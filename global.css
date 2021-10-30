@@ -1,0 +1,104 @@
+:root {
+  --page-background-color: #ffffff;
+  --secondary-page-background-color: #f2f2f2;
+  --content-background-color: #eeeeee;
+  --secondary-content-background-color: #efefef;
+  --primary-text-color: #000000;
+
+  --color-1: rgb(194, 227, 239);
+  --color-2: rgb(94, 157, 191);
+  --main-gradient: linear-gradient(
+    to bottom right,
+    var(--color-1) 0%,
+    var(--color-2) 100%
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-background-color: #000000;
+    --secondary-page-background-color: #111111;
+    --content-background-color: #222222;
+    --secondary-content-background-color: #2a2a2a;
+    --primary-text-color: #ffffff;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  font-family: "Montserrat", sans-serif;
+  font-weight: normal;
+}
+
+.loadingAnimationEllipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.loadingAnimationEllipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--primary-text-color);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.loadingAnimationEllipsis div:nth-child(1) {
+  left: 8px;
+  animation: loadingAnimation1 0.6s infinite;
+}
+.loadingAnimationEllipsis div:nth-child(2) {
+  left: 8px;
+  animation: loadingAnimation2 0.6s infinite;
+}
+.loadingAnimationEllipsis div:nth-child(3) {
+  left: 32px;
+  animation: loadingAnimation2 0.6s infinite;
+}
+.loadingAnimationEllipsis div:nth-child(4) {
+  left: 56px;
+  animation: loadingAnimation3 0.6s infinite;
+}
+@keyframes loadingAnimation1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes loadingAnimation3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes loadingAnimation2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}

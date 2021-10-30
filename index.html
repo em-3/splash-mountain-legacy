@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Splash Mountain Legacy</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="global.css">
+        <link rel="stylesheet" href="index.css">
+        
+        <meta name="description" content="Splash Mountain images, videos, audio, models, and more.">
+        <meta name="keywords" content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Magic Kingdom, Walt Disney World">
+        
+        <meta name="theme-color" content="#ffffff" media=(prefers-color-scheme: light)>
+        <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)">
+        
+    </head>
+    
+    <body ontouchstart class>
+        
+        <header>
+
+            <picture class="logo">
+                <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
+                <img src="/images/logo-black.png">
+            </picture>
+            
+            <div class="searchBox">
+                
+                <input type="text" class="searchField" placeholder="Search" oninput="updateSearchResults()" onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+                
+            </div>
+            
+        </header>
+
+        <main>
+            <div class="about">
+                <h1>History should never be forgotten.</h1>
+                <p>This site serves as a collection of media and information relating to Splash Mountain at Disneyland, Tokyo Disneyland, and Magic Kingdom.</p>
+            </div>
+            <div class="databaseBrowser">
+                <div class="loadingScreen">
+                    <div class="loadingAnimationContainer">
+                        <div class="loadingAnimationEllipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="iframeContainer hidden">
+                    <iframe src="databaseBrowser.html" frameborder="0"></iframe>
+                </div>
+            </div>
+        </main>
+        
+        <script src="search.js"></script>
+        <script src="onload.js"></script>
+        
+    </body>
+    
+</html>

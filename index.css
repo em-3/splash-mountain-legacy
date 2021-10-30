@@ -1,0 +1,85 @@
+header {
+  background: var(--content-background-color);
+  width: 100%;
+  height: 55pt;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20pt;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+header img {
+  height: 50pt;
+  width: auto;
+  transition: opacity 0.2s ease;
+}
+
+@media (max-width: 745px) {
+  header.searchActive img {
+    opacity: 0;
+  }
+}
+
+header .searchBox .searchField {
+  background: var(--page-background-color);
+  border: none;
+  border-radius: 10pt;
+  padding: 10pt;
+  font-family: inherit;
+  width: 200pt;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+header .searchBox .searchField:focus {
+  outline: none;
+  transform: translateX(calc(-50vw + 20pt + 50%));
+}
+
+main {
+  margin-top: 55pt;
+}
+
+main div.about {
+  background: var(--main-gradient);
+  color: black;
+  height: 25vh;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20pt;
+  text-align: center;
+}
+
+main div.about h1 {
+  margin-bottom: 0;
+}
+
+main div.databaseBrowser {
+  padding: 20pt;
+  height: 90vh;
+  min-height: 300pt;
+}
+
+main div.databaseBrowser .loadingScreen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+main div.databaseBrowser .iframeContainer {
+  height: 100%;
+}
+
+main div.databaseBrowser .iframeContainer iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
