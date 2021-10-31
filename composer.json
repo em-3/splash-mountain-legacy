@@ -12,5 +12,7 @@
             "email": "69275008+em-3@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.3"
+    }
 }
