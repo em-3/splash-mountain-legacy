@@ -1,20 +1,5 @@
 var filters = [];
 
-function fetch() {
-    return new Promise(function (resolve, reject) {
-        resolve(JSON.stringify({
-            results: [
-                {
-                    name: "Test",
-                },
-                {
-                    name: "Test2",
-                }
-            ]
-        }));
-    });
-}
-
 function refreshResults () {
     var PHPParams = "";
     for (i in filters) {
@@ -31,7 +16,7 @@ function refreshResults () {
     //Fetch new results
     fetch("/api/search" + PHPParams).then(function(response) {
         // let json = response.json().results;
-        let json = JSON.parse(response).results;
+        let json = response.json();
         if (json.length === 0) {
             var noResults = document.createElement("p");
             noResults.className = "noResults";
