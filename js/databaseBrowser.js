@@ -15,7 +15,8 @@ function refreshResults () {
 
     //Fetch new results
     fetch("/api/search" + PHPParams).then(function(response) {
-        let json = response.json().result;
+        let json = await response.json();
+        json = json.result;
         if (json.length === 0) {
             var noResults = document.createElement("p");
             noResults.className = "noResults";
