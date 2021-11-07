@@ -9,26 +9,54 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/global.css">
-    <link rel="stylesheet" href="/styles/viewer.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/viewer.css">
 
 </head>
 
 <body ontouchstart class>
 
     <main>
-        <div class="loadingScreen">
-            <div class="loadingAnimationContainer">
-                <div class="loadingAnimationEllipsis">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+        <header class="hidden">
+            <div class="contentType"></div>
+        </header>
+        <div class="contentContainer">
+            <div class="loadingScreen">
+                <div class="loadingAnimationContainer">
+                    <div class="loadingAnimationEllipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
             </div>
+            <div class="errorScreen hidden">
+                <div class="errorMessageContainer">
+                    <picture>
+                        <source srcset="/images/icons/error-white.svg" media="(prefers-color-scheme: dark)">
+                        <img class="errorIcon" src="/images/icons/error-black.svg" width="auto" height="50pt">
+                    </picture>
+                    <p class="errorMessage">Item could not be loaded.</p>
+                </div>
+            </div>
+            <div class="contentDisplay hidden invisible"></div>
         </div>
-        <div class="contentScreen"></div>
+        <div class="itemInfoContainer hidden">
+            <div class="parkContainer">
+                <picture>
+                    <source srcset="/images/icons/location-white.svg" media="(prefers-color-scheme: dark)">
+                    <img src="/images/icons/location-black.svg" width="auto" height="20pt">
+                </picture>
+                <h2 class="park"></h2>
+            </div>
+            <h1 class="name"></h1>
+            <p class="description"></p>
+        </div>
     </main>
+
+    <script src="js/global.js"></script>
+    <script src="/js/viewer.js"></script>
 
 </body>
 
