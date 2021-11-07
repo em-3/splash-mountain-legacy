@@ -1,14 +1,9 @@
-<!--
-    api/search/index.php
-    Copyright 2021 EM_3
-    All rights reserved
--->
 <?php
 
 require_once __DIR__ . "/../../scripts/init.php";
 
 //We need to make sure at least query, type, or park is set
-$stmt = "SELECT * FROM `item_index` WHERE";
+$stmt = "SELECT * FROM `item_index`";
 $params = array();
 $results;
 
@@ -19,12 +14,14 @@ if(isset($_GET["query"])) {
     array_push($params, "\"$query\"");
 
     //Update the statement to include the query
-    $stmt .= " MATCH ( name, author, description ) AGAINST ( ? IN BOOLEAN MODE )";
+    $stmt .= " WHERE MATCH ( name, author, description ) AGAINST ( ? IN BOOLEAN MODE )";
 }
 
 if(isset($_GET["type"])) {
     if(count($params) > 0) {
         $stmt .= " AND";
+    }else {
+        $stmt .= " WHERE";
     }
 
     //Add the type to the list of parameters
@@ -37,6 +34,8 @@ if(isset($_GET["type"])) {
 if(isset($_GET["park"])) {
     if(count($params) > 0) {
         $stmt .= " AND";
+    }else {
+        $stmt .= " WHERE";
     }
 
     //Add the park to the list of parameters

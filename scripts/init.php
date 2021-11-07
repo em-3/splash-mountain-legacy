@@ -1,8 +1,3 @@
-<!--
-    init.php
-    Copyright 2021 EM_3
-    All rights reserved
--->
 <?php
 
 require_once __DIR__ . "/../vendor/autoload.php";
