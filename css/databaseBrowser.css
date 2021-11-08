@@ -19,7 +19,6 @@ main {
 
 .filterBar .filter {
   background: var(--page-background-color);
-  border: 1px solid var(--primary-text-color);
   border-radius: 10pt;
   height: 20pt;
   padding: 1pt 8pt;
@@ -42,8 +41,54 @@ main {
   padding: 0;
   height: 100%;
   margin-left: 5pt;
+  color: var(--primary-text-color);
 }
 
 .filterBar .filter select:focus {
   outline: none;
+}
+
+.resultsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+  gap: 10pt;
+  padding: 10pt;
+}
+
+.resultsContainer .result {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 10pt;
+  cursor: pointer;
+}
+
+.resultsContainer .result .headerContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 5pt 0;
+}
+
+.resultsContainer .result .headerContainer * {
+  margin: 0;
+}
+
+.resultsContainer .result .headerContainer .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultsContainer .result .headerContainer .type {
+  margin-left: 2pt;
+}
+
+.resultsContainer .result .author {
+  margin: 0;
 }
