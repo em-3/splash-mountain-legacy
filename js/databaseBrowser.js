@@ -1,41 +1,41 @@
 var filters = [];
 
-function fetch() {
-     return new Promise(function (resolve, reject) {
-         resolve(JSON.stringify([
-                {
-                    name: "Splash Mountain at Night",
-                    author: "91JLovesDisney",
-                    type: "image"
-                },
-                {
-                    name: "Brer Bear",
-                    author: "91JLovesDisney",
-                    type: "video"
-                },
-                {
-                    name: "Test3",
-                    author: "91JLovesDisney",
-                    type: "image"
-                },
-                {
-                    name: "Laughing Place",
-                    author: "91JLovesDisney",
-                    type: "audio"
-                },
-                {
-                    name: "HDYD Instrumental",
-                    author: "91JLovesDisney",
-                    type: "audio"
-                },
-                {
-                    name: "Brer Frog",
-                    author: "91JLovesDisney",
-                    type: "image"
-                },
-            ]));
-     });
- }
+// function fetch() {
+//      return new Promise(function (resolve, reject) {
+//          resolve(JSON.stringify([
+//                 {
+//                     name: "Splash Mountain at Night",
+//                     author: "91JLovesDisney",
+//                     type: "image"
+//                 },
+//                 {
+//                     name: "Brer Bear",
+//                     author: "91JLovesDisney",
+//                     type: "video"
+//                 },
+//                 {
+//                     name: "Test3",
+//                     author: "91JLovesDisney",
+//                     type: "image"
+//                 },
+//                 {
+//                     name: "Laughing Place",
+//                     author: "91JLovesDisney",
+//                     type: "audio"
+//                 },
+//                 {
+//                     name: "HDYD Instrumental",
+//                     author: "91JLovesDisney",
+//                     type: "audio"
+//                 },
+//                 {
+//                     name: "Brer Frog",
+//                     author: "91JLovesDisney",
+//                     type: "image"
+//                 },
+//             ]));
+//      });
+//  }
 
 function refreshResults () {
     var PHPParams = "";
@@ -51,8 +51,8 @@ function refreshResults () {
     }
 
     //Fetch new results
-    // fetch("/api/search" + PHPParams).then(response => response.json()).then((data) => {
-    fetch("/api/search" + PHPParams).then(response => JSON.parse(response)).then((data) => {
+    fetch("/api/search" + PHPParams).then(response => response.json()).then((data) => {
+    // fetch("/api/search" + PHPParams).then(response => JSON.parse(response)).then((data) => {
         if (data.length === 0) {
             var noResults = document.createElement("p");
             noResults.className = "noResults";
