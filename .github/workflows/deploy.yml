@@ -1,0 +1,29 @@
+name: Deploy to Production
+
+on:
+  # Triggers the workflow on push events on the main branch
+  push:
+    branches: [main]
+
+  # Allows running of this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    steps:
+      #Checks out the repo to $GITHUB_WORKSPACE
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      #Deploys via FTP to production server
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ftpupload.net
+          username: epiz_29890181
+          password: ${{ secrets.ftp_password }}
+          port: 21
+          protocol: ftp
+          server-dir: /htdocs/
