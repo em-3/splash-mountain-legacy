@@ -9,7 +9,7 @@ $tokens = explode("/", substr($url, strlen("/api/item/")));
 $id = $tokens[0];
 
 if($_SERVER["REQUEST_METHOD"] == "GET") {
-    $resource = new Resource($id, $resource_path=__DIR__ . "/resources/");
+    $resource = new Resource($id, __DIR__ . "../../resources/");
     $data = $resource->get_data();
     $mime_type = $resource->get_mime_type();
 
