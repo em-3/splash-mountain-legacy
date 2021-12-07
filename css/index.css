@@ -142,11 +142,13 @@ footer .legal {
   height: 100%;
   background: var(--page-background-color);
   opacity: 0;
+  pointer-events: none;
   z-index: 1;
   transition: opacity 0.2s ease;
 }
 
 .itemDetailsContainer:not(.hidden) + .overlay {
   opacity: 0.5;
+  pointer-events: auto;
   display: block !important;
 }
