@@ -87,7 +87,7 @@ function refreshResults () {
     }
 
     //Fetch new results
-    fetch("https://splashmountainlegacy.com/api/search/" + PHPParams).then(response => response.json()).then((data) => {
+    fetch("/api/search/" + PHPParams).then(response => response.json()).then((data) => {
         if (data.length === 0) {
             var noResults = document.createElement("p");
             noResults.className = "noResults";
