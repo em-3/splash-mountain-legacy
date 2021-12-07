@@ -1,13 +1,13 @@
 //Parse PHP parameters from the URL
 var url = new URL(window.location.href);
 var params = url.searchParams;
-var hash = params.get("hash");
+var id = params.get("id");
 var embedded = params.get("embedded");
 
-function fetch(hash) {
+function fetch(id) {
     return new Promise(function(resolve, reject) {
         resolve(JSON.stringify({
-            hash: "anw71nJwfg19A",
+            id: "anw71nJwfg19A",
             park: "WDW",
             name: "Splash Mountain at Night",
             author: "MartinVidsDotNet",
@@ -19,15 +19,32 @@ function fetch(hash) {
     });
 }
 
+var loadedItemDetails;
+var timeOutHasExpired = false;
+
 //Fetch the item details and content
-if (hash) {
-    fetch("/api/item/" + hash + "/details").then(showItemDetails, showErrorScreen);
+if (id) {
+    //Start a timeout
+    setTimeout(function () {
+        timeOutHasExpired = true;
+        if (loadedItemDetails) {
+            showItemDetails();
+        }
+    }, 1000);
+    fetch("/api/item/" + id + "/details").then(checkTimeout, showErrorScreen);
 } else {
     showErrorScreen();
 }
 
-function showItemDetails(itemDetails) {
-    itemDetails = JSON.parse(itemDetails);
+function checkTimeout(itemDetails) {
+    loadedItemDetails = itemDetails;
+    if (timeOutHasExpired) {
+        showItemDetails()
+    }
+}
+
+function showItemDetails() {
+    var itemDetails = JSON.parse(loadedItemDetails);
 
     //Show the item details
     document.querySelector(".park").textContent = itemDetails.park;
@@ -53,25 +70,25 @@ function showItemDetails(itemDetails) {
     });
 
     //Show the item content
-    showItemContent(hash, itemDetails.type, itemDetails.format);
+    showItemContent(id, itemDetails.type, itemDetails.format);
 
 }
 
-function showItemContent(hash, itemType, itemFormat) {
+function showItemContent(id, itemType, itemFormat) {
     //Show the item content
     switch (itemType) {
         case "Image":
             var contentDisplayElement = document.createElement("img");
-            // contentDisplayElement.src = "/api/" + hash;
+            // contentDisplayElement.src = "/api/" + id;
             contentDisplayElement.src = "TEST.png";
             break;
         case "Video":
             var contentDisplayElement = document.createElement("video");
-            contentDisplayElement.src = "/api/" + hash;
+            contentDisplayElement.src = "/api/" + id;
             break;
         case "Audio":
             var contentDisplayElement = document.createElement("audio");
-            contentDisplayElement.src = "/api/" + hash;
+            contentDisplayElement.src = "/api/" + id;
             break;
     }
 
@@ -88,4 +105,8 @@ function showErrorScreen() {
     //Hide the loading screen and show the error screen
     document.querySelector(".loadingScreen").classList.add("hidden")
     document.querySelector(".errorScreen").classList.remove("hidden");
+}
+
+function closeItemDetails() {
+    window.top.postMessage("closeDetails", "*");
 }

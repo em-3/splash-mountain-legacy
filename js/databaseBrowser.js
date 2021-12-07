@@ -92,11 +92,14 @@ function refreshResults () {
             noResults.textContent = "No results found.";
             document.querySelector(".resultsContainer").appendChild(noResults);
         } else {
-            for (i in data) {
+            for (var i = 0; i < data.length; i++) {
                 var currentItemData = data[i];
 
                 var resultElement = document.createElement("div");
                 resultElement.className = "result";
+                (function (id) {
+                    window.top.postMessage("details" + id, "*");
+                })(currentItemData.id)
 
                 var headerContainer = document.createElement("div");
                 headerContainer.classList.add("headerContainer");
