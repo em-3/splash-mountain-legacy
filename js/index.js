@@ -1,7 +1,7 @@
 //Listen for iframe requests
 window.onmessage = function(e) {
     if (e.data.indexOf("details") === 0) {
-        showItemDetails(e.data.substring(8));
+        showItemDetails(e.data.substring(7));
     } else if (e.data === "closeDetails") {
         hideItemDetails();
     }
