@@ -31,7 +31,9 @@ if (id) {
             showItemDetails();
         }
     }, 1000);
-    fetch("/api/item/" + id + "/details/").then(checkTimeout, showErrorScreen);
+    fetch("/api/item/" + id + "/details")
+    .then(response => response.json())
+    .then(checkTimeout, showErrorScreen);
 } else {
     showErrorScreen();
 }
@@ -39,12 +41,12 @@ if (id) {
 function checkTimeout(itemDetails) {
     loadedItemDetails = itemDetails;
     if (timeOutHasExpired) {
-        showItemDetails()
+        showErrorScreen();
     }
 }
 
 function showItemDetails() {
-    var itemDetails = JSON.parse(loadedItemDetails);
+    var itemDetails = loadedItemDetails;
 
     //Show the item details
     document.querySelector(".park").textContent = itemDetails.park;
