@@ -70,12 +70,14 @@ for (var i = 0; i < filters.length; i++) {
 
 function refreshResults () {
     var PHPParams = "";
+    var character = "?";
     for (var i = 0; i < filters.length; i++) {
         //Get the selected option for this filter's select element.
         var filterElement = document.querySelector("select[name='" + filters[i].id + "']");
         var filterValue = filterElement.options[filterElement.selectedIndex].value;
         if (filterValue != "" && filterValue != "All") {
-            PHPParams += ((i === 0) ? "?" : "&") + filters[i].id + "=" + filterValue;
+            PHPParams += character + filters[i].id + "=" + filterValue;
+            character = "&";
         }
     }
 

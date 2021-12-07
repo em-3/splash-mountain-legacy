@@ -31,6 +31,20 @@ if(isset($_GET["type"])) {
     $stmt .= " type = ?";
 }
 
+if(isset($_GET["format"])) {
+    if(count($params) > 0) {
+        $stmt .= " AND";
+    }else {
+        $stmt .= " WHERE";
+    }
+
+    //Add the format to the list of parameters
+    array_push($params, $_GET["format"]);
+
+    //Update the statement to include the format
+    $stmt .= " format = ?";
+}
+
 if(isset($_GET["park"])) {
     if(count($params) > 0) {
         $stmt .= " AND";
