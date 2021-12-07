@@ -106,6 +106,7 @@ footer .legal {
 }
 
 .itemDetailsContainer {
+  background: var(--page-background-color);
   position: fixed;
   top: 50%;
   left: 50%;

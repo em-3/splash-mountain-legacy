@@ -31,7 +31,7 @@ if (id) {
             showItemDetails();
         }
     }, 1000);
-    fetch("/api/item/" + id + "/details").then(checkTimeout, showErrorScreen);
+    fetch("/api/item/" + id + "/details/").then(checkTimeout, showErrorScreen);
 } else {
     showErrorScreen();
 }

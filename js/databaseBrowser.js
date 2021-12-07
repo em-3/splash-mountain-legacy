@@ -100,7 +100,9 @@ function refreshResults () {
                 var resultElement = document.createElement("div");
                 resultElement.className = "result";
                 (function (id) {
-                    window.top.postMessage("details" + id, "*");
+                    resultElement.onclick = function () {
+                        window.top.postMessage("details" + id, "*");
+                    }
                 })(currentItemData.id)
 
                 var headerContainer = document.createElement("div");
