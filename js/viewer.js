@@ -4,20 +4,20 @@ var params = url.searchParams;
 var id = params.get("id");
 var embedded = params.get("embedded");
 
-function fetch(id) {
-    return new Promise(function(resolve, reject) {
-        resolve(JSON.stringify({
-            id: "anw71nJwfg19A",
-            park: "WDW",
-            name: "Splash Mountain at Night",
-            author: "MartinVidsDotNet",
-            date: "11/2/21",
-            type: "Image",
-            format: "image/png",
-            description: "Splash Mountain as seen at night."
-        }))
-    });
-}
+// function fetch(id) {
+//     return new Promise(function(resolve, reject) {
+//         resolve(JSON.stringify({
+//             id: "anw71nJwfg19A",
+//             park: "WDW",
+//             name: "Splash Mountain at Night",
+//             author: "MartinVidsDotNet",
+//             date: "11/2/21",
+//             type: "Image",
+//             format: "image/png",
+//             description: "Splash Mountain as seen at night."
+//         }))
+//     });
+// }
 
 var loadedItemDetails;
 var timeOutHasExpired = false;
