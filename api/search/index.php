@@ -93,6 +93,7 @@ foreach($params as $index=>$param) {
 $stmt->execute();
 
 //Convert the results to JSON and ouput them
+header("Content-Type: application/json");
 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
 ?>

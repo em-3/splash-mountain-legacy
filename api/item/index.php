@@ -54,6 +54,7 @@ function handle_get() {
 
     if(count($tokens) == 1) {
         //Get the list of fragments for the item
+        header("Content-Type: application/json");
         echo file_get_contents($resource_dir . "/" . $item_id . "/fragments.json");
     }else if($tokens[1] == "fragment") {
         //Get the requested fragment
@@ -61,6 +62,7 @@ function handle_get() {
         echo file_get_contents($resource_dir . "/" . $item_id . "/" . $fragment_id);
     }else if($tokens[1] == "details") {
         //Return the details of the item
+        header("Content-Type: application/json");
         echo json_encode($result);
     }
 }
