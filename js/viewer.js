@@ -77,27 +77,34 @@ function showItemDetails() {
 }
 
 function showItemContent(id, itemType, itemFormat) {
+    var contentDisplayElement;
     //Show the item content
     switch (itemType) {
-        case "Image":
-            var contentDisplayElement = document.createElement("img");
-            // contentDisplayElement.src = "/api/" + id;
-            contentDisplayElement.src = "TEST.png";
+        case "image":
+            contentDisplayElement = document.createElement("img");
             break;
-        case "Video":
-            var contentDisplayElement = document.createElement("video");
-            contentDisplayElement.src = "/api/" + id;
+        case "video":
+            contentDisplayElement = document.createElement("video");
             break;
-        case "Audio":
-            var contentDisplayElement = document.createElement("audio");
-            contentDisplayElement.src = "/api/" + id;
+        case "audio":
+            contentDisplayElement = document.createElement("audio");
             break;
+        default:
+            contentDisplayElement = document.createElement("div");
     }
 
-    document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+    defragmentItem(id, itemFormat)
+    .then(function(itemURL) {
+        contentDisplayElement.src = itemURL;
+        document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
 
-    document.querySelector(".loadingScreen").classList.add("hidden")
-    document.querySelector(".contentDisplay").classList.remove("hidden");
+        document.querySelector(".loadingScreen").classList.add("hidden")
+        document.querySelector(".contentDisplay").classList.remove("hidden");
+    })
+    .catch((error) => {
+        showErrorScreen();
+    });
+
     setTimeout(function () {
         document.querySelector(".contentDisplay").classList.remove("invisible");
     });
