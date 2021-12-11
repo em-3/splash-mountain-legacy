@@ -4,23 +4,11 @@ var params = url.searchParams;
 var id = params.get("id");
 var embedded = params.get("embedded");
 
-// function fetch(id) {
-//     return new Promise(function(resolve, reject) {
-//         resolve(JSON.stringify({
-//             id: "anw71nJwfg19A",
-//             park: "WDW",
-//             name: "Splash Mountain at Night",
-//             author: "MartinVidsDotNet",
-//             date: "11/2/21",
-//             type: "Image",
-//             format: "image/png",
-//             description: "Splash Mountain as seen at night."
-//         }))
-//     });
-// }
-
 var loadedItemDetails;
 var timeOutHasExpired = false;
+
+//Show the header to allow the user to close the window even if the item fails to load
+document.querySelector("header").classList.remove("hidden");
 
 //Fetch the item details and content
 if (id) {
@@ -67,7 +55,6 @@ function showItemDetails() {
 
 
     requestAnimationFrame(function () {
-        document.querySelector("header").classList.remove("hidden");
         document.querySelector(".itemInfoContainer").classList.remove("hidden");
     });
 
