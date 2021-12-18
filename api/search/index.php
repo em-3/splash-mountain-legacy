@@ -37,10 +37,10 @@ if(isset($_GET["max"])) {
 
     if(isset($_GET["min"])) {
         //If there's a minimum value specified, then add it to the parameters and calculate the difference between the min and max values
-        $min = $_GET["min"];
+        $min = intval($_GET["min"]);
 
-        $params["min"] = intval($min) - 1;
-        $params["max"] = intval($max) - $min;
+        $params["min"] = $min - 1;
+        $params["max"] = $max - $min;
     }else {
         //Otherwise just add zero and the max value
         $params["min"] = 0;
