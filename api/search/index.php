@@ -2,61 +2,34 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
-//We need to make sure at least query, type, or park is set
-$stmt = "SELECT * FROM `item_index`";
+$available_params = ["type", "format", "park"];
 $params = array();
 $results;
+$stmt = "SELECT * FROM `item_index` WHERE";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
     //Add the query to the list of parameters
-    array_push($params, "\"$query\"");
+    $params["query"] = $query;
 
-    //Update the statement to include the query
-    $stmt .= " WHERE MATCH ( name, author, description ) AGAINST ( ? IN BOOLEAN MODE )";
+    $stmt .= " MATCH ( name, author, description ) AGAINST ( :query IN BOOLEAN MODE )";
 }
 
-if(isset($_GET["type"])) {
-    if(count($params) > 0) {
-        $stmt .= " AND";
-    }else {
-        $stmt .= " WHERE";
+foreach($available_params as $param) {
+    //Check if the parameter was set
+    if(isset($_GET[$param])) {
+        //If there is more than one parameter, add an AND
+        if(count($params) > 0) {
+            $stmt .= " AND";
+        }
+
+        //Set the parameter's value
+        $params[$param] = $_GET[$param];
+
+        //Add the parameter to the statement
+        $stmt .= " `$param` = :$param";
     }
-
-    //Add the type to the list of parameters
-    array_push($params, $_GET["type"]);
-
-    //Update the statement to include the type
-    $stmt .= " type = ?";
-}
-
-if(isset($_GET["format"])) {
-    if(count($params) > 0) {
-        $stmt .= " AND";
-    }else {
-        $stmt .= " WHERE";
-    }
-
-    //Add the format to the list of parameters
-    array_push($params, $_GET["format"]);
-
-    //Update the statement to include the format
-    $stmt .= " format = ?";
-}
-
-if(isset($_GET["park"])) {
-    if(count($params) > 0) {
-        $stmt .= " AND";
-    }else {
-        $stmt .= " WHERE";
-    }
-
-    //Add the park to the list of parameters
-    array_push($params, $_GET["park"] );
-
-    //Update the statement to include the park
-    $stmt .= " park = ?";
 }
 
 if(isset($_GET["max"])) {
@@ -66,12 +39,12 @@ if(isset($_GET["max"])) {
         //If there's a minimum value specified, then add it to the parameters and calculate the difference between the min and max values
         $min = $_GET["min"];
 
-        array_push($params, intval($min) - 1);
-        array_push($params, intval($max) - $min);
+        $params["min"] = intval($min) - 1;
+        $params["max"] = intval($max) - $min;
     }else {
         //Otherwise just add zero and the max value
-        array_push($params, 0);
-        array_push($params, $max);
+        $params["min"] = 0;
+        $params["max"] = $max;
     }
 
     //Update the statement to include the min and max
@@ -81,11 +54,11 @@ if(isset($_GET["max"])) {
 //Prepare the statement
 $stmt = $database->prepare($stmt);
 
-foreach($params as $index=>$param) {
-    if(is_int($param)) {
-        $stmt->bindValue($index + 1, $param, PDO::PARAM_INT);
+foreach($params as $param=>$param_value) {
+    if(is_int($param_value)) {
+        $stmt->bindValue($param, $param_value, PDO::PARAM_INT);
     }else {
-        $stmt->bindValue($index + 1, $param, PDO::PARAM_STR);
+        $stmt->bindValue($param, $param_value, PDO::PARAM_STR);
     }
 }
 
