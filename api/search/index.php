@@ -6,7 +6,7 @@ $available_params = ["type", "format", "park"];
 $params = array();
 $id_only = false;
 $results;
-$stmt = "SELECT * FROM `item_index` WHERE";
+$stmt = "SELECT * FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
@@ -17,10 +17,10 @@ if(isset($_GET["query"])) {
     if(preg_match("/[A-Za-z0-9\/]{11}/", $query)) {
         //If the query is a valid item ID, return only that item
         $id_only = true;
-        $stmt .= " `id` = :query";
+        $stmt .= "WHERE `id` = :query";
     }else {
         //Search for the query in name, author, and description fields
-        $stmt .= " MATCH ( name, author, description ) AGAINST ( :query IN BOOLEAN MODE )";
+        $stmt .= "WHERE MATCH ( name, author, description ) AGAINST ( :query IN BOOLEAN MODE )";
     }
 }
 
@@ -33,6 +33,8 @@ if(!$id_only) {
             //If there is more than one parameter, add an AND
             if(count($params) > 0) {
                 $stmt .= " AND";
+            }else {
+                $stmt .= " WHERE";
             }
 
             //Set the parameter's value
