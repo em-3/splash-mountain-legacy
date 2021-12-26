@@ -69,6 +69,11 @@ function showItemContent(id, itemType, itemFormat) {
     switch (itemType) {
         case "image":
             contentDisplayElement = document.createElement("img");
+            contentDisplayElement.src = "/resources/" + id + "/main";
+            document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+    
+            document.querySelector(".loadingScreen").classList.add("hidden")
+            document.querySelector(".contentDisplay").classList.remove("hidden");
             break;
         case "video":
             contentDisplayElement = document.createElement("video");
@@ -79,18 +84,6 @@ function showItemContent(id, itemType, itemFormat) {
         default:
             contentDisplayElement = document.createElement("div");
     }
-
-    defragmentItem(id, itemFormat)
-    .then(function(itemURL) {
-        contentDisplayElement.src = itemURL;
-        document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
-
-        document.querySelector(".loadingScreen").classList.add("hidden")
-        document.querySelector(".contentDisplay").classList.remove("hidden");
-    })
-    .catch((error) => {
-        showErrorScreen();
-    });
 
     setTimeout(function () {
         document.querySelector(".contentDisplay").classList.remove("invisible");
