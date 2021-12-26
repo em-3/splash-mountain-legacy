@@ -40,11 +40,17 @@ header .searchBox .searchField:focus {
   transform: translateX(calc(-50vw + 20pt + 50%));
 }
 
+header.searchActive ~ .searchResultsContainer {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, 0);
+}
+
 .searchResultsContainer {
   position: fixed;
   top: 55pt;
   left: 50vw;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -100%);
   width: calc(100% - 20pt);
   max-width: 500px;
   height: calc(100% - 75pt);
@@ -55,6 +61,34 @@ header .searchBox .searchField:focus {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.searchResultsContainer .loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.searchResultsContainer .result {
+  background: var(--page-background-color);
+  margin: 10pt;
+  padding: 5pt;
+  border-radius: 10pt;
+}
+
+.searchResultsContainer .result * {
+  margin: 0;
+}
+
+.searchResultsContainer .result .infoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5pt;
 }
 
 main {

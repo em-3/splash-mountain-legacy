@@ -32,13 +32,23 @@
             
             <div class="searchBox">
                 
-                <input type="text" class="searchField" placeholder="Search" oninput="updateSearchResults()" onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()" onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
                 
             </div>
             
         </header>
 
-        <div class="searchResultsContainer"></div>
+        <div class="searchResultsContainer">
+            <div class="loadingContainer">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="resultsContainer hidden"></div>
+        </div>
 
         <main>
             <div class="about">
