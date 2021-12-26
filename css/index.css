@@ -9,6 +9,7 @@ header {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 3;
 }
 
 header img {
@@ -37,6 +38,23 @@ header .searchBox .searchField {
 header .searchBox .searchField:focus {
   outline: none;
   transform: translateX(calc(-50vw + 20pt + 50%));
+}
+
+.searchResultsContainer {
+  position: fixed;
+  top: 55pt;
+  left: 50vw;
+  transform: translate(-50%, 0);
+  width: calc(100% - 20pt);
+  max-width: 500px;
+  height: calc(100% - 75pt);
+  max-height: 500pt;
+  box-shadow: 0 0 25pt var(--shadow-color);
+  border-radius: 0 0 10pt 10pt;
+  background: var(--content-background-color);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 2;
 }
 
 main {
@@ -117,7 +135,7 @@ footer .legal {
   max-height: 400pt;
   border-radius: 10pt;
   box-shadow: 0 0 20px var(--content-background-color);
-  z-index: 2;
+  z-index: 4;
   transition: all 0.5s ease;
 }
 
@@ -143,7 +161,7 @@ footer .legal {
   background: var(--page-background-color);
   opacity: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
   transition: opacity 0.2s ease;
 }
 
