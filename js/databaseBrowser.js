@@ -19,19 +19,6 @@ var filters = [
             "audio",
             "text"
         ]
-    },
-    {
-        id: "format",
-        label: "Format",
-        values: [
-            "All",
-            "image/png",
-            "image/jpeg",
-            "video/mp4",
-            "audio/mp3",
-            "audio/wav",
-            "text/txt"
-        ]
     }
 ];
 

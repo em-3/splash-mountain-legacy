@@ -19,7 +19,7 @@ if (id) {
             showItemDetails();
         }
     }, 1000);
-    fetch("/api/item/" + id + "/details")
+    fetch("/api/item/" + id)
     .then(response => response.json())
     .then(checkTimeout, showErrorScreen);
 } else {

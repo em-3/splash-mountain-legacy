@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
-$available_params = ["type", "format", "park"];
+$available_params = ["type", "park"];
 $params = array();
 $id_only = false;
 $results;
