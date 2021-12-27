@@ -50,7 +50,7 @@ if(!$id_only) {
 
         if(isset($_GET["min"])) {
             //If there's a minimum value specified, then add it to the parameters and calculate the difference between the min and max values
-        $min = intval($_GET["min"]);
+            $min = intval($_GET["min"]);
 
             $params["min"] = $min - 1;
             $params["max"] = $max - $min;
@@ -61,7 +61,7 @@ if(!$id_only) {
         }
 
         //Update the statement to include the min and max
-        $stmt .= " LIMIT ?, ?";
+        $stmt .= " LIMIT :min, :max";
     }
 
 }
