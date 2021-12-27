@@ -155,6 +155,7 @@ footer .legal {
   font-style: italic;
   color: #bbb;
   margin-bottom: 5pt;
+  max-width: 600pt;
 }
 
 .itemDetailsContainer {
