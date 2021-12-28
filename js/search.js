@@ -10,8 +10,10 @@ var searchBar = {
         document.querySelector("header").classList.add("searchActive");
     },
     onblur: function () {
-        document.body.classList.remove("noScroll");
-        document.querySelector("header").classList.remove("searchActive");
+        if (document.querySelector(".searchBar .searchField").value == "") {
+            document.body.classList.remove("noScroll");
+            document.querySelector("header").classList.remove("searchActive");
+        }
     },
 
     showLoadingContainer: function () {
@@ -21,6 +23,11 @@ var searchBar = {
     showResultsContainer: function () {
         document.querySelector(".searchResultsContainer .loadingContainer").classList.add("hidden");
         document.querySelector(".searchResultsContainer .resultsContainer").classList.remove("hidden");
+    },
+    
+    close: function () {
+        document.querySelector(".searchBar .searchField").value = "";
+        document.querySelector(".searchBar .searchField").blur();
     },
 
     loadResultsFromRange: function (query, min, max) {
@@ -133,7 +140,7 @@ var searchBar = {
                 document.querySelector(".searchResultsContainer .resultsContainer").appendChild(errorMessageElement);
                 searchBar.showResultsContainer();
             });
-        }, 2000);
+        }, 1000);
     },
     loadMoreResults: function () {
         //Update the min and max values
