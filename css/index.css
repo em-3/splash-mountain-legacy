@@ -172,6 +172,7 @@ main div.about {
   position: relative;
   height: 35vh;
   min-height: 200px;
+  overflow: hidden;
 }
 
 main div.about > * {
@@ -191,6 +192,7 @@ main div.about .background {
   background-attachment: fixed;
   background-size: cover;
   z-index: 1;
+  transform: scale(1.2);
 }
 
 main div.about .foreground {

@@ -71,7 +71,90 @@ header.hidden {
   transform: translateY(100pt);
 }
 
-.contentContainer .contentDisplay img {
+.audioControls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10pt;
+  background: var(--content-background-color);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.audioControls .pausePlayButton {
+  background: var(--page-background-color);
+  border: none;
+  border-radius: 50%;
+  width: 30pt;
+  height: 30pt;
+  cursor: pointer;
+}
+
+.audioControls .pausePlayButton picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audioControls .pausePlayButton.playing picture.play {
+  display: none;
+}
+
+.audioControls .pausePlayButton:not(.playing) picture.pause {
+  display: none;
+}
+
+.audioControls .progressBar {
+  height: 10pt;
+  width: calc(100% - 40pt);
+  margin: 30px 0;
+  border-radius: 10pt;
+  position: relative;
+  background: var(--page-background-color);
+}
+
+.audioControls .progressBar .progressBarFill {
+  border-radius: 10pt 0 0 10pt;
+  height: 100%;
+  background: var(--shadow-color);
+  width: 0;
+}
+
+.audioControls .progressBar .progressBarInput {
+  width: 100%;
+  position: absolute;
+  height: 20px;
+  top: 0;
+  margin-top: -4px;
+  left: 0;
+}
+
+.audioControls .progressBar .progressBarInput::-webkit-slider-thumb {
+  border: 2px solid var(--page-background-color);
+  height: 30px;
+  width: 10px;
+  border-radius: 3px;
+  background: var(--shadow-color);
+  cursor: pointer;
+  border-radius: 30px;
+  margin-left: -3px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  transition: transform 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.contentContainer .contentDisplay > img {
   width: auto;
   height: auto;
   max-height: 500pt;
