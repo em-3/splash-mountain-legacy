@@ -24,8 +24,8 @@ main {
 }
 
 .link {
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
+  background: #222222;
+  color: white;
   font-weight: bold;
   padding: 5pt;
   border-radius: 2pt;
@@ -38,5 +38,5 @@ main {
 }
 
 .link:visited {
-  color: var(--primary-text-color);
+  color: white;
 }
