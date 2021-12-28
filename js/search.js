@@ -26,8 +26,8 @@ var searchBar = {
     },
     
     close: function () {
-        document.querySelector(".searchBar .searchField").value = "";
-        document.querySelector(".searchBar .searchField").blur();
+        document.querySelector(".searchBox .searchField").value = "";
+        document.querySelector(".searchBox .searchField").blur();
     },
 
     loadResultsFromRange: function (query, min, max) {
