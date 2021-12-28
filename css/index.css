@@ -160,7 +160,7 @@ header.searchActive ~ .searchResultsContainer {
   .right
   .infoContainer
   *:not(:last-child)::after {
-  content: " • ";
+  content: "•";
   margin: 0 5pt;
 }
 
