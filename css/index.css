@@ -122,6 +122,7 @@ header.searchActive ~ .searchResultsContainer {
   border-radius: 10pt;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .searchResultsContainer .result img {

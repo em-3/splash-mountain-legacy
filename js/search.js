@@ -10,7 +10,7 @@ var searchBar = {
         document.querySelector("header").classList.add("searchActive");
     },
     onblur: function () {
-        if (document.querySelector(".searchBar .searchField").value == "") {
+        if (document.querySelector(".searchBox .searchField").value == "") {
             document.body.classList.remove("noScroll");
             document.querySelector("header").classList.remove("searchActive");
         }
