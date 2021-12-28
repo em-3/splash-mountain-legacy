@@ -6,9 +6,11 @@ var searchRange = {
 
 var searchBar = {
     onfocus: function () {
+        document.body.classList.add("noScroll");
         document.querySelector("header").classList.add("searchActive");
     },
     onblur: function () {
+        document.body.classList.remove("noScroll");
         document.querySelector("header").classList.remove("searchActive");
     },
 
@@ -21,7 +23,7 @@ var searchBar = {
         document.querySelector(".searchResultsContainer .resultsContainer").classList.remove("hidden");
     },
 
-    loadResultsFromRange: function (min, max) {
+    loadResultsFromRange: function (query, min, max) {
         return new Promise((resolve, reject) => {
             fetch("/api/search/?query=" + query + "&min=" + min + "&max=" + max).then(response => response.json()).then((results) => {
                 resolve(results);
@@ -49,11 +51,17 @@ var searchBar = {
 
             var sourceElement = document.createElement("source");
             sourceElement.srcset = "/images/icons/types/" + resultItem.type + "-white.png";
-            sourceElement.media = "(prefers-color-scheme: dark)";
+            sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
 
             var imgElement = document.createElement("img");
             imgElement.src = "/images/icons/types/" + resultItem.type + "-black.png";
+
+            pictureElement.appendChild(sourceElement);
+            pictureElement.appendChild(imgElement);
         }
+
+        var rightSideContainer = document.createElement("div");
+        rightSideContainer.className = "right";
 
         var nameElement = document.createElement("h3");
         nameElement.className = "name";
@@ -77,9 +85,11 @@ var searchBar = {
         authorElement.textContent = resultItem.author;
         infoContainerElement.appendChild(authorElement);
 
-        resultItem.appendChild(pictureElement || imgElement);
-        resultElement.appendChild(nameElement);
-        resultElement.appendChild(infoContainerElement);
+        rightSideContainer.appendChild(nameElement);
+        rightSideContainer.appendChild(infoContainerElement);
+
+        resultElement.appendChild(pictureElement || imgElement);
+        resultElement.appendChild(rightSideContainer);
         return resultElement;
     },
     updateSearchResults: function () {
@@ -100,7 +110,7 @@ var searchBar = {
         //Wait two seconds before updating the search results
         timeoutID = setTimeout(function () {
             //Fetch new results
-            searchBar.loadResultsFromRange(searchRange.min, searchRange.max).then((results) => {
+            searchBar.loadResultsFromRange(query, searchRange.min, searchRange.max).then((results) => {
                 searchBar.clearSearchResults();
 
                 if (results.length === 0) {
@@ -110,11 +120,13 @@ var searchBar = {
                     document.querySelector(".searchResultsContainer .resultsContainer").appendChild(noResultsElement);
                 } else {
                     for (var i = 0; i < results.length; i++) {
-                        document.querySelector(".searchResultsContainer .resultsContainer").appendChild(this.generateResultElement(results[i]));
+                        document.querySelector(".searchResultsContainer .resultsContainer").appendChild(searchBar.generateResultElement(results[i]));
                     }
                     searchBar.showResultsContainer();
                 }
             }, (error) => {
+                searchBar.clearSearchResults();
+
                 var errorMessageElement = document.createElement("p");
                 errorMessageElement.className = "message";
                 errorMessageElement.textContent = "Something went wrong.";
@@ -131,12 +143,12 @@ var searchBar = {
         var query = document.querySelector(".searchField").value;
         
         //Fetch new results
-        searchBar.loadResultsFromRange(searchRange.min, searchRange.max).then((results) => {
+        searchBar.loadResultsFromRange(query, searchRange.min, searchRange.max).then((results) => {
             if (results.length === 0) {
                 
             } else {
                 for (var i = 0; i < results.length; i++) {
-                    document.querySelector(".searchResultsContainer .resultsContainer").appendChild(this.generateResultElement(results[i]));
+                    document.querySelector(".searchResultsContainer .resultsContainer").appendChild(searchBar.generateResultElement(results[i]));
                 }
                 searchBar.showResultsContainer();
             }
