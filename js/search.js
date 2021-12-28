@@ -29,6 +29,11 @@ var searchBar = {
         document.querySelector(".searchBox .searchField").value = "";
         document.querySelector(".searchBox .searchField").blur();
         searchBar.onblur();
+        clearTimeout(timeoutID);
+        setTimeout(function () {
+            searchBar.clearSearchResults();
+            searchBar.showResultsContainer();
+        }, 200);
     },
 
     loadResultsFromRange: function (query, min, max) {

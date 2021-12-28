@@ -1,0 +1,42 @@
+main {
+  width: 100vw;
+  height: 90vh;
+  min-height: 500pt;
+  background: var(--main-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote,
+.subquote {
+  background: white;
+  color: black;
+  padding: 5pt;
+  margin: 0 0 5pt 0;
+  width: fit-content;
+  border-radius: 2pt;
+}
+
+.description {
+  margin: 10pt 0 15pt 0;
+  color: black;
+}
+
+.link {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  font-weight: bold;
+  padding: 5pt;
+  border-radius: 2pt;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:visited {
+  color: var(--primary-text-color);
+}

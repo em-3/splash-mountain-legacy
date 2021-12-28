@@ -223,41 +223,6 @@ main div.databaseBrowser iframe {
   border: none;
 }
 
-footer {
-  background: var(--color-3);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-footer img {
-  height: 50pt;
-  width: auto;
-  margin-top: 5pt;
-}
-
-footer .credits h3 {
-  margin: 5pt 0 0 0;
-}
-
-footer .credits a {
-  color: white;
-  text-decoration: none;
-  margin: 0 5pt;
-}
-
-footer .legal {
-  font-size: 10pt;
-  padding: 0 2pt;
-  font-style: italic;
-  color: #bbb;
-  margin-bottom: 5pt;
-  max-width: 600pt;
-}
-
 .itemDetailsContainer {
   background: var(--page-background-color);
   position: fixed;
