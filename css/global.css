@@ -107,7 +107,7 @@ body {
 }
 
 footer {
-  width: 100vw;
+  width: 100%;
   background: var(--color-3);
   color: white;
   display: flex;
