@@ -189,8 +189,54 @@ function handle_post() {
 
 }
 
-function handle_delete() {
-    //TODO: Implement
+function handle_delete(){
+    global $database;
+    global $tokens;
+    global $resource_dir;
+
+    if(count($tokens) > 1) {
+        http_response_code(400);
+        header("Content-Type: application/json");
+        die(json_encode(["error" => "Invalid request. Too many parameters"]));
+    }
+
+    authenticate();
+
+    $item_id = $tokens[0];
+
+    //Check if the item exists in the database
+    $stmt = $database->prepare("SELECT * FROM `item_index` WHERE `id` = ?");
+    $stmt->bindValue(1, $item_id, PDO::PARAM_STR);
+    $stmt->execute();
+
+    if($stmt->rowCount() == 0) {
+        http_response_code(404);
+        header("Content-Type: application/json");
+        die(json_encode(["error" => "Item not found"]));
+    }
+
+    //Delete the item's data folder if it has one
+    if(file_exists($resource_dir . "/" . $item_id)) {
+        unlink($resource_dir . "/" . $item_id . "/main");
+        unlink($resource_dir . "/" . $item_id . "/thumbnail");
+        rmdir($resource_dir . "/" . $item_id);
+    }
+
+    //Delete the item from the database
+    $stmt = $database->prepare("DELETE FROM `item_index` WHERE `id` = ?");
+    $stmt->bindValue(1, $item_id, PDO::PARAM_STR);
+    $stmt->execute();
+
+    //Ensure that the item was deleted
+    if($stmt->rowCount() != 1) {
+        http_response_code(500);
+        header("Content-Type: application/json");
+        die(json_encode(["error" => "Failed to delete item from database"]));
+    }
+
+    //Return success
+    header("Content-Type: application/json");
+    echo json_encode(["success" => true]);
 }
 
 /**
