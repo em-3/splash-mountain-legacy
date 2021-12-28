@@ -28,6 +28,7 @@ var searchBar = {
     close: function () {
         document.querySelector(".searchBox .searchField").value = "";
         document.querySelector(".searchBox .searchField").blur();
+        searchBar.onblur();
     },
 
     loadResultsFromRange: function (query, min, max) {

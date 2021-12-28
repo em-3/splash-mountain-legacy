@@ -10,10 +10,12 @@ window.onmessage = function(e) {
 function showItemDetails(id) {
     document.querySelector(".itemDetailsContainer iframe").src = "/viewer.html?id=" + id;
     document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+    document.body.classList.add("noScroll");
 }
 
 function hideItemDetails() {
     document.querySelector(".itemDetailsContainer").classList.add("hidden");
+    document.body.classList.remove("noScroll");
 }
 
 //Listen for the Konami code
