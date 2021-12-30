@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b19d2753547526ada6e29e3536689518",
+    "content-hash": "689d47c2a09253447f1efd2a1b86d56c",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -138,76 +138,6 @@
                 }
             ],
             "time": "2021-12-04T23:24:31+00:00"
-        },
-        {
-            "name": "robthree/twofactorauth",
-            "version": "1.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RobThree/TwoFactorAuth.git",
-                "reference": "5afcb45282f1c75562a48d479ecd1732c9bdb11b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/5afcb45282f1c75562a48d479ecd1732c9bdb11b",
-                "reference": "5afcb45282f1c75562a48d479ecd1732c9bdb11b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "php-parallel-lint/php-parallel-lint": "^1.2",
-                "phpunit/phpunit": "@stable"
-            },
-            "suggest": {
-                "bacon/bacon-qr-code": "Needed for BaconQrCodeProvider provider",
-                "endroid/qr-code": "Needed for EndroidQrCodeProvider"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "RobThree\\Auth\\": "lib"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rob Janssen",
-                    "homepage": "http://robiii.me",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Two Factor Authentication",
-            "homepage": "https://github.com/RobThree/TwoFactorAuth",
-            "keywords": [
-                "Authentication",
-                "MFA",
-                "Multi Factor Authentication",
-                "Two Factor Authentication",
-                "authenticator",
-                "authy",
-                "php",
-                "tfa"
-            ],
-            "support": {
-                "issues": "https://github.com/RobThree/TwoFactorAuth/issues",
-                "source": "https://github.com/RobThree/TwoFactorAuth"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/robiii",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/RobThree",
-                    "type": "github"
-                }
-            ],
-            "time": "2021-10-20T12:19:55+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

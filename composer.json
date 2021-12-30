@@ -13,7 +13,6 @@
         }
     ],
     "require": {
-        "vlucas/phpdotenv": "^5.3",
-        "robthree/twofactorauth": "^1.8"
+        "vlucas/phpdotenv": "^5.3"
     }
 }
