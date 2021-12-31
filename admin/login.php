@@ -57,23 +57,53 @@ $_SESSION["nonce"] = $nonce;
 $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Splash Mountain Legacy - Admin Login Portal</title>
-</head>
-<body>
-    <h1>Splash Mountain Legacy - Admin Login Portal</h1>
-    <?php if($error != "") { ?>
-        <p style="color: red;"><?php echo $error; ?></p>
-    <?php } ?>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-        <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" value="Login">
-    </form>
-</body>
+
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Admin Login - Splash Mountain Legacy</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="/css/adminLogin.css">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2f8ea9">
+        <meta name="msapplication-TileColor" content="#2d89ef">
+        
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)">
+        
+    </head>
+    
+    <body ontouchstart class>
+
+        <main>
+            <section>
+            <h1>Login to Admin Console</h1>
+                <?php if($error != "") { ?>
+                    <p class="errorMessage"><?php echo $error; ?></p>
+                <?php } ?>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                    <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
+                    <input type="text" name="username" placeholder="Username">
+                    <input type="password" name="password" placeholder="Password">
+                    <input type="submit" value="Login">
+                </form>
+            </section>
+        </main>
+        
+        <script src="/js/global.js"></script>
+        
+    </body>
+    
 </html>
