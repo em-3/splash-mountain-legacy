@@ -89,14 +89,18 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
 
         <main>
             <section>
-            <h1>Login to Admin Console</h1>
-                <?php if($error != "") { ?>
-                    <p class="errorMessage"><?php echo $error; ?></p>
-                <?php } ?>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                    <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
-                    <input type="text" name="username" placeholder="Username">
-                    <input type="password" name="password" placeholder="Password">
+                    <div class="titleContainer">
+                        <h1>Login to Admin Console</h1>
+                        <?php if($error != "") { ?>
+                            <p class="errorMessage"><?php echo $error; ?></p>
+                        <?php } ?>
+                    </div>
+                    <div>
+                        <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
+                        <input type="text" name="username" placeholder="Username">
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
                     <input type="submit" value="Login">
                 </form>
             </section>

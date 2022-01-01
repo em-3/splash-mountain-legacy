@@ -17,6 +17,10 @@ section {
   border-radius: 10pt;
   text-align: center;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 form {
@@ -24,12 +28,24 @@ form {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  flex-grow: 1;
+  height: 100%;
   width: calc(100% - 10pt);
   max-width: 300pt;
+  padding: 20pt;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+section form .titleContainer h1 {
+  margin: 0;
+}
+
+section form .titleContainer p.errorMessage {
+  margin: 5pt 0 0 0;
+  color: #ff7e79;
 }
 
 input {
@@ -44,13 +60,22 @@ input {
   border: none;
 }
 
+input[type="text"],
+input[type="password"] {
+  border: 1px solid transparent;
+  transition: border 0.2s ease;
+}
+
 input[type="text"]:focus,
 input[type="password"]:focus {
-  border: 1px solid var(--primary-text--color);
+  border: 1px solid var(--primary-text-color);
+  outline: none;
 }
 
 input[type="submit"] {
   cursor: pointer;
   font-weight: bold;
   background: var(--color-1);
+  color: black;
+  margin-bottom: 0;
 }
