@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     }else {
         //Verify the nonce
         if(!verify_nonce($_POST["nonce"], $_SESSION["nonce"], $_ENV["JWT_SECRET"])) {
-            $error = "Invalid login attempt. Invalid nonce.";
+            $error = "Invalid nonce. Please try again.";
         }else {
             //Check the username and password
             $username = $_POST["username"];
