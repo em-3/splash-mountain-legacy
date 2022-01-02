@@ -146,11 +146,11 @@ form button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 }
 
 .options button {
-  margin: 0 0 10pt 0;
+  margin: 0;
+  padding: 5pt;
   background: transparent;
   border: none;
   font-family: inherit;
@@ -159,8 +159,4 @@ form button:disabled {
   text-decoration: underline;
   color: var(--color-2);
   cursor: pointer;
-}
-
-.options button:last-child {
-  margin-bottom: none;
 }

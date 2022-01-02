@@ -119,6 +119,7 @@ document.body.addEventListener("input", function () {
 
 async function submitForm() {
     document.querySelector(".formContainer").classList.add("hidden");
+    document.querySelector(".responseContainer").classList.add("hidden");
     document.querySelector(".loadingContainer").classList.remove("hidden");
 
     //Create UTC timestamp
