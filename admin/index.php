@@ -143,9 +143,9 @@ if(!check_authentication()) {
                 </div>
             </section>
             <section class="responseContainer hidden">
-                <h1>Done.</h1>
-                <p>Your item has been added to the database.</p>
-                <p class="itemID"></p>
+                <h1 class="title"></h1>
+                <p class="subtitle"></p>
+                <p class="message"></p>
             </section>
         </main>
         

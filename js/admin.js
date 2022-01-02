@@ -182,7 +182,16 @@ async function submitForm() {
     });
     let result = await response.json();
 
+    if (result.status === "success") {
+        document.querySelector(".responseContainer .title").textContent = "Done.";
+        document.querySelector(".responseContainer .subtitle").textContent = "Your item was added to the database.";
+        document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+    } else {
+        document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".responseContainer .message").textContent = result.error;
+    }
+
     document.querySelector(".loadingContainer").classList.add("hidden");
-    document.querySelector(".itemID").textContent = result.id;
     document.querySelector(".responseContainer").classList.remove("hidden");
 }
