@@ -71,7 +71,7 @@ function showItemDetails() {
     if (itemDetails.timestamp) {
         var localUTCOffset = new Date().getTimezoneOffset();
         var parkUTCOffset = 0;
-        switch (park) {
+        switch (itemDetails.park) {
             case "DL":
                 parkUTCOffset = 8 * 60;
                 break;
