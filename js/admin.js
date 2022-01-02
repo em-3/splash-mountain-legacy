@@ -153,7 +153,7 @@ async function submitForm() {
     formData.append("park", park);
     formData.append("description", document.querySelector("#description").value);
 
-    var authorName = document.querySelector("#author").value;
+    var authorName = document.querySelector("#authorName").value;
     var authorURL = document.querySelector("#authorURL").value;
     if (authorName && authorURL) {
         formData.append("author", document.querySelector("#authorName").value + "[" + document.querySelector("#authorURL").value + "]");
@@ -176,13 +176,13 @@ async function submitForm() {
     }
     formData.append("metadata", JSON.stringify(metadata));
 
-    var response = await fetch('/upload.php', {
+    var response = await fetch('/admin/upload.php', {
         method: 'POST',
         body: formData
     });
     let result = await response.json();
 
     document.querySelector(".loadingContainer").classList.add("hidden");
-    document.querySelector(".itemID").textContent = result.message;
+    document.querySelector(".itemID").textContent = result.id;
     document.querySelector(".responseContainer").classList.remove("hidden");
 }
