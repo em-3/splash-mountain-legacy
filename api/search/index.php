@@ -11,16 +11,19 @@ $stmt = "SELECT * FROM `item_index`";
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
-    //Add the query to the list of parameters
-    $params["query"] = $query;
-
     if(preg_match("/[A-Za-z0-9\/]{11}/", $query)) {
+        //Add the query to the list of parameters
+        $params["id"] = $query;
+        
         //If the query is a valid item ID, return only that item
         $id_only = true;
-        $stmt .= "WHERE `id` = :query";
+        $stmt .= "WHERE `id` = :id";
     }else {
+        //Format the query and add it to the parameters
+        $params["query"] = "%" . $query . "%";
+
         //Search for the query in name, author, and description fields
-        $stmt .= "WHERE MATCH ( name, author, description ) AGAINST ( :query IN BOOLEAN MODE )";
+        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
     }
 }
 
