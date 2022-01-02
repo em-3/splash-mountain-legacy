@@ -116,6 +116,36 @@ function showItemContent(id, itemType, itemFormat) {
             var firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(scriptElement, firstScriptTag);
             break;
+        case "date":
+            contentDisplayElement = document.createElement("h1");
+            var date = new Date(loadedItemDetails.timecode);
+            switch (loadedItemDetails.metadata.precision) {
+                case "year":
+                    contentDisplayElement.textContent = date.getFullYear();
+                    break;
+                case "month":
+                    contentDisplayElement.textContent = date.toLocaleString("en-US", { month: "long" }) + date.getFullYear();
+                    break;
+                case "day":
+                    contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear();
+                    break;
+                case "hour":
+                    contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear() + " at " + date.toLocaleString("en-US", { hour: "numeric", hour12: true });
+                    break;
+                case "minute":
+                    contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear() + " at " + date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
+                    break;
+                case "second":
+                    contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear() + " at " + date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", second: "numeric", hour12: true });
+                    break;
+            }
+            document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+            break;
+        case "text":
+            contentDisplayElement = document.createElement("h2");
+            contentDisplayElement.textContent = loadedItemDetails.content;
+            document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+            break;
         default:
             contentDisplayElement = document.createElement("div");
     }

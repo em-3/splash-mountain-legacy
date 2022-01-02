@@ -1,0 +1,120 @@
+header {
+  background: var(--content-background-color);
+  width: 100%;
+  height: 85px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+main section {
+  background: var(--content-background-color);
+  width: calc(100% - 20pt);
+  max-width: 500pt;
+  margin-top: 20pt;
+  border-radius: 10pt;
+  padding: 20pt;
+  text-align: center;
+}
+
+main section h1 {
+  margin: 0 0 10pt 0;
+}
+
+form {
+  width: 100%;
+}
+
+fieldset {
+  width: 100%;
+  margin-top: 10pt;
+  border: 1px solid var(--primary-text-color);
+  border-radius: 5pt;
+  text-align: left;
+}
+
+fieldset legend {
+  width: fit-content;
+}
+
+fieldset div {
+  display: none;
+}
+
+fieldset,
+select[data-selected-option="camera"] ~ div.camera,
+select[data-selected-option="both"] ~ div.camera,
+select[data-selected-option="microphone"] ~ div.microphone,
+select[data-selected-option="both"] ~ div.microphone {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+input:not(:last-child),
+select {
+  margin-bottom: 10pt;
+}
+
+input {
+  font-family: inherit;
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  font-family: inherit;
+  outline: none;
+  display: grid;
+  grid-template-areas: "select";
+  grid-area: select;
+  align-items: center;
+}
+
+textarea {
+  resize: vertical;
+}
+
+select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--primary-text-color);
+  -webkit-clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  grid-area: select;
+  justify-self: end;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+textarea,
+select {
+  padding: 5pt;
+  border-radius: 5pt;
+  border: 1px solid var(--primary-text-color);
+}
+
+button {
+  margin-top: 10pt;
+  width: 100%;
+  background: var(--color-1);
+  padding: 10pt;
+  border: none;
+  border-radius: 5pt;
+  font-family: inherit;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
