@@ -10,8 +10,8 @@
  */
 function upload_item($item_data, $database, $image_data = null, $resource_dir=null) {
     //Define required and optional POST parameters
-    $required_params = ["name", "type", "park", "author", "description", "timestamp"];
-    $optional_params = ["video_id", "metadata"];
+    $required_params = ["name", "type", "park", "author", "description"];
+    $optional_params = ["video_id", "metadata", "timestamp"];
 
     $params = array();
 
