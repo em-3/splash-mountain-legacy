@@ -74,6 +74,9 @@ function updateItemType() {
     show("content", false);
     hide("file");
     hide("videoID");
+    show("date", false);
+    show("time", false);
+    show("precision", true);
     hide("make");
     hide("model");
     hide("camera");
@@ -85,6 +88,7 @@ function updateItemType() {
             show("file", true);
             show("date", true);
             show("time", true);
+            show("precision", true);
             show("make", false);
             show("model", false);
             show("camera", false);
@@ -181,7 +185,7 @@ async function submitForm() {
     }
 
     var metadata = {};
-    var keys = ["make", "model", "focalLength", "software", "exposureTime", "fNumber", "flash", "colorSpace", "samplingRate"];
+    var keys = ["make", "model", "focalLength", "software", "exposureTime", "fNumber", "flash", "colorSpace", "samplingRate", "precision"];
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         var value = document.querySelector("#" + key).value;

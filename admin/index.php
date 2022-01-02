@@ -95,6 +95,14 @@ if(!check_authentication()) {
                         <input type="date" id="date" name="date">
                         <label for="time">Time</label>
                         <input type="time" id="time" name="time">
+                        <label for="precision">Timestamp Precision</label>
+                        <select name="precision" id="precision">
+                            <option value="year" selected>Year</option>
+                            <option value="month">Month</option>
+                            <option value="day">Day</option>
+                            <option value="hour">Hour</option>
+                            <option value="minute" selected>Minute</option>
+                        </select>
 
                         <!-- Make -->
                         <label for="make">Make</label>
