@@ -103,6 +103,19 @@ function updateItemType() {
     }
 }
 
+document.body.addEventListener("input", function () {
+    var requiredFields = document.querySelectorAll("*[required]");
+    for (var i = 0; i < requiredFields.length; i++) {
+        var field = requiredFields[i];
+        var value = field.value;
+        if (!value) {
+            document.querySelector("#submitButton").disabled = true;
+            return;
+        }
+    }
+    document.querySelector("#submitButton").disabled = false;
+});
+
 async function submitForm() {
     document.querySelector(".formContainer").classList.add("hidden");
     document.querySelector(".loadingContainer").classList.remove("hidden");

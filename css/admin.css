@@ -28,6 +28,10 @@ main .formContainer {
   margin-bottom: 20pt;
 }
 
+main .responseContainer p {
+  margin: 5pt 0 0 0;
+}
+
 main section h1 {
   margin: 0 0 10pt 0;
 }
@@ -130,4 +134,8 @@ button {
   font-weight: bold;
   color: black;
   cursor: pointer;
+}
+
+button:disabled {
+  background: #ff7e79;
 }
