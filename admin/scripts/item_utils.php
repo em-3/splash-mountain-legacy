@@ -160,7 +160,7 @@ function validate_uploaded_image($file) {
     }
 
     //Check if the file is a png, jpeg, or gif
-    $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
+    $extension = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
     if($extension != "png" && $extension != "jpeg" && $extension != "jpg" && $extension != "gif") {
         $error = "File is not a valid image";
     }
