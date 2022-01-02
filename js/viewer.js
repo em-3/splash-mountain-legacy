@@ -143,7 +143,7 @@ function showItemContent(id, itemType, itemFormat) {
             break;
         case "text":
             contentDisplayElement = document.createElement("h2");
-            contentDisplayElement.textContent = loadedItemDetails.content;
+            contentDisplayElement.textContent = loadedItemDetails.description;
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
             break;
         default:

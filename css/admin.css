@@ -24,6 +24,10 @@ main section {
   text-align: center;
 }
 
+main .formContainer {
+  margin-bottom: 20pt;
+}
+
 main section h1 {
   margin: 0 0 10pt 0;
 }
@@ -38,6 +42,7 @@ fieldset {
   border: 1px solid var(--primary-text-color);
   border-radius: 5pt;
   text-align: left;
+  padding: 5pt 10pt 0 10pt;
 }
 
 fieldset legend {
@@ -45,22 +50,19 @@ fieldset legend {
 }
 
 fieldset div {
-  display: none;
-}
-
-fieldset,
-select[data-selected-option="camera"] ~ div.camera,
-select[data-selected-option="both"] ~ div.camera,
-select[data-selected-option="microphone"] ~ div.microphone,
-select[data-selected-option="both"] ~ div.microphone {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
 }
 
-input:not(:last-child),
-select {
+*:focus {
+  outline: none;
+}
+
+input,
+select,
+textarea {
   margin-bottom: 10pt;
 }
 
@@ -94,6 +96,10 @@ select::after {
   justify-self: end;
 }
 
+input[type="file"] {
+  width: 100%;
+}
+
 input[type="text"],
 input[type="url"],
 input[type="date"],
@@ -101,9 +107,16 @@ input[type="time"],
 input[type="number"],
 textarea,
 select {
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
   padding: 5pt;
   border-radius: 5pt;
   border: 1px solid var(--primary-text-color);
+  width: 100%;
+}
+
+*:required:placeholder-shown {
+  border-color: #ff7e79;
 }
 
 button {

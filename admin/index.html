@@ -35,54 +35,64 @@
         </header>
 
         <main>
-            <section>
+            <section class="formContainer">
                 <h1>Add an Item to the Database</h1>
                 <form action="">
                     <fieldset>
-                        <legend>File Upload</legend>
-                        <input type="file" name="file" id="file">
+                        <legend>Item Type</legend>
+                        <label for="type">
+                        <select name="type" id="type" onchange="updateItemType()" required>
+                            <option value="image" selected>Image</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="date">Date</option>
+                            <option value="text">Text</option>
+                        </select>
+                    </fieldset>
+                    <fieldset id="content">
+                        <legend>Content</legend>
+                        <label for="file">Image</label>
+                        <input type="file" accept="image/png, image/jpeg" name="file" id="file">
+                        <label for="videoID" class="hidden">YouTube Video ID</label>
+                        <input type="text" id="videoID" name="videoID" placeholder="dQw4w9WgXcQ" class="hidden">
                     </fieldset>
                     <fieldset>
-                        <legend>Basic Information</legend>
+                        <legend>Description</legend>
                         <!-- Name -->
                         <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="name" name="name" placeholder="Splash Mountain" required>
                         <!-- Description -->
                         <label for="description">Description</label>
-                        <textarea id="description" name="description" required></textarea>
+                        <textarea id="description" name="description" placeholder="Splash Mountain as seen at sunset." required></textarea>
                         <!-- Author -->
                         <label for="authorName">Author Name</label>
-                        <input type="text" id="authorName" name="authorName" required>
-                        <label for="author">Author Link</label>
-                        <input type="url" id="author" name="author">
+                        <input type="text" id="authorName" name="authorName" placeholder="91J Loves Disney">
+                        <label for="authorURL">Author Link</label>
+                        <input type="url" id="authorURL" name="authorURL" placeholder="https://youtu.be/dQw4w9WgXcQ">
+                        <!-- Park -->
+                        <label for="park">Park</label>
+                        <select name="park" id="park" required>
+                            <option value="DL" selected>Disneyland</option>
+                            <option value="TDL">Tokyo Disneyland</option>
+                            <option value="WDW">Walt Disney World</option>
+                        </select>
                     </fieldset>
-                    <fieldset>
+                    <fieldset id="metadata">
                         <legend>Metadata</legend>
                         <!-- Timestamp -->
                         <label for="date">Date</label>
-                        <input type="date" id="date" name="date" required>
+                        <input type="date" id="date" name="date">
                         <label for="time">Time</label>
-                        <input type="time" id="time" name="time" required>
+                        <input type="time" id="time" name="time">
 
-                        <!-- Manufacturer -->
+                        <!-- Make -->
                         <label for="make">Make</label>
                         <input type="text" id="make" name="make">
                         <!-- Model -->
                         <label for="model">Model</label>
                         <input type="text" id="model" name="model">
 
-                        <!-- Recording Device Type -->
-                        <label for="recordingDeviceType">Recording Device Type</label>
-                        <select id="recordingDeviceType" name="recordingDeviceType" data-selected-option="camera" onchange="this.dataset.selectedOption = this.value"
-                            required>
-                            <option value="camera">Camera</option>
-                            <option value="microphone">Microphone</option>
-                            <option value="both">Camera with Microphone</option>
-                            <option value="other">Other</option>
-                            <option value="none">N/A</option>
-                        </select>
-
-                        <div class="camera">
+                        <div id="camera">
                             <!-- Focal Length -->
                             <label for="focalLength">Focal Length</label>
                             <input type="text" id="focalLength" name="focalLength" placeholder="20.1 mm">
@@ -102,8 +112,7 @@
                             <label for="colorSpace">Color Space</label>
                             <input type="text" id="colorSpace" name="colorSpace" placeholder="sRGB">
                         </div>
-
-                        <div class="microphone">
+                        <div id="microphone" class="hidden">
                             <!-- Sampling Rate -->
                             <label for="samplingRate">Sampling Rate</label>
                             <input type="number" id="samplingRate" name="samplingRate">
@@ -111,8 +120,21 @@
 
                     </fieldset>
 
-                    <button class="submit">Add</button>
+                    <button id="submitButton" type="button" onclick="submitForm()">Add</button>
                 </form>
+            </section>
+            <section class="loadingContainer hidden">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </section>
+            <section class="responseContainer hidden">
+                <h1>Done.</h1>
+                <p>Your item has been added to the database.</p>
+                <p class="itemID"></p>
             </section>
         </main>
         
