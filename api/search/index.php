@@ -48,6 +48,17 @@ if(!$id_only) {
         }
     }
 
+    
+    if(count($params) > 0) {
+        $stmt .= " AND";
+    }else {
+        $stmt .= " WHERE";
+    }
+
+    $stmt .= "`hidden` = 0";
+
+    $stmt .= " ORDER BY `name`";
+
     if(isset($_GET["max"])) {
         $max = intval($_GET["max"]);
 
