@@ -1,3 +1,14 @@
+<?php
+
+require_once __DIR__ . "/scripts/init_admin.php";
+
+//Redirect the user if they are not logged in
+if(!check_authentication()) {
+    header("Location: /admin/login.php");
+    exit;
+}
+
+?>
 <!DOCTYPE HTML>
 <html>
     
