@@ -105,7 +105,7 @@ function refreshResults () {
 
                 var author = document.createElement("p");
                 author.classList.add("author");
-                author.textContent = currentItemData.author;
+                author.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
 
                 headerContainer.appendChild(name);
                 headerContainer.appendChild(type);

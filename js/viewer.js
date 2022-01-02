@@ -36,19 +36,99 @@ function checkTimeout(itemDetails) {
 function showItemDetails() {
     var itemDetails = loadedItemDetails;
 
+    function createDetailProperty(label, value, link) {
+        var element = document.createElement("p");
+        element.classList.add("property");
+        element.textContent = label + ": ";
+        var span = document.createElement("span");
+        span.textContent = value;
+        if (link) {
+            var a = document.createElement("a");
+            a.href = link;
+            a.target = "_blank";
+            a.appendChild(span);
+            element.appendChild(a);
+        } else {
+            element.appendChild(span);
+        }
+        document.querySelector(".itemInfoContainer").appendChild(element);
+    }
+
     //Show the item details
     document.querySelector(".park").textContent = itemDetails.park;
     document.querySelector(".name").textContent = itemDetails.name;
     document.querySelector(".description").textContent = itemDetails.description;
-    var properties = ["author", "date", "type", "format"];
-    for (var i in properties) {
-        var element = document.createElement("p");
-        element.classList.add("property");
-        element.textContent = properties[i][0].toUpperCase() + properties[i].slice(1) + ": ";
-        var span = document.createElement("span");
-        span.textContent = itemDetails[properties[i]];
-        element.appendChild(span);
-        document.querySelector(".itemInfoContainer").appendChild(element);
+    if (itemDetails.author) {
+        createDetailProperty(
+            "Author",
+            itemDetails.author.replace(/\[([^\][]+)]/g, ""),
+            itemDetails.author.match(/\[([^\][]+)]/g)[0].substring(
+                1,
+                itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
+            )
+        );
+    }
+    if (itemDetails.timestamp) {
+        var localUTCOffset = new Date().getTimezoneOffset();
+        var parkUTCOffset = 0;
+        switch (park) {
+            case "DL":
+                parkUTCOffset = 8 * 60;
+                break;
+            case "TDL":
+                parkUTCOffset = -9 * 60;
+                break;
+            case "WDW":
+                parkUTCOffset = 5 * 60;
+                break;
+        }
+        var relativeOffset = parkUTCOffset - localUTCOffset;
+        var dateObject = new Date(Number(itemDetails.timestamp));
+        dateObject.setMinutes(dateObject.getMinutes() - relativeOffset);
+
+        var timestampValue = "";
+        switch (itemDetails.metadata.precision) {
+            case "year":
+                timestampValue = dateObject.toLocaleDateString("en-US", {
+                    year: "numeric"
+                });
+                break;
+            case "month":
+                timestampValue = dateObject.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long"
+                });
+                break;
+            case "day":
+                timestampValue = dateObject.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
+                break;
+            case "hour":
+                timestampValue = dateObject.toLocaleTimeString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric"
+                });
+                break;
+            case "minute":
+                timestampValue = dateObject.toLocaleTimeString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric"
+                });
+                break;
+        }
+
+        createDetailProperty(
+            "Timestamp", 
+            timestampValue
+        );
     }
 
     document.querySelector(".contentType").textContent = itemDetails.type;

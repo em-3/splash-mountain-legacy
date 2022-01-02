@@ -92,4 +92,8 @@ main {
 
 .resultsContainer .result .author {
   margin: 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: hidden;
+  white-space: nowrap;
 }
