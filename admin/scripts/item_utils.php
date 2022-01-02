@@ -35,8 +35,6 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
             } else {
                 $params[$param] = $item_data[$param];
             }
-        }else {
-            $params[$param] = null;
         }
     }
 
