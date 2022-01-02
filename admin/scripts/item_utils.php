@@ -46,24 +46,6 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
         throw new Exception("Cannot have an image and a video id");
     }
 
-    //Check if the user uploaded an image
-    if(isset($image_data)) {
-        if(!isset($resource_dir)) {
-            throw new Exception("Missing resource directory");
-        }
-
-        $image_dir = $resource_dir . "/" . $params["id"];
-
-        //Check if the image is a valid image
-        validate_uploaded_image($image_data);
-
-        //Upload the image
-        upload_image($image_data, $image_dir);
-
-        //Generate a thumbnail
-        generate_thumbnail($image_dir);
-    }
-
     //Set up the database query
     $stmt = "INSERT INTO `item_index` (";
 
@@ -87,6 +69,8 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
 
     $stmt .= ")";
 
+    $database->beginTransaction();
+
     $stmt = $database->prepare($stmt);
 
     //Bind the values to the query
@@ -106,6 +90,47 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
     if($stmt->rowCount() != 1) {
         throw new Exception("Failed to insert item into database");
     }
+
+    //Check if the user uploaded an image
+    try {
+        if(isset($image_data)) {
+            if(!isset($resource_dir)) {
+                throw new Exception("Missing resource directory");
+            }
+
+            $image_dir = $resource_dir . "/" . $params["id"];
+
+            //Check if the image is a valid image
+            validate_uploaded_image($image_data);
+
+            //Upload the image
+            upload_image($image_data, $image_dir);
+
+            //Generate a thumbnail
+            generate_thumbnail($image_dir);
+        }
+    }catch(Exception $e) {
+        //Rollback the transaction
+        $database->rollBack();
+
+        //Delete any uploaded images
+        if(file_exists($image_dir . "/main")) {
+            unlink($image_dir . "/main");
+        }
+
+        if(file_exists($image_dir . "/thumbnail")) {
+            unlink($image_dir . "/thumbnail");
+        }
+
+        if(is_dir($image_dir)) {
+            rmdir($image_dir);
+        }
+
+        //Throw the exception for the caller
+        throw $e;
+    }
+
+    $database->commit();
 
     //Return the ID of the item
     return $params["id"];
