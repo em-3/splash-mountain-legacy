@@ -201,10 +201,12 @@ async function submitForm() {
         document.querySelector(".responseContainer .title").textContent = "Done.";
         document.querySelector(".responseContainer .subtitle").textContent = "Your item was added to the database.";
         document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+        document.querySelector(".responseContainer .retry").classList.add("hidden");
     } else {
         document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
         document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
         document.querySelector(".responseContainer .message").textContent = result.error;
+        document.querySelector(".responseContainer .retry").classList.remove("hidden");
     }
 
     document.querySelector(".loadingContainer").classList.add("hidden");

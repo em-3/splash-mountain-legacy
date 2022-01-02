@@ -147,7 +147,7 @@ if(!check_authentication()) {
                 <p class="subtitle"></p>
                 <p class="message"></p>
                 <div class="options">
-                    <button class="button" onclick="submitForm()">Retry Upload</button>
+                    <button class="button retry hidden" onclick="submitForm()">Retry Upload</button>
                     <button class="button" onclick="window.location.reload()">Upload Another Item</button>
                     <button class="button" onclick="window.location.href='logout.php'">Logout</button>
                 </div>
