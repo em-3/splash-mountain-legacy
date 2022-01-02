@@ -60,10 +60,10 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
         validate_uploaded_image($image_data);
 
         //Upload the image
-        upload_image($image_data, $image_dir, $params["id"]);
+        upload_image($image_data, $image_dir);
 
         //Generate a thumbnail
-        generate_thumbnail($params["id"], $image_dir);
+        generate_thumbnail($image_dir);
     }
 
     //Set up the database query
