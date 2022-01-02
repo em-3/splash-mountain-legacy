@@ -17,7 +17,13 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
 $resource_dir = __DIR__ . "/../resources";
 
 try {
-    $id = upload_item($_POST, $database, $_FILES["image"], $resource_dir);
+    $image_data = null;
+
+    if(isset($_FILES["image"])) {
+        $image_data = $_FILES["image"];
+    }
+
+    $id = upload_item($_POST, $database, $image_data, $resource_dir);
 
     header("Content-Type: application/json");
     exit(json_encode(["status" => "success", "id" => $id]));
