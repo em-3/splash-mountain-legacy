@@ -35,6 +35,7 @@ function checkTimeout(itemDetails) {
 
 function showItemDetails() {
     var itemDetails = loadedItemDetails;
+    var metadata = JSON.parse(loadedItemDetails.metadata);
 
     function createDetailProperty(label, value, link) {
         var element = document.createElement("p");
@@ -87,7 +88,7 @@ function showItemDetails() {
         dateObject.setMinutes(dateObject.getMinutes() - relativeOffset);
 
         var timestampValue = "";
-        switch (itemDetails.metadata.precision) {
+        switch (metadata.precision) {
             case "year":
                 timestampValue = dateObject.toLocaleDateString("en-US", {
                     year: "numeric"
