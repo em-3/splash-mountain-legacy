@@ -92,6 +92,7 @@ function updateItemType() {
         case "video":
             show("camera", false);
         case "audio":
+            show("content", false);
             show("videoID", true);
             show("make", false);
             show("model", false);

@@ -131,7 +131,7 @@ if(!check_authentication()) {
 
                     </fieldset>
 
-                    <button id="submitButton" type="button" onclick="submitForm()">Add</button>
+                    <button id="submitButton" type="button" onclick="submitForm()" disabled>Add</button>
                 </form>
             </section>
             <section class="loadingContainer hidden">
@@ -146,6 +146,10 @@ if(!check_authentication()) {
                 <h1 class="title"></h1>
                 <p class="subtitle"></p>
                 <p class="message"></p>
+                <div class="options">
+                    <button class="button" onclick="window.location.reload()">Upload Another Item</button>
+                    <button class="button" onclick="window.location.href='logout.php'">Logout</button>
+                </div>
             </section>
         </main>
         

@@ -123,7 +123,7 @@ select {
   border-color: #ff7e79;
 }
 
-button {
+form button {
   margin-top: 10pt;
   width: 100%;
   background: var(--color-1);
@@ -136,6 +136,31 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
+form button:disabled {
   background: #ff7e79;
+  cursor: not-allowed;
+}
+
+.options {
+  margin-top: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.options button {
+  margin: 0 0 10pt 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 8pt;
+  text-decoration: underline;
+  color: var(--color-2);
+  cursor: pointer;
+}
+
+.options button:last-child {
+  margin-bottom: none;
 }
