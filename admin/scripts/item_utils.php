@@ -221,24 +221,29 @@ function upload_image($image, $image_dir) {
 function generate_thumbnail($image_dir) {
     //Conver the image into a GD image
     $image_gd = imagecreatefromstring(file_get_contents($image_dir . "/main"));
-    $thumbnail_gd = imagecreatetruecolor(256, 256);
+
+    //Resize the image
+    $image_width = imagesx($image_gd);
+    $image_height = imagesy($image_gd);
+
+    $thumbnail_width = 256;
+    $thumbnail_height = 256;
+
+    if($image_width > $image_height) {
+        $thumbnail_height = 256 * $image_height / $image_width;
+    }else if($image_width < $image_height) {
+        $thumbnail_width = 256 * $image_width / $image_height;
+    }
+
+    $thumbnail_gd = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 
     if(!$image_gd || !$thumbnail_gd) {
         throw new Exception("Failed to create GD image");
     }
 
-    //Resize the image
-    $image_width = imagesx($image_gd);
-    $image_height = imagesy($image_gd);
-    $crop_width = min($image_width, $image_height);
-    $crop_height = min($image_width, $image_height);
-
-    $x = ($image_width - $crop_width) / 2;
-    $y = ($image_height - $crop_height) / 2;
-
-    //Resample and crop the image
-    if(!imagecopyresampled($thumbnail_gd, $image_gd, 0, 0, $x, $y, 256, 256, $crop_width, $crop_height)) {
-        throw new Exception("Failed to resample image");
+    //Resample the image
+    if(!imagecopyresampled($thumbnail_gd, $image_gd, 0, 0, 0, 0, $thumbnail_width, $thumbnail_height, $image_width, $image_height)) {
+        throw new Exception("Failed to resize image");
     }
 
     //Save the thumbnail
