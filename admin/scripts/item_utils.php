@@ -42,7 +42,7 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
     $params["id"] = generate_id($database);
 
     //We can't have an image and a video id
-    if($params["video_id"] != null && isset($image_data)) {
+    if(isset($params["video_id"]) && isset($image_data)) {
         throw new Exception("Cannot have an image and a video id");
     }
 
