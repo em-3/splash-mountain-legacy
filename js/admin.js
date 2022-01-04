@@ -150,6 +150,10 @@ async function submitForm() {
         var splitTime = time.split(/\D/);
         var dateObject = new Date(splitDate[0], splitDate[1] - 1, splitDate[2], splitTime[0], splitTime[1] + relativeOffset);
         var timestamp = dateObject.getTime();
+    } else if (date) {
+        var splitDate = date.split(/\D/);
+        var dateObject = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
+        var timestamp = dateObject.getTime();
     }
 
     var formData = new FormData();
