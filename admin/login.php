@@ -71,7 +71,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/global.css">
-        <link rel="stylesheet" href="/css/adminLogin.css">
+        <link rel="stylesheet" href="login.css">
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">

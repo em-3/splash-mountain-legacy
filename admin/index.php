@@ -22,7 +22,7 @@ if(!check_authentication()) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/global.css">
-        <link rel="stylesheet" href="/css/admin.css">
+        <link rel="stylesheet" href="index.css">
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -163,8 +163,8 @@ if(!check_authentication()) {
         </main>
         
         <script src="/js/global.js"></script>
-        <script src="/js/admin.js"></script>
-        <script src="/js/EXIF.js"></script>
+        <script src="index.js"></script>
+        <script src="EXIF.js"></script>
         
     </body>
     
