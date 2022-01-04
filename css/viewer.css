@@ -63,12 +63,35 @@ header.hidden {
 }
 
 .contentContainer .contentDisplay {
+  overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .contentContainer .contentDisplay.invisible {
   opacity: 0;
   transform: translateY(100pt);
+}
+
+.contentContainer .contentDisplay > img {
+  width: 100%;
+  height: auto;
+}
+
+.contentDisplay .thumbnail:not(.hidden) {
+  transform: scale(1.2);
+  filter: blur(20pt);
+}
+
+.contentDisplay .thumbnail ~ .loadingAnimationContainer {
+  position: absolute;
+}
+
+.contentDisplay
+  .thumbnail
+  ~ .loadingAnimationContainer
+  .loadingAnimationEllipsis
+  div {
+  background: white;
 }
 
 .audioControls {
@@ -152,13 +175,6 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-}
-
-.contentContainer .contentDisplay > img {
-  width: auto;
-  height: auto;
-  max-height: 500pt;
-  max-width: 100%;
 }
 
 .itemInfoContainer {

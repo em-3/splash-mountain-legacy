@@ -144,9 +144,9 @@ function showItemDetails() {
         document.querySelector(".metadata .header .make").textContent = metadata.make;
         document.querySelector(".metadata .header .model").textContent = metadata.model;
 
-        if (metadata.version) {
+        if (metadata.software) {
             var versionElement = document.querySelector(".metadata .header .version");
-            versionElement.textContent = metadata.version;
+            versionElement.textContent = metadata.software;
             versionElement.classList.remove("hidden");
         }
 
@@ -162,7 +162,7 @@ function showItemDetails() {
             createContentPropertyElement("ƒ" + metadata.fNumber);
         }
         if (metadata.exposureTime) {
-            createContentPropertyElement(metadata.fNumber);
+            createContentPropertyElement(metadata.exposureTime);
         }
         if (metadata.colorSpace) {
             createContentPropertyElement(metadata.colorSpace);
@@ -183,19 +183,42 @@ function showItemDetails() {
 }
 
 function showItemContent(id, itemType, itemFormat) {
-    var contentDisplayElement;
     //Show the item content
     switch (itemType) {
         case "image":
-            contentDisplayElement = document.createElement("img");
+            var thumbnailElement = document.createElement("img");
+            thumbnailElement.classList.add("thumbnail");
+            thumbnailElement.src = "/resources/" + id + "/thumbnail";
+            document.querySelector(".contentDisplay").appendChild(thumbnailElement);
+
+            var loadingContainer = document.createElement("div");
+            loadingContainer.classList.add("loadingAnimationContainer");
+            loadingContainer.innerHTML = `
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            `;
+            document.querySelector(".contentDisplay").appendChild(loadingContainer);
+
+            var contentDisplayElement = document.createElement("img");
+            contentDisplayElement.classList.add("main");
+            contentDisplayElement.classList.add("hidden");
+            contentDisplayElement.onload = function () {
+                document.querySelector(".contentDisplay .thumbnail").classList.add("hidden");
+                document.querySelector(".contentDisplay .loadingAnimationContainer").classList.add("hidden");
+                document.querySelector(".contentDisplay .main").classList.remove("hidden");
+            }
             contentDisplayElement.src = "/resources/" + id + "/main";
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
     
-            document.querySelector(".loadingScreen").classList.add("hidden")
+            document.querySelector(".loadingScreen").classList.add("hidden");
             document.querySelector(".contentDisplay").classList.remove("hidden");
             break;
         case "video":
-            contentDisplayElement = document.createElement("div");
+            var contentDisplayElement = document.createElement("div");
             contentDisplayElement.id = "player";
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
 
@@ -237,7 +260,7 @@ function showItemContent(id, itemType, itemFormat) {
             firstScriptTag.parentNode.insertBefore(scriptElement, firstScriptTag);
             break;
         case "date":
-            contentDisplayElement = document.createElement("h1");
+            var contentDisplayElement = document.createElement("h1");
             var date = new Date(loadedItemDetails.timecode);
             switch (loadedItemDetails.metadata.precision) {
                 case "year":
@@ -259,12 +282,10 @@ function showItemContent(id, itemType, itemFormat) {
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
             break;
         case "text":
-            contentDisplayElement = document.createElement("h2");
+            var contentDisplayElement = document.createElement("h2");
             contentDisplayElement.textContent = loadedItemDetails.description;
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
             break;
-        default:
-            contentDisplayElement = document.createElement("div");
     }
 
     requestAnimationFrame(function () {
