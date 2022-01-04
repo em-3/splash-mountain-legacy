@@ -58,6 +58,7 @@ main {
 
 .resultsContainer .result {
   background: var(--content-background-color);
+  height: 75px;
   border-radius: 10pt;
   display: flex;
   flex-direction: column;
