@@ -93,10 +93,12 @@ var searchBar = {
         typeElement.textContent = resultItem.type;
         infoContainerElement.appendChild(typeElement);
 
-        var authorElement = document.createElement("p");
-        authorElement.className = "author";
-        authorElement.textContent = resultItem.author.replace(/\[([^\][]+)]/g, "");
-        infoContainerElement.appendChild(authorElement);
+        if (resultItem.author) {
+            var authorElement = document.createElement("p");
+            authorElement.className = "author";
+            authorElement.textContent = resultItem.author.replace(/\[([^\][]+)]/g, "");
+            infoContainerElement.appendChild(authorElement);
+        }
 
         rightSideContainer.appendChild(nameElement);
         rightSideContainer.appendChild(infoContainerElement);

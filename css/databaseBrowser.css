@@ -73,7 +73,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 5pt 0;
+  margin: 0;
 }
 
 .resultsContainer .result .headerContainer * {
@@ -91,7 +91,7 @@ main {
 }
 
 .resultsContainer .result .author {
-  margin: 0;
+  margin: 5pt 0 0 0;
   width: 100%;
   overflow: hidden;
   text-overflow: hidden;

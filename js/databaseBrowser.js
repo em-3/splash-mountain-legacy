@@ -103,15 +103,17 @@ function refreshResults () {
                 type.classList.add("type");
                 type.textContent = currentItemData.type;
 
-                var author = document.createElement("p");
-                author.classList.add("author");
-                author.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+                if (currentItemData.author) {
+                    var author = document.createElement("p");
+                    author.classList.add("author");
+                    author.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+                }
 
                 headerContainer.appendChild(name);
                 headerContainer.appendChild(type);
 
                 resultElement.appendChild(headerContainer);
-                resultElement.appendChild(author);
+                if (currentItemData.author) resultElement.appendChild(author);
                 document.querySelector(".resultsContainer").appendChild(resultElement);
             }
         }
