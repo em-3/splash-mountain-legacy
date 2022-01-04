@@ -261,7 +261,7 @@ function showItemContent(id, itemType, itemFormat) {
             break;
         case "date":
             var contentDisplayElement = document.createElement("h1");
-            var date = new Date(Number(loadedItemDetails.timecode));
+            var date = new Date(Number(loadedItemDetails.timestamp));
             var localUTCOffset = new Date().getTimezoneOffset();
             var parkUTCOffset = 0;
             switch (loadedItemDetails.park) {
