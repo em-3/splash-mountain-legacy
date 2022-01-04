@@ -74,7 +74,7 @@ function showItemDetails() {
             )
         );
     }
-    if (itemDetails.timestamp) {
+    if (itemDetails.timestamp && itemDetails.type !== "date") {
         var localUTCOffset = new Date().getTimezoneOffset();
         var parkUTCOffset = 0;
         switch (itemDetails.park) {
@@ -261,8 +261,25 @@ function showItemContent(id, itemType, itemFormat) {
             break;
         case "date":
             var contentDisplayElement = document.createElement("h1");
-            var date = new Date(loadedItemDetails.timecode);
-            switch (loadedItemDetails.metadata.precision) {
+            var date = new Date(Number(loadedItemDetails.timecode));
+            var localUTCOffset = new Date().getTimezoneOffset();
+            var parkUTCOffset = 0;
+            switch (loadedItemDetails.park) {
+                case "DL":
+                    parkUTCOffset = 8 * 60;
+                    break;
+                case "TDL":
+                    parkUTCOffset = -9 * 60;
+                    break;
+                case "WDW":
+                    parkUTCOffset = 5 * 60;
+                    break;
+            }
+            var relativeOffset = parkUTCOffset - localUTCOffset;
+            date = new Date(Number(loadedItemDetails.timestamp));
+            date.setMinutes(date.getMinutes() - relativeOffset);
+
+            switch (JSON.parse(loadedItemDetails.metadata).precision) {
                 case "year":
                     contentDisplayElement.textContent = date.getFullYear();
                     break;
@@ -280,11 +297,15 @@ function showItemContent(id, itemType, itemFormat) {
                     break;
             }
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+            document.querySelector(".loadingScreen").classList.add("hidden");
+            document.querySelector(".contentDisplay").classList.remove("hidden");
             break;
         case "text":
             var contentDisplayElement = document.createElement("h2");
             contentDisplayElement.textContent = loadedItemDetails.description;
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+            document.querySelector(".loadingScreen").classList.add("hidden");
+            document.querySelector(".contentDisplay").classList.remove("hidden");
             break;
     }
 
