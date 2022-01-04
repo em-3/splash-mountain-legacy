@@ -95,7 +95,7 @@ var searchBar = {
 
         var authorElement = document.createElement("p");
         authorElement.className = "author";
-        authorElement.textContent = resultItem.author;
+        authorElement.textContent = resultItem.author.replace(/\[([^\][]+)]/g, "");
         infoContainerElement.appendChild(authorElement);
 
         rightSideContainer.appendChild(nameElement);
