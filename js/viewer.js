@@ -29,7 +29,7 @@ if (id) {
 function checkTimeout(itemDetails) {
     loadedItemDetails = itemDetails;
     if (timeOutHasExpired) {
-        showErrorScreen();
+        showItemDetails();
     }
 }
 
