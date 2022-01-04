@@ -63,6 +63,7 @@ header.hidden {
 }
 
 .contentContainer .contentDisplay {
+  background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
