@@ -255,9 +255,6 @@ function showItemContent(id, itemType, itemFormat) {
                 case "minute":
                     contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear() + " at " + date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
                     break;
-                case "second":
-                    contentDisplayElement.textContent = date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear() + " at " + date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", second: "numeric", hour12: true });
-                    break;
             }
             document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
             break;
