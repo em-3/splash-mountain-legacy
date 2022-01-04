@@ -58,7 +58,12 @@ function showItemDetails() {
     //Show the item details
     document.querySelector(".park").textContent = itemDetails.park;
     document.querySelector(".name").textContent = itemDetails.name;
-    document.querySelector(".description").textContent = itemDetails.description;
+    if (itemDetails.type !== "text") {
+        var descriptionElement = document.createElement("p");
+        descriptionElement.classList.add("description");
+        descriptionElement.textContent = itemDetails.description;
+        document.querySelector(".itemInfoContainer").appendChild(descriptionElement);
+    }
     if (itemDetails.author) {
         createDetailProperty(
             "Author",
@@ -130,6 +135,40 @@ function showItemDetails() {
             "Timestamp", 
             timestampValue
         );
+    }
+    if (
+        metadata &&
+        metadata.make &&
+        metadata.model
+    ) {
+        document.querySelector(".metadata .header .make").textContent = metadata.make;
+        document.querySelector(".metadata .header .model").textContent = metadata.model;
+
+        if (metadata.version) {
+            var versionElement = document.querySelector(".metadata .header .version");
+            versionElement.textContent = metadata.version;
+            versionElement.classList.remove("hidden");
+        }
+
+        function createContentPropertyElement(value) {
+            var element = document.createElement("p");
+            element.textContent = value;
+            document.querySelector(".metadata .content").appendChild(element);
+        }
+        if (metadata.focalLength) {
+            createContentPropertyElement(metadata.focalLength + "mm");
+        }
+        if (metadata.fNumber) {
+            createContentPropertyElement("ƒ" + metadata.fNumber);
+        }
+        if (metadata.exposureTime) {
+            createContentPropertyElement(metadata.fNumber);
+        }
+        if (metadata.colorSpace) {
+            createContentPropertyElement(metadata.colorSpace);
+        }
+
+        document.querySelector(".metadata").classList.remove("hidden");
     }
 
     document.querySelector(".contentType").textContent = itemDetails.type;

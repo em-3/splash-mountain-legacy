@@ -201,3 +201,52 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .itemInfoContainer p span {
   font-weight: normal;
 }
+
+.itemInfoContainer .metadata {
+  background: var(--content-background-color);
+  width: 100%;
+  padding: 10pt;
+  border-radius: 10pt;
+}
+
+.itemInfoContainer .metadata p {
+  margin: 0;
+}
+
+.itemInfoContainer .metadata .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.itemInfoContainer .metadata .header p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemInfoContainer .metadata .header .device {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.itemInfoContainer .metadata .header .device .make {
+  margin-right: 5pt;
+  background: var(--secondary-content-background-color);
+  padding: 5pt;
+  border-radius: 5pt;
+}
+
+.itemInfoContainer .metadata .content {
+  margin-top: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.itemInfoContainer .metadata .content p {
+  border: 2pt solid var(--secondary-content-background-color);
+  padding: 5pt;
+  border-radius: 5pt;
+}
