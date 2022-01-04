@@ -85,35 +85,64 @@ function refreshResults () {
                 var currentItemData = data[i];
 
                 var resultElement = document.createElement("div");
-                resultElement.className = "result";
+                resultElement.className = "listItem";
                 (function (id) {
                     resultElement.onclick = function () {
                         window.top.postMessage("details" + id, "*");
                     }
                 })(currentItemData.id)
 
-                var headerContainer = document.createElement("div");
-                headerContainer.classList.add("headerContainer");
+                if (currentItemData.type === "image") {
+                    var imgElement = document.createElement("img");
+                    imgElement.className = "image";
+                    imgElement.src = "/resources/" + currentItemData.id + "/thumbnail";
+                } else {
+                    var pictureElement = document.createElement("picture");
+                    pictureElement.className = "image";
 
-                var name = document.createElement("h3");
-                name.classList.add("name");
-                name.textContent = currentItemData.name;
+                    var sourceElement = document.createElement("source");
+                    sourceElement.srcset = "/images/icons/types/" + currentItemData.type + "-white.png";
+                    sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
 
-                var type = document.createElement("p");
-                type.classList.add("type");
-                type.textContent = currentItemData.type;
+                    var imgElement = document.createElement("img");
+                    imgElement.src = "/images/icons/types/" + currentItemData.type + "-black.png";
 
-                if (currentItemData.author) {
-                    var author = document.createElement("p");
-                    author.classList.add("author");
-                    author.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+                    pictureElement.appendChild(sourceElement);
+                    pictureElement.appendChild(imgElement);
                 }
 
-                headerContainer.appendChild(name);
-                headerContainer.appendChild(type);
+                var rightSideContainer = document.createElement("div");
+                rightSideContainer.className = "right";
 
-                resultElement.appendChild(headerContainer);
-                if (currentItemData.author) resultElement.appendChild(author);
+                var nameElement = document.createElement("h3");
+                nameElement.className = "name";
+                nameElement.textContent = currentItemData.name;
+
+                var infoContainerElement = document.createElement("div");
+                infoContainerElement.className = "infoContainer";
+
+                var parkElement = document.createElement("p");
+                parkElement.className = "park";
+                parkElement.textContent = currentItemData.park;
+                infoContainerElement.appendChild(parkElement);
+
+                var typeElement = document.createElement("p");
+                typeElement.className = "type";
+                typeElement.textContent = currentItemData.type;
+                infoContainerElement.appendChild(typeElement);
+
+                if (currentItemData.author) {
+                    var authorElement = document.createElement("p");
+                    authorElement.className = "author";
+                    authorElement.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+                    infoContainerElement.appendChild(authorElement);
+                }
+
+                rightSideContainer.appendChild(nameElement);
+                rightSideContainer.appendChild(infoContainerElement);
+
+                resultElement.appendChild(pictureElement || imgElement);
+                resultElement.appendChild(rightSideContainer);
                 document.querySelector(".resultsContainer").appendChild(resultElement);
             }
         }

@@ -115,53 +115,9 @@ header.searchActive ~ .searchResultsContainer {
   height: 100%;
 }
 
-.searchResultsContainer .result {
+.searchResultsContainer .listItem {
   background: var(--page-background-color);
   margin: 10pt;
-  padding: 5pt;
-  border-radius: 10pt;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.searchResultsContainer .result img {
-  width: 50pt;
-  margin: 10pt;
-  background: var(--content-background-color);
-  border-radius: 5pt;
-}
-
-.searchResultsContainer .result picture > img {
-  padding: 5pt;
-}
-
-.searchResultsContainer .result .right {
-  width: 100%;
-}
-
-.searchResultsContainer .result .right .name {
-  margin: 0 0 5pt 0;
-}
-
-.searchResultsContainer .result .right .infoContainer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 5pt;
-}
-
-.searchResultsContainer .result .right .infoContainer * {
-  margin: 0;
-}
-
-.searchResultsContainer
-  .result
-  .right
-  .infoContainer
-  *:not(:last-child)::after {
-  content: "•";
-  margin: 0 5pt;
 }
 
 main {

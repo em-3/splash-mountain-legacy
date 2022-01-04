@@ -47,7 +47,7 @@ var searchBar = {
     },
     generateResultElement: function (resultItem) {
         var resultElement = document.createElement("div");
-        resultElement.className = "result";
+        resultElement.className = "listItem";
         (function (id) {
             resultElement.onmousedown = function () {
                 showItemDetails(id);
