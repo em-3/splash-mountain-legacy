@@ -73,6 +73,10 @@ header.hidden {
   transform: translateY(100pt);
 }
 
+.contentContainer .contentDisplay h2 {
+  padding: 0 20pt;
+}
+
 .contentContainer .contentDisplay > img {
   width: 100%;
   height: auto;
