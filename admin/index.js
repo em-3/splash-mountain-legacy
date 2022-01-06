@@ -225,6 +225,8 @@ async function submitAddItemForm() {
         formData.append("timestamp", timestamp);
     }
 
+    formData.append("dateAdded", new Date.now());
+
     var metadata = {};
     var keys = ["make", "model", "focalLength", "software", "exposureTime", "fNumber", "flash", "colorSpace", "samplingRate", "precision"];
     for (var i = 0; i < keys.length; i++) {
