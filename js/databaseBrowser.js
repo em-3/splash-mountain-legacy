@@ -93,6 +93,7 @@ function refreshResults () {
                 })(currentItemData.id)
 
                 if (currentItemData.type === "image") {
+                    var pictureElement = null;
                     var imgElement = document.createElement("img");
                     imgElement.className = "image";
                     imgElement.src = "/resources/" + currentItemData.id + "/thumbnail";
@@ -141,7 +142,11 @@ function refreshResults () {
                 rightSideContainer.appendChild(nameElement);
                 rightSideContainer.appendChild(infoContainerElement);
 
-                resultElement.appendChild(pictureElement || imgElement);
+                if (pictureElement) {
+                    resultElement.appendChild(pictureElement);
+                } else if (imgElement) {
+                    resultElement.appendChild(imgElement);
+                }
                 resultElement.appendChild(rightSideContainer);
                 document.querySelector(".resultsContainer").appendChild(resultElement);
             }
