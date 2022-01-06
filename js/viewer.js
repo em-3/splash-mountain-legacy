@@ -79,7 +79,7 @@ function showItemDetails() {
         }
     }
     if (itemDetails.timestamp && itemDetails.type !== "date") {
-        var dateObject = new Date(itemDetails.timestamp);
+        var dateObject = new Date(itemDetails.timestamp.replace(" ", "T"));
 
         var timestampValue = "";
         switch (metadata.precision) {
@@ -250,7 +250,7 @@ function showItemContent(id, itemType, itemFormat) {
             break;
         case "date":
             var contentDisplayElement = document.createElement("h1");
-            var date = new Date(loadedItemDetails.timestamp);
+            var date = new Date(loadedItemDetails.timestamp.replace(" ", "T"));
 
             switch (JSON.parse(loadedItemDetails.metadata).precision) {
                 case "year":
