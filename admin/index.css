@@ -26,6 +26,14 @@ main {
   justify-content: center;
 }
 
+main > section {
+  width: 100%;
+  min-height: calc(100vh - 85px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 main > section > div {
   background: var(--content-background-color);
   width: calc(100% - 20pt);
