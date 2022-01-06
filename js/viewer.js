@@ -65,14 +65,18 @@ function showItemDetails() {
         document.querySelector(".itemInfoContainer").appendChild(descriptionElement);
     }
     if (itemDetails.author) {
-        createDetailProperty(
-            "Author",
-            itemDetails.author.replace(/\[([^\][]+)]/g, ""),
-            itemDetails.author.match(/\[([^\][]+)]/g)[0].substring(
-                1,
-                itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
-            )
-        );
+        if (itemDetails.author.match(/\[([^\][]+)]/g)) {
+            createDetailProperty(
+                "Author",
+                itemDetails.author.replace(/\[([^\][]+)]/g, ""),
+                itemDetails.author.match(/\[([^\][]+)]/g)[0].substring(
+                    1,
+                    itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
+                )
+            );
+        } else {
+            createDetailProperty("Author", itemDetails.author);
+        }
     }
     if (itemDetails.timestamp && itemDetails.type !== "date") {
         var localUTCOffset = new Date().getTimezoneOffset();
