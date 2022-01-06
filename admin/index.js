@@ -162,35 +162,12 @@ async function submitAddItemForm() {
     document.querySelector(".addItem .responseContainer").classList.add("hidden");
     document.querySelector(".addItem .loadingContainer").classList.remove("hidden");
 
-    //Create UTC timestamp
-    var park = document.querySelector("#park").value;
-    var localUTCOffset = new Date().getTimezoneOffset();
-    var parkUTCOffset = 0;
-    switch (park) {
-        case "DL":
-            parkUTCOffset = 8 * 60;
-            break;
-        case "TDL":
-            parkUTCOffset = -9 * 60;
-            break;
-        case "WDW":
-            parkUTCOffset = 5 * 60;
-            break;
-    }
-    var relativeOffset = parkUTCOffset - localUTCOffset;
-
     var date = document.querySelector("#date").value;
     var time = document.querySelector("#time").value;
     if (date && time) {
-        var splitDate = date.split(/\D/);
-        var splitTime = time.split(/\D/);
-        var dateObject = new Date(splitDate[0], splitDate[1] - 1, splitDate[2], splitTime[0], splitTime[1] + relativeOffset);
-        var timestamp = dateObject.getTime();
+        var timestamp = date + " " + time;
     } else if (date) {
-        var splitDate = date.split(/\D/);
-        var dateObject = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
-        dateObject.setMinutes(dateObject.getMinutes() + relativeOffset);
-        var timestamp = dateObject.getTime();
+        var timestamp = date;
     }
 
     var formData = new FormData();
@@ -210,7 +187,7 @@ async function submitAddItemForm() {
     }
 
     formData.append("name", document.querySelector("#name").value);
-    formData.append("park", park);
+    formData.append("park", document.querySelector("#park").value);
     formData.append("description", document.querySelector("#description").value);
 
     var authorName = document.querySelector("#authorName").value;

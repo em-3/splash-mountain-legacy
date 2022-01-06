@@ -79,22 +79,7 @@ function showItemDetails() {
         }
     }
     if (itemDetails.timestamp && itemDetails.type !== "date") {
-        var localUTCOffset = new Date().getTimezoneOffset();
-        var parkUTCOffset = 0;
-        switch (itemDetails.park) {
-            case "DL":
-                parkUTCOffset = 8 * 60;
-                break;
-            case "TDL":
-                parkUTCOffset = -9 * 60;
-                break;
-            case "WDW":
-                parkUTCOffset = 5 * 60;
-                break;
-        }
-        var relativeOffset = parkUTCOffset - localUTCOffset;
-        var dateObject = new Date(Number(itemDetails.timestamp));
-        dateObject.setMinutes(dateObject.getMinutes() - relativeOffset);
+        var dateObject = new Date(itemDetails.timestamp);
 
         var timestampValue = "";
         switch (metadata.precision) {
@@ -265,23 +250,7 @@ function showItemContent(id, itemType, itemFormat) {
             break;
         case "date":
             var contentDisplayElement = document.createElement("h1");
-            var date = new Date(Number(loadedItemDetails.timestamp));
-            var localUTCOffset = new Date().getTimezoneOffset();
-            var parkUTCOffset = 0;
-            switch (loadedItemDetails.park) {
-                case "DL":
-                    parkUTCOffset = 8 * 60;
-                    break;
-                case "TDL":
-                    parkUTCOffset = -9 * 60;
-                    break;
-                case "WDW":
-                    parkUTCOffset = 5 * 60;
-                    break;
-            }
-            var relativeOffset = parkUTCOffset - localUTCOffset;
-            date = new Date(Number(loadedItemDetails.timestamp));
-            date.setMinutes(date.getMinutes() - relativeOffset);
+            var date = new Date(loadedItemDetails.timestamp);
 
             switch (JSON.parse(loadedItemDetails.metadata).precision) {
                 case "year":
