@@ -189,6 +189,7 @@ async function submitAddItemForm() {
     } else if (date) {
         var splitDate = date.split(/\D/);
         var dateObject = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
+        dateObject.setMinutes(dateObject.getMinutes() + relativeOffset);
         var timestamp = dateObject.getTime();
     }
 
