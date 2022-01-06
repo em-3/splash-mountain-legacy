@@ -1,3 +1,11 @@
+function navigateTo(sectionClass) {
+    var sections = document.querySelectorAll("main > section");
+    for (var i = 0; i < sections.length; i++) {
+        sections[i].classList.add("hidden");
+    }
+    document.querySelector("main > ." + sectionClass).classList.remove("hidden");
+}
+
 document.querySelector("#file").onchange = function(e) {
     var file = e.target.files[0]
     if (file && file.name) {
@@ -108,23 +116,51 @@ function updateItemType() {
     }
 }
 
-document.body.addEventListener("input", function () {
-    var requiredFields = document.querySelectorAll("*[required]");
+document.querySelector(".addItem .formContainer").addEventListener("input", function () {
+    var requiredFields = document.querySelectorAll(".addItem *[required]");
     for (var i = 0; i < requiredFields.length; i++) {
         var field = requiredFields[i];
         var value = field.value;
         if (!value) {
-            document.querySelector("#submitButton").disabled = true;
+            document.querySelector(".addItem .submitButton").disabled = true;
             return;
         }
     }
-    document.querySelector("#submitButton").disabled = false;
+    document.querySelector(".addItem .submitButton").disabled = false;
 });
 
-async function submitForm() {
-    document.querySelector(".formContainer").classList.add("hidden");
-    document.querySelector(".responseContainer").classList.add("hidden");
-    document.querySelector(".loadingContainer").classList.remove("hidden");
+document.querySelector(".removeItem .formContainer #itemID").addEventListener("input", function () {
+    var itemID = this.value;
+    document.querySelector(".removeItem .itemPreview").classList.add("hidden");
+    if (itemID && itemID.length == 11) {
+        //Show a preview of this item
+        var response = fetch("/api/item/" + itemID).then(response => response.json())
+        .then((response) => {
+            if (response.type === "image") {
+                document.querySelector(".removeItem .itemPreview .thumbnail").src = "/resources/" + itemID + "/thumbnail";
+                document.querySelector(".removeItem .itemPreview .thumbnail").classList.remove("hidden");
+            } else {
+                document.querySelector(".removeItem .itemPreview .thumbnail").classList.add("hidden");
+            }
+            document.querySelector(".removeItem .itemPreview .park span").textContent = response.park;
+            document.querySelector(".removeItem .itemPreview .name span").textContent = response.name;
+            document.querySelector(".removeItem .itemPreview .description span").textContent = response.description;
+            document.querySelector(".removeItem .itemPreview .author span").textContent = response.author;
+            document.querySelector(".removeItem .itemPreview").classList.remove("hidden");
+        }, (error) => {
+            console.log(error);
+        });
+        //Re-enable the submit button
+        document.querySelector(".removeItem .submitButton").disabled = false;
+    } else {
+        document.querySelector(".removeItem .submitButton").disabled = true;
+    }
+});
+
+async function submitAddItemForm() {
+    document.querySelector(".addItem .formContainer").classList.add("hidden");
+    document.querySelector(".addItem .responseContainer").classList.add("hidden");
+    document.querySelector(".addItem .loadingContainer").classList.remove("hidden");
 
     //Create UTC timestamp
     var park = document.querySelector("#park").value;
@@ -206,17 +242,48 @@ async function submitForm() {
     let result = await response.json();
 
     if (result.status === "success") {
-        document.querySelector(".responseContainer .title").textContent = "Done.";
-        document.querySelector(".responseContainer .subtitle").textContent = "Your item was added to the database.";
-        document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
-        document.querySelector(".responseContainer .retry").classList.add("hidden");
+        document.querySelector(".addItem .responseContainer .title").textContent = "Done.";
+        document.querySelector(".addItem .responseContainer .subtitle").textContent = "Your item was added to the database.";
+        document.querySelector(".addItem .responseContainer .message").textContent = "Item ID: " + result.id;
+        document.querySelector(".addItem .responseContainer .retry").classList.add("hidden");
     } else {
-        document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-        document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-        document.querySelector(".responseContainer .message").textContent = result.error;
-        document.querySelector(".responseContainer .retry").classList.remove("hidden");
+        document.querySelector(".addItem .responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".addItem .responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".addItem .responseContainer .message").textContent = result.error;
+        document.querySelector(".addItem .responseContainer .retry").classList.remove("hidden");
     }
 
-    document.querySelector(".loadingContainer").classList.add("hidden");
-    document.querySelector(".responseContainer").classList.remove("hidden");
+    document.querySelector(".addItem .loadingContainer").classList.add("hidden");
+    document.querySelector(".addItem .responseContainer").classList.remove("hidden");
+}
+
+async function submitRemoveItemForm() {
+    document.querySelector(".removeItem .formContainer").classList.add("hidden");
+    document.querySelector(".removeItem .responseContainer").classList.add("hidden");
+    document.querySelector(".removeItem .loadingContainer").classList.remove("hidden");
+
+    var formData = new FormData();
+
+    formData.append("id", document.querySelector("#itemID").value);
+
+    var response = await fetch('/admin/delete.php', {
+        method: 'POST',
+        body: formData
+    });
+    let result = await response.json();
+
+    if (result.status === "success") {
+        document.querySelector(".removeItem .responseContainer .title").textContent = "Done.";
+        document.querySelector(".removeItem .responseContainer .subtitle").textContent = "Your item was removed from the database.";
+        document.querySelector(".removeItem .responseContainer .message").textContent = "";
+        document.querySelector(".removeItem .responseContainer .retry").classList.add("hidden");
+    } else {
+        document.querySelector(".removeItem .responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".removeItem .responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".removeItem .responseContainer .message").textContent = result.error;
+        document.querySelector(".removeItem .responseContainer .retry").classList.remove("hidden");
+    }
+
+    document.querySelector(".removeItem .loadingContainer").classList.add("hidden");
+    document.querySelector(".removeItem .responseContainer").classList.remove("hidden");
 }
