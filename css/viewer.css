@@ -215,6 +215,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: bold;
 }
 
+.itemInfoContainer p.property a {
+  color: var(--primary-text-color);
+  text-decoration: underline;
+}
+
 .itemInfoContainer p span {
   font-weight: normal;
 }
