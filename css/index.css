@@ -1,137 +1,11 @@
-body.noScroll {
-  overflow: hidden;
-}
-
-header {
-  background: var(--content-background-color);
-  width: 100%;
-  height: 55pt;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20pt;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 4;
-}
-
-header .logo img {
-  height: 50pt;
-  width: auto;
-  transition: opacity 0.2s ease;
-}
-
-@media (max-width: 745px) {
-  header.searchActive .logo {
-    opacity: 0;
-  }
-}
-
-header .searchBox {
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-header.searchActive .searchBox {
-  outline: none;
-  transform: translateX(calc(-50vw + 20pt + 50%));
-}
-
-header .searchBox .searchField {
-  background: var(--page-background-color);
-  border: none;
-  border-radius: 10pt;
-  padding: 10pt;
-  font-family: inherit;
-  height: 30pt;
-  width: 200pt;
-  color: inherit;
-}
-
-header .searchBox .searchField:focus {
-  outline: none;
-}
-
-header .searchBox .clearButton {
-  position: absolute;
-  height: 18pt;
-  width: 18pt;
-  top: 6pt;
-  right: 6pt;
-  background: var(--content-background-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-header .searchBox .clearButton picture {
-  width: 14px;
-  height: 14px;
-  display: flex;
-}
-
-header.searchActive .searchBox .clearButton {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-header.searchActive ~ .searchResultsContainer {
-  opacity: 1;
-  pointer-events: all;
-  transform: translate(-50%, 0);
-}
-
-.searchResultsContainer {
-  position: fixed;
-  top: 55pt;
-  left: 50vw;
-  transform: translate(-50%, -100%);
-  width: calc(100% - 20pt);
-  max-width: 500px;
-  height: calc(100% - 75pt);
-  max-height: 500pt;
-  box-shadow: 0 0 25pt var(--shadow-color);
-  border-radius: 0 0 10pt 10pt;
-  background: var(--content-background-color);
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 3;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-
-.searchResultsContainer .loadingContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.searchResultsContainer .listItem {
-  background: var(--page-background-color);
-  margin: 10pt;
-}
-
-main {
-  margin-top: 55pt;
-}
-
-main div.about {
+main section.about {
   position: relative;
   height: 35vh;
   min-height: 200px;
   overflow: hidden;
 }
 
-main div.about > * {
+main section.about > * {
   position: absolute;
   top: 0;
   left: 0;
@@ -140,7 +14,7 @@ main div.about > * {
   overflow: hidden;
 }
 
-main div.about .background {
+main section.about .background {
   filter: blur(5px);
   background-image: url("/images/header.jpg");
   background-repeat: no-repeat;
@@ -151,7 +25,7 @@ main div.about .background {
   transform: scale(1.2);
 }
 
-main div.about .foreground {
+main section.about .foreground {
   color: white;
   display: flex;
   flex-direction: column;
@@ -162,69 +36,114 @@ main div.about .foreground {
   z-index: 2;
 }
 
-main div.about h1 {
+main section.about h1 {
   margin-bottom: 0;
+  font-size: 25pt;
 }
 
-main div.about p {
+main section.about p {
   max-width: 500pt;
 }
 
-main div.databaseBrowser {
-  height: 90vh;
-  min-height: 300pt;
+section.featured {
+  padding: 20pt 0 0 0;
 }
 
-main div.databaseBrowser iframe {
-  width: 100%;
-  height: 100%;
+section.featured:last-child {
+  margin-bottom: 20pt;
+}
+
+section.featured .header {
+  width: calc(100% - 40pt);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 20pt 20pt;
+}
+
+section.featured .header h1 {
+  margin-left: 20pt;
+}
+
+section.featured .header button {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
   border: none;
-}
-
-.itemDetailsContainer {
-  background: var(--page-background-color);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 75vw;
-  max-width: 500pt;
-  height: 60vh;
-  max-height: 400pt;
   border-radius: 10pt;
-  box-shadow: 0 0 20px var(--content-background-color);
-  z-index: 6;
-  transition: all 0.5s ease;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 5pt 20pt;
+  cursor: pointer;
 }
 
-.itemDetailsContainer iframe {
-  width: 100%;
-  height: 60vh;
-  max-height: 400pt;
+section.featured .content {
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+section.featured .content .item:first-child {
+  margin-left: 20pt;
+}
+
+section.featured .content .item {
+  width: 200pt;
+  background: var(--content-background-color);
   border-radius: 10pt;
+  overflow: hidden;
+  margin-right: 20pt;
+  display: inline-block;
 }
 
-.itemDetailsContainer.hidden {
-  top: calc(100vh + 20px);
-  transform: translate(-50%, 0);
-  display: block !important;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+section.featured .content .item img {
   width: 100%;
-  height: 100%;
-  background: var(--page-background-color);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
-  transition: opacity 0.2s ease;
+  height: auto;
 }
 
-.itemDetailsContainer:not(.hidden) + .overlay {
-  opacity: 0.5;
-  pointer-events: auto;
-  display: block !important;
+section.featured .content .item .info {
+  padding: 10pt;
+}
+
+section.featured .content .item .info .title {
+  margin: 0 0 5pt 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+section.featured .content .item .info .preview,
+section.featured .content .item .info .subtitle {
+  margin: 0;
+}
+
+section.featured .content .item .info .preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+section.featured .content .item .info .subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 5pt;
+  white-space: nowrap;
+}
+
+section.featured .content .item .info .subtitle * {
+  margin: 0;
+}
+
+section.featured .content .item .info .subtitle *:not(:last-child)::after {
+  content: "•";
+  margin: 0 5pt;
+}
+
+section.featured .content .item .info .subtitle *:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

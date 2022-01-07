@@ -1,3 +1,47 @@
+//Populate the database additions container with the newest items
+fetch("/api/search/?orderBy=newest&min=1&max=15")
+    .then(response => response.json())
+    .then(data => {
+        var items = data.results;
+        var container = document.querySelector(".databaseAdditions .content")
+        items.forEach(item => {
+            var currentItemElement = document.createElement("div");
+            currentItemElement.className = "item";
+            
+            var imgElement = document.createElement("img");
+            imgElement.src = "/resources/" + item.id + "/thumbnail";
+
+            var infoElement = document.createElement("div");
+            infoElement.className = "info";
+
+            var titleElement = document.createElement("h3");
+            titleElement.className = "title";
+            titleElement.textContent = item.name;
+            
+            var subtitleElement = document.createElement("div");
+            subtitleElement.className = "subtitle";
+
+            var parkElement = document.createElement("p");
+            parkElement.textContent = item.park;
+            subtitleElement.appendChild(parkElement);
+            var typeElement = document.createElement("p");
+            typeElement.textContent = item.type;
+            subtitleElement.appendChild(typeElement);
+            if (item.author) {
+                var authorElement = document.createElement("p");
+                authorElement.textContent = item.author.replace(/\[([^\][]+)]/g, "");
+                subtitleElement.appendChild(authorElement);
+            }
+
+            infoElement.appendChild(titleElement);
+            infoElement.appendChild(subtitleElement);
+            currentItemElement.appendChild(imgElement);
+            currentItemElement.appendChild(infoElement);
+
+            container.appendChild(currentItemElement);
+        });
+    });
+
 //Listen for iframe requests
 window.onmessage = function(e) {
     if (e.data.indexOf("details") === 0) {
