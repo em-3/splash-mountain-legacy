@@ -128,10 +128,16 @@ body {
 
 .listItem .right {
   width: 100%;
+  overflow: hidden;
 }
 
 .listItem .right .name {
   margin: 0 0 5pt 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .listItem .right .infoContainer {
@@ -139,6 +145,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   margin-top: 5pt;
+  white-space: nowrap;
 }
 
 .listItem .right .infoContainer * {
@@ -148,6 +155,11 @@ body {
 .listItem .right .infoContainer *:not(:last-child)::after {
   content: "•";
   margin: 0 5pt;
+}
+
+.listItem .right .infoContainer *:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 footer {
