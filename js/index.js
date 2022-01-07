@@ -2,9 +2,8 @@
 fetch("/api/search/?orderBy=newest&min=1&max=15")
     .then(response => response.json())
     .then(data => {
-        var items = data.results;
         var container = document.querySelector(".databaseAdditions .content")
-        items.forEach(item => {
+        data.forEach(item => {
             var currentItemElement = document.createElement("div");
             currentItemElement.className = "item";
             
