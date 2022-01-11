@@ -88,10 +88,24 @@ section.featured .content .item {
   display: inline-block;
 }
 
-section.featured .content .item img {
+section.featured .content .item .imageContainer {
+  width: 100%;
+  height: 100pt;
+  background: var(--secondary-content-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+section.featured .content .item .imageContainer > img {
   width: 100%;
   height: 100pt;
   object-fit: cover;
+}
+
+section.featured .content .item .imageContainer picture img {
+  width: 70pt;
+  height: 70pt;
 }
 
 section.featured .content .item .info {

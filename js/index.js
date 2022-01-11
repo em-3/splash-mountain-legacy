@@ -7,13 +7,14 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
             var currentItemElement = document.createElement("div");
             currentItemElement.className = "item";
             
-            var imgElement = document.createElement("img");
-            imgElement.src = "/resources/" + item.id + "/thumbnail";
+            var imageContainer = document.createElement("div");
+            imageContainer.className = "imageContainer";
 
-            if (currentItemData.type === "image") {
+            if (item.type === "image") {
                 var pictureElement = null;
                 var imgElement = document.createElement("img");
                 imgElement.src = "/resources/" + item.id + "/thumbnail";
+                imageContainer.appendChild(imgElement);
             } else {
                 var pictureElement = document.createElement("picture");
 
@@ -26,6 +27,7 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
 
                 pictureElement.appendChild(sourceElement);
                 pictureElement.appendChild(imgElement);
+                imageContainer.appendChild(pictureElement);
             }
 
             var infoElement = document.createElement("div");
@@ -53,11 +55,7 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
             infoElement.appendChild(titleElement);
             infoElement.appendChild(subtitleElement);
 
-            if (pictureElement) {
-                resultElement.appendChild(pictureElement);
-            } else if (imgElement) {
-                resultElement.appendChild(imgElement);
-            }
+            currentItemElement.appendChild(imageContainer);
             currentItemElement.appendChild(infoElement);
 
             container.appendChild(currentItemElement);
