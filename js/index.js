@@ -10,6 +10,24 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
             var imgElement = document.createElement("img");
             imgElement.src = "/resources/" + item.id + "/thumbnail";
 
+            if (currentItemData.type === "image") {
+                var pictureElement = null;
+                var imgElement = document.createElement("img");
+                imgElement.src = "/resources/" + item.id + "/thumbnail";
+            } else {
+                var pictureElement = document.createElement("picture");
+
+                var sourceElement = document.createElement("source");
+                sourceElement.srcset = "/images/icons/types/" + item.type + "-white.png";
+                sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
+
+                var imgElement = document.createElement("img");
+                imgElement.src = "/images/icons/types/" + item.type + "-black.png";
+
+                pictureElement.appendChild(sourceElement);
+                pictureElement.appendChild(imgElement);
+            }
+
             var infoElement = document.createElement("div");
             infoElement.className = "info";
 
@@ -34,7 +52,12 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
 
             infoElement.appendChild(titleElement);
             infoElement.appendChild(subtitleElement);
-            currentItemElement.appendChild(imgElement);
+
+            if (pictureElement) {
+                resultElement.appendChild(pictureElement);
+            } else if (imgElement) {
+                resultElement.appendChild(imgElement);
+            }
             currentItemElement.appendChild(infoElement);
 
             container.appendChild(currentItemElement);

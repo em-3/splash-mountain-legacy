@@ -97,7 +97,8 @@ section.featured .content .item {
 
 section.featured .content .item img {
   width: 100%;
-  height: auto;
+  height: 100pt;
+  object-fit: cover;
 }
 
 section.featured .content .item .info {
