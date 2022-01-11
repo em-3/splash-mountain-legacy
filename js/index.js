@@ -6,6 +6,11 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
         data.forEach(item => {
             var currentItemElement = document.createElement("div");
             currentItemElement.className = "item";
+            (function (id) {
+                currentItemElement.onclick = function () {
+                    showItemDetails(id);
+                };
+            })(item.id);
             
             var imageContainer = document.createElement("div");
             imageContainer.className = "imageContainer";

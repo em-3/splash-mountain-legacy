@@ -86,6 +86,7 @@ section.featured .content .item {
   overflow: hidden;
   margin-right: 20pt;
   display: inline-block;
+  cursor: pointer;
 }
 
 section.featured .content .item .imageContainer {
