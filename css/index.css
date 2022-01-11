@@ -26,23 +26,16 @@ main section.about .background {
 }
 
 main section.about .foreground {
-  color: white;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20pt;
-  text-align: center;
   z-index: 2;
+  mix-blend-mode: screen;
 }
 
-main section.about h1 {
-  margin-bottom: 0;
-  font-size: 25pt;
-}
-
-main section.about p {
-  max-width: 500pt;
+main section.about .foreground video {
+  width: 75vw;
+  max-width: 500px;
 }
 
 section.featured {
