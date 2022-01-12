@@ -2,6 +2,7 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
+$sort_by = ["nane" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
 $available_params = ["type", "park"];
 $params = array();
 $id_only = false;
@@ -57,7 +58,12 @@ if(!$id_only) {
 
     $stmt .= "`hidden` = 0";
 
-    $stmt .= " ORDER BY `name`";
+    //Sort the results by the specified field
+    if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
+        $stmt .= " ORDER BY `" . $_GET["sort_by"] . "` " . $sort_by[$_GET["sort_by"]];
+    }else {
+        $stmt .= " ORDER BY `name` ASC";
+    }
 
     if(isset($_GET["max"])) {
         $max = intval($_GET["max"]);
