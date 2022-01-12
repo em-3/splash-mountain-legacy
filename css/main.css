@@ -46,6 +46,10 @@ header.searchActive .links {
   pointer-events: none;
 }
 
+header .links .current {
+  background: var(--secondary-content-background-color);
+}
+
 header .links > * {
   background: var(--page-background-color);
   color: inherit;
