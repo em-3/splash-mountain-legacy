@@ -6,6 +6,7 @@ var searchRange = {
 
 var searchBar = {
     onfocus: function () {
+        document.querySelector(".searchBox .searchField").focus();
         document.body.classList.add("noScroll");
         document.querySelector("header").classList.add("searchActive");
     },

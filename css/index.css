@@ -39,42 +39,6 @@ main section.header .foreground video {
   max-width: 500px;
 }
 
-section.about {
-  background: var(--secondary-page-background-color);
-  padding: 20pt;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-section.about a {
-  color: var(--primary-text-color);
-  padding: 5pt;
-  font-weight: bold;
-  font-size: 15pt;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  opacity: 0;
-
-  transition: all 0.2s ease;
-  animation: AboutLink 3s ease 6s forwards;
-}
-
-section.about a:hover {
-  border-bottom-color: var(--primary-text-color);
-}
-
-@keyframes AboutLink {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 section.featured {
   padding: 20pt 0 0 0;
 }

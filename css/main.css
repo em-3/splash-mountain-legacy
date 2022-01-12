@@ -4,6 +4,7 @@ body.noScroll {
 
 header {
   background: var(--content-background-color);
+  position: relative;
   width: 100%;
   height: 55pt;
   display: flex;
@@ -14,6 +15,11 @@ header {
   top: 0;
   left: 0;
   z-index: 4;
+}
+
+header .logo {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
 header .logo img {
@@ -28,14 +34,65 @@ header .logo img {
   }
 }
 
+header .links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+header.searchActive .links {
+  opacity: 0;
+  pointer-events: none;
+}
+
+header .links > * {
+  background: var(--page-background-color);
+  color: inherit;
+  text-decoration: none;
+  font-size: 12pt;
+  font-family: inherit;
+  font-weight: bold;
+  padding: 5pt 10pt;
+  border-radius: 5pt;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+}
+
+header .links > *:not(:last-child) {
+  margin-right: 5pt;
+}
+
+header .links .search {
+  border-radius: 50%;
+  padding: 0;
+  height: 30pt;
+  width: 30pt;
+}
+
+header .links .search picture {
+  width: 22px;
+  height: 22px;
+}
+
+header .links .search picture img {
+  /*Balance visually instead of aligning perfectly centered*/
+  transform: translate(0, 1px);
+}
+
 header .searchBox {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
 header.searchActive .searchBox {
   outline: none;
-  transform: translateX(calc(-50vw + 20pt + 50%));
+  opacity: 1;
 }
 
 header .searchBox .searchField {

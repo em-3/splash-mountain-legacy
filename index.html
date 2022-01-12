@@ -33,11 +33,21 @@
     <body ontouchstart class>
         
         <header>
-
-            <picture class="logo">
+            <picture class="logo" onclick="window.location.href = '/'">
                 <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
                 <img src="/images/logo-black.png">
             </picture>
+
+            <div class="links">
+                <a href="/database">Database</a>
+                <a href="/about">About</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <picture>
+                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                    </picture>
+                </button>
+            </div>
             
             <div class="searchBox">
                 <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()" onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
@@ -48,7 +58,6 @@
                     </picture>
                 </div>
             </div>
-            
         </header>
 
         <div class="searchResultsContainer">
@@ -69,9 +78,6 @@
                 <div class="foreground">
                     <video src="images/logo-animation.mp4" autoplay muted playsinline></video>
                 </div>
-            </section>
-            <section class="about">
-                <a href="/about">About the Project</a>
             </section>
             <section class="news featured">
                 <div class="header">

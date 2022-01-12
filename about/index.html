@@ -33,14 +33,25 @@
     <body ontouchstart class>
         
         <header>
-
-            <picture class="logo">
+            <picture class="logo" onclick="window.location.href = '/'">
                 <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
                 <img src="/images/logo-black.png">
             </picture>
-            
+        
+            <div class="links">
+                <a href="/database">Database</a>
+                <a href="/about">About</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <picture>
+                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                    </picture>
+                </button>
+            </div>
+        
             <div class="searchBox">
-                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()" onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
+                    onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
                 <div class="clearButton" onclick="searchBar.close()">
                     <picture>
                         <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
@@ -48,7 +59,6 @@
                     </picture>
                 </div>
             </div>
-            
         </header>
 
         <div class="searchResultsContainer">
@@ -68,8 +78,9 @@
                 <h1>History should never be forgotten.</h1>
                 <p>
                     Splash Mountain Legacy serves as a treasury of media and
-                    information about Splash Mountain at Disneyland, Tokyo
-                    Disneyland, and Magic Kingdom.
+                    information about Splash Mountain in its three forms at 
+                    Disney Parks around the world, preserving the legacy of
+                    the attraction for generations to come.
                 </p>
             </section>
         </main>
