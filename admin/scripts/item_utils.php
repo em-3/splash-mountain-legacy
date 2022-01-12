@@ -137,6 +137,80 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
 }
 
 /**
+ * Changes an item's data in the database
+ * @param array $item_data An associative array with item properties.
+ * @param PDO $database The database connection.
+ * @return bool True if the item was updated successfully. False otherwise.
+ * @throws Exception If there was an error updating the item.
+ */
+function modify_item($item_data, $database) {
+    if(!isset($item_data["id"])) {
+        throw new Exception("Missing item ID");
+    }
+
+    //Define available parameters
+    $available_params = ["name", "park", "description", "author", "video_id", "source", "metadata", "timestamp", "hidden"];
+
+    $params = array();
+
+    $params["id"] = $item_data["id"];
+
+    //Add any available parameters
+    foreach($available_params as $param) {
+        if(isset($item_data[$param])) {
+            if(is_numeric($item_data[$param])) {
+                $params[$param] = intval($item_data[$param]);
+            } else {
+                $params[$param] = $item_data[$param];
+            }
+        }
+    }
+
+    if(count($params) < 2) {
+        throw new Exception("No parameters given to update");
+    }
+
+    //Prepare the query
+    $stmt = "UPDATE `item_index` SET ";
+
+    foreach($params as $key => $value) {
+        $stmt .= "`" . $key . "` = :" . $key . ", ";
+    }
+
+    //Remove the trailing comma
+    $stmt = substr($stmt, 0, -2);
+
+    $stmt .= " WHERE `id` = :id";
+
+    $database->beginTransaction();
+
+    $stmt = $database->prepare($stmt);
+
+    //Bind the values to the query
+    foreach($params as $key => $value) {
+        if($value === null) {
+            $stmt->bindValue($key, null, PDO::PARAM_NULL);
+        }else if(is_int($value)) {
+            $stmt->bindValue($key, $value, PDO::PARAM_INT);
+        }else {
+            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+        }
+    }
+
+    //Execute the query
+    try {
+        $stmt->execute();
+    }catch(Exception $e) {
+        $database->rollBack();
+        throw $e;
+    }
+
+    $database->commit();
+
+    return true;
+}
+
+/**
  * Deletes an item from the database
  * @param string $item_id The item ID
  * @param PDO $database The database connection
