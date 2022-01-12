@@ -1,10 +1,79 @@
 main div.databaseBrowser {
-  height: 90vh;
-  min-height: 300pt;
+  min-height: calc(100vh - 55pt);
 }
 
-main div.databaseBrowser iframe {
-  width: 100%;
-  height: 100%;
+.filterBar {
+  background: var(--content-background-color);
+  height: 35pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10pt;
+}
+
+.filterBar .filter {
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  height: 20pt;
+  padding: 1pt 8pt;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterBar .filter:not(:last-child) {
+  margin-right: 10pt;
+}
+
+.filterBar .filter select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: var(--page-background-color);
   border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 0;
+  height: 100%;
+  margin-left: 5pt;
+  color: var(--primary-text-color);
+}
+
+.filterBar .filter select:focus {
+  outline: none;
+}
+
+.databaseBrowser .loadingContainer,
+.databaseBrowser .resultsContainer,
+.databaseBrowser .errorMessageContainer {
+  height: calc(100vh - 55pt);
+}
+
+.databaseBrowser .loadingContainer,
+.databaseBrowser .errorMessageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.databaseBrowser .errorMessageContainer {
+  flex-direction: column;
+}
+
+.databaseBrowser .errorMessageContainer .title {
+  margin: 0 0 10pt 0;
+}
+
+.databaseBrowser .errorMessageContainer .subtitle {
+  margin: 0;
+}
+
+.databaseBrowser .resultsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+  gap: 10pt;
+  padding: 10pt;
 }

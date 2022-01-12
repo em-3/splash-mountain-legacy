@@ -40,7 +40,7 @@
         </picture>
     
         <div class="links">
-            <a href="/database">Database</a>
+            <a class="current" href="/database">Database</a>
             <a href="/about">About</a>
             <button class="search" onclick="searchBar.onfocus();">
                 <picture>
@@ -80,7 +80,20 @@
 
     <main>
         <div class="databaseBrowser">
-            <iframe src="databaseBrowser.html" frameborder="0"></iframe>
+            <div class="filterBar"></div>
+            <div class="loadingContainer">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="resultsContainer hidden"></div>
+            <div class="errorMessageContainer hidden">
+                <h2 class="title"></h2>
+                <p class="subtitle"></p>
+            </div>
         </div>
     </main>
 
