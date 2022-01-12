@@ -88,7 +88,7 @@ function refreshResults () {
                 resultElement.className = "listItem";
                 (function (id) {
                     resultElement.onclick = function () {
-                        window.top.postMessage("details" + id, "*");
+                        showItemDetails(id);
                     }
                 })(currentItemData.id)
 
