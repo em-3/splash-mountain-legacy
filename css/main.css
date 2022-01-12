@@ -172,6 +172,22 @@ header.searchActive ~ .searchResultsContainer {
   height: 100%;
 }
 
+.searchResultsContainer .errorMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.searchResultsContainer .errorMessageContainer .title {
+  margin: 0 0 10pt 0;
+}
+
+.searchResultsContainer .errorMessageContainer .subtitle {
+  margin: 0;
+}
+
 .searchResultsContainer .listItem {
   background: var(--page-background-color);
   margin: 10pt;

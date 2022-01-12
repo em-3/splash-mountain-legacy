@@ -20,10 +20,20 @@ var searchBar = {
     showLoadingContainer: function () {
         document.querySelector(".searchResultsContainer .loadingContainer").classList.remove("hidden");
         document.querySelector(".searchResultsContainer .resultsContainer").classList.add("hidden");
+        document.querySelector(".searchResultsContainer .errorMessageContainer").classList.add("hidden");
     },
     showResultsContainer: function () {
         document.querySelector(".searchResultsContainer .loadingContainer").classList.add("hidden");
         document.querySelector(".searchResultsContainer .resultsContainer").classList.remove("hidden");
+        document.querySelector(".searchResultsContainer .errorMessageContainer").classList.add("hidden");
+    },
+    showErrorMessageContainer: function (title, subtitle) {
+        document.querySelector(".searchResultsContainer .errorMessageContainer .title").textContent = title;
+        document.querySelector(".searchResultsContainer .errorMessageContainer .subtitle").textContent = subtitle;
+
+        document.querySelector(".searchResultsContainer .loadingContainer").classList.add("hidden");
+        document.querySelector(".searchResultsContainer .resultsContainer").classList.add("hidden");
+        document.querySelector(".searchResultsContainer .errorMessageContainer").classList.remove("hidden");
     },
     
     close: function () {
@@ -142,12 +152,7 @@ var searchBar = {
                 }
             }, (error) => {
                 searchBar.clearSearchResults();
-
-                var errorMessageElement = document.createElement("p");
-                errorMessageElement.className = "message";
-                errorMessageElement.textContent = "Something went wrong.";
-                document.querySelector(".searchResultsContainer .resultsContainer").appendChild(errorMessageElement);
-                searchBar.showResultsContainer();
+                searchBar.showErrorMessageContainer("Something Went Wrong", "Unable to load results.");
             });
         }, 1000);
     },
