@@ -140,10 +140,8 @@ var searchBar = {
                 searchBar.clearSearchResults();
 
                 if (results.length === 0) {
-                    var noResultsElement = document.createElement("p");
-                    noResultsElement.className = "message";
-                    noResultsElement.textContent = "No results found.";
-                    document.querySelector(".searchResultsContainer .resultsContainer").appendChild(noResultsElement);
+                    searchBar.clearSearchResults();
+                    searchBar.showErrorMessageContainer("No Results Found", "We couldn't find any matching items in the database.");
                 } else {
                     for (var i = 0; i < results.length; i++) {
                         document.querySelector(".searchResultsContainer .resultsContainer").appendChild(searchBar.generateResultElement(results[i]));
