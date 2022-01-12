@@ -2,7 +2,7 @@
 fetch("/api/search/?orderBy=newest&min=1&max=15")
     .then(response => response.json())
     .then(data => {
-        var container = document.querySelector(".databaseAdditions .content")
+        var container = document.querySelector(".databaseAdditions .content");
         data.forEach(item => {
             var currentItemElement = document.createElement("div");
             currentItemElement.className = "item";
@@ -65,6 +65,11 @@ fetch("/api/search/?orderBy=newest&min=1&max=15")
 
             container.appendChild(currentItemElement);
         });
+        document.querySelector(".databaseAdditions .loading").classList.add("hidden");
+        container.classList.remove("hidden");
+    }, error => {
+        document.querySelector(".databaseAdditions .loading").classList.add("hidden");
+        document.querySelector(".databaseAdditions .error").classList.remove("hidden");
     });
 
 //Listen for iframe requests

@@ -64,18 +64,29 @@
         </div>
 
         <main>
-            <section class="about">
+            <section class="header">
                 <div class="background"></div>
                 <div class="foreground">
                     <video src="images/logo-animation.mp4" autoplay muted playsinline></video>
                 </div>
+            </section>
+            <section class="about">
+                <a href="/about">About the Project</a>
             </section>
             <section class="news featured">
                 <div class="header">
                     <h1 class="title">News</h1>
                     <button onclick="location.href = '/news'">See All</button>
                 </div>
-                <div class="content">
+                <div class="loading hidden">
+                    <div class="loadingAnimationEllipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="content hidden">
                     <div class="item">
                         <div class="imageContainer">    
                             <img src="/images/header.jpg" alt="">
@@ -122,13 +133,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="error">
+                    <h2>Something Went Wrong</h2>
+                    <p>Content failed to load.</p>
+                </div>
             </section>
             <section class="databaseAdditions featured">
                 <div class="header">
                     <h1 class="title">Recent Database Additions</h1>
                     <button onclick="location.href = '/database'">Browse Database</button>
                 </div>
-                <div class="content"></div>
+                <div class="loading">
+                    <div class="loadingAnimationEllipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="content hidden"></div>
+                <div class="error hidden">
+                    <h2>Something Went Wrong</h2>
+                    <p>Content failed to load.</p>
+                </div>
             </section>
         </main>
 
