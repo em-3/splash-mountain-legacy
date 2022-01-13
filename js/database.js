@@ -37,7 +37,7 @@ for (var i = 0; i < filters.length; i++) {
     var filterSelect = document.createElement("select");
     filterSelect.setAttribute("name", currentFilter.id);
     filterSelect.addEventListener("change", function () {
-        refreshResults();
+        databaseBrowser.refreshResults();
     });
 
     for (var j = 0; j < currentFilter.values.length; j++) {
