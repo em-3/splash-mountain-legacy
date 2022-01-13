@@ -128,7 +128,7 @@ if(!check_authentication()) {
                             <div id="camera">
                                 <!-- Focal Length -->
                                 <label for="focalLength">Focal Length</label>
-                                <input type="text" id="focalLength" name="focalLength" placeholder="20.1 mm">
+                                <input type="text" id="focalLength" name="focalLength" placeholder="20.1">
                                 <!-- Software Version-->
                                 <label for="software">Software Version</label>
                                 <input type="text" id="software" name="software" placeholder="15.0">
@@ -140,7 +140,7 @@ if(!check_authentication()) {
                                 <input type="text" id="fNumber" name="fNumber" placeholder="4.0">
                                 <!-- Flash -->
                                 <label for="flash">Flash</label>
-                                <input type="text" id="flash" name="flash" placeholder="Flash did not fire">
+                                <input type="text" id="flash" name="flash" placeholder="Flash did not fire, compulsory flash mode">
                                 <!-- Color Space -->
                                 <label for="colorSpace">Color Space</label>
                                 <input type="text" id="colorSpace" name="colorSpace" placeholder="sRGB">
@@ -148,7 +148,7 @@ if(!check_authentication()) {
                             <div id="microphone" class="hidden">
                                 <!-- Sampling Rate -->
                                 <label for="samplingRate">Sampling Rate</label>
-                                <input type="number" id="samplingRate" name="samplingRate">
+                                <input type="text" id="samplingRate" name="samplingRate" placeholder="196.33 kbit/s">
                             </div>
 
                         </fieldset>
