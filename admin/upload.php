@@ -23,10 +23,17 @@ try {
         $image_data = $_FILES["image"];
     }
 
-    $id = upload_item($_POST, $database, $image_data, $resource_dir);
+    if(isset($_POST["id"])) {
+        modify_item($_POST, $database);
 
-    header("Content-Type: application/json");
-    exit(json_encode(["status" => "success", "id" => $id]));
+        header("Content-Type: application/json");
+        exit(json_encode(["status" => "success"]));
+    }else {
+        $id = upload_item($_POST, $database, $image_data, $resource_dir);
+
+        header("Content-Type: application/json");
+        exit(json_encode(["status" => "success", "id" => $id]));
+    }
 }catch(Exception $e) {
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => $e->getMessage()]));
