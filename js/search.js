@@ -1,8 +1,4 @@
 var timeoutID = null;
-var searchRange = {
-    min: 1,
-    max: 20
-};
 
 var searchBar = {
     onfocus: function () {
@@ -137,7 +133,9 @@ var searchBar = {
         timeoutID = setTimeout(function () {
             //Fetch new results
             searchBar.loadResultsFromRange(query, searchRange.min, searchRange.max).then((results) => {
-                searchBar.clearSearchResults();
+                if (!preservePreviousResults) {
+                    searchBar.clearSearchResults();
+                }
 
                 if (results.length === 0) {
                     searchBar.clearSearchResults();
@@ -146,6 +144,7 @@ var searchBar = {
                     for (var i = 0; i < results.length; i++) {
                         document.querySelector(".searchResultsContainer .resultsContainer").appendChild(searchBar.generateResultElement(results[i]));
                     }
+
                     searchBar.showResultsContainer();
                 }
             }, (error) => {
@@ -153,32 +152,6 @@ var searchBar = {
                 searchBar.showErrorMessageContainer("Something Went Wrong", "Unable to load results.");
             });
         }, 1000);
-    },
-    loadMoreResults: function () {
-        //Update the min and max values
-        searchRange.min += 20;
-        searchRange.max += 20;
-
-        var query = document.querySelector(".searchField").value;
-        
-        //Fetch new results
-        searchBar.loadResultsFromRange(query, searchRange.min, searchRange.max).then((results) => {
-            if (results.length === 0) {
-                
-            } else {
-                for (var i = 0; i < results.length; i++) {
-                    document.querySelector(".searchResultsContainer .resultsContainer").appendChild(searchBar.generateResultElement(results[i]));
-                }
-                searchBar.showResultsContainer();
-            }
-        }, (error) => {
-            searchBar.clearSearchResults();
-            var errorMessageElement = document.createElement("p");
-            errorMessageElement.className = "message";
-            errorMessageElement.textContent = "Something went wrong.";
-            document.querySelector(".searchResultsContainer .resultsContainer").appendChild(errorMessageElement);
-            searchBar.showResultsContainer();
-        });
     },
     clearSearchResults: function () {
         while (document.querySelector(".searchResultsContainer .resultsContainer").firstChild) {

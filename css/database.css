@@ -77,3 +77,12 @@ main div.databaseBrowser {
   gap: 10pt;
   padding: 10pt;
 }
+
+.databaseBrowser .resultsContainer .loadMoreButton {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  cursor: pointer;
+  border: none;
+  font: inherit;
+  font-weight: bold;
+}
