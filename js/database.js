@@ -116,6 +116,11 @@ var databaseBrowser = {
                         var imgElement = document.createElement("img");
                         imgElement.className = "image";
                         imgElement.src = "/resources/" + currentItemData.id + "/thumbnail";
+                    } else if (currentItemData.type === "video") {
+                        var pictureElement = null;
+                        var imgElement = document.createElement("img");
+                        imgElement.className = "image";
+                        imgElement.src = "https://img.youtube.com/vi/" + currentItemData.video_id + "/mqdefault.jpg";
                     } else {
                         var pictureElement = document.createElement("picture");
                         pictureElement.className = "image";

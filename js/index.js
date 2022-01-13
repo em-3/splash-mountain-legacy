@@ -20,6 +20,11 @@ fetch("/api/search/?sort_by=date_added&min=1&max=15")
                 var imgElement = document.createElement("img");
                 imgElement.src = "/resources/" + item.id + "/thumbnail";
                 imageContainer.appendChild(imgElement);
+            } else if (item.type === "video") {
+                var pictureElement = null;
+                var imgElement = document.createElement("img");
+                imgElement.src = "https://img.youtube.com/vi/" + item.video_id + "/mqdefault.jpg";
+                imageContainer.appendChild(imgElement);
             } else {
                 var pictureElement = document.createElement("picture");
 
