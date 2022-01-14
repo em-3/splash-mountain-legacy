@@ -1,6 +1,50 @@
+header {
+  position: absolute;
+  justify-content: center;
+  background: transparent;
+}
+
+header .logo {
+  display: none;
+}
+
+header .links > * {
+  background: rgba(300, 300, 300, 0.5);
+  color: black;
+  transition: background 0.2s ease;
+}
+
+header .links > *.current {
+  background: rgba(300, 300, 300, 0.8);
+}
+
+header .links > *:hover {
+  background: rgba(300, 300, 300, 0.8);
+}
+
+header .searchBox .searchField {
+  background: rgba(300, 300, 300, 0.8);
+  color: black;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+header .searchBox .clearButton {
+  background: white;
+}
+
+.searchResultsContainer {
+  border-radius: 10pt;
+  transform: translate(-50%, 50pt);
+}
+
+main {
+  margin-top: 0;
+}
+
 main section.header {
   position: relative;
-  height: 35vh;
+  height: calc(35vh + 55pt);
   min-height: 200px;
   overflow: hidden;
 }
@@ -19,10 +63,9 @@ main section.header .background {
   background-image: url("/images/header.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-attachment: fixed;
   background-size: cover;
   z-index: 1;
-  transform: scale(1.2);
+  transform: scale(1.5);
 }
 
 main section.header .foreground {
@@ -37,6 +80,7 @@ main section.header .foreground {
 main section.header .foreground video {
   width: 75vw;
   max-width: 500px;
+  transform: translate(0, 20pt);
 }
 
 section.featured {
@@ -56,7 +100,7 @@ section.featured .header {
 }
 
 section.featured .header h1 {
-  margin-left: 20pt;
+  margin: 0 0 0 10pt;
 }
 
 section.featured .header button {
@@ -180,4 +224,39 @@ section.featured .content .item .info .subtitle *:not(:last-child)::after {
 section.featured .content .item .info .subtitle *:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    height: 55pt;
+    transition: background 0.2s ease;
+  }
+
+  header.searchActive {
+    background: var(--content-background-color);
+  }
+
+  header .searchBox {
+    top: 50%;
+    bottom: unset;
+    transform: translate(-50%, -50%);
+  }
+
+  .searchResultsContainer {
+    top: 55pt;
+    height: calc(100% - 55pt);
+    border-radius: 0;
+  }
+
+  main {
+    margin-top: 0;
+  }
+
+  main section.header .foreground video {
+    width: 65vw;
+  }
+
+  section.featured .header h1 {
+    margin: 0;
+  }
 }

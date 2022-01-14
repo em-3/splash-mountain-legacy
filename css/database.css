@@ -74,6 +74,7 @@ main div.databaseBrowser {
 .databaseBrowser .resultsContainer {
   display: grid;
   grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+  grid-auto-rows: 90pt;
   gap: 10pt;
   padding: 10pt;
 }
@@ -85,4 +86,16 @@ main div.databaseBrowser {
   border: none;
   font: inherit;
   font-weight: bold;
+}
+
+@media only screen and (max-width: 960px) {
+  .databaseBrowser .resultsContainer {
+    grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
+  }
+}
+
+@media only screen and (max-width: 670px) {
+  .databaseBrowser .resultsContainer {
+    grid-template-columns: 100%;
+  }
 }

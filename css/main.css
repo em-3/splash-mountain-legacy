@@ -28,7 +28,7 @@ header .logo img {
   transition: opacity 0.2s ease;
 }
 
-@media (max-width: 745px) {
+@media (max-width: 745px) and (min-width: 601px) {
   header.searchActive .logo {
     opacity: 0;
   }
@@ -54,7 +54,7 @@ header .links > * {
   background: var(--page-background-color);
   color: inherit;
   text-decoration: none;
-  font-size: 12pt;
+  font-size: 10pt;
   font-family: inherit;
   font-weight: bold;
   padding: 5pt 10pt;
@@ -91,12 +91,14 @@ header .searchBox {
   top: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
+  pointer-events: none;
   transition: all 0.3s ease;
 }
 
 header.searchActive .searchBox {
   outline: none;
   opacity: 1;
+  pointer-events: all;
 }
 
 header .searchBox .searchField {
@@ -153,7 +155,7 @@ header.searchActive ~ .searchResultsContainer {
   position: fixed;
   top: 55pt;
   left: 50vw;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -200pt);
   width: calc(100% - 20pt);
   max-width: 500px;
   height: calc(100% - 75pt);
@@ -246,4 +248,50 @@ main {
   opacity: 0.5;
   pointer-events: auto;
   display: block !important;
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    height: 100pt;
+    flex-direction: column;
+    padding: 10pt;
+  }
+  header .logo,
+  header .links {
+    margin: 0;
+  }
+  header .searchBox {
+    top: unset;
+    bottom: 5pt;
+    transform: translate(-50%, 0);
+  }
+
+  .searchResultsContainer {
+    top: 100pt;
+    height: calc(100% - 100pt);
+    width: 100%;
+    max-width: none;
+    background: var(--page-background-color);
+    border-radius: 0;
+  }
+
+  main {
+    margin-top: 100pt;
+  }
+
+  footer {
+    padding: 10pt;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  footer .logo img {
+    margin-top: 0;
+  }
+
+  .itemDetailsContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
 }
