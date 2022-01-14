@@ -42,16 +42,6 @@ var searchBar = {
             searchBar.showResultsContainer();
         }, 200);
     },
-
-    loadResultsFromRange: function (query, min, max) {
-        return new Promise((resolve, reject) => {
-            fetch("/api/search/?query=" + query + "&min=" + min + "&max=" + max).then(response => response.json()).then((results) => {
-                resolve(results);
-            }, (error) => {
-                reject(error);
-            });
-        });
-    },
     generateResultElement: function (resultItem) {
         var resultElement = document.createElement("div");
         resultElement.className = "listItem";
@@ -65,11 +55,11 @@ var searchBar = {
             var imgElement = document.createElement("img");
             imgElement.className = "image";
             imgElement.src = "/resources/" + resultItem.id + "/thumbnail";
-        } else if (currentItemData.type === "video") {
+        } else if (resultItem.type === "video") {
             var pictureElement = null;
             var imgElement = document.createElement("img");
             imgElement.className = "image";
-            imgElement.src = "https://img.youtube.com/vi/" + currentItemData.video_id + "/mqdefault.jpg";
+            imgElement.src = "https://img.youtube.com/vi/" + resultItem.video_id + "/mqdefault.jpg";
         } else {
             var pictureElement = document.createElement("picture");
             pictureElement.className = "image";
@@ -137,10 +127,8 @@ var searchBar = {
         //Wait two seconds before updating the search results
         timeoutID = setTimeout(function () {
             //Fetch new results
-            searchBar.loadResultsFromRange(query, searchRange.min, searchRange.max).then((results) => {
-                if (!preservePreviousResults) {
-                    searchBar.clearSearchResults();
-                }
+            fetch("/api/search/?query=" + query).then(response => response.json()).then((results) => {
+                searchBar.clearSearchResults();
 
                 if (results.length === 0) {
                     searchBar.clearSearchResults();
