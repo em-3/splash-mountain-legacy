@@ -6,7 +6,7 @@ function navigateTo(sectionClass) {
     document.querySelector("main > ." + sectionClass).classList.remove("hidden");
 }
 
-document.querySelector("#file").onchange = function(e) {
+document.querySelector(".addItem #file").onchange = function(e) {
     var file = e.target.files[0]
     if (file && file.name) {
         EXIF.getData(file, function() {
@@ -102,7 +102,9 @@ function updateItemType() {
             show("camera", false);
             break;
         case "video":
+            show("videoID", true);
             show("camera", false);
+            show("microphone", false);
         case "audio":
             show("content", false);
             show("videoID", true);
