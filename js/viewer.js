@@ -52,7 +52,7 @@ function showItemDetails() {
         } else {
             element.appendChild(span);
         }
-        document.querySelector(".itemInfoContainer").appendChild(element);
+        document.querySelector(".itemInfoContainer").insertBefore(element, document.querySelector(".itemInfoContainer .metadata"));
     }
 
     //Show the item details
@@ -62,7 +62,7 @@ function showItemDetails() {
         var descriptionElement = document.createElement("p");
         descriptionElement.classList.add("description");
         descriptionElement.textContent = itemDetails.description;
-        document.querySelector(".itemInfoContainer").appendChild(descriptionElement);
+        document.querySelector(".itemInfoContainer").insertBefore(descriptionElement, document.querySelector(".itemInfoContainer .metadata"));
     }
     if (itemDetails.author) {
         if (itemDetails.author.match(/\[([^\][]+)]/g)) {
