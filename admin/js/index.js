@@ -1,3 +1,5 @@
+localStorage.setItem("adminAccess", "true");
+
 function navigateTo(sectionClass) {
     var sections = document.querySelectorAll("main > section");
     for (var i = 0; i < sections.length; i++) {

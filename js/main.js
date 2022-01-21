@@ -18,6 +18,11 @@ window.onmessage = function(e) {
     }
 };
 
+//Show admin onsole link if user has previously logged in
+if (localStorage.getItem("adminAccess") === "true") {
+    document.querySelector("header .links .admin").classList.remove("hidden");
+}
+
 //Listen for the Konami code
 var konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
 var konamiCodeIndex = 0;
