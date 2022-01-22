@@ -104,15 +104,18 @@ function updateItemType() {
             show("camera", false);
             break;
         case "video":
+            show("content", false);
             show("videoID", true);
             show("camera", false);
             show("microphone", false);
+            break;
         case "audio":
             show("content", false);
             show("videoID", true);
             show("make", false);
             show("model", false);
             show("microphone", false);
+            break;
         case "date":
         case "text":
             hide("content");
