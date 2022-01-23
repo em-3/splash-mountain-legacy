@@ -11,7 +11,6 @@ header .logo {
 header .links > * {
   background: rgba(300, 300, 300, 0.5);
   color: black;
-  transition: background 0.2s ease;
 }
 
 header .links > *.current {
