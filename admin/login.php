@@ -106,17 +106,19 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
                 <img src="/images/logo-black.png">
             </picture>
         
-            <div class="links">
-                <a href="/">Home</a>
-                <a href="/database">Database</a>
-                <a href="/about">About</a>
-                <a class="admin current" href="/admin">Admin</a>
-                <button class="search" onclick="searchBar.onfocus();">
-                    <picture>
-                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                    </picture>
-                </button>
+            <div class="linksContainer">
+                <div class="links">
+                    <a href="/">Home</a>
+                    <a href="/database">Database</a>
+                    <a href="/about">About</a>
+                    <a class="admin current" href="/admin">Admin</a>
+                    <button class="search" onclick="searchBar.onfocus();">
+                        <picture>
+                            <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                            <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                        </picture>
+                    </button>
+                </div>
             </div>
         
             <div class="searchBox">

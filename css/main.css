@@ -254,12 +254,31 @@ main {
   header {
     height: 100pt;
     flex-direction: column;
-    padding: 10pt;
+    padding: 10pt 10pt 5pt 10pt;
   }
+
   header .logo,
   header .links {
     margin: 0;
   }
+
+  header .linksContainer {
+    width: 100vw;
+    overflow: scroll;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  header .linksContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  header .linksContainer .links {
+    padding: 0 10pt;
+    min-width: 100vw;
+    width: fit-content;
+  }
+
   header .searchBox {
     top: unset;
     bottom: 5pt;

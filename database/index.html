@@ -50,17 +50,19 @@ require_once __DIR__ . "/../site_lock.php";
             <img src="/images/logo-black.png">
         </picture>
     
-        <div class="links">
-            <a href="/">Home</a>
-            <a class="current" href="/database">Database</a>
-            <a href="/about">About</a>
-            <a class="admin hidden" href="/admin">Admin</a>
-            <button class="search" onclick="searchBar.onfocus();">
-                <picture>
-                    <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                </picture>
-            </button>
+        <div class="linksContainer">
+            <div class="links">
+                <a href="/">Home</a>
+                <a class="current" href="/database">Database</a>
+                <a href="/about">About</a>
+                <a class="admin hidden" href="/admin">Admin</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <picture>
+                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                    </picture>
+                </button>
+            </div>
         </div>
     
         <div class="searchBox">
