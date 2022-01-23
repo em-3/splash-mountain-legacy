@@ -64,14 +64,27 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
     <head>
         
         <meta charset="utf-8">
-        <title>Admin Login - Splash Mountain Legacy</title>
+        <title>Login - Splash Mountain Legacy</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
         
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="/css/main.css">
         <link rel="stylesheet" href="css/login.css">
+        
+        <meta name="description" content="Splash Mountain images, videos, audio, and more.">
+        <meta name="keywords" content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9N1M0HPYP7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-9N1M0HPYP7');
+        </script>
 
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -86,6 +99,53 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
     </head>
     
     <body ontouchstart class>
+        
+        <header>
+            <picture class="logo" onclick="window.location.href = '/'">
+                <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
+                <img src="/images/logo-black.png">
+            </picture>
+        
+            <div class="links">
+                <a href="/">Home</a>
+                <a href="/database">Database</a>
+                <a href="/about">About</a>
+                <a class="admin current" href="/admin">Admin</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <picture>
+                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                    </picture>
+                </button>
+            </div>
+        
+            <div class="searchBox">
+                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
+                    onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+                <div class="clearButton" onclick="searchBar.close()">
+                    <picture>
+                        <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
+                    </picture>
+                </div>
+            </div>
+        </header>
+
+        <div class="searchResultsContainer">
+            <div class="loadingContainer hidden">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="resultsContainer"></div>
+            <div class="errorMessageContainer">
+                <h2 class="title"></h2>
+                <p class="subtitle"></p>
+            </div>
+        </div>
 
         <main>
             <section>
@@ -105,8 +165,29 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
                 </form>
             </section>
         </main>
+
+        <footer>
+            <div class="logo">
+                <img src="/images/logo-white.png">
+            </div>
+            <div class="credits">
+                <h3>Created By</h3>
+                <a href="https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA" target="_BLANK">91J Loves Disney</a>
+                <a>EM_3</a>
+                <a href="https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A" target="_BLANK">MickeyWaffleCo.</a>
+            </div>
+        </footer>
+
+        <div class="itemDetailsContainer hidden">
+            <iframe src="" frameborder="0"></iframe>
+        </div>
+
+        <div class="overlay"></div>
         
         <script src="/js/global.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/search.js"></script>
+        <script src="/js/index.js"></script>
         
     </body>
     
