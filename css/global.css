@@ -242,6 +242,7 @@ footer .links .link.discord:hover {
 
 footer .credits {
   margin-bottom: 5pt;
+  cursor: default;
 }
 
 footer .credits h3 {
