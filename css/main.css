@@ -303,16 +303,6 @@ main {
     margin-top: 100pt;
   }
 
-  footer {
-    padding: 10pt;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  footer .logo img {
-    margin-top: 0;
-  }
-
   .itemDetailsContainer {
     width: 100%;
     height: 100%;

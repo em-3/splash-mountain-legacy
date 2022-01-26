@@ -1,0 +1,101 @@
+section {
+  padding: 20pt;
+}
+
+section h1,
+section h2 {
+  margin: 0 0 10pt 0;
+}
+
+section p {
+  margin: 0;
+}
+
+section a {
+  display: block;
+  width: fit-content;
+  margin: 10pt 0 0 0;
+  background: #5f66ea;
+  color: #2a2b2e;
+  font: inherit;
+  font-weight: bold;
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  padding: 5pt 10pt;
+  border-radius: 5pt;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+section a:hover {
+  background: #2a2b2e;
+  color: #5f66ea;
+}
+
+section.hero {
+  background: var(--main-gradient);
+  color: var(--color-3);
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: center;
+  font-weight: bold;
+  min-height: 200pt;
+}
+
+section.hero h1 {
+  font-size: 25pt;
+}
+
+section.creators {
+  padding: 20pt 0 20pt 0;
+}
+
+section.creators h2 {
+  margin-left: 20pt;
+}
+
+.creatorList {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: auto;
+  white-space: nowrap;
+  overflow: scroll;
+  padding: 0 0 0 20pt;
+}
+
+.creatorList .creator {
+  width: 180pt;
+  margin-right: 20pt;
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  padding: 10pt;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.creatorList .creator.link {
+  cursor: pointer;
+}
+
+.creatorList .creator img {
+  width: 50pt;
+  height: 50pt;
+  border-radius: 50%;
+  margin-bottom: 10pt;
+}
+
+.creatorList .creator .info h2 {
+  margin: 0 0 5pt 0;
+}
+
+.creatorList .creator .info ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}

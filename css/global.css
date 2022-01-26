@@ -167,16 +167,73 @@ footer {
   background: var(--color-3);
   color: white;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
   text-align: center;
-  gap: 20pt;
+  gap: 5pt;
 }
 
-footer img {
+@media only screen and (max-width: 720px) {
+  footer {
+    flex-direction: column;
+    padding: 0 0 10pt 0;
+    gap: 0;
+  }
+
+  footer .links {
+    margin-top: 5pt;
+  }
+}
+
+footer .logo img {
   height: 50pt;
   width: auto;
   margin-top: 5pt;
+}
+
+footer .links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5pt;
+}
+
+footer .links .link {
+  background: var(--page-background-color);
+  width: 35pt;
+  height: 35pt;
+  border-radius: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+footer .links .link picture.regular {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer .links .link img.hover {
+  display: none;
+}
+
+footer .links .link:hover picture.regular {
+  display: none;
+}
+
+footer .links .link:hover img.hover {
+  display: block;
+}
+
+footer .links .link.youtube:hover {
+  background: #ff0000;
+}
+
+footer .links .link.discord:hover {
+  background: #5865f2;
 }
 
 footer .credits {
