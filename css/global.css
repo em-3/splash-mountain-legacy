@@ -190,6 +190,7 @@ footer .logo img {
   height: 50pt;
   width: auto;
   margin-top: 5pt;
+  cursor: pointer;
 }
 
 footer .links {

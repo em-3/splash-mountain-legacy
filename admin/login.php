@@ -170,7 +170,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
 
         <footer>
             <div class="logo">
-                <img src="/images/logo-white.png">
+                <img src="/images/logo-white.png" onclick="window.location.href = '/'">
             </div>
             <div class="credits">
                 <h3>Created By</h3>
