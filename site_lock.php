@@ -7,9 +7,9 @@ if($_SERVER['PHP_SELF'] == '/admin/login.php') {
     return;
 }
 
-//Check if the user is logged in
+//Check if the user is logged in. If not, redirect to the countdown page.
 if(!check_authentication()) {
-    header("Location: /admin/login.php");
+    header("Location: /countdown");
     exit;
 }
 
