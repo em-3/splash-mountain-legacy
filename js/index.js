@@ -76,3 +76,9 @@ fetch("/api/search/?sort_by=date_added&min=1&max=15")
         document.querySelector(".databaseAdditions .loading").classList.add("hidden");
         document.querySelector(".databaseAdditions .error").classList.remove("hidden");
     });
+
+//When the user navigates to a different tab, replace the video element with a picture element to prevent a frozen animation.
+window.onblur = function () {
+    document.querySelector("section.header .foreground video").classList.add("hidden");
+    document.querySelector("section.header .foreground img").classList.remove("hidden");
+};

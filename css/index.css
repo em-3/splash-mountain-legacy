@@ -76,7 +76,8 @@ main section.header .foreground {
   background: black;
 }
 
-main section.header .foreground video {
+main section.header .foreground video,
+main section.header .foreground img {
   width: 75vw;
   max-width: 500px;
   transform: translate(0, 20pt);
