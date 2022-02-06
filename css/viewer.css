@@ -63,6 +63,8 @@ header.hidden {
 }
 
 .contentContainer .contentDisplay {
+  width: 100%;
+  height: calc(100vh - 40pt);
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -79,7 +81,8 @@ header.hidden {
 
 .contentContainer .contentDisplay > img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
 }
 
 .contentDisplay .thumbnail:not(.hidden) {
