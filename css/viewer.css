@@ -64,7 +64,8 @@ header.hidden {
 
 .contentContainer .contentDisplay {
   width: 100%;
-  height: calc(100vh - 40pt);
+  height: auto;
+  max-height: calc(100vh - 40pt);
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
