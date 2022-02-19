@@ -1,5 +1,5 @@
 main {
-  padding: 10pt;
+  padding: 20pt;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,10 +7,10 @@ main {
 }
 
 main section {
-  width: calc(100% - 20pt);
-  max-width: 600pt;
+  width: 100%;
+  max-width: 800pt;
   background: var(--content-background-color);
-  padding: 10pt;
+  padding: 20pt;
   border-radius: 10pt;
 }
 
@@ -22,7 +22,7 @@ main section h1 {
   border: 2px solid var(--primary-text-color);
   border-radius: 10pt;
   padding: 3pt;
-  margin: 5pt 0;
+  margin: 5pt auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,8 +30,8 @@ main section h1 {
 }
 
 .tabContainer .tab {
-  background: var(--color-1);
-  color: black;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
   padding: 2pt 5pt;
   border-radius: 5pt;
   font-size: 10pt;
@@ -41,12 +41,79 @@ main section h1 {
 }
 
 .tabContainer .tab.selected {
-  background: var(--color-2);
-  color: white;
+  background: var(--secondary-content-background-color);
 }
 
 .tabContainer .tab:not(:last-child) {
   margin-right: 5pt;
+}
+
+.list .filters {
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  display: flex;
+  align-items: center;
+  padding: 5pt;
+  margin-top: 15pt;
+}
+
+.list .filters .searchField input {
+  border: none;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  padding: 5pt;
+  width: 100%;
+  font: inherit;
+  font-size: 10pt;
+  border-radius: 5pt;
+  transition: background 0.2s ease;
+}
+
+.list .filters .searchField input:focus {
+  outline: none;
+  background: var(--page-background-color);
+}
+
+.list .filters .optionMenus {
+  margin: 0 10pt;
+  display: flex;
+  align-items: center;
+}
+
+.list .filters .optionMenus .optionMenu {
+  background: var(--content-background-color);
+  border-radius: 5pt;
+  height: 20pt;
+  padding: 1pt 8pt;
+  display: flex;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+}
+
+.list .filters .optionMenus .optionMenu:not(:last-child) {
+  margin-right: 10pt;
+}
+
+.list .filters .optionMenus .optionMenu select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: var(--content-background-color);
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  cursor: pointer;
+  padding: 0;
+  height: 100%;
+  margin-left: 5pt;
+  color: var(--primary-text-color);
+}
+
+.list .filters .optionMenus .optionMenu select:focus {
+  outline: none;
 }
 
 .list .loadingContainer,
@@ -76,17 +143,84 @@ main section h1 {
 
 .list .resultsContainer {
   display: grid;
-  grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
-  grid-auto-rows: 90pt;
+  grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
+  grid-auto-rows: 110pt;
   gap: 10pt;
-  padding: 10pt;
+  margin-top: 10pt;
 }
 
 .list .resultsContainer .loadMoreButton {
-  background: var(--content-background-color);
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
   border-radius: 10pt;
   cursor: pointer;
   border: none;
   font: inherit;
   font-weight: bold;
+}
+
+.result {
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  padding: 5pt;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.result img {
+  width: 50pt;
+  margin: 10pt 10pt 10pt 5pt;
+  background: var(--page-background-color);
+  border-radius: 5pt;
+}
+
+.result picture > img {
+  padding: 5pt;
+}
+
+.result .right {
+  width: 100%;
+  overflow: hidden;
+}
+
+.result .right .name {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result .right .description {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result .right .infoContainer {
+  margin: 2pt 0 2pt 0;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+.result .right .infoContainer * {
+  margin: 0;
+}
+
+.result .right .infoContainer *:not(:last-child)::after {
+  content: "•";
+  margin: 0 5pt;
+}
+
+.result .right .infoContainer *:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -16,7 +16,7 @@ function selectTab(listName) {
             databaseList.refreshResults();
             break;
         case "news":
-            newsList.refreshResults();
+            // newsList.refreshResults();
             break;
     }
 
@@ -32,18 +32,66 @@ var databaseList = {
         min: 1,
         max: 21
     },
-    filters: {
+    searchBar: {
+        timeoutID: null,
+        oninput: function () {
+            var query = document.querySelector(".searchField").value;
 
+            if (this.timeoutID) {
+                clearTimeout(this.timeoutID);
+            }
+
+            document.querySelector(".list.database .loadingContainer").classList.remove("hidden");
+            document.querySelector(".list.database .resultsContainer").classList.add("hidden");
+            document.querySelector(".list.database .errorMessageContainer").classList.add("hidden")
+            
+            //Wait a second before updating the search results
+            this.timeoutID = setTimeout(databaseList.refreshResults, 1000);
+        }, 
+        onchange: function () {
+            databaseList.refreshResults();
+        }
     },
+    filters: [
+        {
+        id: "park",
+        label: "Park",
+        values: [
+            "All",
+            "WDW",
+            "DL",
+            "TDL"
+        ]
+    },
+    {
+        id: "type",
+        label: "Type",
+        values: [
+            "All",
+            "image",
+            "video",
+            "audio",
+            "date",
+            "text"
+        ]
+    }
+    ],
     refreshResults: function (preservePreviousResults) {
         var PHPParams = "";
         var character = "?";
-        for (var i = 0; i < this.filters.length; i++) {
+
+        var filterValue = document.querySelector(".list.database .filters .searchField input").value;
+        if (filterValue != "") {
+            PHPParams += character + "query=" + filterValue;
+            character = "&";
+        }
+
+        for (var i = 0; i < databaseList.filters.length; i++) {
             //Get the selected option for this filter's select element.
-            var filterElement = document.querySelector("select[name='" + filters[i].id + "']");
+            var filterElement = document.querySelector("select[name='" + databaseList.filters[i].id + "']");
             var filterValue = filterElement.options[filterElement.selectedIndex].value;
             if (filterValue != "" && filterValue != "All") {
-                PHPParams += character + filters[i].id + "=" + filterValue;
+                PHPParams += character + databaseList.filters[i].id + "=" + filterValue;
                 character = "&";
             }
         }
@@ -56,7 +104,7 @@ var databaseList = {
         }
 
         //Fetch new results
-        fetch("/api/search/" + PHPParams + character + "min=" + this.searchRange.min + "&max=" + this.searchRange.max)
+        fetch("/api/search/" + PHPParams + character + "min=" + databaseList.searchRange.min + "&max=" + databaseList.searchRange.max)
             .then(response => response.json())
             .then((data) => {
             if (!preservePreviousResults && data.length === 0) {
@@ -140,8 +188,8 @@ var databaseList = {
                         infoContainerElement.appendChild(authorElement);
                     }
 
-                    rightSideContainer.appendChild(infoContainerElement);
                     rightSideContainer.appendChild(nameElement);
+                    rightSideContainer.appendChild(infoContainerElement);
                     rightSideContainer.appendChild(descriptionElement);
 
                     if (pictureElement) {
@@ -153,7 +201,7 @@ var databaseList = {
                     document.querySelector(".list.database .resultsContainer").appendChild(resultElement);
                 }
 
-                if (data.length === this.searchRange.max - this.searchRange.min) {
+                if (data.length === databaseList.searchRange.max - databaseList.searchRange.min) {
                     var loadMoreButton = document.createElement("button");
                     loadMoreButton.className = "loadMoreButton";
                     loadMoreButton.textContent = "Load More";
@@ -183,6 +231,39 @@ var databaseList = {
         this.searchRange.max += 20;
         this.refreshResults(true);
     }
+}
+
+//Loop through each filter and create an element for for it.
+for (var i = 0; i < databaseList.filters.length; i++) {
+    var currentFilter = databaseList.filters[i];
+
+    var filterElement = document.createElement("div");
+    filterElement.classList.add("optionMenu");
+    filterElement.classList.add(currentFilter.id);
+
+    var filterName = document.createElement("p");
+    filterName.classList.add("name");
+    filterName.textContent = currentFilter.label + ":";
+
+    var filterSelect = document.createElement("select");
+    filterSelect.setAttribute("name", currentFilter.id);
+    filterSelect.addEventListener("change", function () {
+        databaseList.refreshResults();
+    });
+
+    for (var j = 0; j < currentFilter.values.length; j++) {
+        var filterSelectOption = document.createElement("option");
+        filterSelectOption.setAttribute("value", currentFilter.values[j]);
+        filterSelectOption.textContent = currentFilter.values[j];
+        if (j === 0) {
+            filterSelectOption.setAttribute("selected", true);
+        }
+        filterSelect.appendChild(filterSelectOption);
+    }
+
+    filterElement.appendChild(filterName);
+    filterElement.appendChild(filterSelect);
+    document.querySelector(".list.database .filters .optionMenus").appendChild(filterElement);
 }
 
 databaseList.refreshResults();
