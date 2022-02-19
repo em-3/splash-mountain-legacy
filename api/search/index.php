@@ -24,7 +24,17 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
+        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query";
+
+        //Add each word to the tags query
+        $words = explode(" ", str_replace(",", "", $query));
+        for($i = 0; $i < count($words); $i++) {
+            $stmt .= " OR `tags` LIKE :tag" . $i;
+            $params["tag" . $i] = "%" . $words[$i] . "%";
+        }
+
+        //Close the search query
+        $stmt .= ")";
     }
 }
 
@@ -56,7 +66,7 @@ if(!$id_only) {
         $stmt .= " WHERE";
     }
 
-    $stmt .= "`hidden` = 0";
+    $stmt .= " `hidden` = 0";
 
     //Sort the results by the specified field
     if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
