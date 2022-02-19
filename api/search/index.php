@@ -6,6 +6,7 @@ $sort_by = ["nane" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
 $available_params = ["type", "park"];
 $params = array();
 $id_only = false;
+$tag_mode = isset($_GET["tags"]);
 $results;
 $stmt = "SELECT * FROM `item_index`";
 
@@ -26,11 +27,16 @@ if(isset($_GET["query"])) {
         //Search for the query in name, author, and description fields
         $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query";
 
-        //Add each word to the tags query
-        $words = explode(" ", str_replace(",", "", $query));
-        for($i = 0; $i < count($words); $i++) {
-            $stmt .= " OR `tags` LIKE :tag" . $i;
-            $params["tag" . $i] = "%" . $words[$i] . "%";
+        //Only search for the query in the tags field if the user has not specified tags as a search parameter
+        if(!$tag_mode) {
+
+            //Add each word to the tags query
+            $words = explode(" ", str_replace(",", "", $query));
+            for($i = 0; $i < count($words); $i++) {
+                $stmt .= " OR `tags` LIKE :tag" . $i;
+                $params["tag" . $i] = "%" . $words[$i] . "%";
+            }
+
         }
 
         //Close the search query
@@ -59,6 +65,31 @@ if(!$id_only) {
         }
     }
 
+    //If the user has specified tags as a search parameter, add the tags to the statement
+    if($tag_mode) {
+        //If there is more than one parameter, add an AND
+        if(count($params) > 0) {
+            $stmt .= " AND (";
+        }else {
+            $stmt .= " WHERE (";
+        }
+
+        //Add each tag to the statement
+        $tags = is_array($_GET["tags"]) ? $_GET["tags"] : [$_GET["tags"]];
+        for($i = 0; $i < count($tags); $i++) {
+            if($i != 0) {
+                $stmt .= " AND";
+            }
+
+            //Add the tag to the statement
+            $stmt .= " `tags` LIKE :tag" . $i;
+            
+            //Add the tag to the parameters
+            $params["tag" . $i] = "%" . $tags[$i] . "%";
+        }
+
+        $stmt .= ")";
+    }
     
     if(count($params) > 0) {
         $stmt .= " AND";
