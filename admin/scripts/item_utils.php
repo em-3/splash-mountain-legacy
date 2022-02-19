@@ -11,7 +11,7 @@
 function upload_item($item_data, $database, $image_data = null, $resource_dir=null) {
     //Define required and optional POST parameters
     $required_params = ["name", "type", "park", "description"];
-    $optional_params = ["author", "video_id", "source", "metadata", "timestamp", "hidden"];
+    $optional_params = ["author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
 
     $params = array();
 
@@ -149,7 +149,7 @@ function modify_item($item_data, $database) {
     }
 
     //Define available parameters
-    $available_params = ["name", "park", "description", "author", "video_id", "source", "metadata", "timestamp", "hidden"];
+    $available_params = ["name", "park", "description", "author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
 
     $params = array();
 
