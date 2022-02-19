@@ -1,0 +1,92 @@
+main {
+  padding: 10pt;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+main section {
+  width: calc(100% - 20pt);
+  max-width: 600pt;
+  background: var(--content-background-color);
+  padding: 10pt;
+  border-radius: 10pt;
+}
+
+main section h1 {
+  margin: 0;
+}
+
+.tabContainer {
+  border: 2px solid var(--primary-text-color);
+  border-radius: 10pt;
+  padding: 3pt;
+  margin: 5pt 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.tabContainer .tab {
+  background: var(--color-1);
+  color: black;
+  padding: 2pt 5pt;
+  border-radius: 5pt;
+  font-size: 10pt;
+  width: fit-content;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tabContainer .tab.selected {
+  background: var(--color-2);
+  color: white;
+}
+
+.tabContainer .tab:not(:last-child) {
+  margin-right: 5pt;
+}
+
+.list .loadingContainer,
+.list .resultsContainer,
+.list .errorMessageContainer {
+  min-height: 200pt;
+}
+
+.list .loadingContainer,
+.list .errorMessageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list .errorMessageContainer {
+  flex-direction: column;
+}
+
+.list .errorMessageContainer .title {
+  margin: 0 0 10pt 0;
+}
+
+.list .errorMessageContainer .subtitle {
+  margin: 0;
+}
+
+.list .resultsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+  grid-auto-rows: 90pt;
+  gap: 10pt;
+  padding: 10pt;
+}
+
+.list .resultsContainer .loadMoreButton {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  cursor: pointer;
+  border: none;
+  font: inherit;
+  font-weight: bold;
+}

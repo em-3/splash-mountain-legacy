@@ -83,22 +83,56 @@
 
     <main>
         <section>
-            <form action="<?php echo htmlspecialchars($_SERVER[" PHP_SELF"]); ?>" method="POST">
-                <div class="titleContainer">
-                    <h1>Login to Admin Console</h1>
-                    <?php if($error != "") { ?>
-                    <p class="errorMessage">
-                        <?php echo $error; ?>
-                    </p>
-                    <?php } ?>
+            <div class="toolbar">
+                <h1>Admin</h1>
+                <div class="buttons">
+                    <div class="addItem"></div>
                 </div>
-                <div>
-                    <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
-                    <input type="text" name="username" placeholder="Username">
-                    <input type="password" name="password" placeholder="Password">
+            </div>
+            <div class="content">
+                <div class="tabContainer">
+                    <div class="tab database selected" onclick="selectTab('database')">Database Items</div>
+                    <div class="tab news" onclick="selectTab('news')">News Articles</div>
                 </div>
-                <input type="submit" value="Login">
-            </form>
+                <div class="list database">
+                    <div class="searchField">
+                        <input type="text" placeholder="Filter" oninput="searchBar.updateSearchResults()">
+                    </div>
+                    <div class="filters"></div>
+                    <div class="loadingContainer">
+                        <div class="loadingAnimationEllipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="resultsContainer hidden"></div>
+                    <div class="errorMessageContainer hidden">
+                        <h2 class="title"></h2>
+                        <p class="subtitle"></p>
+                    </div>
+                </div>
+                <div class="list news hidden">
+                    <div class="searchField">
+                    <input type="text" placeholder="Filter" oninput="searchBar.updateSearchResults()">
+                    </div>
+                    <div class="filters"></div>
+                    <div class="loadingContainer">
+                        <div class="loadingAnimationEllipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="resultsContainer hidden"></div>
+                    <div class="errorMessageContainer hidden">
+                        <h2 class="title"></h2>
+                        <p class="subtitle"></p>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -146,7 +180,7 @@
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/search.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="js/index.js"></script>
 
 </body>
 
