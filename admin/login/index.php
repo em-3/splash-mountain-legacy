@@ -72,7 +72,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/global.css">
         <link rel="stylesheet" href="/css/main.css">
-        <link rel="stylesheet" href="../css/login.css">
+        <link rel="stylesheet" href="styles.css">
         
         <meta name="description" content="Splash Mountain images, videos, audio, and more.">
         <meta name="keywords" content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
@@ -203,7 +203,6 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
         <script src="/js/global.js"></script>
         <script src="/js/main.js"></script>
         <script src="/js/search.js"></script>
-        <script src="/js/index.js"></script>
         
     </body>
     
