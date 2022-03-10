@@ -10,8 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="styles.css">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -27,9 +26,82 @@
 
 <body ontouchstart class>
 
+    <header>
+        <picture onclick="closeEditor()">
+            <source srcset="/images/icons/arrow-white.svg" media="(prefers-color-scheme: dark)">
+            <img src="/images/icons/arrow-black.svg" width="auto" height="30pt">
+        </picture>
+    </header>
+
     <main>
-        <section>
-            
+        <section class="loadingContainer centered hidden">
+            <div class="loadingAnimationEllipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </section>
+        <section class="errorContainer centered hidden">
+            <h1 class="title"></h1>
+            <h2 class="subtitle"></h2>
+            <p class="message"></p>
+        </section>
+        <section class="editor">
+            <div class="itemPreview">
+                <img src="/images/mwc.jpg" class="thumbnail">
+                <div class="textContainer">
+                    <p class="itemType">image</p>
+                    <p class="itemID">adjhWHEFUAuwheifa</p>
+                </div>
+            </div>
+            <div class="itemEditor">
+                <div class="properties">
+
+                    <div class="propertyContainer">
+                        <label for="type">Type</label>
+                        <select name="type">
+                            <option value="image">image</option>
+                            <option value="video">video</option>
+                            <option value="text">text</option>
+                        </select>
+                    </div>
+
+                    <div class="propertyContainer">
+                        <label for="title">Title</label>
+                        <input name="title" type="text">
+                    </div>
+
+                </div>
+                <div class="actions">
+                    <div class="passive">
+                        <button class="cancel" onclick="closeEditor()">Cancel Changes</button>
+                        <button class="save" onclick="updateItem()">Update Item</button>
+                    </div>
+                    <div class="danger">
+                        <button class="delete" onclick="deleteItem()">Delete Item</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="progressContainer centered hidden">
+            <div class="animation"></div>
+            <div class="progressIndicator">
+                <div class="determinate hidden"></div>
+                <div class="indeterminate">
+                    <div class="loadingAnimationEllipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="responseContainer centered hidden">
+            <h1 class="title"></h1>
+            <p class="message"></p>
+            <div class="actions"></div>
         </section>
     </main>
 
