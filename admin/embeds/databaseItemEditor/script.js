@@ -31,8 +31,8 @@ function showItemDetails(itemDetails) {
             label.for = "park";
             label.textContent = "Park";
             var select = document.createElement("select");
-            input.name = "park";
-            input.id = "park";
+            select.name = "park";
+            select.id = "park";
 
             var wdw = document.createElement("option");
             wdw.textContent = "WDW";
