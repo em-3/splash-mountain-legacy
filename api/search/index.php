@@ -9,7 +9,7 @@ $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
 $results;
-$stmt = "SELECT * FROM `item_index`";
+$stmt = "SELECT `id`, `name`, `park`, `author` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
