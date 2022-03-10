@@ -25,22 +25,26 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query";
+        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
-        if(!$tag_mode) {
+        if($tag_mode) {
+            $stmt .= " OR (";
 
             //Add each word to the tags query
             $words = explode(" ", str_replace(",", "", $query));
             for($i = 0; $i < count($words); $i++) {
-                $stmt .= " OR `tags` LIKE :tag" . $i;
+                if($i > 0) {
+                    $stmt .= " AND ";
+                }
+
+                $stmt .= "`tags` LIKE :tag" . $i;
                 $params["tag" . $i] = "%" . $words[$i] . "%";
             }
 
+            //Close the search query
+            $stmt .= ")";
         }
-
-        //Close the search query
-        $stmt .= ")";
     }
 }
 
@@ -52,16 +56,16 @@ if(!$id_only) {
         if(isset($_GET[$param])) {
             //If there is more than one parameter, add an AND
             if(count($params) > 0) {
-                $stmt .= " AND";
+                $stmt .= " AND ";
             }else {
-                $stmt .= " WHERE";
+                $stmt .= " WHERE ";
             }
 
             //Set the parameter's value
             $params[$param] = $_GET[$param];
 
             //Add the parameter to the statement
-            $stmt .= " `$param` = :$param";
+            $stmt .= "`$param` = :$param";
         }
     }
 
@@ -78,11 +82,11 @@ if(!$id_only) {
         $tags = is_array($_GET["tags"]) ? $_GET["tags"] : [$_GET["tags"]];
         for($i = 0; $i < count($tags); $i++) {
             if($i != 0) {
-                $stmt .= " AND";
+                $stmt .= " AND ";
             }
 
             //Add the tag to the statement
-            $stmt .= " `tags` LIKE :tag" . $i;
+            $stmt .= "`tags` LIKE :tag" . $i;
             
             //Add the tag to the parameters
             $params["tag" . $i] = "%" . $tags[$i] . "%";
@@ -92,12 +96,12 @@ if(!$id_only) {
     }
     
     if(count($params) > 0) {
-        $stmt .= " AND";
+        $stmt .= " AND ";
     }else {
-        $stmt .= " WHERE";
+        $stmt .= " WHERE ";
     }
 
-    $stmt .= " `hidden` = 0";
+    $stmt .= "`hidden` = 0";
 
     //Sort the results by the specified field
     if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
@@ -124,7 +128,6 @@ if(!$id_only) {
         //Update the statement to include the min and max
         $stmt .= " LIMIT :min, :max";
     }
-
 }
 
 //Prepare the statement
