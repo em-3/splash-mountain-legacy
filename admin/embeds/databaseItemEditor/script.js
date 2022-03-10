@@ -47,7 +47,7 @@ function showItemDetails(itemDetails) {
             tdl.value = "tdl";
             select.appendChild(tdl);
 
-            select.value = metadata.park.toLowerCase();
+            select.value = itemDetails.park.toLowerCase();
 
             container.appendChild(label);
             container.appendChild(select);
