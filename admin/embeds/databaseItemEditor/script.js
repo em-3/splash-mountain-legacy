@@ -82,7 +82,7 @@ function showItemDetails(itemDetails) {
             var input = document.createElement("input");
             input.name = "name";
             input.id = "name";
-            input.value = metadata.name;
+            input.value = itemDetails.name;
             container.appendChild(label);
             container.appendChild(input);
             return container;
@@ -116,7 +116,7 @@ function showItemDetails(itemDetails) {
             var input = document.createElement("textarea");
             input.name = "description";
             input.id = "description";
-            input.value = metadata.description;
+            input.value = itemDetails.description;
             container.appendChild(label);
             container.appendChild(input);
             return container;
@@ -153,7 +153,7 @@ function showItemDetails(itemDetails) {
             nameInput.name = "authorLink";
             nameInput.id = "authorLink";
             //Remove anything between square brackets from author name
-            if (metadata.author) { nameInput.value = metadata.author.replace(/\[.*\]/, ""); }
+            if (itemDetails.author) { nameInput.value = itemDetails.author.replace(/\[.*\]/, ""); }
             nameContainer.appendChild(nameLabel);
             nameContainer.appendChild(nameInput);
 
@@ -167,7 +167,7 @@ function showItemDetails(itemDetails) {
             linkInput.name = "authorLink";
             linkInput.id = "authorLink";
             //Get the portion of the author link between square brackets
-            if (metadata.author) { linkInput.value = metadata.author.match(/\[(.*)\]/) }
+            if (itemDetails.author) { linkInput.value = itemDetails.author.match(/\[(.*)\]/) }
             linkContainer.appendChild(linkLabel);
             linkContainer.appendChild(linkInput);
 
@@ -216,8 +216,8 @@ function showItemDetails(itemDetails) {
             dateInput.type = "date";
             dateInput.name = "date";
             dateInput.id = "date";
-            if (metadata.timestamp) {
-                dateInput.value = metadata.timestamp.split(" ")[0];
+            if (itemDetails.timestamp) {
+                dateInput.value = itemDetails.timestamp.split(" ")[0];
             }
             timestampContainer.appendChild(dateInput);
 
@@ -229,14 +229,14 @@ function showItemDetails(itemDetails) {
             timeInput.type = "time";
             timeInput.name = "time";
             timeInput.id = "time";
-            if (metadata.timestamp && (metadata.timestamp.indexOf(" ") !== -1)) {
-                dateInput.value = metadata.timestamp.split(" ")[1];
+            if (itemDetails.timestamp && (itemDetails.timestamp.indexOf(" ") !== -1)) {
+                dateInput.value = itemDetails.timestamp.split(" ")[1];
             }
             timestampContainer.appendChild(timeInput);
 
             var precisionLabel = document.createElement("label");
             precisionLabel.for = "timestampPrecision";
-            precisionLabel.textContent = "Tiemstamp Precision";
+            precisionLabel.textContent = "Timestamp Precision";
             timestampContainer.appendChild(precisionLabel);
             var precisionSelect = document.createElement("select");
             precisionSelect.name = "timestampPrecision";
@@ -248,7 +248,7 @@ function showItemDetails(itemDetails) {
                 option.textContent = precisionOptions[i][0].toUpperCase() + precisionOptions[i].slice(1);
                 precisionSelect.appendChild(option);
             }
-            if (metadata.timestampPrecision) { precisionSelect.value = metadata.timestampPrecision };
+            if (metadata.precision) { precisionSelect.value = metadata.precision };
             timestampContainer.appendChild(precisionSelect);
 
             container.appendChild(timestampContainer);

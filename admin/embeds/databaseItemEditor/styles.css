@@ -90,7 +90,8 @@ section {
   outline: none;
 }
 
-.propertyContainer input {
+.propertyContainer input,
+.propertyContainer textarea {
   border-radius: 5pt;
   background: var(--content-background-color);
   color: var(--primary-text-color);
@@ -100,7 +101,8 @@ section {
   transition: border 0.1s ease;
 }
 
-.propertyContainer input:focus {
+.propertyContainer input:focus,
+.propertyContainer textarea:focus {
   border-color: var(--primary-text-color);
   outline: none;
 }
