@@ -34,7 +34,7 @@
     </header>
 
     <main>
-        <section class="loadingContainer centered hidden">
+        <section class="loadingContainer centered">
             <div class="loadingAnimationEllipsis">
                 <div></div>
                 <div></div>
@@ -47,7 +47,7 @@
             <h2 class="subtitle"></h2>
             <p class="message"></p>
         </section>
-        <section class="editor">
+        <section class="editor hidden">
             <div class="itemPreview">
                 <img src="" class="thumbnail">
                 <div class="textContainer">
@@ -57,6 +57,7 @@
             </div>
             <div class="itemEditor">
                 <div class="properties"></div>
+                <h2 class="errorMessage hidden"></h2>
                 <div class="actions">
                     <div class="passive">
                         <button class="cancel" onclick="closeEditor()">Cancel Changes</button>
@@ -84,6 +85,7 @@
         </section>
         <section class="responseContainer centered hidden">
             <h1 class="title"></h1>
+            <h2 class="subtitle"></h2>
             <p class="message"></p>
             <div class="actions"></div>
         </section>

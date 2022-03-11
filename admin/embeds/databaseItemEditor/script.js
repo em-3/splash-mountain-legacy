@@ -387,8 +387,6 @@ function showItemDetails(itemDetails) {
         valueGetter: function () {
             var updatedMetadata = {};
             var values = {};
-            values.date = document.getElementById("date").value;
-            values.time = document.getElementById("time").value;
             values.timestampPrecision = document.getElementById("timestampPrecision").value;
             values.make = document.getElementById("make").value;
             values.model = document.getElementById("model").value;
@@ -400,10 +398,20 @@ function showItemDetails(itemDetails) {
             values.colorSpace = document.getElementById("colorSpace").value;
             values.samplingRate = document.getElementById("samplingRate").value;
 
-            if (values.date && values.time) {
-                values.timestamp = values.date + " " + values.time;
-            } else if (date) {
-                values.timestamp = values.date;
+            if (values.timestampPrecision) { updatedMetadata.precision = values.timestampPrecision };
+            if (values.make) { updatedMetadata.make = values.make };
+            if (values.model) { updatedMetadata.model = values.model };
+            if (values.focalLength) { updatedMetadata.focalLength = values.focalLength };
+            if (values.softwareVersion) { updatedMetadata.software = values.softwareVersion };
+            if (values.exposureTime) { updatedMetadata.exposureTime = values.exposureTime };
+            if (values.fNumber) { updatedMetadata.fNumber = values.fNumber };
+            if (values.flash) { updatedMetadata.flash = values.flash };
+            if (values.colorSpace) { updatedMetadata.colorSpace = values.colorSpace };
+            if (values.samplingRate) { updatedMetadata.samplingRate = values.samplingRate };
+
+            return {
+                include: true,
+                value: updatedMetadata
             }
         }
     });
@@ -418,13 +426,61 @@ function showItemDetails(itemDetails) {
     document.querySelector(".itemID").textContent = id;
     document.querySelector(".itemType").textContent = type;
 
+    document.querySelector(".loadingContainer").classList.add("hidden");
     requestAnimationFrame(function () {
-        document.querySelector(".itemInfoContainer").classList.remove("hidden");
+        document.querySelector(".editor").classList.remove("hidden");
     });
 
-    //Show the item content
-    showItemContent(id, itemDetails.type, itemDetails.format);
+}
 
+async function updateItem() {
+    document.querySelector(".editor").classList.add("hidden");
+    document.querySelector(".progressContainer").classList.remove("hidden");
+
+    var formData = new FormData();
+
+    for (var i = 0; i < properties.length; i++) {
+        var currentProperty = properties[i];
+        var currentPropertyValue = currentProperty.getter();
+        if (currentPropertyValue.include) {
+            formData.append(currentProperty.propertyName, currentPropertyValue.value);
+        } else if (currentPropertyValue.fail) {
+            document.querySelector(".editor .errorMessage").classList.remove("hidden");
+            document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
+            document.querySelector(".progressContainer").classList.add("hidden");
+            document.querySelector(".editor").classList.remove("hidden");
+            return;
+        }
+    }
+
+    var date = document.querySelector(".editor #date").value;
+    var time = document.querySelector(".editor #time").value;
+    if (date && time) {
+        formData.append("timestamp", date + " " + time);
+    } else if (date) {
+        formData.append("timestamp", date);
+    }
+
+    var response = await fetch('/admin/upload.php', {
+        method: 'POST',
+        body: formData
+    });
+    let result = await response.json();
+
+    if (result.status === "success") {
+        document.querySelector(".responseContainer .title").textContent = "Done.";
+        document.querySelector(".responseContainer .subtitle").textContent = "The item has been updated.";
+        document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+        document.querySelector(".responseContainer .retry").classList.add("hidden");
+    } else {
+        document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".responseContainer .message").textContent = result.error;
+        document.querySelector(".responseContainer .retry").classList.remove("hidden");
+    }
+
+    document.querySelector(".loadingContainer").classList.add("hidden");
+    document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 function showErrorScreen() {

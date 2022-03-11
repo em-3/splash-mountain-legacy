@@ -103,6 +103,7 @@ section {
 
 .propertyContainer textarea {
   resize: vertical;
+  min-height: 100pt;
 }
 
 .propertyContainer input:focus,
