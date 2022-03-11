@@ -441,7 +441,7 @@ async function updateItem() {
 
     for (var i = 0; i < properties.length; i++) {
         var currentProperty = properties[i];
-        var currentPropertyValue = currentProperty.getter();
+        var currentPropertyValue = currentProperty.valueGetter();
         if (currentPropertyValue.include) {
             formData.append(currentProperty.propertyName, currentPropertyValue.value);
         } else if (currentPropertyValue.fail) {
