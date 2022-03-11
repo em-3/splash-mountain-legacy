@@ -142,24 +142,19 @@ function showItemDetails(itemDetails) {
         propertyName: "author",
         constructor: function () {
             var container = document.createElement("div");
+            container.classList.add("propertyContainer");
 
-            var nameContainer = document.createElement("div");
-            nameContainer.classList.add("propertyContainer");
-            nameContainer.classList.add("authorLink");
             var nameLabel = document.createElement("label");
-            nameLabel.for = "authorLink";
-            nameLabel.textContent = "Author Link";
+            nameLabel.for = "authorName";
+            nameLabel.textContent = "Author Name";
             var nameInput = document.createElement("input");
-            nameInput.name = "authorLink";
-            nameInput.id = "authorLink";
+            nameInput.name = "authorName";
+            nameInput.id = "authorName";
             //Remove anything between square brackets from author name
             if (itemDetails.author) { nameInput.value = itemDetails.author.replace(/\[.*\]/, ""); }
-            nameContainer.appendChild(nameLabel);
-            nameContainer.appendChild(nameInput);
+            container.appendChild(nameLabel);
+            container.appendChild(nameInput);
 
-            var linkContainer = document.createElement("div");
-            linkContainer.classList.add("propertyContainer");
-            linkContainer.classList.add("authorLink");
             var linkLabel = document.createElement("label");
             linkLabel.for = "authorLink";
             linkLabel.textContent = "Author Link";
@@ -168,11 +163,9 @@ function showItemDetails(itemDetails) {
             linkInput.id = "authorLink";
             //Get the portion of the author link between square brackets
             if (itemDetails.author) { linkInput.value = itemDetails.author.match(/\[(.*)\]/) }
-            linkContainer.appendChild(linkLabel);
-            linkContainer.appendChild(linkInput);
+            container.appendChild(linkLabel);
+            container.appendChild(linkInput);
 
-            container.appendChild(nameContainer);
-            container.appendChild(linkContainer);
             return container;
         },
         valueGetter: function () {
@@ -230,7 +223,7 @@ function showItemDetails(itemDetails) {
             timeInput.name = "time";
             timeInput.id = "time";
             if (itemDetails.timestamp && (itemDetails.timestamp.indexOf(" ") !== -1)) {
-                dateInput.value = itemDetails.timestamp.split(" ")[1];
+                timeInput.value = itemDetails.timestamp.split(" ")[1];
             }
             timestampContainer.appendChild(timeInput);
 
@@ -253,156 +246,119 @@ function showItemDetails(itemDetails) {
 
             container.appendChild(timestampContainer);
 
-            //Make
-            var makeContainer = document.createElement("div");
-            makeContainer.classList.add("propertyContainer");
-            makeContainer.classList.add("make");
+            //Hardware Info
+            var hardwareInfoContainer = document.createElement("div");
+            hardwareInfoContainer.classList.add("propertyContainer");
 
+            //Make
             var makeLabel = document.createElement("label");
             makeLabel.for = "make";
             makeLabel.textContent = "Recording Device Make";
-            makeContainer.appendChild(makeLabel);
+            hardwareInfoContainer.appendChild(makeLabel);
 
             var makeInput = document.createElement("input");
             makeInput.name = "make";
             makeInput.id = "make";
             if (metadata.make) { makeInput.value = metadata.make };
-            makeContainer.appendChild(makeInput);
-
-            container.appendChild(makeContainer);
+            hardwareInfoContainer.appendChild(makeInput);
 
             //Model
-            var modelContainer = document.createElement("div");
-            modelContainer.classList.add("propertyContainer");
-            modelContainer.classList.add("model");
-
             var modelLabel = document.createElement("label");
             modelLabel.for = "model";
             modelLabel.textContent = "Recording Device Model";
-            modelContainer.appendChild(modelLabel);
+            hardwareInfoContainer.appendChild(modelLabel);
 
             var modelInput = document.createElement("input");
             modelInput.name = "model";
             modelInput.id = "model";
             if (metadata.model) { modelInput.value = metadata.model };
-            modelContainer.appendChild(modelInput);
+            hardwareInfoContainer.appendChild(modelInput);
 
-            container.appendChild(modelContainer);
+            container.appendChild(hardwareInfoContainer);
 
             if (type === "image" || type === "video") {
-                //Focal Length
-                var focalLengthContainer = document.createElement("div");
-                focalLengthContainer.classList.add("propertyContainer");
-                focalLengthContainer.classList.add("focalLength");
+                var cameraInfoContainer = document.createElement("div");
+                cameraInfoContainer.classList.add("propertyContainer");
 
+                //Focal Length
                 var focalLengthLabel = document.createElement("label");
                 focalLengthLabel.for = "focalLength";
                 focalLengthLabel.textContent = "Focal Length";
-                focalLengthContainer.appendChild(focalLengthLabel);
+                cameraInfoContainer.appendChild(focalLengthLabel);
 
                 var focalLengthInput = document.createElement("input");
                 focalLengthInput.name = "focalLength";
                 focalLengthInput.id = "focalLength";
                 focalLengthInput.placeholder = "20.1";
                 if (metadata.focalLength) { focalLengthInput.value = metadata.focalLength };
-                focalLengthContainer.appendChild(focalLengthInput);
-
-                container.appendChild(focalLengthContainer);
+                cameraInfoContainer.appendChild(focalLengthInput);
 
                 //Software Version
-                var softwareVersionContainer = document.createElement("div");
-                softwareVersionContainer.classList.add("propertyContainer");
-                softwareVersionContainer.classList.add("softwareVersion");
-
                 var softwareVersionLabel = document.createElement("label");
                 softwareVersionLabel.for = "softwareVersion";
                 softwareVersionLabel.textContent = "Software Version";
-                softwareVersionContainer.appendChild(softwareVersionLabel);
+                cameraInfoContainer.appendChild(softwareVersionLabel);
 
                 var softwareVersionInput = document.createElement("input");
                 softwareVersionInput.name = "softwareVersion";
                 softwareVersionInput.id = "softwareVersion";
                 softwareVersionInput.placeholder = "15.0";
                 if (metadata.software) { softwareVersionInput.value = metadata.software };
-                softwareVersionContainer.appendChild(softwareVersionInput);
-
-                container.appendChild(softwareVersionContainer);
+                cameraInfoContainer.appendChild(softwareVersionInput);
 
                 //Exposure Time
-                var exposureTimeContainer = document.createElement("div");
-                exposureTimeContainer.classList.add("propertyContainer");
-                exposureTimeContainer.classList.add("exposureTime");
-
                 var exposureTimeLabel = document.createElement("label");
                 exposureTimeLabel.for = "exposureTime";
                 exposureTimeLabel.textContent = "Exposure Time";
-                exposureTimeContainer.appendChild(exposureTimeLabel);
+                cameraInfoContainer.appendChild(exposureTimeLabel);
 
                 var exposureTimeInput = document.createElement("input");
                 exposureTimeInput.name = "exposureTime";
                 exposureTimeInput.id = "exposureTime";
                 exposureTimeInput.placeholder = "1/50";
                 if (metadata.exposureTime) { exposureTimeInput.value = metadata.exposureTime };
-                exposureTimeContainer.appendChild(exposureTimeInput);
-
-                container.appendChild(exposureTimeContainer);
+                cameraInfoContainer.appendChild(exposureTimeInput);
 
                 //F-number
-                var fNumberContainer = document.createElement("div");
-                fNumberContainer.classList.add("propertyContainer");
-                fNumberContainer.classList.add("fNumber");
-
                 var fNumberLabel = document.createElement("label");
                 fNumberLabel.for = "fNumber";
                 fNumberLabel.textContent = "F-number";
-                fNumberContainer.appendChild(fNumberLabel);
+                cameraInfoContainer.appendChild(fNumberLabel);
 
                 var fNumberInput = document.createElement("input");
                 fNumberInput.name = "fNumber";
                 fNumberInput.id = "fNumber";
                 fNumberInput.placeholder = "4.0";
                 if (metadata.fNumber) { fNumberInput.value = metadata.fNumber };
-                fNumberContainer.appendChild(fNumberInput);
-
-                container.appendChild(fNumberContainer);
+                cameraInfoContainer.appendChild(fNumberInput);
 
                 //Flash
-                var flashContainer = document.createElement("div");
-                flashContainer.classList.add("propertyContainer");
-                flashContainer.classList.add("flash");
-
                 var flashLabel = document.createElement("label");
                 flashLabel.for = "flash";
                 flashLabel.textContent = "Flash";
-                flashContainer.appendChild(flashLabel);
+                cameraInfoContainer.appendChild(flashLabel);
 
                 var flashInput = document.createElement("input");
                 flashInput.name = "flash";
                 flashInput.id = "flash";
                 flashInput.placeholder = "Flash did not fire, compulsory flash mode";
                 if (metadata.flash) { flashInput.value = metadata.flash };
-                flashContainer.appendChild(flashInput);
-
-                container.appendChild(flashContainer);
+                cameraInfoContainer.appendChild(flashInput);
 
                 //Color Space
-                var colorSpaceContainer = document.createElement("div");
-                colorSpaceContainer.classList.add("propertyContainer");
-                colorSpaceContainer.classList.add("colorSpace");
-
                 var colorSpaceLabel = document.createElement("label");
                 colorSpaceLabel.for = "colorSpace";
                 colorSpaceLabel.textContent = "Color Space";
-                colorSpaceContainer.appendChild(colorSpaceLabel);
+                cameraInfoContainer.appendChild(colorSpaceLabel);
 
                 var colorSpaceInput = document.createElement("input");
                 colorSpaceInput.name = "colorSpace";
                 colorSpaceInput.id = "colorSpace";
                 colorSpaceInput.placeholder = "sRGB";
                 if (metadata.colorSpace) { colorSpaceInput.value = metadata.colorSpace };
-                colorSpaceContainer.appendChild(colorSpaceInput);
+                cameraInfoContainer.appendChild(colorSpaceInput);
 
-                container.appendChild(colorSpaceContainer);
+                container.appendChild(cameraInfoContainer);
             }
 
             if (type === "video" || type === "audio") {
@@ -430,24 +386,32 @@ function showItemDetails(itemDetails) {
         },
         valueGetter: function () {
             var updatedMetadata = {};
-            var values = {};
-            values.date = document.getElementById("date").value;
-            values.time = document.getElementById("time").value;
-            values.timestampPrecision = document.getElementById("timestampPrecision").value;
-            values.make = document.getElementById("make").value;
-            values.model = document.getElementById("model").value;
-            values.focalLength = document.getElementById("focalLength").value;
-            values.softwareVersion = document.getElementById("softwareVersion").value;
-            values.exposureTime = document.getElementById("exposureTime").value;
-            values.fNumber = document.getElementById("fNumber").value;
-            values.flash = document.getElementById("flash").value;
-            values.colorSpace = document.getElementById("colorSpace").value;
-            values.samplingRate = document.getElementById("samplingRate").value;
+            var elements = {};
+            elements.timestampPrecision = document.getElementById("timestampPrecision");
+            elements.make = document.getElementById("make");
+            elements.model = document.getElementById("model");
+            elements.focalLength = document.getElementById("focalLength");
+            elements.softwareVersion = document.getElementById("softwareVersion");
+            elements.exposureTime = document.getElementById("exposureTime");
+            elements.fNumber = document.getElementById("fNumber");
+            elements.flash = document.getElementById("flash");
+            elements.colorSpace = document.getElementById("colorSpace");
+            elements.samplingRate = document.getElementById("samplingRate");
 
-            if (values.date && values.time) {
-                values.timestamp = values.date + " " + values.time;
-            } else if (date) {
-                values.timestamp = values.date;
+            if (elements.timestampPrecision && elements.timestampPrecision.value) { updatedMetadata.precision = elements.timestampPrecision.value };
+            if (elements.make && elements.make.value) { updatedMetadata.make = elements.make.value };
+            if (elements.model && elements.model.value) { updatedMetadata.model = elements.model.value };
+            if (elements.focalLength && elements.focalLength.value) { updatedMetadata.focalLength = elements.focalLength.value };
+            if (elements.softwareVersion && elements.softwareVersion.value) { updatedMetadata.software = elements.softwareVersion.value };
+            if (elements.exposureTime && elements.exposureTime.value) { updatedMetadata.exposureTime = elements.exposureTime.value };
+            if (elements.fNumber && elements.fNumber.value) { updatedMetadata.fNumber = elements.fNumber.value };
+            if (elements.flash && elements.flash.value) { updatedMetadata.flash = elements.flash.value };
+            if (elements.colorSpace && elements.colorSpace.value) { updatedMetadata.colorSpace = elements.colorSpace.value };
+            if (elements.samplingRate && elements.samplingRate.value) { updatedMetadata.samplingRate = elements.samplingRate.value };
+
+            return {
+                include: true,
+                value: JSON.stringify(updatedMetadata)
             }
         }
     });
@@ -462,19 +426,67 @@ function showItemDetails(itemDetails) {
     document.querySelector(".itemID").textContent = id;
     document.querySelector(".itemType").textContent = type;
 
+    document.querySelector(".loadingContainer").classList.add("hidden");
     requestAnimationFrame(function () {
-        document.querySelector(".itemInfoContainer").classList.remove("hidden");
+        document.querySelector(".editor").classList.remove("hidden");
     });
 
-    //Show the item content
-    showItemContent(id, itemDetails.type, itemDetails.format);
+}
 
+async function updateItem() {
+    document.querySelector(".editor").classList.add("hidden");
+    document.querySelector(".progressContainer").classList.remove("hidden");
+
+    var formData = new FormData();
+
+    formData.append("id", id);
+
+    for (var i = 0; i < properties.length; i++) {
+        var currentProperty = properties[i];
+        var currentPropertyValue = currentProperty.valueGetter();
+        if (currentPropertyValue.include) {
+            formData.append(currentProperty.propertyName, currentPropertyValue.value);
+        } else if (currentPropertyValue.fail) {
+            document.querySelector(".editor .errorMessage").classList.remove("hidden");
+            document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
+            document.querySelector(".progressContainer").classList.add("hidden");
+            document.querySelector(".editor").classList.remove("hidden");
+            return;
+        }
+    }
+
+    var date = document.querySelector(".editor #date").value;
+    var time = document.querySelector(".editor #time").value;
+    if (date && time) {
+        formData.append("timestamp", date + " " + time);
+    } else if (date) {
+        formData.append("timestamp", date);
+    }
+
+    var response = await fetch('/admin/upload.php', {
+        method: 'POST',
+        body: formData
+    });
+    let result = await response.json();
+
+    if (result.status === "success") {
+        document.querySelector(".responseContainer .title").textContent = "Done.";
+        document.querySelector(".responseContainer .subtitle").textContent = "The item has been updated.";
+        document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+    } else {
+        document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".responseContainer .message").textContent = result.error;
+    }
+
+    document.querySelector(".progressContainer").classList.add("hidden");
+    document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 function showErrorScreen() {
     //Hide the loading screen and show the error screen
-    document.querySelector(".loadingScreen").classList.add("hidden")
-    document.querySelector(".errorScreen").classList.remove("hidden");
+    document.querySelector(".loadingContainer").classList.add("hidden")
+    document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
 function closeEditor() {

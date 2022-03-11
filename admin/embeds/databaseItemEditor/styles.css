@@ -101,6 +101,11 @@ section {
   transition: border 0.1s ease;
 }
 
+.propertyContainer textarea {
+  resize: vertical;
+  min-height: 100pt;
+}
+
 .propertyContainer input:focus,
 .propertyContainer textarea:focus {
   border-color: var(--primary-text-color);
