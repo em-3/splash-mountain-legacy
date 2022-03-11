@@ -386,28 +386,28 @@ function showItemDetails(itemDetails) {
         },
         valueGetter: function () {
             var updatedMetadata = {};
-            var values = {};
-            values.timestampPrecision = document.getElementById("timestampPrecision").value;
-            values.make = document.getElementById("make").value;
-            values.model = document.getElementById("model").value;
-            values.focalLength = document.getElementById("focalLength").value;
-            values.softwareVersion = document.getElementById("softwareVersion").value;
-            values.exposureTime = document.getElementById("exposureTime").value;
-            values.fNumber = document.getElementById("fNumber").value;
-            values.flash = document.getElementById("flash").value;
-            values.colorSpace = document.getElementById("colorSpace").value;
-            values.samplingRate = document.getElementById("samplingRate").value;
+            var elements = {};
+            elements.timestampPrecision = document.getElementById("timestampPrecision");
+            elements.make = document.getElementById("make");
+            elements.model = document.getElementById("model");
+            elements.focalLength = document.getElementById("focalLength");
+            elements.softwareVersion = document.getElementById("softwareVersion");
+            elements.exposureTime = document.getElementById("exposureTime");
+            elements.fNumber = document.getElementById("fNumber");
+            elements.flash = document.getElementById("flash");
+            elements.colorSpace = document.getElementById("colorSpace");
+            elements.samplingRate = document.getElementById("samplingRate");
 
-            if (values.timestampPrecision) { updatedMetadata.precision = values.timestampPrecision };
-            if (values.make) { updatedMetadata.make = values.make };
-            if (values.model) { updatedMetadata.model = values.model };
-            if (values.focalLength) { updatedMetadata.focalLength = values.focalLength };
-            if (values.softwareVersion) { updatedMetadata.software = values.softwareVersion };
-            if (values.exposureTime) { updatedMetadata.exposureTime = values.exposureTime };
-            if (values.fNumber) { updatedMetadata.fNumber = values.fNumber };
-            if (values.flash) { updatedMetadata.flash = values.flash };
-            if (values.colorSpace) { updatedMetadata.colorSpace = values.colorSpace };
-            if (values.samplingRate) { updatedMetadata.samplingRate = values.samplingRate };
+            if (elements.timestampPrecision && elements.timestampPrecision.value) { updatedMetadata.precision = elements.timestampPrecision.value };
+            if (elements.make && elements.make.value) { updatedMetadata.make = elements.make.value };
+            if (elements.model && elements.model.value) { updatedMetadata.model = elements.model.value };
+            if (elements.focalLength && elements.focalLength.value) { updatedMetadata.focalLength = elements.focalLength.value };
+            if (elements.softwareVersion && elements.softwareVersion.value) { updatedMetadata.software = elements.softwareVersion.value };
+            if (elements.exposureTime && elements.exposureTime.value) { updatedMetadata.exposureTime = elements.exposureTime.value };
+            if (elements.fNumber && elements.fNumber.value) { updatedMetadata.fNumber = elements.fNumber.value };
+            if (elements.flash && elements.flash.value) { updatedMetadata.flash = elements.flash.value };
+            if (elements.colorSpace && elements.colorSpace.value) { updatedMetadata.colorSpace = elements.colorSpace.value };
+            if (elements.samplingRate && elements.samplingRate.value) { updatedMetadata.samplingRate = elements.samplingRate.value };
 
             return {
                 include: true,
