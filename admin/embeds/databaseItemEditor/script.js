@@ -483,6 +483,31 @@ async function updateItem() {
     document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
+async function deleteItem() {
+    var formData = new FormData();
+
+    formData.append("id", id);
+
+    var response = await fetch('/admin/delete.php', {
+        method: 'POST',
+        body: formData
+    });
+    let result = await response.json();
+
+    if (result.status === "success") {
+        document.querySelector(".responseContainer .title").textContent = "Done.";
+        document.querySelector(".responseContainer .subtitle").textContent = "The item has been removed from the database.";
+        document.querySelector(".responseContainer .message").textContent = "";
+    } else {
+        document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
+        document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
+        document.querySelector(".responseContainer .message").textContent = result.error;
+    }
+
+    document.querySelector(".progressContainer").classList.add("hidden");
+    document.querySelector(".responseContainer").classList.remove("hidden");
+}
+
 function showErrorScreen() {
     //Hide the loading screen and show the error screen
     document.querySelector(".loadingContainer").classList.add("hidden")
