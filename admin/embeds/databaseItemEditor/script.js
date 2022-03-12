@@ -411,7 +411,7 @@ function showItemDetails(itemDetails) {
 
             return {
                 include: true,
-                value: updatedMetadata
+                value: JSON.stringify(updatedMetadata)
             }
         }
     });
@@ -479,14 +479,14 @@ async function updateItem() {
         document.querySelector(".responseContainer .message").textContent = result.error;
     }
 
-    document.querySelector(".loadingContainer").classList.add("hidden");
+    document.querySelector(".progressContainer").classList.add("hidden");
     document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 function showErrorScreen() {
     //Hide the loading screen and show the error screen
-    document.querySelector(".loadingScreen").classList.add("hidden")
-    document.querySelector(".errorScreen").classList.remove("hidden");
+    document.querySelector(".loadingContainer").classList.add("hidden")
+    document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
 function closeEditor() {
