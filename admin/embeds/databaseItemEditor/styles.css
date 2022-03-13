@@ -34,7 +34,7 @@ section {
   background: var(--content-background-color);
   width: calc(100% - 20pt);
   max-width: 800pt;
-  height: 300pt;
+  height: 200pt;
   border-radius: 10pt;
   padding: 15pt;
   display: flex;
@@ -60,12 +60,12 @@ section {
   margin-left: 20pt;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .editor .itemInfo .textContainer * {
-  margin: 5pt 0 5pt 0;
+  margin: 2.5pt 0 2.5pt 0;
 }
 
 .editor .itemEditor {

@@ -426,7 +426,7 @@ function showItemDetails(itemDetails) {
     switch (type) {
         case "image":
             thumbnailElement = document.querySelector(".thumbnail img");
-            element.src = "/resources/" + id + "/thumbnail";
+            thumbnailElement.src = "/resources/" + id + "/thumbnail";
             break;
         case "video":
         case "audio":
@@ -434,7 +434,7 @@ function showItemDetails(itemDetails) {
             thumbnailElement.src = "https://www.youtube.com/embed/" + itemDetails.video_id;
             break;
     }
-    element.classList.remove("hidden");
+    thumbnailElement.classList.remove("hidden");
 
     document.querySelector(".itemID").textContent = id;
     document.querySelector(".itemType").textContent = type;

@@ -224,3 +224,48 @@ main section h1 {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--shadow-color);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.2s ease;
+}
+
+.overlay.active {
+  opacity: 0.5;
+  pointer-events: auto;
+}
+
+.databaseItemEditorContainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 60pt);
+  height: calc(100% - 60pt);
+  max-width: 800pt;
+  max-height: 600pt;
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  z-index: 10;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.databaseItemEditorContainer.hidden {
+  display: block !important;
+  opacity: 0;
+  transform: translate(-50%, 50vh);
+}
+
+.databaseItemEditorContainer iframe {
+  width: 100%;
+  height: 100%;
+}
