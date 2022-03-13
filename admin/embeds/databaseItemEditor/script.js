@@ -422,9 +422,23 @@ function showItemDetails(itemDetails) {
         document.querySelector(".editor .properties").appendChild(currentProperty.constructor());
     }
 
-    document.querySelector(".thumbnail").src = "/resources/" + id + "/thumbnail";
+    var thumbnailElement = undefined;
+    switch (type) {
+        case "image":
+            thumbnailElement = document.querySelector(".thumbnail img");
+            element.src = "/resources/" + id + "/thumbnail";
+            break;
+        case "video":
+        case "audio":
+            thumbnailElement = document.querySelector(".thumbnail iframe");
+            thumbnailElement.src = "https://www.youtube.com/embed/" + itemDetails.video_id;
+            break;
+    }
+    element.classList.remove("hidden");
+
     document.querySelector(".itemID").textContent = id;
     document.querySelector(".itemType").textContent = type;
+    document.querySelector(".itemName").textContent = itemDetails.name;
 
     document.querySelector(".loadingContainer").classList.add("hidden");
     requestAnimationFrame(function () {

@@ -30,20 +30,20 @@ section {
   padding: 20pt;
 }
 
-.editor .itemPreview {
+.editor .itemInfo {
   background: var(--content-background-color);
-  max-width: 300pt;
   width: calc(100% - 20pt);
+  max-width: 800pt;
+  height: 300pt;
   border-radius: 10pt;
   padding: 15pt;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: auto;
 }
 
-.editor .itemPreview .thumbnail {
+.editor .itemInfo .thumbnail img {
   width: auto;
   height: auto;
   max-height: 150pt;
@@ -51,16 +51,21 @@ section {
   border-radius: 5pt;
 }
 
-.editor .itemPreview .textContainer {
-  width: 100%;
-  margin-top: 15pt;
+.editor .itemInfo .thumbnail iframe {
+  height: 100%;
+  width: auto;
+}
+
+.editor .itemInfo .textContainer {
+  margin-left: 20pt;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
 
-.editor .itemPreview .textContainer p {
-  margin: 0;
+.editor .itemInfo .textContainer * {
+  margin: 5pt 0 5pt 0;
 }
 
 .editor .itemEditor {
