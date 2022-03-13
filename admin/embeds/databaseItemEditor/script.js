@@ -162,7 +162,7 @@ function showItemDetails(itemDetails) {
             linkInput.name = "authorLink";
             linkInput.id = "authorLink";
             //Get the portion of the author link between square brackets
-            if (itemDetails.author) { linkInput.value = itemDetails.author.match(/\[(.*)\]/) }
+            if (itemDetails.author) { linkInput.value = itemDetails.author.match(/\[(.*)\]/)[0].substr(1, itemDetails.author.match(/\[(.*)\]/)[0].length - 2); }
             container.appendChild(linkLabel);
             container.appendChild(linkInput);
 
