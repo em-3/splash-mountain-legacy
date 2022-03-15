@@ -29,7 +29,7 @@ if(isset($_GET["query"])) {
         $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
-        if($tag_mode) {
+        if(!$tag_mode) {
             $stmt .= " OR (";
 
             //Add each word to the tags query
