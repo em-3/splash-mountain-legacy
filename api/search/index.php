@@ -26,7 +26,7 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
+        $stmt .= " WHERE ((`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {
@@ -59,7 +59,7 @@ if(!$id_only) {
             if(count($params) > 0) {
                 $stmt .= " AND ";
             }else {
-                $stmt .= " WHERE ";
+                $stmt .= " WHERE (";
             }
 
             //Set the parameter's value
@@ -76,7 +76,7 @@ if(!$id_only) {
         if(count($params) > 0) {
             $stmt .= " AND (";
         }else {
-            $stmt .= " WHERE (";
+            $stmt .= " WHERE ((";
         }
 
         //Add each tag to the statement
@@ -97,16 +97,18 @@ if(!$id_only) {
     }
     
     if(count($params) > 0) {
-        $stmt .= " AND ";
+        $stmt .= ") AND ";
     }else {
         $stmt .= " WHERE ";
     }
 
-    $stmt .= "`hidden` = 0";
+    $stmt .= "(`hidden` = 0";
 
     if(isset($_GET["show_hidden"]) && $_GET["show_hidden"] == "true" && check_authentication()) {
         $stmt .= " OR `hidden` = 1";
     }
+
+    $stmt .= ")";
 
     //Sort the results by the specified field
     if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
