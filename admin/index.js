@@ -160,7 +160,7 @@ var databaseList = {
                     var rightSideContainer = document.createElement("div");
                     rightSideContainer.className = "right";
 
-                    if (currentItemData.hidden) {
+                    if (currentItemData.hidden === "1") {
                         resultElement.classList.add("hiddenItem");
                         var hiddenElement = document.createElement("p");
                         hiddenElement.textContent = "Hidden Item";

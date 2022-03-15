@@ -188,6 +188,10 @@ main section h1 {
   overflow: hidden;
 }
 
+.result .right p {
+  margin: 0 0 2pt 0;
+}
+
 .result .right .name {
   margin: 0;
   display: -webkit-box;
