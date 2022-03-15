@@ -104,7 +104,7 @@ var databaseList = {
         }
 
         //Fetch new results
-        fetch("/api/search/" + PHPParams + character + "min=" + databaseList.searchRange.min + "&max=" + databaseList.searchRange.max)
+        fetch("/api/search/" + PHPParams + character + "min=" + databaseList.searchRange.min + "&max=" + databaseList.searchRange.max + "&show_hidden=true")
             .then(response => response.json())
             .then((data) => {
             if (!preservePreviousResults && data.length === 0) {
@@ -159,6 +159,13 @@ var databaseList = {
 
                     var rightSideContainer = document.createElement("div");
                     rightSideContainer.className = "right";
+
+                    if (currentItemData.hidden) {
+                        resultElement.classList.add("hiddenItem");
+                        var hiddenElement = document.createElement("p");
+                        hiddenElement.textContent = "Hidden Item";
+                        rightSideContainer.appendChild(hiddenElement);
+                    }
 
                     var nameElement = document.createElement("h3");
                     nameElement.className = "name";

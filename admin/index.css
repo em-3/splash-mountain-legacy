@@ -168,6 +168,10 @@ main section h1 {
   cursor: pointer;
 }
 
+.result.hiddenItem {
+  background: var(--content-background-color);
+}
+
 .result img {
   width: 50pt;
   margin: 10pt 10pt 10pt 5pt;
