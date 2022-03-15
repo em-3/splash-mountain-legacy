@@ -3,13 +3,13 @@
 require_once __DIR__ . "/../../scripts/init.php";
 require_once __DIR__ . "/../../admin/scripts/init_admin.php";
 
-$sort_by = ["nane" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
+$sort_by = ["name" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
 $available_params = ["type", "park"];
 $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
 $results;
-$stmt = "SELECT `id`, `name`, `type`, `park`, `author` FROM `item_index`";
+$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `video_id`, `hidden` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
