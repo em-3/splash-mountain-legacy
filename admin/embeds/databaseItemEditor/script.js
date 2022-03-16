@@ -660,10 +660,10 @@ function showItemDetails(itemDetails) {
         document.querySelector(".itemType").textContent = type;
         document.querySelector(".itemName").textContent = itemDetails.name;
 
-        document.querySelector(".actions .existingItem").classList.remove("hidden");
+        document.querySelector(".actions.existingItem").classList.remove("hidden");
     } else {
         document.querySelector(".itemInfo").classList.add("hidden");
-        document.querySelector(".actions .newItem").classList.remove("hidden");
+        document.querySelector(".actions.newItem").classList.remove("hidden");
     }
 
     document.querySelector(".loadingContainer").classList.add("hidden");
