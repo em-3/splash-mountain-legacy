@@ -42,7 +42,7 @@ function showItemDetails(itemDetails) {
                 select.id = "type";
 
                 var options = ["image", "video", "audio", "text", "date"];
-                for (var i = 0; i < option.length; i++) {
+                for (var i = 0; i < options.length; i++) {
                     var currentOption = options[i];
                     var optionElement = document.createElement("option");
                     optionElement.textContent = currentOption[0].toUpperCase() + currentOption.slice(1);
