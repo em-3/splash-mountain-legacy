@@ -52,7 +52,7 @@ function showItemDetails(itemDetails) {
 
                 select.value = "image";
                 select.onchange = function () {
-                    var newType = container.value;
+                    var newType = select.value;
 
                     var image = document.querySelector(".image");
                     var videoID = document.querySelector(".videoID");
