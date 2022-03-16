@@ -48,7 +48,25 @@ main section h1 {
   margin-right: 5pt;
 }
 
+.list .toolbar {
+  display: flex;
+  gap: 10pt;
+}
+
+.list .addItemButton {
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  display: flex;
+  align-items: center;
+  font-size: 20pt;
+  font-weight: bold;
+  padding: 5pt 10pt;
+  margin-top: 15pt;
+  cursor: pointer;
+}
+
 .list .filters {
+  width: 100%;
   background: var(--page-background-color);
   border-radius: 10pt;
   display: flex;

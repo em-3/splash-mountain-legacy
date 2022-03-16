@@ -62,13 +62,21 @@
             <div class="itemEditor">
                 <div class="properties"></div>
                 <h2 class="errorMessage hidden"></h2>
-                <div class="actions">
+                <div class="actions existingItem hidden">
                     <div class="passive">
                         <button class="cancel" onclick="closeEditor()">Cancel Changes</button>
                         <button class="save" onclick="updateItem()">Update Item</button>
                     </div>
                     <div class="danger">
                         <button class="delete" onclick="deleteItem()">Delete Item</button>
+                    </div>
+                </div>
+                <div class="actions newItem hidden">
+                    <div class="danger">
+                        <button class="cancel" onclick="closeEditor()">Cancel</button>
+                    </div>
+                    <div class="passive">
+                        <button class="save" onclick="uploadItem()">Upload Item</button>
                     </div>
                 </div>
             </div>

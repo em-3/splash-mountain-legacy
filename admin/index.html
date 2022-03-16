@@ -95,11 +95,14 @@
                     <div class="tab news" onclick="selectTab('news')">News Articles</div>
                 </div>
                 <div class="list database">
-                    <div class="filters">
-                        <div class="searchField">
-                            <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()" onchange="databaseList.searchBar.onchange()">
+                    <div class="toolbar">
+                        <div class="filters">
+                            <div class="searchField">
+                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()" onchange="databaseList.searchBar.onchange()">
+                            </div>
+                            <div class="optionMenus"></div>
                         </div>
-                        <div class="optionMenus"></div>
+                        <div class="addItemButton" onclick="showNewItemEditor()">+</div>
                     </div>
                     <div class="loadingContainer">
                         <div class="loadingAnimationEllipsis">
@@ -124,7 +127,7 @@
     <div class="overlay"></div>
 
     <div class="databaseItemEditorContainer hidden">
-        <iframe src="embeds/databaseItemEditor.php" frameborder="0"></iframe>
+        <iframe src="" frameborder="0"></iframe>
     </div>
 
     <footer>

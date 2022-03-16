@@ -240,14 +240,21 @@ var databaseList = {
     }
 }
 
-function showDatabaseItemEditor (itemID) {
-    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?id=" + itemID; //FIXME Change to .php
+function showNewItemEditor () {
+    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=newItem"; //FIXME Change to .php
 
     document.querySelector(".overlay").classList.add("active");
     document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
 }
 
-function hideDatabaseItemEditor (itemID) {
+function showDatabaseItemEditor (itemID) {
+    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=editor&id=" + itemID; //FIXME Change to .php
+
+    document.querySelector(".overlay").classList.add("active");
+    document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+}
+
+function hideItemEditor (itemID) {
     document.querySelector(".overlay").classList.remove("active");
     document.querySelector(".databaseItemEditorContainer").classList.add("hidden");
 
@@ -293,6 +300,6 @@ databaseList.refreshResults();
 
 window.onmessage = function(e) {
     if (e.data === "closeEditor") {
-        hideDatabaseItemEditor();
+        hideItemEditor();
     }
 };
