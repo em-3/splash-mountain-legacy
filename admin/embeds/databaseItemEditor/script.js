@@ -54,10 +54,10 @@ function showItemDetails(itemDetails) {
                 select.onchange = function () {
                     var newType = container.value;
 
-                    var image = document.getElementById("image");
-                    var videoID = document.getElementById("videoID");
+                    var image = document.querySelector(".image");
+                    var videoID = document.querySelector(".videoID");
                     var cameraInfoContainer = document.querySelector(".cameraInfoContainer");
-                    var samplingRate = document.getElementById("samplingRate");
+                    var samplingRate = document.querySelector(".samplingRate");
 
                     image.classList.add("hidden");
                     videoID.classList.add("hidden");
