@@ -202,7 +202,7 @@ function showItemDetails(itemDetails) {
                     }
                 }
             } else {
-                if (!document.querySelector("#videoID").classList.contains("hidden")) {
+                if (!document.querySelector(".videoID").classList.contains("hidden")) {
                     if (value) {
                         return {
                             include: true,
