@@ -133,7 +133,7 @@ function showItemDetails(itemDetails) {
                     fail: false
                 }
             } else {
-                if (!document.querySelector("#image").classList.contains("hidden")) {
+                if (!document.querySelector(".image").classList.contains("hidden")) {
                     if (file) {
                         return {
                             include: true,
