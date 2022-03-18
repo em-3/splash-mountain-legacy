@@ -16,7 +16,6 @@ main div.databaseBrowser {
   border-radius: 10pt;
   height: 20pt;
   padding: 1pt 8pt;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,6 +29,7 @@ main div.databaseBrowser {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  cursor: pointer;
   background: var(--page-background-color);
   border: none;
   border-radius: 0;
