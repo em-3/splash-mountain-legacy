@@ -301,5 +301,6 @@ databaseList.refreshResults();
 window.onmessage = function(e) {
     if (e.data === "closeEditor") {
         hideItemEditor();
+        databaseList.refreshResults();
     }
 };
