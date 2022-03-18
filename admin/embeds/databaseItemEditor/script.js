@@ -654,7 +654,9 @@ function showItemDetails(itemDetails) {
                 thumbnailElement.src = "https://www.youtube.com/embed/" + itemDetails.video_id;
                 break;
         }
-        thumbnailElement.classList.remove("hidden");
+        if (thumbnailElement) {
+            thumbnailElement.classList.remove("hidden");
+        }
 
         document.querySelector(".itemID").textContent = id;
         document.querySelector(".itemType").textContent = type;
@@ -772,6 +774,9 @@ async function updateItem() {
 }
 
 async function deleteItem() {
+    document.querySelector(".editor").classList.add("hidden");
+    document.querySelector(".progressContainer").classList.remove("hidden");
+
     var formData = new FormData();
 
     formData.append("id", id);
