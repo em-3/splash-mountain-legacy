@@ -181,8 +181,11 @@ function showItemContent(id, itemType, itemFormat) {
             document.querySelector(".contentDisplay").appendChild(thumbnailElement);
 
             var loadingContainer = document.createElement("div");
-            loadingContainer.classList.add("loadingAnimationContainer");
-            loadingContainer.innerHTML = `
+            loadingContainer.classList.add("loadingContainer");
+
+            var loadingAnimationContainer = document.createElement("div");
+            loadingAnimationContainer.classList.add("loadingAnimationContainer");
+            loadingAnimationContainer.innerHTML = `
                 <div class="loadingAnimationEllipsis">
                     <div></div>
                     <div></div>
@@ -190,14 +193,22 @@ function showItemContent(id, itemType, itemFormat) {
                     <div></div>
                 </div>
             `;
+
+            var loadingText = document.createElement("p");
+            loadingText.classList.add("loadingText");
+            loadingText.textContent = "Loading Full Image";
+
+            loadingContainer.appendChild(loadingAnimationContainer);
+            loadingContainer.appendChild(loadingText);
             document.querySelector(".contentDisplay").appendChild(loadingContainer);
+
 
             var contentDisplayElement = document.createElement("img");
             contentDisplayElement.classList.add("main");
             contentDisplayElement.classList.add("hidden");
             contentDisplayElement.onload = function () {
                 document.querySelector(".contentDisplay .thumbnail").classList.add("hidden");
-                document.querySelector(".contentDisplay .loadingAnimationContainer").classList.add("hidden");
+                document.querySelector(".contentDisplay .loadingContainer").classList.add("hidden");
                 document.querySelector(".contentDisplay .main").classList.remove("hidden");
             }
             contentDisplayElement.src = "/resources/" + id + "/main";

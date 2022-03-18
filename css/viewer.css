@@ -69,6 +69,7 @@ header.hidden {
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+  position: relative;
 }
 
 .contentContainer .contentDisplay.invisible {
@@ -86,21 +87,35 @@ header.hidden {
   object-fit: contain;
 }
 
-.contentDisplay .thumbnail:not(.hidden) {
-  transform: scale(1.2);
-  filter: blur(20pt);
-}
-
-.contentDisplay .thumbnail ~ .loadingAnimationContainer {
+.contentDisplay .thumbnail ~ .loadingContainer {
   position: absolute;
+  bottom: 10pt;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: var(--content-background-color);
+  border-radius: 5pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10pt;
+  height: 35pt;
+  transition: opacity 0.2s ease;
+  cursor: none;
 }
 
-.contentDisplay
-  .thumbnail
-  ~ .loadingAnimationContainer
-  .loadingAnimationEllipsis
-  div {
-  background: white;
+.contentDisplay .thumbnail ~ .loadingContainer:hover {
+  opacity: 0;
+}
+
+.contentDisplay .thumbnail ~ .loadingContainer .loadingAnimationContainer {
+  position: absolute;
+  left: -5pt;
+  top: calc(50% + 1pt);
+  transform: translate(0, -50%) scale(0.5);
+}
+
+.contentDisplay .thumbnail ~ .loadingContainer p {
+  margin: 0 0 0 35pt;
 }
 
 .audioControls {
