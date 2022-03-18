@@ -1,5 +1,5 @@
 function showItemDetails(id) {
-    document.querySelector(".itemDetailsContainer iframe").src = "/viewer.html?id=" + id;
+    document.querySelector(".itemDetailsContainer iframe").src = "/item?id=" + id;
     document.querySelector(".itemDetailsContainer").classList.remove("hidden");
     document.body.classList.add("noScroll");
 }
