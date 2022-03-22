@@ -18,7 +18,7 @@ window.onmessage = function(e) {
     }
 };
 
-//Show admin onsole link if user has previously logged in
+//Show admin console link if user has previously logged in
 if (localStorage.getItem("adminAccess") === "true") {
     document.querySelector("header .links .admin").classList.remove("hidden");
 }
@@ -34,7 +34,6 @@ document.addEventListener("keydown", function(event) {
         konamiCodeIndex = 0;
     }
     if (konamiCodeIndex === konamiCode.length) {
-        //Redirect the page to a rickroll
         window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     }
 });
