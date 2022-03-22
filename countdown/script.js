@@ -1,11 +1,10 @@
 var currentTimestamp;
-// var launchTimestamp = new Date("2022-02-20T10:00:00");
-var launchTimestamp = new Date("2022-02-20T17:00:00Z");
+var launchTimestamp = new Date("2022-07-17T17:00:00Z");
 
 var container = document.querySelector("section");
 var title = document.querySelector(".title");
 var subtitle = document.querySelector(".subtitle");
-var countdown = document.querySelector(".countdown");
+var countdown = document.querySelector(".description");
 
 function updateCountdown() {
     currentTimestamp = new Date();
