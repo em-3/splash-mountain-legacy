@@ -97,7 +97,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
                 <img src="/images/logo-black.png">
             </picture>
         
-            <div class="linksContainer">
+            <!-- <div class="linksContainer">
                 <div class="links">
                     <a href="/">Home</a>
                     <a href="/database">Database</a>
@@ -121,7 +121,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
                         <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
                     </picture>
                 </div>
-            </div>
+            </div> -->
         </header>
 
         <div class="searchResultsContainer">
