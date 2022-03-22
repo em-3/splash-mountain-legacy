@@ -1,5 +1,7 @@
 section {
   padding: 20pt;
+  max-width: 600pt;
+  margin: auto;
 }
 
 section h1,
@@ -34,6 +36,8 @@ section a:hover {
 }
 
 section.hero {
+  width: 100%;
+  max-width: none;
   background: var(--main-gradient);
   color: var(--color-3);
   display: flex;
@@ -42,6 +46,11 @@ section.hero {
   justify-content: center;
   font-weight: bold;
   min-height: 200pt;
+}
+
+section.hero .textContainer {
+  max-width: 700pt;
+  margin: auto;
 }
 
 section.hero h1 {
