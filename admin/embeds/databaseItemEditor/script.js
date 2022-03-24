@@ -703,7 +703,7 @@ async function uploadItem() {
         formData.append("timestamp", date);
     }
 
-    var response = await fetch('/admin/upload.php', {
+    var response = await fetch('/admin/item/upload.php', {
         method: 'POST',
         body: formData
     });
@@ -753,7 +753,7 @@ async function updateItem() {
         formData.append("timestamp", date);
     }
 
-    var response = await fetch('/admin/upload.php', {
+    var response = await fetch('/admin/item/upload.php', {
         method: 'POST',
         body: formData
     });
@@ -781,7 +781,7 @@ async function deleteItem() {
 
     formData.append("id", id);
 
-    var response = await fetch('/admin/delete.php', {
+    var response = await fetch('/admin/item/delete.php', {
         method: 'POST',
         body: formData
     });
