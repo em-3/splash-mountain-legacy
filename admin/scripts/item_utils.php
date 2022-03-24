@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . "/../../scripts/init.php";
+use SplmlFoundation\SplashMountainLegacyBackend\DatabaseEntry;
+
 /**
  * Creates a new item.
  * @param array $item_data An associative array with item properties.
@@ -13,82 +16,20 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
     $required_params = ["name", "type", "park", "description"];
     $optional_params = ["author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
 
-    $params = array();
+    $database_entry = new DatabaseEntry($database, "item_index", $required_params, $optional_params);
 
-    //Now check if all required parameters are present
-    foreach($required_params as $param) {
-        if(!isset($item_data[$param])) {
-            throw new Exception("Missing required parameter: " . $param);
-        }
-        if(is_numeric($item_data[$param])) {
-            $params[$param] = intval($item_data[$param]);
-        } else {
-            $params[$param] = $item_data[$param];
-        }
-    }
-
-    //Add any optional parameters
-    foreach($optional_params as $param) {
-        if(isset($item_data[$param])) {
-            if(is_numeric($item_data[$param])) {
-                $params[$param] = intval($item_data[$param]);
-            } else {
-                $params[$param] = $item_data[$param];
-            }
-        }
-    }
-
-    //Generate a unique ID for the item
-    $params["id"] = generate_id($database);
-
-    //We can't have an image and a video id
-    if(isset($params["video_id"]) && isset($image_data)) {
-        throw new Exception("Cannot have an image and a video id");
-    }
-
-    //Set up the database query
-    $stmt = "INSERT INTO `item_index` (";
-
-    //Add the parameters to the query
-    foreach($params as $key => $value) {
-        $stmt .= "`" . $key . "`, ";
-    }
-
-    //Remove the trailing comma
-    $stmt = substr($stmt, 0, -2);
-
-    $stmt .= ") VALUES (";
-
-    //Add the values to the query
-    foreach($params as $key => $value) {
-        $stmt .= ":$key, ";
-    }
-
-    //Remove the trailing comma
-    $stmt = substr($stmt, 0, -2);
-
-    $stmt .= ")";
+    $database_entry->loadData($item_data);
 
     $database->beginTransaction();
 
-    $stmt = $database->prepare($stmt);
+    $id = null;
 
-    //Bind the values to the query
-    foreach($params as $key => $value) {
-        if($value === null) {
-            $stmt->bindValue($key, null, PDO::PARAM_NULL);
-        }else if(is_int($value)) {
-            $stmt->bindValue($key, $value, PDO::PARAM_INT);
-        }else {
-            $stmt->bindValue($key, $value, PDO::PARAM_STR);
-        }
-    }
-
-    //Execute the query
-    $stmt->execute();
-
-    if($stmt->rowCount() != 1) {
-        throw new Exception("Failed to insert item into database");
+    //Insert the item into the database.
+    try {
+        $id = $database_entry->saveEntry();
+    }catch(\Exception $e) {
+        $database->rollBack();
+        throw $e;
     }
 
     //Check if the user uploaded an image
@@ -98,7 +39,7 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
                 throw new Exception("Missing resource directory");
             }
 
-            $image_dir = $resource_dir . "/" . $params["id"];
+            $image_dir = $resource_dir . "/" . $id;
 
             //Check if the image is a valid image
             validate_uploaded_image($image_data);
@@ -130,10 +71,11 @@ function upload_item($item_data, $database, $image_data = null, $resource_dir=nu
         throw $e;
     }
 
+    //Commit the transaction
     $database->commit();
 
     //Return the ID of the item
-    return $params["id"];
+    return $id;
 }
 
 /**
@@ -151,63 +93,29 @@ function modify_item($item_data, $database) {
     //Define available parameters
     $available_params = ["name", "park", "description", "author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
 
-    $params = array();
+    $id = $item_data["id"];
 
-    $params["id"] = $item_data["id"];
+    //Create a database entry to modify the item
+    $database_entry = new DatabaseEntry($database, "item_index", array(), $available_params, $id);
 
-    //Add any available parameters
-    foreach($available_params as $param) {
-        if(isset($item_data[$param])) {
-            if(is_numeric($item_data[$param])) {
-                $params[$param] = intval($item_data[$param]);
-            } else {
-                $params[$param] = $item_data[$param];
-            }
-        }
-    }
+    //Load the data into the database entry
+    $database_entry->loadData($item_data);
 
-    if(count($params) < 2) {
-        throw new Exception("No parameters given to update");
-    }
-
-    //Prepare the query
-    $stmt = "UPDATE `item_index` SET ";
-
-    foreach($params as $key => $value) {
-        $stmt .= "`" . $key . "` = :" . $key . ", ";
-    }
-
-    //Remove the trailing comma
-    $stmt = substr($stmt, 0, -2);
-
-    $stmt .= " WHERE `id` = :id";
-
+    //Begin a transaction in case something goes wrong
     $database->beginTransaction();
 
-    $stmt = $database->prepare($stmt);
-
-    //Bind the values to the query
-    foreach($params as $key => $value) {
-        if($value === null) {
-            $stmt->bindValue($key, null, PDO::PARAM_NULL);
-        }else if(is_int($value)) {
-            $stmt->bindValue($key, $value, PDO::PARAM_INT);
-        }else {
-            $stmt->bindValue($key, $value, PDO::PARAM_STR);
-        }
-    }
-
-    //Execute the query
+    //Try to update the item
     try {
-        $stmt->execute();
-    }catch(Exception $e) {
+        $database_entry->saveEntry();
+    }catch(\Exception $e) {
         $database->rollBack();
         throw $e;
     }
 
+    //Commit the transaction
     $database->commit();
 
-    return true;
+    return $id;
 }
 
 /**
@@ -219,13 +127,18 @@ function modify_item($item_data, $database) {
  * @throws Exception If the item does not exist
  */
 function delete_item($item_id, $database, $resource_dir) {
-    //Check if the item exists in the database
-    $stmt = $database->prepare("SELECT * FROM `item_index` WHERE `id` = ?");
-    $stmt->bindValue(1, $item_id, PDO::PARAM_STR);
-    $stmt->execute();
+    //Create a database entry to delete the item
+    $database_entry = new DatabaseEntry($database, "item_index", array(), array(), $item_id);
 
-    if($stmt->rowCount() == 0) {
-        throw new Exception("Item does not exist");
+    //Start a transaction in case something goes wrong
+    $database->beginTransaction();
+
+    //Delete the item
+    try {
+        $database_entry->deleteEntry();
+    }catch(\Exception $e) {
+        $database->rollBack();
+        throw $e;
     }
 
     //Delete the item's data folder if it has one
@@ -235,12 +148,10 @@ function delete_item($item_id, $database, $resource_dir) {
         rmdir($resource_dir . "/" . $item_id);
     }
 
-    //Delete the item from the database
-    $stmt = $database->prepare("DELETE FROM `item_index` WHERE `id` = ?");
-    $stmt->bindValue(1, $item_id, PDO::PARAM_STR);
-    $stmt->execute();
+    //Commit the transaction if everything worked
+    $database->commit();
 
-    return $stmt->rowCount() == 1;
+    return true;
 }
 
 /**
@@ -324,38 +235,6 @@ function generate_thumbnail($image_dir) {
     if(!imagejpeg($thumbnail_gd, $image_dir . "/thumbnail")) {
         throw new Exception("Failed to save thumbnail");
     }
-}
-
-/**
- * Generates a random unique Base64 URL ID.
- * @param PDO $database The database connection
- * @return string The random Base64 URL ID
- * @throws Exception If the ID could not be generated
- */
-function generate_id($database) {
-
-    $index = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-
-    for($i = 0; $i < 100; $i++) {
-
-        //Generate an id
-        $id = "";
-        for($i = 0; $i < 11; $i++) {
-            $id .= $index[mt_rand(0, 61)];
-        }
-
-        //Check if the ID is unique
-        $stmt = $database->prepare("SELECT * FROM `item_index` WHERE `id` = ?");
-        $stmt->bindValue(1, $id, PDO::PARAM_STR);
-        $stmt->execute();
-        
-        //If the result set is empty, then the ID is unique
-        if($stmt->rowCount() == 0) {
-            return $id;
-        }
-    }
-
-    throw new Exception("Failed to generate unique ID");
 }
 
 ?>
