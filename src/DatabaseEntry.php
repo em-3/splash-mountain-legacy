@@ -103,12 +103,12 @@ class DatabaseEntry {
         }
 
         //Check if the item exists in the database
-        $stmt = $this->database->prepare("SELECT * FROM `item_index` WHERE `id` = ?");
+        $stmt = $this->database->prepare("SELECT * FROM `$this->table_name` WHERE `id` = ?");
         $stmt->bindValue(1, $this->id, \PDO::PARAM_STR);
         $stmt->execute();
 
         if($stmt->rowCount() == 0) {
-            throw new \Exception("Entry does not exist.");
+            return false;
         }
 
         //Delete the entry from the database.
