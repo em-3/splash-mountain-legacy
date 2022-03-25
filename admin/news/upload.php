@@ -15,6 +15,8 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 try {
+    $database->beginTransaction();
+
     if(isset($_POST["id"])) {
         $allowed_fields = ["title", "subtitle", "author", "content"];
 
@@ -23,6 +25,8 @@ try {
         $database_entry->loadData($_POST);
 
         $id = $database_entry->saveEntry();
+
+        $database->commit();
 
         header("Content-Type: application/json");
         exit(json_encode(["status" => "success", "id" => $id]));
@@ -36,10 +40,13 @@ try {
 
         $id = $database_entry->saveEntry();
 
+        $database->commit();
+
         header("Content-Type: application/json");
         exit(json_encode(["status" => "success", "id" => $id]));
     }
 }catch(Exception $e) {
+    $database->rollBack();
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => $e->getMessage()]));
 }

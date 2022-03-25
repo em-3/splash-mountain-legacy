@@ -19,17 +19,20 @@ try {
         throw new Exception("Missing required parameter: id");
     }
 
+    $database->beginTransaction();
+
     $database_entry = new DatabaseEntry($database, "news_articles", array(), array(), $_POST["id"]);
 
-    $sucess = $database_entry->deleteEntry();
+    $success = $database_entry->deleteEntry();
 
-    if($sucess) {
+    if($success) {
         header("Content-Type: application/json");
         exit(json_encode(["status" => "success"]));
     } else {
         throw new Exception("Failed to delete article: article does not exist");
     }
 }catch (Exception $e) {
+    $database->rollBack();
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => $e->getMessage()]));
 }
