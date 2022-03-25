@@ -134,11 +134,11 @@ function delete_item($item_id, $database, $resource_dir) {
     $database->beginTransaction();
 
     //Delete the item
-    try {
-        $database_entry->deleteEntry();
-    }catch(\Exception $e) {
+    $success = $database_entry->deleteEntry();
+
+    if(!$success) {
         $database->rollBack();
-        throw $e;
+        throw new Exception("Item does not exist");
     }
 
     //Delete the item's data folder if it has one
