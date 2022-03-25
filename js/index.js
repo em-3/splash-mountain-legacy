@@ -47,23 +47,23 @@ fetch("/api/search/?sort_by=date_added&min=1&max=15")
             titleElement.className = "title";
             titleElement.textContent = item.name;
             
-            var subtitleElement = document.createElement("div");
-            subtitleElement.className = "subtitle";
+            var infoContainer = document.createElement("div");
+            infoContainer.className = "infoContainer";
 
             var parkElement = document.createElement("p");
             parkElement.textContent = item.park;
-            subtitleElement.appendChild(parkElement);
+            infoContainer.appendChild(parkElement);
             var typeElement = document.createElement("p");
             typeElement.textContent = item.type;
-            subtitleElement.appendChild(typeElement);
+            infoContainer.appendChild(typeElement);
             if (item.author) {
                 var authorElement = document.createElement("p");
                 authorElement.textContent = item.author.replace(/\[([^\][]+)]/g, "");
-                subtitleElement.appendChild(authorElement);
+                infoContainer.appendChild(authorElement);
             }
 
             infoElement.appendChild(titleElement);
-            infoElement.appendChild(subtitleElement);
+            infoElement.appendChild(infoContainer);
 
             currentItemElement.appendChild(imageContainer);
             currentItemElement.appendChild(infoElement);
@@ -77,7 +77,65 @@ fetch("/api/search/?sort_by=date_added&min=1&max=15")
         document.querySelector(".databaseAdditions .error").classList.remove("hidden");
     });
 
-//When the user navigates to a different tab, replace the video element with a picture element to prevent a frozen animation.
+//Populate the news articles container with the newest items
+fetch("/api/news/list/?min=1&max=15")
+    .then(response => response.json())
+    .then(data => {
+        var container = document.querySelector(".news .content");
+        data.forEach(item => {
+            var currentItemElement = document.createElement("div");
+            currentItemElement.className = "item";
+            (function (id) {
+                currentItemElement.onclick = function () {
+                    showItemDetails(id);
+                };
+            })(item.id);
+            
+            var imageContainer = document.createElement("div");
+            imageContainer.className = "imageContainer";
+
+            var pictureElement = null;
+            var imgElement = document.createElement("img");
+            imgElement.src = "/resources/" + item.thumbnail + "/thumbnail";
+            imageContainer.appendChild(imgElement);
+
+            var infoElement = document.createElement("div");
+            infoElement.className = "info";
+
+            var titleElement = document.createElement("h3");
+            titleElement.className = "title";
+            titleElement.textContent = item.title;
+
+            var subtitleElement = document.createElement("h4");
+            titleElement.className = "subtitle";
+            titleElement.textContent = item.subtitle;
+            
+            var infoContainer = document.createElement("div");
+            infoContainer.className = "infoContainer";
+
+            var publicationDateElement = document.createElement("p");
+            publicationDateElement.textContent = item.publication_date;
+            infoContainer.appendChild(publicationDateElement);
+            var authorElement = document.createElement("p");
+            authorElement.textContent = item.author;
+            infoContainer.appendChild(authorElement);
+
+            infoElement.appendChild(titleElement);
+            infoElement.appendChild(infoContainer);
+
+            currentItemElement.appendChild(imageContainer);
+            currentItemElement.appendChild(infoElement);
+
+            container.appendChild(currentItemElement);
+        });
+        document.querySelector(".news .loading").classList.add("hidden");
+        container.classList.remove("hidden");
+    }, error => {
+        document.querySelector(".news .loading").classList.add("hidden");
+        document.querySelector(".news .error").classList.remove("hidden");
+    });
+
+//When the user navigates to a different browser tab, replace the video element with a picture element to prevent a frozen animation.
 window.onblur = function () {
     document.querySelector("section.header .foreground video").classList.add("hidden");
     document.querySelector("section.header .foreground img").classList.remove("hidden");

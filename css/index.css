@@ -158,6 +158,10 @@ section.featured .content .item {
   cursor: pointer;
 }
 
+section.featured.news .content .item {
+  height: 170pt;
+}
+
 section.featured .content .item .imageContainer {
   width: 100%;
   height: 100pt;
@@ -191,37 +195,36 @@ section.featured .content .item .info .title {
   text-overflow: ellipsis;
 }
 
-section.featured .content .item .info .preview,
-section.featured .content .item .info .subtitle {
+section.featured .content .item .info .infoContainer {
   margin: 0;
-}
-
-section.featured .content .item .info .preview {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 section.featured .content .item .info .subtitle {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 5pt;
+  margin: 0;
   white-space: nowrap;
 }
 
-section.featured .content .item .info .subtitle * {
+section.featured .content .item .info .infoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 2.5pt;
+  white-space: nowrap;
+}
+
+section.featured .content .item .info .infoContainer * {
   margin: 0;
 }
 
-section.featured .content .item .info .subtitle *:not(:last-child)::after {
+section.featured .content .item .info .infoContainer *:not(:last-child)::after {
   content: "•";
   margin: 0 5pt;
 }
 
-section.featured .content .item .info .subtitle *:last-child {
+section.featured .content .item .info .infoContainer *:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
 }
