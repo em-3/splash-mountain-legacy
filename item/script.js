@@ -218,9 +218,14 @@ function showItemContent(id, itemType, itemFormat) {
             document.querySelector(".contentDisplay").classList.remove("hidden");
             break;
         case "video":
+            var contentDisplayElementContainer = document.createElement("div");
+            contentDisplayElementContainer.classList.append("videoContainer");
+
             var contentDisplayElement = document.createElement("div");
             contentDisplayElement.id = "player";
-            document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+
+            contentDisplayElementContainer.appendChild(contentDisplayElement);
+            document.querySelector(".contentDisplay").appendChild(contentDisplayElementContainer);
 
             var scriptElement = document.createElement("script");
             scriptElement.src = "https://www.youtube.com/iframe_api";
