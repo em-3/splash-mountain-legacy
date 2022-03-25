@@ -119,6 +119,28 @@
                     </div>
                 </div>
                 <div class="list news hidden">
+                    <div class="toolbar">
+                        <div class="filters">
+                            <div class="searchField">
+                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()"
+                                    onchange="databaseList.searchBar.onchange()">
+                            </div>
+                        </div>
+                        <div class="addItemButton" onclick="showNewItemEditor()">+</div>
+                    </div>
+                    <div class="loadingContainer">
+                        <div class="loadingAnimationEllipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="resultsContainer hidden"></div>
+                    <div class="errorMessageContainer hidden">
+                        <h2 class="title"></h2>
+                        <p class="subtitle"></p>
+                    </div>
                 </div>
             </div>
         </section>

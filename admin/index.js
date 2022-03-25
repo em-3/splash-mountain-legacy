@@ -16,7 +16,7 @@ function selectTab(listName) {
             databaseList.refreshResults();
             break;
         case "news":
-            // newsList.refreshResults();
+            newsList.refreshResults();
             break;
     }
 
@@ -263,6 +263,177 @@ function hideItemEditor (itemID) {
     }, 500);
 }
 
+var newsList = {
+    searchRange: {
+        min: 1,
+        max: 21
+    },
+    searchBar: {
+        timeoutID: null,
+        oninput: function () {
+            var query = document.querySelector(".searchField").value;
+
+            if (this.timeoutID) {
+                clearTimeout(this.timeoutID);
+            }
+
+            document.querySelector(".list.news .loadingContainer").classList.remove("hidden");
+            document.querySelector(".list.news .resultsContainer").classList.add("hidden");
+            document.querySelector(".list.news .errorMessageContainer").classList.add("hidden")
+            
+            //Wait a second before updating the search results
+            this.timeoutID = setTimeout(newsList.refreshResults, 1000);
+        }, 
+        onchange: function () {
+            newsList.refreshResults();
+        }
+    },
+    refreshResults: function (preservePreviousResults) {
+        var PHPParams = "";
+        var character = "?";
+
+        var filterValue = document.querySelector(".list.news .filters .searchField input").value;
+        if (filterValue != "") {
+            PHPParams += character + "query=" + filterValue;
+            character = "&";
+        }
+
+        if (!preservePreviousResults) {
+            //Clear the current results
+            while (document.querySelector(".list.news .resultsContainer").firstChild) {
+                document.querySelector(".list.news .resultsContainer").removeChild(document.querySelector(".list.news .resultsContainer").firstChild);
+            }
+        }
+
+        //Fetch new results
+        fetch("/api/news/list/" + PHPParams + character + "min=" + newsList.searchRange.min + "&max=" + newsList.searchRange.max + "&show_unpublihshed=true")
+            .then(response => response.json())
+            .then((data) => {
+            if (!preservePreviousResults && data.length === 0) {
+                var noResults = document.createElement("p");
+                noResults.className = "noResults";
+                noResults.textContent = "No results found.";
+                document.querySelector(".list.news .resultsContainer").appendChild(noResults);
+            } else if (preservePreviousResults && data.length === 0) {
+                var loadMoreButton = document.querySelector(".list.news .loadMoreButton");
+                loadMoreButton.parentElement.removeChild(loadMoreButton);
+            } else {
+                if (preservePreviousResults) {
+                    var loadMoreButton = document.querySelector(".list.news .loadMoreButton");
+                    loadMoreButton.parentElement.removeChild(loadMoreButton);
+                }
+
+                for (var i = 0; i < data.length; i++) {
+                    var currentItemData = data[i];
+
+                    var resultElement = document.createElement("div");
+                    resultElement.className = "result";
+                    (function (id) {
+                        resultElement.onclick = function () {
+                            showArticleEditor(id);
+                        }
+                    })(currentItemData.id)
+
+                    var pictureElement = null;
+                    var imgElement = document.createElement("img");
+                    imgElement.className = "image";
+                    imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail";
+
+                    var rightSideContainer = document.createElement("div");
+                    rightSideContainer.className = "right";
+
+                    if (currentItemData.hidden === "1") {
+                        resultElement.classList.add("hiddenItem");
+                        var hiddenElement = document.createElement("p");
+                        hiddenElement.textContent = "Hidden Item";
+                        rightSideContainer.appendChild(hiddenElement);
+                    }
+
+                    var nameElement = document.createElement("h3");
+                    nameElement.className = "title";
+                    nameElement.textContent = currentItemData.title;
+
+                    var descriptionElement = document.createElement("p");
+                    descriptionElement.className = "subtitle";
+                    descriptionElement.textContent = currentItemData.subtitle;
+
+                    var infoContainerElement = document.createElement("div");
+                    infoContainerElement.className = "infoContainer";
+
+                    var publicationDateElement = document.createElement("p");
+                    publicationDateElement.className = "publicationDate";
+                    publicationDateElement.textContent = currentItemData.publicationDate;
+                    infoContainerElement.appendChild(publicationDateElement);
+
+                    var authorElement = document.createElement("p");
+                    authorElement.className = "author";
+                    authorElement.textContent = currentItemData.author;
+                    infoContainerElement.appendChild(authorElement);
+
+                    rightSideContainer.appendChild(nameElement);
+                    rightSideContainer.appendChild(descriptionElement);
+                    rightSideContainer.appendChild(infoContainerElement);
+
+                    resultElement.appendChild(imgElement);
+                    resultElement.appendChild(rightSideContainer);
+                    document.querySelector(".list.news .resultsContainer").appendChild(resultElement);
+                }
+
+                if (data.length === newsList.searchRange.max - newsList.searchRange.min) {
+                    var loadMoreButton = document.createElement("button");
+                    loadMoreButton.className = "loadMoreButton";
+                    loadMoreButton.textContent = "Load More";
+                    loadMoreButton.addEventListener("click", function () {
+                        newsList.loadMoreResults();
+                    });
+                    document.querySelector(".list.news .resultsContainer").appendChild(loadMoreButton);
+                }
+            }
+
+            //Hide the loading screen and show the results container
+            document.querySelector(".list.news .loadingContainer").classList.add("hidden");
+            document.querySelector(".list.news .resultsContainer").classList.remove("hidden");
+            document.querySelector(".list.news .errorMessageContainer").classList.add("hidden");
+        }, (error) => {
+            document.querySelector(".list.news .errorMessageContainer .title").textContent = "Something Went Wrong";
+            document.querySelector(".list.news .errorMessageContainer .subtitle").textContent = "Failed to load news articles.";
+
+            //Hide the loading screen and show the error message container
+            document.querySelector(".list.news .loadingContainer").classList.add("hidden");
+            document.querySelector(".list.news .resultsContainer").classList.add("hidden");
+            document.querySelector(".list.news .errorMessageContainer").classList.remove("hidden");
+        });
+    },
+    loadMoreResults: function () {
+        this.searchRange.min += 20;
+        this.searchRange.max += 20;
+        this.refreshResults(true);
+    }
+}
+
+function showNewItemEditor () {
+    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=newItem"; //FIXME Change to .php
+
+    document.querySelector(".overlay").classList.add("active");
+    document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+}
+
+function showDatabaseItemEditor (itemID) {
+    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=editor&id=" + itemID; //FIXME Change to .php
+
+    document.querySelector(".overlay").classList.add("active");
+    document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+}
+
+function hideItemEditor (itemID) {
+    document.querySelector(".overlay").classList.remove("active");
+    document.querySelector(".databaseItemEditorContainer").classList.add("hidden");
+
+    setTimeout(function () {
+        document.querySelector(".databaseItemEditorContainer iframe").src = "about:blank";
+    }, 500);
+}
+
 //Loop through each filter and create an element for for it.
 for (var i = 0; i < databaseList.filters.length; i++) {
     var currentFilter = databaseList.filters[i];
@@ -297,6 +468,7 @@ for (var i = 0; i < databaseList.filters.length; i++) {
 }
 
 databaseList.refreshResults();
+newsList.refreshResults();
 
 window.onmessage = function(e) {
     if (e.data === "closeEditor") {
