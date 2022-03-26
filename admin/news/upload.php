@@ -18,7 +18,7 @@ try {
     $database->beginTransaction();
 
     if(isset($_POST["id"])) {
-        $allowed_fields = ["title", "subtitle", "author", "content"];
+        $allowed_fields = ["title", "subtitle", "author", "content", "thumbnail"];
 
         $database_entry = new DatabaseEntry($database, "news_articles", $allowed_fields, array(), $_POST["id"]);
 
@@ -31,7 +31,7 @@ try {
         header("Content-Type: application/json");
         exit(json_encode(["status" => "success", "id" => $id]));
     }else {
-        $required_fields = ["title", "subtitle", "author", "content"];
+        $required_fields = ["title", "subtitle", "author", "content", "thumbnail"];
         $optional_fields = ["publication_date"];
 
         $database_entry = new DatabaseEntry($database, "news_articles", $required_fields, $optional_fields);
