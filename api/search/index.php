@@ -9,7 +9,7 @@ $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
 $results;
-$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `video_id`, `hidden` FROM `item_index`";
+$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `video_id`, `scene`, `hidden` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
@@ -26,7 +26,7 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE ((`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query)";
+        $stmt .= " WHERE ((`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query)";
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {

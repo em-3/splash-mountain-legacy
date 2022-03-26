@@ -14,7 +14,7 @@ use SplmlFoundation\SplashMountainLegacyBackend\DatabaseEntry;
 function upload_item($item_data, $database, $image_data = null, $resource_dir=null) {
     //Define required and optional POST parameters
     $required_params = ["name", "type", "park", "description"];
-    $optional_params = ["author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
+    $optional_params = ["author", "video_id", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
 
     $database_entry = new DatabaseEntry($database, "item_index", $required_params, $optional_params);
 
@@ -91,7 +91,7 @@ function modify_item($item_data, $database) {
     }
 
     //Define available parameters
-    $available_params = ["name", "park", "description", "author", "video_id", "source", "metadata", "tags", "timestamp", "hidden"];
+    $available_params = ["name", "park", "description", "author", "video_id", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
 
     $id = $item_data["id"];
 
