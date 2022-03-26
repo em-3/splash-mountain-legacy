@@ -1,10 +1,15 @@
 <?php
 
 require_once __DIR__ . "/../../../scripts/init.php";
+require_once __DIR__ . "/../../../admin/scripts/init_admin.php";
 
 $params = array();
 
 $stmt = "SELECT `id`, `title`, `subtitle`, `author`, `publication_date` FROM `news_articles` WHERE `publication_date` < CURRENT_TIMESTAMP()";
+
+if(isset($_GET["show_unpublished"]) && $_GET["show_unpublished"] == "true" && check_authentication()) {
+    $stmt .= " OR `publication_date` > CURRENT_TIMESTAMP()";
+}
 
 //Check if there is a query parameter
 if(isset($_GET["query"])) {
