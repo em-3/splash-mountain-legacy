@@ -69,10 +69,12 @@ class DatabaseEntry {
 
             //Loop through the optional fields and add them to the field values if they are present.
             foreach ($this->optional_fields as $field) {
-                if(is_numeric($data[$field])) {
-                    $this->field_values[$field] = intval($data[$field]);
-                }else {
-                    $this->field_values[$field] = $data[$field];
+                if(isset($data[$field])) {
+                    if(is_numeric($data[$field])) {
+                        $this->field_values[$field] = intval($data[$field]);
+                    }else {
+                        $this->field_values[$field] = $data[$field];
+                    }
                 }
             }
         }
