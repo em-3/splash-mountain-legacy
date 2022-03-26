@@ -94,7 +94,6 @@ fetch("/api/news/list/?min=1&max=15")
             var imageContainer = document.createElement("div");
             imageContainer.className = "imageContainer";
 
-            var pictureElement = null;
             var imgElement = document.createElement("img");
             imgElement.src = "/resources/" + item.thumbnail + "/thumbnail";
             imageContainer.appendChild(imgElement);
@@ -107,8 +106,8 @@ fetch("/api/news/list/?min=1&max=15")
             titleElement.textContent = item.title;
 
             var subtitleElement = document.createElement("h4");
-            titleElement.className = "subtitle";
-            titleElement.textContent = item.subtitle;
+            subtitleElement.className = "subtitle";
+            subtitleElement.textContent = item.subtitle;
             
             var infoContainer = document.createElement("div");
             infoContainer.className = "infoContainer";
@@ -121,6 +120,7 @@ fetch("/api/news/list/?min=1&max=15")
             infoContainer.appendChild(authorElement);
 
             infoElement.appendChild(titleElement);
+            infoElement.appendChild(subtitleElement);
             infoElement.appendChild(infoContainer);
 
             currentItemElement.appendChild(imageContainer);

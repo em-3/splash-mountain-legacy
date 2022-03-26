@@ -195,23 +195,24 @@ section.featured .content .item .info .title {
   text-overflow: ellipsis;
 }
 
-section.featured .content .item .info .infoContainer {
-  margin: 0;
-}
-
 section.featured .content .item .info .subtitle {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin: 0;
   white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 section.featured .content .item .info .infoContainer {
+  margin: 2.5pt 0 0 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 2.5pt;
   white-space: nowrap;
 }
 
