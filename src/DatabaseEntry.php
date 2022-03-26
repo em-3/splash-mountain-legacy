@@ -41,7 +41,11 @@ class DatabaseEntry {
             //Loop through each of the fields and add them if they are allowed to be modified.
             foreach($fields as $field) {
                 if(isset($data[$field])) {
-                    $this->field_values[$field] = $data[$field];
+                    if(is_numeric($data[$field])) {
+                        $this->field_values[$field] = intval($data[$field]);
+                    }else {
+                        $this->field_values[$field] = $data[$field];
+                    }
                 }
             }
 
@@ -56,13 +60,18 @@ class DatabaseEntry {
                     throw new \Exception("Missing required field: $field");
                 }
 
-                //Add the field to the field values.
-                $this->field_values[$field] = $data[$field];
+                if(is_numeric($data[$field])) {
+                    $this->field_values[$field] = intval($data[$field]);
+                }else {
+                    $this->field_values[$field] = $data[$field];
+                }
             }
 
             //Loop through the optional fields and add them to the field values if they are present.
             foreach ($this->optional_fields as $field) {
-                if (isset($data[$field])) {
+                if(is_numeric($data[$field])) {
+                    $this->field_values[$field] = intval($data[$field]);
+                }else {
                     $this->field_values[$field] = $data[$field];
                 }
             }
@@ -104,7 +113,7 @@ class DatabaseEntry {
 
         //Check if the item exists in the database
         $stmt = $this->database->prepare("SELECT * FROM `$this->table_name` WHERE `id` = ?");
-        $stmt->bindValue(1, $this->id, \PDO::PARAM_STR);
+        $stmt->bindValue(1, $this->id);
         $stmt->execute();
 
         if($stmt->rowCount() == 0) {
@@ -153,13 +162,7 @@ class DatabaseEntry {
 
         //Bind the values to the query.
         foreach($this->field_values as $field => $value) {
-            if(is_numeric($value)) {
-                $statement->bindValue(":$field", $value, \PDO::PARAM_INT);
-            }else if(is_string($value)) {
-                $statement->bindValue(":$field", $value, \PDO::PARAM_STR);
-            }else {
-                $statement->bindValue(":$field", null, \PDO::PARAM_NULL);
-            }
+            $statement->bindValue(":$field", $value);
         }
 
         //Bind the id to the query.
@@ -217,13 +220,7 @@ class DatabaseEntry {
         $statement = $this->database->prepare($query);
 
         foreach($this->field_values as $field => $value) {
-            if(is_numeric($value)) {
-                $statement->bindValue(":$field", $value, \PDO::PARAM_INT);
-            }else if(is_string($value)) {
-                $statement->bindValue(":$field", $value, \PDO::PARAM_STR);
-            }else {
-                $statement->bindValue(":$field", null, \PDO::PARAM_NULL);
-            }
+            $statement->bindValue(":$field", $value);
         }
 
         //Execute the query.
@@ -255,7 +252,7 @@ class DatabaseEntry {
 
             //Check if the ID is unique
             $stmt = $this->database->prepare("SELECT * FROM `$this->table_name` WHERE `id` = ?");
-            $stmt->bindValue(1, $id, \PDO::PARAM_STR);
+            $stmt->bindValue(1, $id);
             $stmt->execute();
             
             //If the result set is empty, then the ID is unique
