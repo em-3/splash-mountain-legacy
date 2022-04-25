@@ -284,7 +284,7 @@ main section h1 {
   pointer-events: auto;
 }
 
-.databaseItemEditorContainer {
+.editorContainer {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -300,13 +300,13 @@ main section h1 {
   transition: all 0.3s ease;
 }
 
-.databaseItemEditorContainer.hidden {
+.editorContainer.hidden {
   display: block !important;
   opacity: 0;
   transform: translate(-50%, 50vh);
 }
 
-.databaseItemEditorContainer iframe {
+.editorContainer iframe {
   width: 100%;
   height: 100%;
 }

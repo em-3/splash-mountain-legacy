@@ -1,0 +1,159 @@
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  background: var(--content-background-color);
+  width: 100%;
+  height: 35pt;
+  padding-left: 20pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+header picture {
+  cursor: pointer;
+}
+
+section {
+  transition: all 0.2s ease;
+}
+
+.editor {
+  width: 100%;
+  height: 100%;
+  padding: 20pt;
+}
+
+.editor .articleInfo {
+  background: var(--content-background-color);
+  width: calc(100% - 20pt);
+  max-width: 800pt;
+  height: 200pt;
+  border-radius: 10pt;
+  padding: 15pt;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto;
+}
+
+.editor .articleInfo .thumbnail img {
+  width: auto;
+  height: auto;
+  max-height: 150pt;
+  max-width: 260pt;
+  border-radius: 5pt;
+}
+
+.editor .articleInfo .thumbnail iframe {
+  height: 100%;
+  width: auto;
+}
+
+.editor .articleInfo .textContainer {
+  margin-left: 20pt;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.editor .articleInfo .textContainer * {
+  margin: 2.5pt 0 2.5pt 0;
+}
+
+.editor .articleEditor {
+  max-width: 500pt;
+  padding: 20pt;
+  margin: auto;
+}
+
+.editor .articleEditor .properties .propertyContainer {
+  margin: 0 20pt 20pt 20pt;
+  display: flex;
+  flex-direction: column;
+}
+
+.propertyContainer select {
+  appearance: none;
+  font: inherit;
+  padding: 5pt;
+  border-radius: 5pt;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  border: 2pt solid var(--secondary-content-background-color);
+  cursor: pointer;
+}
+
+.propertyContainer select:focus {
+  outline: none;
+}
+
+.propertyContainer input,
+.propertyContainer textarea {
+  border-radius: 5pt;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  border: 2pt solid var(--secondary-content-background-color);
+  padding: 5pt;
+  font: inherit;
+  transition: border 0.1s ease;
+}
+
+.propertyContainer textarea {
+  resize: vertical;
+  min-height: 100pt;
+}
+
+.propertyContainer input:focus,
+.propertyContainer textarea:focus {
+  border-color: var(--primary-text-color);
+  outline: none;
+}
+
+.editor .articleEditor .actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.editor .articleEditor .actions div {
+  display: flex;
+}
+
+.editor .articleEditor .actions button {
+  background: var(--content-background-color);
+  border: 2pt solid var(--secondary-content-background-color);
+  border-radius: 5pt;
+  padding: 2pt 5pt;
+  color: var(--primary-text-color);
+  font: inherit;
+  transition: border-color 0.1s ease;
+  cursor: pointer;
+}
+
+.editor .articleEditor .actions button:hover {
+  border-color: var(--primary-text-color) !important;
+}
+
+.editor .articleEditor .actions .danger button {
+  background: #ff6f66;
+  border-color: #ff5449;
+  color: white;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.indeterminate .loadingAnimationEllipses {
+  transform: scale(0.7);
+}

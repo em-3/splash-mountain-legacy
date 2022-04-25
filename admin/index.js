@@ -254,7 +254,7 @@ function showDatabaseItemEditor (itemID) {
     document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
 }
 
-function hideItemEditor (itemID) {
+function hideItemEditor () {
     document.querySelector(".overlay").classList.remove("active");
     document.querySelector(".databaseItemEditorContainer").classList.add("hidden");
 
@@ -411,26 +411,26 @@ var newsList = {
     }
 }
 
-function showNewItemEditor () {
-    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=newItem"; //FIXME Change to .php
+function showNewArticleEditor () {
+    document.querySelector(".articleEditorContainer iframe").src = "/admin/embeds/articleEditor/index.html?mode=newArticle"; //FIXME Change to .php
 
     document.querySelector(".overlay").classList.add("active");
-    document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+    document.querySelector(".articleEditorContainer").classList.remove("hidden");
 }
 
-function showDatabaseItemEditor (itemID) {
-    document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/index.html?mode=editor&id=" + itemID; //FIXME Change to .php
+function showExistingArticleEditor (articleID) {
+    document.querySelector(".articleEditorContainer iframe").src = "/admin/embeds/articleEditor/index.html?mode=editor&id=" + articleID; //FIXME Change to .php
 
     document.querySelector(".overlay").classList.add("active");
-    document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+    document.querySelector(".articleEditorContainer").classList.remove("hidden");
 }
 
-function hideItemEditor (itemID) {
+function hideArticleEditor () {
     document.querySelector(".overlay").classList.remove("active");
-    document.querySelector(".databaseItemEditorContainer").classList.add("hidden");
+    document.querySelector(".articleEditorContainer").classList.add("hidden");
 
     setTimeout(function () {
-        document.querySelector(".databaseItemEditorContainer iframe").src = "about:blank";
+        document.querySelector(".articleEditorContainer iframe").src = "about:blank";
     }, 500);
 }
 
