@@ -435,7 +435,7 @@ async function uploadArticle() {
   var content = [];
   for (var i = 0; i < contentFields.length; i++) {
     var currentField = contentFields[i];
-    var currentFieldValue = currentField.getValue();
+    content.push(currentField.getValue());
   }
   formData.append("content", content);
 
