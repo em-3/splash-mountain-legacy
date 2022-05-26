@@ -65,29 +65,29 @@ function addContentField(type) {
 function showArticleDetails(articleDetails) {
   //Image
   properties.push({
-    name: "Image",
-    propertyName: "image",
+    name: "Thumbnail",
+    propertyName: "thumbnail",
     constructor: function () {
       var container = document.createElement("div");
       container.classList.add("propertyContainer");
-      container.classList.add("image");
+      container.classList.add("thumbnail");
       if (mode === "editor") {
         container.classList.add("hidden");
       }
       var label = document.createElement("label");
-      label.for = "image";
-      label.textContent = "Image File";
+      label.for = "thumbnail";
+      label.textContent = "Thumbnail Image";
       var input = document.createElement("input");
       input.type = "file";
-      input.name = "image";
-      input.id = "image";
+      input.name = "thumbnail";
+      input.id = "thumbnail";
 
       container.appendChild(label);
       container.appendChild(input);
       return container;
     },
     valueGetter: function () {
-      var fileElement = document.querySelector("#image");
+      var fileElement = document.querySelector("#thumbnail");
       if (fileElement.files.length > 0) {
         var file = fileElement.files[0];
       }
@@ -97,7 +97,9 @@ function showArticleDetails(articleDetails) {
           fail: false,
         };
       } else {
-        if (!document.querySelector(".image").classList.contains("hidden")) {
+        if (
+          !document.querySelector(".thumbnail").classList.contains("hidden")
+        ) {
           if (file) {
             return {
               include: true,
