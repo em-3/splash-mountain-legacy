@@ -117,6 +117,49 @@ section {
   outline: none;
 }
 
+.fields textarea {
+  width: 100%;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  border: 2pt solid var(--secondary-content-background-color);
+  border-radius: 5pt;
+  padding: 5pt;
+  font: inherit;
+  transition: border 0.1s ease;
+  resize: vertical;
+  min-height: 100pt;
+}
+
+.fields textarea:focus {
+  border-color: var(--primary-text-color);
+  outline: none;
+}
+
+.addSection {
+  margin-bottom: 10pt;;
+}
+
+.addSection * {
+  display: inline-block;
+}
+
+.addSection .icon {
+  font-weight: bold;
+  margin: 0 5pt 0 0;
+  cursor: default;
+}
+
+.addSection div {
+  background: var(--content-background-color);
+  padding: 5pt 10pt;
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.addSection div p {
+  margin: 0;
+}
+
 .editor .articleEditor .actions {
   display: flex;
   justify-content: space-between;

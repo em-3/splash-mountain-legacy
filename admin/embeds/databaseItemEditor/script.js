@@ -127,6 +127,7 @@ function showItemDetails(itemDetails) {
             var timecode = EXIF.getTag(this, "DateTime");
             if (timecode) {
               var dateTimeSplit = timecode.split(/\D/);
+              var dateTimeSplit = timecode.split(/\D/);
               var date =
                 dateTimeSplit[0] +
                 "-" +
