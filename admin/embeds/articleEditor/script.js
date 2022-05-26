@@ -26,6 +26,9 @@ var contentFieldConstructors = {
     constructor(content) {
       var object = {
         element: document.createElement("textarea"),
+        getValue: function () {
+          return this.element.value;
+        },
       };
       if (content) {
         object.element.value = content;
@@ -428,6 +431,13 @@ async function uploadArticle() {
       return;
     }
   }
+
+  var content = [];
+  for (var i = 0; i < contentFields.length; i++) {
+    var currentField = contentFields[i];
+    var currentFieldValue = currentField.getValue();
+  }
+  formData.append("content", content);
 
   var response = await fetch("/admin/news/upload.php", {
     method: "POST",
