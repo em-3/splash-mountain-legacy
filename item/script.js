@@ -467,5 +467,9 @@ function closeItemDetails() {
   if (audioPlayer.player) {
     audioPlayer.player.stopVideo();
   }
-  window.top.postMessage("closeDetails", "*");
+  if (embedded) {
+    window.top.postMessage("closeDetails", "*");
+  } else {
+    window.location.href = "https://splashmountainlegacy.com";
+  }
 }
