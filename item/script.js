@@ -354,11 +354,11 @@ function share() {
   if (navigator.share) {
     navigator.share({
       title: loadedItemDetails.name,
-      url: "https://splashmountainlegacy.io/item?id=" + loadedItemDetails.id,
+      url: "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id,
     });
   } else {
     navigator.clipboard.writeText(
-      "https://splashmountainlegacy.io/item?id=" + loadedItemDetails.id
+      "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id
     );
     document.querySelector(".shareButton").textContent = "Copied Link";
   }
