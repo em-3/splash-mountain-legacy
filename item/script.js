@@ -164,8 +164,6 @@ function showItemDetails() {
     document.querySelector(".metadata").classList.remove("hidden");
   }
 
-  document.querySelector(".contentType").textContent = itemDetails.type;
-
   requestAnimationFrame(function () {
     document.querySelector(".itemInfoContainer").classList.remove("hidden");
   });
