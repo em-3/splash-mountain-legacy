@@ -350,6 +350,20 @@ function showItemContent(id, itemType, itemFormat) {
   });
 }
 
+function share() {
+  if (navigator.share) {
+    navigator.share({
+      title: loadedItemDetails.name,
+      url: "https://splashmountainlegacy.io/item?id=" + loadedItemDetails.id,
+    });
+  } else {
+    navigator.clipboard.writeText(
+      "https://splashmountainlegacy.io/item?id=" + loadedItemDetails.id
+    );
+    document.querySelector(".shareButton").textContent = "Copied Link";
+  }
+}
+
 var audioPlayer = {
   player: undefined,
   refreshInterval: undefined,

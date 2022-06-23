@@ -25,8 +25,12 @@ header.hidden {
   opacity: 0;
 }
 
-.contentType {
+.shareButton {
   font-weight: bold;
+  background: white;
+  padding: 2pt 5pt;
+  border-radius: 5pt;
+  cursor: pointer;
 }
 
 .contentContainer {
