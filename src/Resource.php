@@ -90,11 +90,26 @@ class Resource {
 
     /**
      * Adds the given entry ID to the list of this resource's associated IDs
-     * @param $id The ID to add
+     * @param string $id The ID to add
      */
     public function associateID($id) {
         $this->associatedIDs[] = $id;
         $this->associatedIDs = array_unique($this->associatedIDs);
+    }
+
+    /**
+     * Remove the given entry ID from the list of this resource's associated IDs
+     * @param string $id The ID to remove
+     * @throws \Exception If the resource does not have the given ID associated with it
+     */
+    public function dissociateID($id) {
+        if(!in_array($id, $this->associatedIDs)) {
+            throw new \Exception("ID ($id) is not associated with this resource");
+        }
+
+        $index = array_search($id, $this->associatedIDs);
+
+        array_splice($this->associatedIDs, $index, 1);
     }
 
     /**
@@ -225,7 +240,7 @@ class Resource {
             //Loop through each association and delete it
             foreach($associated_ids_to_delete as $aid) {
                 $stmt->execute([$id, $aid]);
-                if($stmt->rowCount() !== 0) {
+                if($stmt->rowCount() === 0) {
                     throw new \Exception("Associated ID ($aid) for ID ($id) could not be deleted");
                 }
             }
