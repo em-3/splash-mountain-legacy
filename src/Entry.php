@@ -136,6 +136,30 @@ abstract class Entry {
     }
 
     /**
+     * Gets any resource associated with this entry
+     * @return array The resources associated with this entry
+     * @throws \Exception If an error occurred while retrieving resource data
+     */
+    public function getAssociatedResources($table_name, $resource_directory) {
+        $resources = array();
+
+        //Query the database to get the associated resources
+        $stmt = $this->database->prepare("SELECT resource_id FROM `" . $table_name . "` WHERE associated_id = ?");
+        $stmt->execute([$this->getID()]);
+        $resource_ids = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        //Loop through the resource IDs and create resource objects for them
+        foreach($resource_ids as $id) {
+            $resource = new Resource($this->database, $table_name, $resource_directory);
+            $resource->useResourceID($id);
+            $resource->load();
+            $resources[] = $resource;
+        }
+
+        return $resources;
+    }
+
+    /**
      * Returns the list of available fields for this entry.
      * @return array The available fields for this entry
      */
