@@ -11,7 +11,7 @@ abstract class Entry {
     /** @var string $id */
     private $id;
     /** @var array $data */
-    private $data;
+    private $data = array();
     /** @var bool $ready */
     private $ready = false;
 
@@ -33,7 +33,7 @@ abstract class Entry {
             throw new \Exception("Field ($fieldName) doesn't exist for this entry");
         }
 
-        $data[$fieldName] = $fieldValue;
+        $this->data[$fieldName] = $fieldValue;
     }
 
     /**
@@ -45,11 +45,11 @@ abstract class Entry {
         $required_fields = $this::getRequiredFields();
 
         foreach($required_fields as $field) {
-            if(!in_array($field, $input)) {
+            if(!array_key_exists($field, $input)) {
                 throw new \Exception("Missing required field ($field)");
             }
 
-            $data[$field] = $input[$field];
+            $this->data[$field] = $input[$field];
         }
 
         $this->ready = true;
@@ -63,8 +63,8 @@ abstract class Entry {
         $optional_fields = $this::getOptionalFields();
 
         foreach($optional_fields as $field) {
-            if(in_array($field, $input)) {
-                $data[$field] = $input[$field];
+            if(array_key_exists($field, $input)) {
+                $this->data[$field] = $input[$field];
             }
         }
     }
@@ -86,7 +86,7 @@ abstract class Entry {
             }
 
             //Create the insert statement
-            $sql = "INSERT INTO " . $this->table_name . " (";
+            $sql = "INSERT INTO `" . $this->table_name . "` (";
 
             //Add the keys
             foreach($this->data as $key=>$value) {
@@ -106,11 +106,13 @@ abstract class Entry {
             //Remove the last comma
             $sql = substr($sql, 0, -2);
 
+            $sql .= ")";
+
             //Prepare and execute the query
             $stmt = $this->database->prepare($sql);
             $stmt->execute(array_values($this->data));
 
-            if($stmt->rowCount !== 1) {
+            if($stmt->rowCount() !== 1) {
                 throw new \Exception("Failed to commit data");
             }
 
@@ -121,6 +123,8 @@ abstract class Entry {
             if($transaction) {
                 $this->database->rollBack();
             }
+
+            throw $e;
         }
     }
 
