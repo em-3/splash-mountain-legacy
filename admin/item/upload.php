@@ -38,6 +38,7 @@ try {
     if(isset($_FILES["image"])) {
         //If it is a file, upload it, generate an ID from it's hash, and store that ID in an affiliated records table.
         $resource->useUploadedImage($_FILES["image"]);
+        $resource->load();
         $resource->associateID($id);
 
         $item->setDataField("image", $resource->getID());

@@ -225,7 +225,11 @@ class Resource {
         $associated_ids = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
         if(count($associated_ids) === 0) {
-            //If it doesn't, mark the filesystem as affected
+            //If it doesn't, check to make sure there is at least one association
+            if(count($new_associations) === 0) {
+                throw new \Exception("There are no entries associated with ID ($id)");
+            }
+            //Mark the filesystem as affected
             $filesystem_affected = true;
             //Upload the image
             $this->performResourceUpload();
@@ -242,6 +246,25 @@ class Resource {
                 $stmt->execute([$id, $aid]);
                 if($stmt->rowCount() === 0) {
                     throw new \Exception("Associated ID ($aid) for ID ($id) could not be deleted");
+                }
+            }
+
+            //Check if there is any associations left
+            if(count($this->associatedIDs) === 0) {
+                //If there are not, then delete the resource
+                $resource_location = $this->resource_directory . "$id";
+
+                //Delete any files that were created
+                if(file_exists($resource_location . "/main")) {
+                    unlink($resource_location . "/main");
+                }
+
+                if(file_exists($resource_location . "/thumbnail")) {
+                    unlink($resource_location . "/thumbnail");
+                }
+
+                if(file_exists($resource_location)) {
+                    rmdir($resource_location);
                 }
             }
         }
