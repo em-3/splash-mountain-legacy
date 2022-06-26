@@ -14,6 +14,8 @@ abstract class Entry {
     private $data = array();
     /** @var bool $ready */
     private $ready = false;
+    /** @var bool $pendingDeletion */
+    private $pendingDeletion = false;
 
     public function __construct($database, $table_name, $id) {
         $this->database = $database;
@@ -70,13 +72,20 @@ abstract class Entry {
     }
 
     /**
+     * Marks this item for deletion
+     */
+    public function markForDeletion() {
+        $this->pendingDeletion = true;
+    }
+
+    /**
      * Commits the current item state to the database
      * @param bool $transaction Whether or not to start a database transaction. If set, any errors occurring during entry creation will cause the database to rollback to its previous state.
      * @throws \Exception If an error occurs during the commit
      */
     public function commit($transaction = false) {
         //Ensure that the entry is ready
-        if(!$this->ready) {
+        if(!$this->ready && !$this->pendingDeletion) {
             throw new \Exception("All required fields have not been set on this entry");
         }
 
@@ -85,35 +94,46 @@ abstract class Entry {
                 $this->database->beginTransaction();
             }
 
-            //Create the insert statement
-            $sql = "INSERT INTO `" . $this->table_name . "` (";
+            //Check if we this item is pending deletion
+            if($this->pendingDeletion) {
+                //If it is, remove the item from the database
+                $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE id = ?");
+                $stmt->execute([$this->getID()]);
 
-            //Add the keys
-            foreach($this->data as $key=>$value) {
-                $sql .= $key . ", ";
-            }
+                if($stmt->rowCount() !== 1) {
+                    throw new \Exception("Failed to delete item");
+                }
+            }else {
+                //If it isn't create the insert statement
+                $sql = "INSERT INTO `" . $this->table_name . "` (";
 
-            //Remove the last comma
-            $sql = substr($sql, 0, -2);
-            
-            //Add the values
-            $sql .= ") VALUES (";
+                //Add the keys
+                foreach($this->data as $key=>$value) {
+                    $sql .= $key . ", ";
+                }
 
-            for($i = 0; $i < count($this->data); $i++) {
-                $sql .= "?, ";
-            }
+                //Remove the last comma
+                $sql = substr($sql, 0, -2);
+                
+                //Add the values
+                $sql .= ") VALUES (";
 
-            //Remove the last comma
-            $sql = substr($sql, 0, -2);
+                for($i = 0; $i < count($this->data); $i++) {
+                    $sql .= "?, ";
+                }
 
-            $sql .= ")";
+                //Remove the last comma
+                $sql = substr($sql, 0, -2);
 
-            //Prepare and execute the query
-            $stmt = $this->database->prepare($sql);
-            $stmt->execute(array_values($this->data));
+                $sql .= ")";
 
-            if($stmt->rowCount() !== 1) {
-                throw new \Exception("Failed to commit data");
+                //Prepare and execute the query
+                $stmt = $this->database->prepare($sql);
+                $stmt->execute(array_values($this->data));
+
+                if($stmt->rowCount() !== 1) {
+                    throw new \Exception("Failed to commit data");
+                }
             }
 
             if($transaction) {
