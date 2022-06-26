@@ -19,7 +19,8 @@ class Resource {
 
     public function __construct($database, $table_name, $resource_directory) {
         $this->database = $database;
-        $this->resource_directory = $resource_directory;
+        $this->table_name = $table_name;
+        $this->setResourceDirectory($resource_directory);
     }
 
     /**
@@ -57,7 +58,7 @@ class Resource {
 
     /**
      * Attaches the given uploaded image to this resource
-     * @param $file The file from `$_FILES` to use
+     * @param array $file The file from `$_FILES` to use
      * @throws \Exception If the file is not a valid image
      */
     public function useUploadedImage($file) {
@@ -85,7 +86,7 @@ class Resource {
         }
 
         //Generate the hash from the uploaded file's content
-        return hash_file("sha256", $this->file["tmp_name"]);
+        return $this->id = hash_file("sha256", $this->file["tmp_name"]);
     }
 
     /**
@@ -116,6 +117,8 @@ class Resource {
                     rmdir($resource_location);
                 }
             }
+
+            throw $e;
         }
     }
 
@@ -169,7 +172,7 @@ class Resource {
         }
 
         //Save the thumbnail
-        if(!imagejpeg($thumbnail_gd, $this->resource_directory . $this->getID() . "/main")) {
+        if(!imagejpeg($thumbnail_gd, $this->resource_directory . $this->getID() . "/thumbnail")) {
             throw new \Exception("Failed to save thumbnail");
         }
     }
@@ -179,10 +182,11 @@ class Resource {
         $new_associations = $this->associatedIDs;
         //Get the file hash
         $id = $this->getID();
+
         //Check if that hash already has any associations
-        $stmt = $this->database->prepare("SELECT associated_id FROM " . $this->table_name . " WHERE id = ?");
+        $stmt = $this->database->prepare("SELECT associated_id FROM `" . $this->table_name . "` WHERE resource_id = ?");
         $stmt->execute([$id]);
-        $associated_ids = $stmt->fetchColumn();
+        $associated_ids = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
         if(count($associated_ids) === 0) {
             //If it doesn't, mark the filesystem as affected
@@ -196,7 +200,7 @@ class Resource {
             $associated_ids_to_delete = array_diff($associated_ids, $this->associatedIDs);
             $new_associations = array_diff($this->associatedIDs, $associated_ids);
             //Create a query to delete any marked associations
-            $stmt = $this->database->prepare("DELETE FROM " . $this->table_name . " WHERE id = ? AND associated_id = ?");
+            $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE resource_id = ? AND associated_id = ?");
             //Loop through each association and delete it
             foreach($associated_ids_to_delete as $aid) {
                 $stmt->execute([$id, $aid]);
@@ -205,12 +209,13 @@ class Resource {
                 }
             }
         }
+
         //Finally create a query to add any new changes in the database
-        $stmt = $this->database->prepare("INSERT INTO " . $this->table_name . " (id, associated_id) VALUES (?, ?)");
+        $stmt = $this->database->prepare("INSERT INTO `" . $this->table_name . "` (resource_id, associated_id) VALUES (?, ?)");
         //Loop through each association and add it
         foreach($new_associations as $aid) {
             $stmt->execute([$id, $aid]);
-            if($stmt->rowCount() !== 0) {
+            if($stmt->rowCount() === 0) {
                 throw new \Exception("Associated ID ($aid) for ID ($id) could not be added");
             }
         }
