@@ -1,5 +1,8 @@
 <?php
 
+use SplmlFoundation\SplashMountainLegacyBackend\ItemEntry;
+use SplmlFoundation\SplashMountainLegacyBackend\Resource;
+
 require_once __DIR__ . "/../scripts/init_admin.php";
 require_once __DIR__ . "/../scripts/item_utils.php";
 
@@ -17,20 +20,37 @@ if($_SERVER["REQUEST_METHOD"] !== "POST") {
 $resource_dir = __DIR__ . "/../../resources";
 
 try {
+    $database->beginTransaction();
+
     if(!isset($_POST["id"])) {
         throw new Exception("Missing required parameter: id");
     }
 
-    $item_id = $_POST["id"];
-    $sucess = delete_item($item_id, $database, $resource_dir);
+    //Create an empty item
+    $item = new ItemEntry($database, "item_index", $_POST["id"]);
 
-    if($sucess) {
-        header("Content-Type: application/json");
-        exit(json_encode(["status" => "success"]));
-    } else {
-        throw new Exception("Failed to delete item");
+    //Load all resources that are associated with this item
+    $associated_resources = $item->getAssociatedResources("resource_associations", $resource_dir, $item->getID());
+
+    //Remove the item's affiliation from each resource and commit the change
+    foreach($associated_resources as $resource) {
+        $resource->dissociateID($item->getID());
+        $resource->commitWithCleanup();
     }
+
+    //Mark the item for deletion
+    $item->markForDeletion();
+
+    //Commit the changes
+    $item->commit();
+
+    $database->commit();
+
+    header("Content-Type: application/json");
+    exit(json_encode(["status" => "success"]));
 }catch (Exception $e) {
+    $database->rollBack();
+
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => $e->getMessage()]));
 }
