@@ -68,6 +68,27 @@ class Resource {
     }
 
     /**
+     * Sets this resource's ID to the provided value
+     * If used during resource creation, this may cause instability
+     * @param string $id The ID of the resource to use.
+     */
+    public function useResourceID($id) {
+        $this->id = $id;
+    }
+
+    /**
+     * Loads the associated IDs from the database for this resource.
+     * WARNING: This will overwrite the associated IDs in this resource object!
+     * @throws \Exception If an error occurs during loading
+     */
+    public function load() {
+        //Create the query to load the associated IDs
+        $stmt = $this->database->prepare("SELECT associated_id FROM `" . $this->table_name . "` WHERE resource_id = ?");
+        $stmt->execute([$this->getID()]);
+        $this->associatedIDs = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Adds the given entry ID to the list of this resource's associated IDs
      * @param $id The ID to add
      */
