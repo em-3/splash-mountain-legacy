@@ -14,8 +14,6 @@ abstract class Entry {
     private $data = array();
     /** @var bool $ready */
     private $ready = false;
-    /** @var bool $pendingDeletion */
-    private $pendingDeletion = false;
 
     public function __construct($database, $table_name, $id) {
         $this->database = $database;
@@ -72,20 +70,13 @@ abstract class Entry {
     }
 
     /**
-     * Marks this item for deletion
-     */
-    public function markForDeletion() {
-        $this->pendingDeletion = true;
-    }
-
-    /**
-     * Commits the current item state to the database
+     * Commits the current entry state to the database
      * @param bool $transaction Whether or not to start a database transaction. If set, any errors occurring during entry creation will cause the database to rollback to its previous state.
      * @throws \Exception If an error occurs during the commit
      */
     public function commit($transaction = false) {
         //Ensure that the entry is ready
-        if(!$this->ready && !$this->pendingDeletion) {
+        if(!$this->ready) {
             throw new \Exception("All required fields have not been set on this entry");
         }
 
@@ -94,47 +85,7 @@ abstract class Entry {
                 $this->database->beginTransaction();
             }
 
-            //Check if we this item is pending deletion
-            if($this->pendingDeletion) {
-                //If it is, remove the item from the database
-                $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE id = ?");
-                $stmt->execute([$this->getID()]);
-
-                if($stmt->rowCount() !== 1) {
-                    throw new \Exception("Failed to delete item");
-                }
-            }else {
-                //If it isn't create the insert statement
-                $sql = "INSERT INTO `" . $this->table_name . "` (";
-
-                //Add the keys
-                foreach($this->data as $key=>$value) {
-                    $sql .= $key . ", ";
-                }
-
-                //Remove the last comma
-                $sql = substr($sql, 0, -2);
-                
-                //Add the values
-                $sql .= ") VALUES (";
-
-                for($i = 0; $i < count($this->data); $i++) {
-                    $sql .= "?, ";
-                }
-
-                //Remove the last comma
-                $sql = substr($sql, 0, -2);
-
-                $sql .= ")";
-
-                //Prepare and execute the query
-                $stmt = $this->database->prepare($sql);
-                $stmt->execute(array_values($this->data));
-
-                if($stmt->rowCount() !== 1) {
-                    throw new \Exception("Failed to commit data");
-                }
-            }
+            $this->createEntry();
 
             if($transaction) {
                 $this->database->commit();
@@ -177,6 +128,55 @@ abstract class Entry {
         }
 
         return $resources;
+    }
+
+    /**
+     * Deletes the entry
+     * @throws \Exception If the deletion fails
+     */
+    public function deleteEntry() {
+        $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE id = ?");
+        $stmt->execute([$this->getID()]);
+
+        if($stmt->rowCount() !== 1) {
+            throw new \Exception("Failed to delete entry");
+        }
+    }
+
+    /**
+     * Creates this entry in the database
+     * @throws \Exception If the creation failed
+     */
+    private function createEntry() {
+        $sql = "INSERT INTO `" . $this->table_name . "` (";
+
+        //Add the keys
+        foreach($this->data as $key=>$value) {
+            $sql .= $key . ", ";
+        }
+
+        //Remove the last comma
+        $sql = substr($sql, 0, -2);
+        
+        //Add the values
+        $sql .= ") VALUES (";
+
+        for($i = 0; $i < count($this->data); $i++) {
+            $sql .= "?, ";
+        }
+
+        //Remove the last comma
+        $sql = substr($sql, 0, -2);
+
+        $sql .= ")";
+
+        //Prepare and execute the query
+        $stmt = $this->database->prepare($sql);
+        $stmt->execute(array_values($this->data));
+
+        if($stmt->rowCount() !== 1) {
+            throw new \Exception("Failed to commit data");
+        }
     }
 
     /**
