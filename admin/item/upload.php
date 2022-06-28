@@ -34,20 +34,21 @@ try {
     //Create an empty resource
     $resource = new Resource($database, "resource_associations", $resource_dir);
 
-    //Check if the image field was provided and if it is a file
-    if(isset($_FILES["image"])) {
-        //If it is a file, upload it, generate an ID from it's hash, and store that ID in an affiliated records table.
-        $resource->useUploadedImage($_FILES["image"]);
-        $resource->load();
-        $resource->associateID($id);
+    //Check if the image field was provided
+    if(isset($_POST["image"]) || isset($_FILES["image"])) {
+        if(isset($_FILES["image"])) {
+            //If it is a file, upload it
+            $resource->useUploadedImage($_FILES["image"]);
+    
+            $item->setDataField("image", $resource->getID());
+        }else {
+            //If it is not a file, add it to the item's data
+            $item->setDataField("image", $_POST["image"]);
 
-        $item->setDataField("image", $resource->getID());
-    }else if(isset($_POST["image"])) {
-        //If it is not a file, add it to the item's data
-        $item->setDataField("image", $_POST["image"]);
+            $resource->useResourceID($_POST["image"]);
+        }
 
-        //Add the item's ID to the resource's data
-        $resource->useResourceID($_POST["image"]);
+        //Load the resource's info and associate the item ID with the resource.
         $resource->load();
         $resource->associateID($id);
     }
