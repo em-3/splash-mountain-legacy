@@ -12,6 +12,10 @@ class ItemEntry extends Entry {
         return ["author", "video_id", "image", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
     }
 
+    public static function getModifiableFields() {
+        return ["name", "park", "description", "author", "video_id", "image", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
+    }
+
 }
 
 ?>
