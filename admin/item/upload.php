@@ -31,15 +31,15 @@ try {
 
     //Create an empty item
     $item = new ItemEntry($database, "item_index", $id);
-    //Create an empty resource
-    $resource = new Resource($database, "resource_associations", $resource_dir);
 
     //Check if the image field was provided and if it is a file
     if(isset($_FILES["image"])) {
         //If it is a file, upload it, generate an ID from it's hash, and store that ID in an affiliated records table.
+        $resource = new Resource($database, "resource_associations", $resource_dir);
         $resource->useUploadedImage($_FILES["image"]);
         $resource->load();
         $resource->associateID($id);
+        $resource->commitWithCleanup();
 
         $item->setDataField("image", $resource->getID());
     }else if(isset($_POST["image"])) {
@@ -53,7 +53,6 @@ try {
     $item->putOptionalData($_POST);
     //Store the item's data in the item's table.
     $item->commit();
-    $resource->commitWithCleanup();
 
     $database->commit();
 
