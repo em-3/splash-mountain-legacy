@@ -38,11 +38,8 @@ try {
         $resource->commitWithCleanup();
     }
 
-    //Mark the item for deletion
-    $item->markForDeletion();
-
-    //Commit the changes
-    $item->commit();
+    //Delete the item
+    $item->deleteEntry();
 
     $database->commit();
 
