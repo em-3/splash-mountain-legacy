@@ -45,11 +45,15 @@ try {
     }else if(isset($_POST["image"])) {
         //If it is not a file, add it to the item's data
         $item->setDataField("image", $_POST["image"]);
+
+        //Add the item's ID to the resource's data
+        $resource->useResourceID($_POST["image"]);
+        $resource->load();
+        $resource->associateID($id);
     }
 
-    //Loop through the provided POST parameters, and ensure that POST contains all the required item data
-    $item->putRequiredData($_POST);
     //Add the required data to the item's data, as well as the optional data.
+    $item->putRequiredData($_POST);
     $item->putOptionalData($_POST);
     //Store the item's data in the item's table.
     $item->commit();
