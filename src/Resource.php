@@ -12,8 +12,8 @@ class Resource {
     private $resource_directory;
     /** @var array $file */
     private $file;
-    /** @var array $associatedIDs */
-    private $associatedIDs;
+    /** @var array $associated_ids */
+    private $associated_ids;
     /** @var string $id */
     private $id;
 
@@ -85,7 +85,7 @@ class Resource {
         //Create the query to load the associated IDs
         $stmt = $this->database->prepare("SELECT associated_id FROM `" . $this->table_name . "` WHERE resource_id = ?");
         $stmt->execute([$this->getID()]);
-        $this->associatedIDs = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $this->associated_ids = $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -93,8 +93,8 @@ class Resource {
      * @param string $id The ID to add
      */
     public function associateID($id) {
-        $this->associatedIDs[] = $id;
-        $this->associatedIDs = array_unique($this->associatedIDs);
+        $this->associated_ids[] = $id;
+        $this->associated_ids = array_unique($this->associated_ids);
     }
 
     /**
@@ -103,13 +103,13 @@ class Resource {
      * @throws \Exception If the resource does not have the given ID associated with it
      */
     public function dissociateID($id) {
-        if(!in_array($id, $this->associatedIDs)) {
+        if(!in_array($id, $this->associated_ids)) {
             throw new \Exception("ID ($id) is not associated with this resource");
         }
 
-        $index = array_search($id, $this->associatedIDs);
+        $index = array_search($id, $this->associated_ids);
 
-        array_splice($this->associatedIDs, $index, 1);
+        array_splice($this->associated_ids, $index, 1);
     }
 
     /**
@@ -215,7 +215,7 @@ class Resource {
 
     protected function commitChanges(&$filesystem_affected = null) {
         //Set new associations to all associations
-        $new_associations = $this->associatedIDs;
+        $new_associations = $this->associated_ids;
         //Get the file hash
         $id = $this->getID();
 
@@ -237,8 +237,8 @@ class Resource {
             $this->generateThumbnail();
         }else {
             //If it does, use the list of existing associations to determine what changes must be made
-            $associated_ids_to_delete = array_diff($associated_ids, $this->associatedIDs);
-            $new_associations = array_diff($this->associatedIDs, $associated_ids);
+            $associated_ids_to_delete = array_diff($associated_ids, $this->associated_ids);
+            $new_associations = array_diff($this->associated_ids, $associated_ids);
             //Create a query to delete any marked associations
             $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE resource_id = ? AND associated_id = ?");
             //Loop through each association and delete it
@@ -250,7 +250,7 @@ class Resource {
             }
 
             //Check if there is any associations left
-            if(count($this->associatedIDs) === 0) {
+            if(count($this->associated_ids) === 0) {
                 //If there are not, then delete the resource
                 $resource_location = $this->resource_directory . "$id";
 
