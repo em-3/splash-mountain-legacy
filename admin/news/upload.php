@@ -36,8 +36,6 @@ try {
     //Check if the thumbnail field was provided
     if(isset($_POST["thumbnail"]) || isset($_FILES["thumbnail"])) {
         if(isset($_FILES["thumbnail"])) {
-            echo "here";
-
             //If it is a file, upload it
             $resource->useUploadedImage($_FILES["thumbnail"]);
 
