@@ -168,11 +168,13 @@ abstract class Entry {
      * @throws \Exception If the deletion fails
      */
     public function deleteEntry() {
-        $stmt = $this->database->prepare("DELETE FROM `" . $this->table_name . "` WHERE id = ?");
+        $sql = "DELETE FROM `" . $this->table_name . "` WHERE id = ?";
+
+        $stmt = $this->database->prepare($sql);
         $stmt->execute([$this->getID()]);
 
         if($stmt->rowCount() !== 1) {
-            throw new \Exception("Failed to delete entry. Query: $stmt");
+            throw new \Exception("Failed to delete entry. Query: $sql");
         }
     }
 
@@ -211,7 +213,7 @@ abstract class Entry {
         $stmt->execute(array_values($this->data));
 
         if($stmt->rowCount() !== 1) {
-            throw new \Exception("Failed to commit data. Query: $stmt");
+            throw new \Exception("Failed to commit data. Query: $sql");
         }
     }
 
@@ -246,7 +248,7 @@ abstract class Entry {
         $stmt->execute();
 
         if($stmt->rowCount() !== 1) {
-            throw new \Exception("Failed to update data. Query: $stmt");
+            throw new \Exception("Failed to update data. Query: $sql");
         }
     }
 
