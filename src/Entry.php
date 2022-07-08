@@ -183,6 +183,9 @@ abstract class Entry {
     private function createEntry() {
         $sql = "INSERT INTO `" . $this->table_name . "` (";
 
+        //Add the ID to the data to be inserted
+        $this->data["id"] = $this->getID();
+
         //Add the keys
         foreach($this->data as $key=>$value) {
             $sql .= $key . ", ";
