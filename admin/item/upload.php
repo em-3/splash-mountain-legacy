@@ -40,11 +40,9 @@ try {
             //If it is a file, upload it
             $resource->useUploadedImage($_FILES["image"]);
     
-            $item->setDataField("image", $resource->getID());
+            $_POST["image"] = $resource->getID();
         }else {
             //If it is not a file, add it to the item's data
-            $item->setDataField("image", $_POST["image"]);
-
             $resource->useResourceID($_POST["image"]);
         }
 

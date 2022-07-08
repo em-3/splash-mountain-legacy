@@ -30,21 +30,6 @@ abstract class Entry {
     }
 
     /**
-     * Sets a specific field for this entry.
-     * @param string $fieldName The name of the field to set
-     * @param mixed $fieldValue The value of the field to set
-     * @throws \Exception If the field name provided is not a known field name
-     */
-    public function setDataField($fieldName, $fieldValue) {
-        //Check if the field exists
-        if(!in_array($fieldName, $this::getFields())) {
-            throw new \Exception("Field ($fieldName) doesn't exist for this entry");
-        }
-
-        $this->data[$fieldName] = $fieldValue;
-    }
-
-    /**
      * Inserts all matching required parameters into their correct fields. Any non-required fields are ignored.
      * @param array $input An associative array containing all required fields as defined in `getRequiredFields()`
      * @throws \Exception If a required field is missing from the input array
