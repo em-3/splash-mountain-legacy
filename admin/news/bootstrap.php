@@ -8,7 +8,7 @@ if(!check_authentication()) {
     die(json_encode(["status" => "error", "error" => "Not authenticated"]));
 }
 
-if($_SERVER["REQUEST_METHOD"] !== "POST") {
+if($_SERVER["REQUEST_METHOD"] !== "GET") {
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => "Invalid request"]));
 }
