@@ -46,6 +46,8 @@ abstract class Entry {
                 throw new \Exception("Missing required field ($field)");
             }
 
+            $this->handleDataPut($field, $input[$field]);
+
             $this->data[$field] = $input[$field];
         }
 
@@ -66,6 +68,8 @@ abstract class Entry {
 
         foreach($optional_fields as $field) {
             if(array_key_exists($field, $input)) {
+                $this->handleDataPut($field, $input[$field]);
+
                 $this->data[$field] = $input[$field];
             }
         }
@@ -87,6 +91,8 @@ abstract class Entry {
 
         foreach($modifiable_fields as $field) {
             if(array_key_exists($field, $input)) {
+                $this->handleDataPut($field, $input[$field]);
+
                 $this->data[$field] = $input[$field];
             }
         }
@@ -251,6 +257,14 @@ abstract class Entry {
             throw new \Exception("Failed to update data. Query: $sql");
         }
     }
+
+    /**
+     * Hook method which is called before every item is added to the data array.
+     * The field and data values are passed by reference, allowing the hook to make changes to the data before it is applied to the entry
+     * @param string &$field The field name of the data
+     * @param mixed &$field The data being put into the entry
+     */
+    protected function handleDataPut(&$field, &$data) {}
 
     /**
      * Returns the list of available fields for this entry.
