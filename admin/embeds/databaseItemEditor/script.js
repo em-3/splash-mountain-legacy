@@ -839,7 +839,7 @@ async function uploadItem() {
     })
     .then(() => {
       formData.append("id", itemID);
-      fetch("/admin/item/upload.php", {
+      fetch("/admin/item/create.php", {
         method: "POST",
         body: formData,
       })
