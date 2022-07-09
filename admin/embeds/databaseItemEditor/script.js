@@ -829,29 +829,44 @@ async function uploadItem() {
     formData.append("timestamp", date);
   }
 
-  var response = await fetch("/admin/item/upload.php", {
-    method: "POST",
-    body: formData,
-  });
-  let result = await response.json();
+  var itemID;
+  fetch("/admin/item/bootstrap.php")
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
+        itemID = data.id;
+      }
+    })
+    .then(() => {
+      formData.append("id", itemID);
+      fetch("/admin/item/upload.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.status === "success") {
+            document.querySelector(".responseContainer .title").textContent =
+              "Done.";
+            document.querySelector(".responseContainer .subtitle").textContent =
+              "Your item has been added to the database.";
+            document.querySelector(".responseContainer .message").textContent =
+              "Item ID: " + result.id;
+          } else {
+            document.querySelector(".responseContainer .title").textContent =
+              "Congratulations, you broke something.";
+            document.querySelector(".responseContainer .subtitle").textContent =
+              "Good going.";
+            document.querySelector(".responseContainer .message").textContent =
+              result.error;
+          }
 
-  if (result.status === "success") {
-    document.querySelector(".responseContainer .title").textContent = "Done.";
-    document.querySelector(".responseContainer .subtitle").textContent =
-      "Your item has been added to the database.";
-    document.querySelector(".responseContainer .message").textContent =
-      "Item ID: " + result.id;
-  } else {
-    document.querySelector(".responseContainer .title").textContent =
-      "Congratulations, you broke something.";
-    document.querySelector(".responseContainer .subtitle").textContent =
-      "Good going.";
-    document.querySelector(".responseContainer .message").textContent =
-      result.error;
-  }
-
-  document.querySelector(".progressContainer").classList.add("hidden");
-  document.querySelector(".responseContainer").classList.remove("hidden");
+          document.querySelector(".progressContainer").classList.add("hidden");
+          document
+            .querySelector(".responseContainer")
+            .classList.remove("hidden");
+        });
+    });
 }
 
 async function updateItem() {
