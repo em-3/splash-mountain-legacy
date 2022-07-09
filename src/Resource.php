@@ -64,6 +64,8 @@ class Resource {
     public function useUploadedImage($file) {
         if(Resource::validateImage($file)) {
             $this->file = $file;
+        }else {
+            throw new \Exception("File provided is not a valid image (" . $file["name"] . "). Allowed types are jpg, png, and gif.");
         }
     }
 
