@@ -1,10 +1,10 @@
 <?php
 
-use SplmlFoundation\SplashMountainLegacyBackend\ItemEntry;
-use SplmlFoundation\SplashMountainLegacyBackend\Resource;
-
 require_once __DIR__ . "/../scripts/init_admin.php";
 require_once __DIR__ . "/../scripts/item_utils.php";
+
+use SplmlFoundation\SplashMountainLegacyBackend\ItemEntry;
+use SplmlFoundation\SplashMountainLegacyBackend\Resource;
 
 if(!check_authentication()) {
     http_response_code(401);

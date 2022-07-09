@@ -3,7 +3,6 @@
 require_once __DIR__ . "/../scripts/init_admin.php";
 
 use SplmlFoundation\SplashMountainLegacyBackend\ArticleEntry;
-use SplmlFoundation\SplashMountainLegacyBackend\DatabaseEntry;
 
 if(!check_authentication()) {
     http_response_code(401);
