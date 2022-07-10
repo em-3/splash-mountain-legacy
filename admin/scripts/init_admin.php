@@ -2,17 +2,6 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
-//Initiate the session
-session_start();
-
-/**
- * Checks if the user is logged in
- * @return bool true if logged in, false if not
- */
-function check_authentication() {
-    return isset($_SESSION["id"]) && $_SESSION["id"] != "";
-}
-
 /**
  * Generates a random unique Base38 URL ID.
  * @param PDO $database The database to check the generated ID against
