@@ -1,6 +1,6 @@
 function showItemDetails(id) {
   document.querySelector(".itemDetailsContainer iframe").src =
-    "/item?id=" + id + "&embedded=true";
+    "/item/" + id + "/?embedded=true";
   document.querySelector(".itemDetailsContainer").classList.remove("hidden");
   document.body.classList.add("noScroll");
 }

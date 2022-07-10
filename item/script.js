@@ -3,6 +3,11 @@ var url = new URL(window.location.href);
 var params = url.searchParams;
 var id = params.get("id");
 var embedded = params.get("embedded");
+if(!id) {
+  //Extract the ID from the last part of the URL
+  var pieces = url.pathname.split("/");
+  id = pieces[pieces.length - 2];
+}
 
 var loadedItemDetails;
 var timeOutHasExpired = false;
@@ -352,11 +357,11 @@ function share() {
   if (navigator.share) {
     navigator.share({
       title: loadedItemDetails.name,
-      url: "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id,
+      url: "https://splashmountainlegacy.com/item/" + loadedItemDetails.id,
     });
   } else {
     navigator.clipboard.writeText(
-      "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id
+      "https://splashmountainlegacy.com/item/" + loadedItemDetails.id
     );
     document.querySelector(".shareButton").textContent = "Copied Link";
   }
@@ -468,6 +473,6 @@ function closeItemDetails() {
   if (embedded) {
     window.top.postMessage("closeDetails", "*");
   } else {
-    window.location.href = "https://splashmountainlegacy.com";
+    window.location.href = "/";
   }
 }
