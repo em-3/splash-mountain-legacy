@@ -93,7 +93,10 @@ var databaseBrowser = {
 		var character = "?";
 
         var searchInput = document.querySelector(".searchField input");
-        if ()
+        if (searchInput.value.length > 0) {
+			PHPParams += character + "query=" + searchInput.value;
+            character = "&";
+		}
 
 		var activeFilters = document.querySelectorAll(
 			".filterBar .filters .filter"
