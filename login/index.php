@@ -5,7 +5,7 @@ require_once __DIR__ . "/../scripts/jwt_nonce.php";
 
 //Redirect the user if they're already logged in
 if(check_authentication()) {
-    header("Location: /admin/index.php");
+    header("Location: /");
     exit;
 }
 
@@ -26,7 +26,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
             $username = $_POST["username"];
             $password = $_POST["password"];
 
-            $stmt = $database->prepare("SELECT `id`, `password` FROM `admins` WHERE `username` = ?");
+            $stmt = $database->prepare("SELECT `id`, `password`, `clearance` FROM `users` WHERE `username` = ?");
             $stmt->bindValue(1, $username, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -39,8 +39,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
                 if(!password_verify($password, $user_data["password"])) {
                     $error = "Invalid username or password.";
                 }else {
-                    //Store the user ID in the session
+                    //Store the user ID and clearance in the session
                     $_SESSION["id"] = $user_data["id"];
+                    $_SESSION["clearance"] = $user_data["clearance"];
 
                     //Redirect the user to the main page
                     header("Location: /");
