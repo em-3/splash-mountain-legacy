@@ -183,7 +183,7 @@ function showItemContent(id, itemType, itemFormat) {
     case "image":
       var thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("thumbnail");
-      thumbnailElement.src = "/resources/" + id + "/thumbnail";
+      thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail";
       document.querySelector(".contentDisplay").appendChild(thumbnailElement);
 
       var loadingContainer = document.createElement("div");
@@ -222,7 +222,7 @@ function showItemContent(id, itemType, itemFormat) {
           .querySelector(".contentDisplay .main")
           .classList.remove("hidden");
       };
-      contentDisplayElement.src = "/resources/" + id + "/main";
+      contentDisplayElement.src = "/resources/" + itemDetails.image + "/main";
       document
         .querySelector(".contentDisplay")
         .appendChild(contentDisplayElement);
