@@ -174,10 +174,12 @@ function showItemDetails() {
   });
 
   //Show the item content
-  showItemContent(id, itemDetails.type, itemDetails.format);
+  showItemContent(itemDetails);
 }
 
-function showItemContent(id, itemType, itemFormat) {
+function showItemContent(itemDetails) {
+  var itemType = itemDetails.type;
+  var itemFormat = itemDetails.format;
   //Show the item content
   switch (itemType) {
     case "image":
