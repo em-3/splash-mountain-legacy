@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../scripts/init_admin.php";
+require_once __DIR__ . "/../scripts/init.php";
 require_once __DIR__ . "/../scripts/jwt_nonce.php";
 
 //Redirect the user if they're already logged in
@@ -43,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
                     $_SESSION["id"] = $user_data["id"];
 
                     //Redirect the user to the main page
-                    header("Location: /admin/index.php");
+                    header("Location: /");
                     exit;
                 }
             }
@@ -144,7 +144,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
             <section>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                     <div class="titleContainer">
-                        <h1>Login to Admin Console</h1>
+                        <h1>Login to Splash Mountain Legacy</h1>
                         <?php if($error != "") { ?>
                             <p class="errorMessage"><?php echo $error; ?></p>
                         <?php } ?>
