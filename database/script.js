@@ -81,6 +81,8 @@ function addFilter(filterObject) {
 	filterElement.appendChild(filterSelect);
 	filterElement.appendChild(removeButton);
 	document.querySelector(".filterBar .filters").appendChild(filterElement);
+
+	databaseBrowser.refreshResults();
 }
 
 var databaseBrowser = {
