@@ -1,20 +1,12 @@
 <?php
 
 require_once __DIR__ . "/../scripts/init_admin.php";
+require_once __DIR__ . "/../scripts/endpoint_utils.php";
 
 use SplmlFoundation\SplashMountainLegacyBackend\ArticleEntry;
 use SplmlFoundation\SplashMountainLegacyBackend\Resource;
 
-if(!check_authentication()) {
-    http_response_code(401);
-    header("Content-Type: application/json");
-    die(json_encode(["status" => "error", "error" => "Not authenticated"]));
-}
-
-if($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Content-Type: application/json");
-    die(json_encode(["status" => "error", "error" => "Invalid request"]));
-}
+check_request();
 
 $resource_dir = __DIR__ . "/../../resources";
 

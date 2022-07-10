@@ -1,17 +1,9 @@
 <?php
 
 require_once __DIR__ . "/../scripts/init_admin.php";
+require_once __DIR__ . "/../scripts/endpoint_utils.php";
 
-if(!check_authentication()) {
-    http_response_code(401);
-    header("Content-Type: application/json");
-    die(json_encode(["status" => "error", "error" => "Not authenticated"]));
-}
-
-if($_SERVER["REQUEST_METHOD"] !== "GET") {
-    header("Content-Type: application/json");
-    die(json_encode(["status" => "error", "error" => "Invalid request"]));
-}
+check_request("GET");
 
 try {
     //Generate a unique ID
