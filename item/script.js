@@ -3,6 +3,11 @@ var url = new URL(window.location.href);
 var params = url.searchParams;
 var id = params.get("id");
 var embedded = params.get("embedded");
+if(!id) {
+  //Extract the ID from the last part of the URL
+  var pieces = url.pathname.split("/");
+  id = pieces[pieces.length - 2];
+}
 
 var loadedItemDetails;
 var timeOutHasExpired = false;
@@ -169,16 +174,18 @@ function showItemDetails() {
   });
 
   //Show the item content
-  showItemContent(id, itemDetails.type, itemDetails.format);
+  showItemContent(itemDetails);
 }
 
-function showItemContent(id, itemType, itemFormat) {
+function showItemContent(itemDetails) {
+  var itemType = itemDetails.type;
+  var itemFormat = itemDetails.format;
   //Show the item content
   switch (itemType) {
     case "image":
       var thumbnailElement = document.createElement("img");
       thumbnailElement.classList.add("thumbnail");
-      thumbnailElement.src = "/resources/" + id + "/thumbnail";
+      thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail";
       document.querySelector(".contentDisplay").appendChild(thumbnailElement);
 
       var loadingContainer = document.createElement("div");
@@ -217,7 +224,7 @@ function showItemContent(id, itemType, itemFormat) {
           .querySelector(".contentDisplay .main")
           .classList.remove("hidden");
       };
-      contentDisplayElement.src = "/resources/" + id + "/main";
+      contentDisplayElement.src = "/resources/" + itemDetails.image + "/main";
       document
         .querySelector(".contentDisplay")
         .appendChild(contentDisplayElement);
@@ -352,11 +359,11 @@ function share() {
   if (navigator.share) {
     navigator.share({
       title: loadedItemDetails.name,
-      url: "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id,
+      url: "https://splashmountainlegacy.com/item/" + loadedItemDetails.id,
     });
   } else {
     navigator.clipboard.writeText(
-      "https://splashmountainlegacy.com/item?id=" + loadedItemDetails.id
+      "https://splashmountainlegacy.com/item/" + loadedItemDetails.id
     );
     document.querySelector(".shareButton").textContent = "Copied Link";
   }
@@ -468,6 +475,6 @@ function closeItemDetails() {
   if (embedded) {
     window.top.postMessage("closeDetails", "*");
   } else {
-    window.location.href = "https://splashmountainlegacy.com";
+    window.location.href = "/";
   }
 }
