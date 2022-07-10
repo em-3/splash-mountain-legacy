@@ -2,30 +2,82 @@ main div.databaseBrowser {
   min-height: calc(100vh - 55pt);
 }
 
-.filterBar {
-  background: var(--content-background-color);
+main {
+  overflow: auto;
+}
+
+.searchControls {
+  margin: 10pt;
   height: 35pt;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10pt;
-}
-
-.filterBar .filter {
-  background: var(--page-background-color);
+  background: var(--content-background-color);
   border-radius: 10pt;
-  height: 20pt;
-  padding: 1pt 8pt;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
 }
 
-.filterBar .filter:not(:last-child) {
+.controls,
+.filterSelect {
+  height: 20pt;
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+  position: absolute;
+  top: 50%;
+  left: 7pt;
+  right: 7pt;
+  transform: translateY(-50%);
+  transition: opacity 0.2s ease;
+}
+
+.controls.hidden,
+.filterSelect.hidden {
+  display: flex !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.searchField {
   margin-right: 10pt;
 }
 
-.filterBar .filter select {
+.searchField input {
+  border: none;
+  height: 20pt;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  margin: 0;
+  padding: 5pt;
+  width: 100%;
+  font: inherit;
+  font-size: 10pt;
+  border-radius: 5pt;
+  transition: background 0.2s ease;
+}
+
+.searchField input:focus {
+  outline: none;
+  background: var(--content-background-color);
+}
+
+.filterBar {
+  display: flex;
+}
+
+.filterBar .filters {
+  display: flex;
+}
+
+.filterBar .filters .filter {
+  background: var(--page-background-color);
+  border-radius: 5pt;
+  height: 20pt;
+  padding: 1pt 3pt 1pt 8pt;
+  margin-right: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterBar .filters .filter select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -42,8 +94,61 @@ main div.databaseBrowser {
   color: var(--primary-text-color);
 }
 
-.filterBar .filter select:focus {
+.filterBar .filters .filter select:focus {
   outline: none;
+}
+
+.filterBar .filters .filter .removeButton {
+  background: var(--content-background-color);
+  border: none;
+  border-radius: 3pt;
+  font-weight: bold;
+  height: 15pt;
+  padding: 2pt;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterBar .addFilter {
+  background: var(--page-background-color);
+  border-radius: 5pt;
+  padding: 0 5pt;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterSelect .closeButton {
+  background: var(--page-background-color);
+  height: 20pt;
+  border-radius: 5pt;
+  padding: 0 5pt;
+  margin-right: 10pt;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterSelect .availableFilters {
+  display: flex;
+}
+
+.filterSelect .availableFilters .filter {
+  background: var(--page-background-color);
+  height: 20pt;
+  padding: 0 8pt;
+  border-radius: 5pt;
+  margin-right: 10pt;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .databaseBrowser .loadingContainer,

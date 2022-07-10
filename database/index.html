@@ -95,7 +95,25 @@ require_once __DIR__ . "/../site_lock.php";
 
     <main>
         <div class="databaseBrowser">
-            <div class="filterBar"></div>
+            <div class="searchControls">
+
+                <div class="controls">
+                    <div class="searchField">
+                        <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()"
+                            onchange="databaseList.searchBar.onchange()">
+                    </div>
+                    <div class="filterBar">
+                        <div class="filters"></div>
+                        <div class="addFilter" onclick="showFilterSelect()">+</div>
+                    </div>
+                </div>
+
+                <div class="filterSelect hidden">
+                    <div class="closeButton" onclick="hideFilterSelect()">✕</div>
+                    <div class="availableFilters"></div>
+                </div>
+                
+            </div>
             <div class="loadingContainer">
                 <div class="loadingAnimationEllipsis">
                     <div></div>
