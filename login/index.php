@@ -151,6 +151,7 @@ if(isset($_GET["code"])) {
         <main>
             <section>
                 <?php if(!isset($user)) { ?>
+                    <!-- Authentication not started or didn't succeed -->
                     <div class="loginPromptContainer">
                         <h1>Login</h1>
                         <?php if($error != "") { ?>
@@ -161,12 +162,13 @@ if(isset($_GET["code"])) {
                         <button class="loginButton" onclick="window.location.href='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?login=discord'">Login with Discord</a>
                     </div>
                 <?php }else { ?>
+                    <!-- Authentication succeeded -->
                     <div class="welcomeContainer">
                         <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
                         <h1 class="name"><?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?></h1>
                         <h2 class="authLevel">
                             <?php
-                                if(!isset($_SESSION["clearance"]) {
+                                if(!isset($_SESSION["clearance"])) {
                                     echo "Unauthorized";
                                 } else if($_SESSION["clearance"] == 0) {
                                     echo "Admin";
@@ -176,8 +178,10 @@ if(isset($_GET["code"])) {
                             ?>
                         </h2>
                         <?php if(check_authentication()) { ?>
+                            <!-- User is allowed access -->
                             <a href="/" class="continueButton">Continue</a>
                         <?php }else { ?>
+                            <!-- User is not allowed access -->
                             <p class="authLevelWarning">Sorry, you don't have access to the site yet. Don't worry, Splash Mountain Legacy will be available to everyone soon!</p>
                         <?php } ?>
                     </div>
