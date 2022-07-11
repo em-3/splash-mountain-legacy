@@ -43,7 +43,7 @@ main {
 
 main section.header {
   position: relative;
-  height: calc(35vh + 55pt);
+  height: calc(45vh + 55pt);
   min-height: 200px;
   overflow: hidden;
 }
@@ -64,7 +64,7 @@ main section.header .background {
   background-position: center;
   background-size: cover;
   z-index: 1;
-  transform: scale(1.5);
+  transform: scale(1.8);
 }
 
 main section.header .foreground {
