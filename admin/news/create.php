@@ -22,11 +22,11 @@ try {
 
     //Create an empty item
     $item = new ArticleEntry($database, "news_articles", $id);
-    //Create an empty resource
-    $resource = new Resource($database, "resource_associations", $resource_dir);
 
     //Check if the thumbnail field was provided
     if(isset($_POST["thumbnail"]) || isset($_FILES["thumbnail"])) {
+        //Create an empty resource
+        $resource = new Resource($database, "resource_associations", $resource_dir);
         if(isset($_FILES["thumbnail"])) {
             //If it is a file, upload it
             $resource->useUploadedImage($_FILES["thumbnail"]);
@@ -40,6 +40,7 @@ try {
         //Load the resource's info and associate the item ID with the resource.
         $resource->load();
         $resource->associateID($id);
+        $resource->commitWithCleanup();
     }
 
     //Add the required data to the item's data, as well as the optional data.
@@ -47,7 +48,6 @@ try {
     $item->putOptionalData($_POST);
     //Store the item's data in the item's table.
     $item->commit();
-    $resource->commitWithCleanup();
 
     //Commit the transaction.
     $database->commit();
