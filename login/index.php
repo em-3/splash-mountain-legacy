@@ -19,7 +19,7 @@ session_regenerate_id();
 $provider = new Discord([
     "clientId" => $_ENV["DISCORD_CLIENT_ID"],
     "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
-    "redirectUri" => "http://localhost/login/index.php"
+    "redirectUri" => $_ENV["DISCORD_REDIRECT_URI_PREFIX"] . "/login/index.php"
 ]);
 
 if(isset($_GET["login"]) && $_GET["login"] == "discord") {
