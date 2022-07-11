@@ -152,6 +152,12 @@ main {
   justify-content: center;
 }
 
+.filterSelect .availableFilters .filter.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .databaseBrowser .loadingContainer,
 .databaseBrowser .resultsContainer,
 .databaseBrowser .errorMessageContainer {
