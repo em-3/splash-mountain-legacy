@@ -145,7 +145,7 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
             <section>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                     <div class="titleContainer">
-                        <h1>Login to Splash Mountain Legacy</h1>
+                        <h1>Login</h1>
                         <?php if($error != "") { ?>
                             <p class="errorMessage"><?php echo $error; ?></p>
                         <?php } ?>
