@@ -4,6 +4,7 @@
   --content-background-color: #eeeeee;
   --secondary-content-background-color: #cccccc;
   --primary-text-color: #000000;
+  --secondary-text-color: #555555;
   --shadow-color: #555555;
 
   --color-1: rgb(194, 227, 239);
@@ -23,6 +24,7 @@
     --content-background-color: #222222;
     --secondary-content-background-color: #444444;
     --primary-text-color: #ffffff;
+    --secondary-text-color: #aaaaaa;
     --shadow-color: #000000;
   }
 }
