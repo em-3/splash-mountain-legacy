@@ -151,23 +151,34 @@ if(isset($_GET["code"])) {
         <main>
             <section>
                 <?php if(!isset($user)) { ?>
-                    <div class="titleContainer">
-                        <h1>Welcome</h1>
+                    <div class="loginPromptContainer">
+                        <h1>Login</h1>
                         <?php if($error != "") { ?>
                                 <p class="errorMessage"><?php echo $error; ?></p>
                         <?php } ?>
                     </div>
                     <div>
-                        <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?login=discord" onclick="" class="fancyButton">Login with Discord</a>
+                        <button class="loginButton" onclick="window.location.href='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?login=discord'">Login with Discord</a>
                     </div>
                 <?php }else { ?>
-                    <div class="titleContainer">
-                        <img src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
-                        <h1>Welcome, <?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?>!</h1>
+                    <div class="welcomeContainer">
+                        <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
+                        <h1 class="name"><?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?></h1>
+                        <h2 class="authLevel">
+                            <?php
+                                if(!isset($_SESSION["clearance"]) {
+                                    echo "Unauthorized";
+                                } else if($_SESSION["clearance"] == 0) {
+                                    echo "Admin";
+                                } else {
+                                    echo "Launch Team";
+                                }
+                            ?>
+                        </h2>
                         <?php if(check_authentication()) { ?>
-                            <a href="/" class="fancyButton">Continue to site</a>
+                            <a href="/" class="continueButton">Continue</a>
                         <?php }else { ?>
-                            <p>It looks like you don't have access to the site yet. Don't worry, Splash Mountain Legacy will be available to everyone soon!</p>
+                            <p class="authLevelWarning">Sorry, you don't have access to the site yet. Don't worry, Splash Mountain Legacy will be available to everyone soon!</p>
                         <?php } ?>
                     </div>
                 <?php } ?>

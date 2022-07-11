@@ -22,67 +22,6 @@ section {
   align-items: center;
 }
 
-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  flex-grow: 1;
-  height: 100%;
-  width: calc(100% - 10pt);
-  max-width: 300pt;
-  padding: 20pt;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-section form .titleContainer h1 {
-  margin: 0;
-}
-
-section form .titleContainer p.errorMessage {
-  margin: 5pt 0 0 0;
-  color: #ff7e79;
-}
-
-input, a.fancyButton {
-  background: var(--page-background-color);
-  color: var(--primary-text--color);
-  font-family: inherit;
-  width: 100%;
-  height: 30pt;
-  border-radius: 5pt;
-  padding: 5pt;
-  margin-bottom: 10pt;
-  border: none;
-}
-
-input[type="text"],
-input[type="password"] {
-  border: 1px solid transparent;
-  transition: border 0.2s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border: 1px solid var(--primary-text-color);
-  outline: none;
-}
-
-input[type="submit"], a.fancyButton {
-  cursor: pointer;
-  font-weight: bold;
-  background: var(--color-1);
-  color: black;
-  margin-bottom: 0;
-}
-
-a.fancyButton {
-  text-decoration: none;
-}
-
 @media only screen and (max-width: 600px) {
   main {
     display: block;
@@ -98,15 +37,5 @@ a.fancyButton {
     border-radius: none;
     background: var(--page-background-color);
     padding: 20pt 0;
-  }
-  form {
-    position: static;
-    transform: none;
-    width: 100%;
-    height: 100%;
-    padding: 10pt;
-  }
-  input {
-    background: var(--content-background-color);
   }
 }
