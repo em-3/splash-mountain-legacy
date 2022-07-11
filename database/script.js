@@ -75,6 +75,7 @@ function addFilter(filterObject) {
 	removeButton.textContent = "✕";
 	removeButton.addEventListener("click", function () {
 		filterElement.parentElement.removeChild(filterElement);
+		databaseBrowser.refreshResults();
 	});
 
 	filterElement.appendChild(filterName);
@@ -90,14 +91,39 @@ var databaseBrowser = {
 		min: 1,
 		max: 21,
 	},
+
+	searchBar: {
+		timeoutID: null,
+		oninput: function () {
+			if (this.timeoutID) {
+				clearTimeout(this.timeoutID);
+			}
+
+			document
+				.querySelector(".databaseBrowser .loadingContainer")
+				.classList.remove("hidden");
+			document
+				.querySelector(".databaseBrowser .resultsContainer")
+				.classList.add("hidden");
+			document
+				.querySelector(".databaseBrowser .errorMessageContainer")
+				.classList.add("hidden");
+
+			//Wait a second before updating the search results
+			this.timeoutID = setTimeout(databaseBrowser.refreshResults, 1000);
+		},
+		onchange: function () {
+			databaseBrowser.refreshResults();
+		},
+	},
 	refreshResults: function (preservePreviousResults) {
 		var PHPParams = "";
 		var character = "?";
 
-        var searchInput = document.querySelector(".searchField input");
-        if (searchInput.value.length > 0) {
+		var searchInput = document.querySelector(".searchField input");
+		if (searchInput.value.length > 0) {
 			PHPParams += character + "query=" + searchInput.value;
-            character = "&";
+			character = "&";
 		}
 
 		var activeFilters = document.querySelectorAll(
