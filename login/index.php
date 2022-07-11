@@ -1,7 +1,8 @@
 <?php
 
 require_once __DIR__ . "/../scripts/init.php";
-require_once __DIR__ . "/../scripts/jwt_nonce.php";
+
+use Wohali\OAuth2\Client\Provider\Discord;
 
 //Redirect the user if they're already logged in
 if(check_authentication()) {
@@ -10,52 +11,58 @@ if(check_authentication()) {
 }
 
 $error = "";
+$user;
 
 //Regenerate the session ID to prevent session fixation attacks
 session_regenerate_id();
 
-if($_SERVER["REQUEST_METHOD"] === "POST") {
-    if(!isset($_POST["nonce"]) || !isset($_POST["username"]) || !isset($_POST["password"])) {
-        $error = "Invalid login attempt. Missing form data.";
+$provider = new Discord([
+    "clientId" => $_ENV["DISCORD_CLIENT_ID"],
+    "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
+    "redirectUri" => "http://localhost/login/index.php"
+]);
+
+if(isset($_GET["login"]) && $_GET["login"] == "discord") {
+    $authUrl = $provider->getAuthorizationUrl(["scope" => ["identify"]]);
+    $_SESSION["oauth2state"] = $provider->getState();
+    header("Location: " . $authUrl);
+    exit();
+}
+
+//Check if the code has been provided
+if(isset($_GET["code"])) {
+    //Check the state stored in the session to mitigate CSRF attacks
+    if(empty($_GET["state"]) || ($_GET["state"] !== $_SESSION["oauth2state"])) {
+        //If the state isn't valid reset the session value
+        unset($_SESSION["oauth2state"]);
+        $error = "Your login state was bad. Please clear your cookies and try again.";
     }else {
-        //Verify the nonce
-        if(!verify_nonce($_POST["nonce"], $_SESSION["nonce"], $_ENV["JWT_SECRET"])) {
-            $error = "Invalid nonce. Please try again.";
-        }else {
-            //Check the username and password
-            $username = $_POST["username"];
-            $password = $_POST["password"];
+        //Get the access token
+        $token = $provider->getAccessToken("authorization_code", [
+            "code" => $_GET["code"]
+        ]);
+    
+        //Store the token for later use
+        $_SESSION["token"] = $token->getToken();
+    
+        try {
+            $user = $provider->getResourceOwner($token);
 
-            $stmt = $database->prepare("SELECT `id`, `password`, `clearance` FROM `users` WHERE `username` = ?");
-            $stmt->bindValue(1, $username, PDO::PARAM_STR);
-            $stmt->execute();
+            //Get the user's data from the database
+            $stmt = $database->prepare("SELECT `clearance` FROM discord_users WHERE `id` = ?");
+            $stmt->execute([$user->getId()]);
 
-            if($stmt->rowCount() != 1) {
-                $error = "Invalid username or password.";
-            }else {
-                $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                //Check the password
-                if(!password_verify($password, $user_data["password"])) {
-                    $error = "Invalid username or password.";
-                }else {
-                    //Store the user ID and clearance in the session
-                    $_SESSION["id"] = $user_data["id"];
-                    $_SESSION["clearance"] = $user_data["clearance"];
-
-                    //Redirect the user to the main page
-                    header("Location: /");
-                    exit;
-                }
+            //Check if the user exists
+            if($stmt->rowCount() == 1) {
+                //Store their clearance level and ID
+                $_SESSION["id"] = $user->getId();
+                $_SESSION["clearance"] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]["clearance"];
             }
+        }catch(Exception $e) {
+            $error = "An exception occurred: " . $e->getMessage();
         }
     }
 }
-
-//Generate a JWT nonce
-$nonce = bin2hex(random_bytes(16));
-$_SESSION["nonce"] = $nonce;
-$jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
 
 ?>
 
@@ -143,20 +150,27 @@ $jwt = generate_nonce($_ENV["JWT_SECRET"], $nonce);
 
         <main>
             <section>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                <?php if(!isset($user)) { ?>
                     <div class="titleContainer">
-                        <h1>Login</h1>
+                        <h1>Welcome</h1>
                         <?php if($error != "") { ?>
-                            <p class="errorMessage"><?php echo $error; ?></p>
+                                <p class="errorMessage"><?php echo $error; ?></p>
                         <?php } ?>
                     </div>
                     <div>
-                        <input type="hidden" name="nonce" value="<?php echo $jwt; ?>">
-                        <input type="text" name="username" placeholder="Username">
-                        <input type="password" name="password" placeholder="Password">
+                        <a href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?login=discord" onclick="" class="fancyButton">Login with Discord</a>
                     </div>
-                    <input type="submit" value="Login">
-                </form>
+                <?php }else { ?>
+                    <div class="titleContainer">
+                        <img src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
+                        <h1>Welcome, <?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?>!</h1>
+                        <?php if(check_authentication()) { ?>
+                            <a href="/" class="fancyButton">Continue to site</a>
+                        <?php }else { ?>
+                            <p>It looks like you don't have access to the site yet. Don't worry, Splash Mountain Legacy will be available to everyone soon!</p>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
             </section>
         </main>
 
