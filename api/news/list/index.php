@@ -5,10 +5,10 @@ require_once __DIR__ . "/../../../admin/scripts/init_admin.php";
 
 $params = array();
 
-$stmt = "SELECT `id`, `title`, `subtitle`, `author`, `publication_date`, `thumbnail` FROM `news_articles` WHERE `publication_date` < CURRENT_TIMESTAMP()";
+$stmt = "SELECT `id`, `title`, `subtitle`, `author`, `publication_timestamp`, `thumbnail`, `content` FROM `news_articles` WHERE `publication_timestamp` < CURRENT_TIMESTAMP()";
 
 if(isset($_GET["show_unpublished"]) && $_GET["show_unpublished"] == "true" && check_authentication()) {
-    $stmt .= " OR `publication_date` > CURRENT_TIMESTAMP()";
+    $stmt .= " OR `publication_timestamp` > CURRENT_TIMESTAMP()";
 }
 
 //Check if there is a query parameter
@@ -17,7 +17,7 @@ if(isset($_GET["query"])) {
     $params["query"] = "%" . $_GET["query"] . "%";
 }
 
-$stmt .= " ORDER BY `publication_date` DESC";
+$stmt .= " ORDER BY `publication_timestamp` DESC";
 
 if(isset($_GET["max"])) {
     $max = intval($_GET["max"]);
@@ -52,8 +52,26 @@ foreach($params as $param=>$param_value) {
 //Execute the statement
 $stmt->execute();
 
+//Format the results
+$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($articles as &$article) {
+    if(isset($article["content"])) {
+        //Get the content of the article
+        $content = json_decode($article["content"]);
+
+        //Find the first string in the item content
+        foreach($content as $item) {
+            if(is_string($item)) {
+                //Store the string on the main article object
+                $article["content_preview"] = $item;
+                break;
+            }
+        }
+    }
+}
+
 //Output the results
 header("Content-Type: application/json");
-echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-
+echo json_encode($articles);
 ?>
