@@ -31,6 +31,8 @@ var filters = [
 			"ZDDD Showboat",
 			"ZDDD Homecoming",
 			"ZDDD Unload",
+			"Photos",
+			"Exit"
 		],
 		max: 1,
 	},

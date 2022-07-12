@@ -351,6 +351,8 @@ function showItemDetails(itemDetails) {
 				"ZDDD Showboat",
 				"ZDDD Homecoming",
 				"ZDDD Unload",
+				"Photos",
+				"Exit"
 			];
 			for (var i = 0; i < values.length; i++) {
 				var option = document.createElement("option");
