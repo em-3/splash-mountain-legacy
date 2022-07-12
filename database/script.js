@@ -15,6 +15,8 @@ var filters = [
 		id: "scene",
 		label: "Scene",
 		values: [
+			"Exterior",
+			"Queue",
 			"Loading Zone",
 			"Lift A",
 			"Briar Patch",
