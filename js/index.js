@@ -18,7 +18,7 @@ fetch("/api/search/?sort_by=date_added&min=1&max=15")
             if (item.type === "image") {
                 var pictureElement = null;
                 var imgElement = document.createElement("img");
-                imgElement.src = "/resources/" + item.id + "/thumbnail";
+                imgElement.src = "/resources/" + item.image + "/thumbnail";
                 imageContainer.appendChild(imgElement);
             } else if (item.type === "video") {
                 var pictureElement = null;

@@ -136,7 +136,7 @@ var databaseList = {
                         var pictureElement = null;
                         var imgElement = document.createElement("img");
                         imgElement.className = "image";
-                        imgElement.src = "/resources/" + currentItemData.id + "/thumbnail";
+                        imgElement.src = "/resources/" + currentItemData.image + "/thumbnail";
                     } else if (currentItemData.type === "video") {
                         var pictureElement = null;
                         var imgElement = document.createElement("img");
