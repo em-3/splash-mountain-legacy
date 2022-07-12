@@ -4,7 +4,7 @@ require_once __DIR__ . "/../../scripts/init.php";
 require_once __DIR__ . "/../../admin/scripts/init_admin.php";
 
 $sort_by = ["name" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
-$available_params = ["type", "park"];
+$available_params = ["type", "park", "scene"];
 $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
