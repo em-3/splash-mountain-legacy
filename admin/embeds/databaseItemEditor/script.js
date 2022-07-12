@@ -914,7 +914,7 @@ async function updateItem() {
 		formData.append("timestamp", date);
 	}
 
-	var response = await fetch("/admin/item/upload.php", {
+	var response = await fetch("/admin/item/modify.php", {
 		method: "POST",
 		body: formData,
 	});
