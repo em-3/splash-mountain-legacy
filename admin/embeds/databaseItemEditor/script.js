@@ -335,6 +335,8 @@ function showItemDetails(itemDetails) {
 			select.id = "scene";
 
 			var values = [
+				"Exterior",
+				"Queue",
 				"Loading Zone",
 				"Lift A",
 				"Briar Patch",
