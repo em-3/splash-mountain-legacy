@@ -329,8 +329,6 @@ var newsList = {
                 for (var i = 0; i < data.length; i++) {
                     var currentItemData = data[i];
 
-                    if (currentItemData.scene) {continue;}
-
                     var resultElement = document.createElement("div");
                     resultElement.className = "result";
                     (function (id) {
@@ -478,7 +476,7 @@ newsList.refreshResults();
 window.onmessage = function(e) {
     if (e.data === "closeEditor") {
         hideItemEditor();
-        // databaseList.refreshResults();
+        databaseList.refreshResults();
     }
 };
 
