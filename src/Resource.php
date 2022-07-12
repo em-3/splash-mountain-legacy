@@ -65,7 +65,7 @@ class Resource {
         if(Resource::validateImage($file)) {
             $this->file = $file;
         }else {
-            throw new \Exception("File provided is not a valid image (" . $file["name"] . "). Allowed types are jpg, png, and gif.");
+            throw new \Exception("File provided is not a valid image (" . $file["name"] . ").");
         }
     }
 
@@ -288,6 +288,11 @@ class Resource {
      * @return bool `true` if the image is valid, false otherwise
      */
     public static final function validateImage($file) {
+        //Check if the file was uploaded correctly
+        if($file["error"] !== 0) {
+            return false;
+        }
+
         //Check if the file is over 10 MB
         if($file["size"] > 10485760) {
             return false;
