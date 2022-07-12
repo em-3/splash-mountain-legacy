@@ -26,14 +26,14 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE ((`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query)";
+        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query";
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {
             $stmt .= " OR (";
 
             //Add each word to the tags query
-            $words = explode(" ", str_replace(",", "", $query));
+            $words = explode(",", $query);
             for($i = 0; $i < count($words); $i++) {
                 if($i > 0) {
                     $stmt .= " AND ";
@@ -46,17 +46,22 @@ if(isset($_GET["query"])) {
             //Close the search query
             $stmt .= ")";
         }
+
+        $stmt .= ")";
     }
 }
 
 //If id only mode is enabled, then ignore all other parameters
 if(!$id_only) {
-
     foreach($available_params as $param) {
+        $first = true;
+
         //Check if the parameter was set
         if(isset($_GET[$param])) {
             //If there is more than one parameter, add an AND
-            if(count($params) > 0) {
+            if(count($params) > 0 && $first) {
+                $stmt .= " AND (";
+            }else if(count($params) > 0) {
                 $stmt .= " AND ";
             }else {
                 $stmt .= " WHERE (";
@@ -74,7 +79,7 @@ if(!$id_only) {
     if($tag_mode) {
         //If there is more than one parameter, add an AND
         if(count($params) > 0) {
-            $stmt .= " AND (";
+            $stmt .= " AND ((";
         }else {
             $stmt .= " WHERE ((";
         }
@@ -97,9 +102,9 @@ if(!$id_only) {
     }
     
     if(count($params) > 0) {
-        $stmt .= ") AND ";
+        $stmt .= " AND ";
     }else {
-        $stmt .= " WHERE ";
+        $stmt .= " WHERE (";
     }
 
     $stmt .= "(`hidden` = 0";
@@ -108,7 +113,7 @@ if(!$id_only) {
         $stmt .= " OR `hidden` = 1";
     }
 
-    $stmt .= ")";
+    $stmt .= "))";
 
     //Sort the results by the specified field
     if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
