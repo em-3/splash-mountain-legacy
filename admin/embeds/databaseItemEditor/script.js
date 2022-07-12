@@ -480,7 +480,7 @@ function showItemDetails(itemDetails) {
 			linkInput.name = "authorLink";
 			linkInput.id = "authorLink";
 			//Get the portion of the author link between square brackets
-			if (mode === "editor" && itemDetails.author) {
+			if (mode === "editor" && itemDetails.author && (itemDetails.author.indexOf("[") >= 0)) {
 				linkInput.value = itemDetails.author.match(/\[(.*)\]/)[0].substr(1, itemDetails.author.match(/\[(.*)\]/)[0].length - 2);
 			}
 			container.appendChild(linkLabel);
