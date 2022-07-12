@@ -53,18 +53,20 @@ if(isset($_GET["query"])) {
 
 //If id only mode is enabled, then ignore all other parameters
 if(!$id_only) {
-    foreach($available_params as $param) {
-        $first = true;
+    $first = true;
 
+    foreach($available_params as $param) {
         //Check if the parameter was set
         if(isset($_GET[$param])) {
             //If there is more than one parameter, add an AND
             if(count($params) > 0 && $first) {
                 $stmt .= " AND (";
+                $first = false;
             }else if(count($params) > 0) {
                 $stmt .= " AND ";
             }else {
                 $stmt .= " WHERE (";
+                $first = false;
             }
 
             //Set the parameter's value
@@ -78,10 +80,14 @@ if(!$id_only) {
     //If the user has specified tags as a search parameter, add the tags to the statement
     if($tag_mode) {
         //If there is more than one parameter, add an AND
-        if(count($params) > 0) {
-            $stmt .= " AND ((";
+        if(count($params) > 0 && $first) {
+            $stmt .= " AND (";
+            $first = false;
+        }else if(count($params) > 0) {
+            $stmt .= " AND ";
         }else {
-            $stmt .= " WHERE ((";
+            $stmt .= " WHERE (";
+            $first = false;
         }
 
         //Add each tag to the statement
@@ -101,7 +107,10 @@ if(!$id_only) {
         $stmt .= ")";
     }
     
-    if(count($params) > 0) {
+    if(count($params) > 0 && $first) {
+        $stmt .= " AND (";
+        $first = false;
+    }else if(count($params) > 0) {
         $stmt .= " AND ";
     }else {
         $stmt .= " WHERE (";
