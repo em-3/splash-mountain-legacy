@@ -11,6 +11,27 @@ var filters = [
 		values: ["image", "video", "audio", "text"],
 		max: 1,
 	},
+	{
+		id: "scene",
+		label: "Scene",
+		values: [
+			"Loading Zone",
+			"Lift A",
+			"Briar Patch",
+			"Lift B",
+			"HDYD Exterior",
+			"HDYD Interior",
+			"EGALP Pre-Bees",
+			"EGALP Bees",
+			"EGALP LP",
+			"Final Lift",
+			"ZDDD Exterior",
+			"ZDDD Showboat",
+			"ZDDD Homecoming",
+			"ZDDD Unload",
+		],
+		max: 1,
+	},
 ];
 
 function showFilterSelect() {
