@@ -182,8 +182,14 @@ class Resource {
     }
 
     protected function generateThumbnail() {
+        $inputPath = $this->resource_directory . $this->getID() . "/main";
+        $outputPath = $this->resource_directory . $this->getID() . "/thumbnail";
+
         //Convert the image into a GD image
-        $image_gd = imagecreatefromstring(file_get_contents($this->resource_directory . $this->getID() . "/main"));
+        $image_gd = imagecreatefromstring(file_get_contents($inputPath));
+
+        //Get the EXIF data
+        $exif = exif_read_data($inputPath);
 
         //Resize the image
         $image_width = imagesx($image_gd);
@@ -209,8 +215,22 @@ class Resource {
             throw new \Exception("Failed to resize image");
         }
 
+        //Rotate the image based on EXIF data
+        if(in_array($exif["Orientation"], [3, 4])) {
+            $thumbnail_gd = imagerotate($thumbnail_gd, 180, 0);
+        }
+        if(in_array($exif["Orientation"], [5, 6])) {
+            $thumbnail_gd = imagerotate($thumbnail_gd, -90, 0);
+        }
+        if(in_array($exif["Orientation"], [7, 8])) {
+            $thumbnail_gd = imagerotate($thumbnail_gd, 90, 0);
+        }
+        if(in_array($exif["Orientation"], [2, 5, 7, 4])) {
+            imageflip($thumbnail_gd, IMG_FLIP_HORIZONTAL);
+        }
+
         //Save the thumbnail
-        if(!imagejpeg($thumbnail_gd, $this->resource_directory . $this->getID() . "/thumbnail")) {
+        if(!imagejpeg($thumbnail_gd, $outputPath)) {
             throw new \Exception("Failed to save thumbnail");
         }
     }
