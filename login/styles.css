@@ -122,4 +122,8 @@ section.welcomeContainer .authLevelWarning {
     background: var(--page-background-color);
     padding: 20pt 0;
   }
+
+  section.welcomeContainer .continueButton {
+    background: var(--content-background-color);
+  }
 }
