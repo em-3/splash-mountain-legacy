@@ -978,5 +978,5 @@ function showErrorScreen() {
 }
 
 function closeEditor() {
-	window.top.postMessage("closeEditor", "*");
+	window.top.postMessage("closeItemEditor", "*");
 }

@@ -337,7 +337,7 @@ var newsList = {
 							resultElement.className = "result";
 							(function (id) {
 								resultElement.onclick = function () {
-									showArticleEditor(id);
+									showExistingArticleEditor(id);
 								};
 							})(currentItemData.id);
 
@@ -480,9 +480,12 @@ databaseList.refreshResults();
 newsList.refreshResults();
 
 window.onmessage = function (e) {
-	if (e.data === "closeEditor") {
+	if (e.data === "closeItemEditor") {
 		hideItemEditor();
 		databaseList.refreshResults();
+	} else if (e.data === "closeArticleEditor") {
+		hideArticleEditor();
+		newsList.refreshResults();
 	}
 };
 
