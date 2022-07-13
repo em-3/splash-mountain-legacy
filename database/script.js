@@ -43,11 +43,20 @@ var filters = [
 ];
 
 function showFilterSelect() {
+	document.querySelector(".searchControls").scrollTo({
+		top: 0,
+		left: 0,
+		behavior: "smooth",
+	});
 	document.querySelector(".controls").classList.add("hidden");
 	document.querySelector(".filterSelect").classList.remove("hidden");
+	setTimeout(function () {
+		document.querySelector(".controls").style.setProperty("display", "none", "important");
+	}, 200);
 }
 
 function hideFilterSelect() {
+	document.querySelector(".controls").style.display = null;
 	document.querySelector(".controls").classList.remove("hidden");
 	document.querySelector(".filterSelect").classList.add("hidden");
 }
