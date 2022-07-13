@@ -225,6 +225,15 @@ main section h1 {
   margin: 0 0 2pt 0;
 }
 
+.result .right .scene {
+  background: var(--secondary-content-background-color);
+  font-size: 11pt;
+  padding: 1pt 5pt;
+  border-radius: 2.5pt;
+  margin: 0 0 2.5pt 0;
+  display: inline-block;
+}
+
 .result .right .name {
   margin: 0;
   display: -webkit-box;

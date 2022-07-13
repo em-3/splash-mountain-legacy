@@ -197,7 +197,7 @@ main {
 .databaseBrowser .resultsContainer {
   display: grid;
   grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
-  grid-auto-rows: 90pt;
+  grid-auto-rows: 100pt;
   gap: 10pt;
   padding: 0 10pt 10pt 10pt;
 }

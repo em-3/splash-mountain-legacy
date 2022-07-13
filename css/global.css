@@ -133,8 +133,17 @@ body {
   overflow: hidden;
 }
 
+.listItem .right .scene {
+  background: var(--secondary-content-background-color);
+  font-size: 11pt;
+  padding: 1pt 2pt;
+  border-radius: 2pt;
+  margin: 0 0 2.5pt 0;
+  display: inline-block;
+}
+
 .listItem .right .name {
-  margin: 0 0 5pt 0;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -146,7 +155,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 5pt;
+  margin-top: 2.5pt;
   white-space: nowrap;
 }
 

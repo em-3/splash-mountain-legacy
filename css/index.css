@@ -149,7 +149,7 @@ section.featured .content .item:first-child {
 
 section.featured .content .item {
   width: 200pt;
-  height: 155pt;
+  height: 170pt;
   background: var(--content-background-color);
   border-radius: 10pt;
   overflow: hidden;
@@ -187,6 +187,15 @@ section.featured .content .item .info {
   padding: 10pt;
 }
 
+section.featured .content .item .info .scene {
+  background: var(--secondary-content-background-color);
+  font-size: 11pt;
+  padding: 1pt 2pt;
+  border-radius: 2pt;
+  margin: 0 0 2.5pt 0;
+  display: inline-block;
+}
+
 section.featured .content .item .info .title {
   margin: 0;
   display: -webkit-box;
@@ -210,7 +219,7 @@ section.featured .content .item .info .subtitle {
 }
 
 section.featured .content .item .info .infoContainer {
-  margin: 3.5pt 0 0 0;
+  margin: 1.5pt 0 0 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;

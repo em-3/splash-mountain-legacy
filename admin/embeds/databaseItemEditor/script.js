@@ -361,12 +361,12 @@ function showItemDetails(itemDetails) {
 			for (var i = 0; i < values.length; i++) {
 				var option = document.createElement("option");
 				option.textContent = values[i];
-				option.value = values[i].toLowerCase();
+				option.value = values[i];
 				select.appendChild(option);
 			}
 
 			if (mode === "editor") {
-				select.value = itemDetails.scene.toLowerCase();
+				select.value = itemDetails.scene;
 			}
 
 			container.appendChild(label);
@@ -374,7 +374,7 @@ function showItemDetails(itemDetails) {
 			return container;
 		},
 		valueGetter: function () {
-			var value = document.querySelector("#scene").value.toUpperCase();
+			var value = document.querySelector("#scene").value;
 			if (value) {
 				return {
 					include: true,

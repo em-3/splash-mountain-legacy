@@ -241,6 +241,10 @@ var databaseBrowser = {
 							var rightSideContainer = document.createElement("div");
 							rightSideContainer.className = "right";
 
+							var sceneElement = document.createElement("p");
+							sceneElement.className = "scene";
+							sceneElement.textContent = currentItemData.scene;
+
 							var nameElement = document.createElement("h3");
 							nameElement.className = "name";
 							nameElement.textContent = currentItemData.name;
@@ -265,6 +269,7 @@ var databaseBrowser = {
 								infoContainerElement.appendChild(authorElement);
 							}
 
+							rightSideContainer.appendChild(sceneElement);
 							rightSideContainer.appendChild(nameElement);
 							rightSideContainer.appendChild(infoContainerElement);
 
