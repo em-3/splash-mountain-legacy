@@ -96,7 +96,7 @@ fetch("/api/news/list/?min=1&max=15")
 				currentItemElement.className = "item";
 				(function (id) {
 					currentItemElement.onclick = function () {
-						showItemDetails(id);
+						window.location.href = "/article/" + id;
 					};
 				})(item.id);
 
@@ -122,7 +122,14 @@ fetch("/api/news/list/?min=1&max=15")
 				infoContainer.className = "infoContainer";
 
 				var publicationDateElement = document.createElement("p");
-				publicationDateElement.textContent = item.publication_date;
+				var publicationDateObject = new Date(0);
+				publicationDateObject.setUTCSeconds(Number(item.publication_timestamp));
+				publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
+					weekday: "short",
+					day: "numeric",
+					month: "long",
+					year: "numeric",
+				});
 				infoContainer.appendChild(publicationDateElement);
 				var authorElement = document.createElement("p");
 				authorElement.textContent = item.author;
