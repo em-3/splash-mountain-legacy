@@ -6,167 +6,10 @@ main {
     overflow: auto;
 }
 
-.searchControls {
-    margin: 10pt;
-    height: 35pt;
-    background: var(--content-background-color);
-    border-radius: 10pt;
-    position: relative;
-    overflow: scroll;
-}
-
-.searchControls::-webkit-scrollbar {
-    display: none;
-}
-
-.searchControls {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.controls,
-.filterSelect {
-    height: 20pt;
-    display: flex;
-    align-content: center;
-    justify-content: flex-start;
-    position: absolute;
-    top: 50%;
-    left: 7pt;
-    margin-right: 7pt;
-    transform: translateY(-50%);
-    transition: opacity 0.2s ease;
-}
-
-.controls.hidden,
-.filterSelect.hidden {
-    display: flex !important;
-    opacity: 0;
-    pointer-events: none;
-    right: 0;
-}
-
-.searchField {
-    margin-right: 10pt;
-}
-
-.searchField input {
-    border: none;
-    height: 20pt;
-    background: var(--page-background-color);
-    color: var(--primary-text-color);
-    margin: 0;
-    padding: 5pt;
-    width: 125pt;
-    font: inherit;
-    font-size: 10pt;
-    border-radius: 5pt;
-    transition: background 0.2s ease;
-}
-
-.searchField input:focus {
-    outline: none;
-    background: var(--content-background-color);
-}
-
-.filterBar {
-    display: flex;
-}
-
-.filterBar .filters {
-    display: flex;
-}
-
-.filterBar .filters .filter {
-    background: var(--page-background-color);
-    border-radius: 5pt;
-    height: 20pt;
-    padding: 1pt 3pt 1pt 8pt;
-    margin-right: 10pt;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filterBar .filters .filter select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    background: var(--page-background-color);
-    border: none;
-    border-radius: 0;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 10pt;
-    padding: 0;
-    height: 100%;
-    margin-left: 5pt;
-    color: var(--primary-text-color);
-}
-
-.filterBar .filters .filter select:focus {
-    outline: none;
-}
-
-.filterBar .filters .filter .removeButton {
-    background: var(--content-background-color);
-    border: none;
-    border-radius: 3pt;
-    font-weight: bold;
-    height: 15pt;
-    padding: 2pt;
-    margin-left: 5pt;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filterBar .addFilter {
-    background: var(--page-background-color);
-    border-radius: 5pt;
-    padding: 0 5pt;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filterSelect .closeButton {
-    background: var(--page-background-color);
-    height: 20pt;
-    border-radius: 5pt;
-    padding: 0 5pt;
-    margin-right: 10pt;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filterSelect .availableFilters {
-    display: flex;
-}
-
-.filterSelect .availableFilters .filter {
-    background: var(--page-background-color);
-    height: 20pt;
-    padding: 0 8pt;
-    border-radius: 5pt;
-    margin-right: 10pt;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filterSelect .availableFilters .filter.disabled {
-    pointer-events: none;
-    opacity: 0.5;
-    cursor: not-allowed;
+main section > h1 {
+    text-align: center;
+    margin: 10pt 0 0 0;
+    font-size: 30pt;
 }
 
 .newsList .loadingContainer,
@@ -196,10 +39,12 @@ main {
 
 .newsList .resultsContainer {
     display: grid;
-    grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+    grid-template-columns: repeat(1, 100%);
     grid-auto-rows: 100pt;
     gap: 10pt;
-    padding: 0 10pt 10pt 10pt;
+    padding: 10pt;
+    margin: 0 auto;
+    max-width: 500pt;
 }
 
 .newsList .resultsContainer .loadMoreButton {
@@ -211,14 +56,80 @@ main {
     font-weight: bold;
 }
 
+.article {
+    background: var(--content-background-color);
+    padding: 5pt;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.article img {
+    width: 70pt;
+    margin: 10pt;
+    border-radius: 5pt;
+}
+
+.article .right {
+    width: 100%;
+    overflow: hidden;
+}
+
+.article .right .title {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.article .right .subtitle {
+    margin: 0 0 1.5pt 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.article .right .contentPreview {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.article .right .authorContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 3pt;
+    white-space: nowrap;
+}
+
+.article .right .authorImage {
+    width: 20pt;
+    height: 20pt;
+    margin: 0 5pt 0 0;
+}
+
+.article .right .authorName {
+    margin: 0;
+}
+
 @media only screen and (max-width: 960px) {
     .newsList .resultsContainer {
-        grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
+        /* grid-template-columns: repeat(2, calc((100% - 10pt) / 2)); */
     }
 }
 
 @media only screen and (max-width: 670px) {
-    .newsList .resultsContainer {
-        grid-template-columns: 100%;
+    .article img {
+        width: 50pt;
+        margin: 10pt 10pt 10pt 5pt;
     }
 }

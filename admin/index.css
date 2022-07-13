@@ -240,10 +240,20 @@ main section h1 {
   display: inline-block;
 }
 
+.result .right .title,
 .result .right .name {
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result .right .subtitle {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -341,7 +341,6 @@ var newsList = {
 								};
 							})(currentItemData.id);
 
-							var pictureElement = null;
 							var imgElement = document.createElement("img");
 							imgElement.className = "image";
 							imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail";
@@ -356,20 +355,26 @@ var newsList = {
 								rightSideContainer.appendChild(hiddenElement);
 							}
 
-							var nameElement = document.createElement("h3");
-							nameElement.className = "title";
-							nameElement.textContent = currentItemData.title;
+							var titleElement = document.createElement("h3");
+							titleElement.className = "title";
+							titleElement.textContent = currentItemData.title;
 
-							var descriptionElement = document.createElement("p");
-							descriptionElement.className = "subtitle";
-							descriptionElement.textContent = currentItemData.subtitle;
+							var subtitleElement = document.createElement("p");
+							subtitleElement.className = "subtitle";
+							subtitleElement.textContent = currentItemData.subtitle;
 
 							var infoContainerElement = document.createElement("div");
 							infoContainerElement.className = "infoContainer";
 
 							var publicationDateElement = document.createElement("p");
 							publicationDateElement.className = "publicationDate";
-							publicationDateElement.textContent = currentItemData.publicationDate;
+							var publicationDateObject = new Date(0);
+							publicationDateObject.setUTCSeconds(Number(currentItemData.publication_timestamp));
+							publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
+								day: "numeric",
+								month: "long",
+								year: "numeric",
+							});
 							infoContainerElement.appendChild(publicationDateElement);
 
 							var authorElement = document.createElement("p");
@@ -377,8 +382,8 @@ var newsList = {
 							authorElement.textContent = currentItemData.author;
 							infoContainerElement.appendChild(authorElement);
 
-							rightSideContainer.appendChild(nameElement);
-							rightSideContainer.appendChild(descriptionElement);
+							rightSideContainer.appendChild(titleElement);
+							rightSideContainer.appendChild(subtitleElement);
 							rightSideContainer.appendChild(infoContainerElement);
 
 							resultElement.appendChild(imgElement);

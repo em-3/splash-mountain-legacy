@@ -10,7 +10,7 @@ var properties = [];
 
 //Fetch the article details and content
 if (mode === "editor" && id) {
-	fetch("/api/news/article/?id=" + id)
+	fetch("/api/news/article/" + id)
 		.then((response) => response.json())
 		.then(showArticleDetails, showErrorScreen);
 } else if (mode === "newArticle") {
@@ -365,8 +365,7 @@ function showArticleDetails(articleDetails) {
 		thumbnailElement.classList.remove("hidden");
 
 		document.querySelector(".articleID").textContent = id;
-		document.querySelector(".articleType").textContent = type;
-		document.querySelector(".articleName").textContent = articleDetails.name;
+		document.querySelector(".articleName").textContent = articleDetails.title;
 
 		document.querySelector(".actions.existingArticle").classList.remove("hidden");
 	} else {
@@ -381,7 +380,7 @@ function showArticleDetails(articleDetails) {
 		for (var i = 0; i < content.length; i++) {
 			var currentField = content[i];
 			if (typeof currentField === "string") {
-				addContentField("text", currentField);
+				addContentField(contentFieldConstructors.text, currentField);
 			}
 		}
 	}

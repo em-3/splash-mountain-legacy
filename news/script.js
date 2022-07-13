@@ -7,8 +7,8 @@ var newsList = {
 	refreshResults: function (preservePreviousResults) {
 		if (!preservePreviousResults) {
 			//Clear the current results from .resultsContainer
-			while (document.querySelector(".resultsContainer").firstChild) {
-				document.querySelector(".resultsContainer").removeChild(document.querySelector(".resultsContainer").firstChild);
+			while (document.querySelector(".newsList .resultsContainer").firstChild) {
+				document.querySelector(".newsList .resultsContainer").removeChild(document.querySelector(".newsList .resultsContainer").firstChild);
 			}
 		}
 
@@ -21,7 +21,7 @@ var newsList = {
 						var noResults = document.createElement("p");
 						noResults.className = "noResults";
 						noResults.textContent = "No articles found.";
-						document.querySelector(".resultsContainer").appendChild(noResults);
+						document.querySelector(".newsList .resultsContainer").appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
 						var loadMoreButton = document.querySelector(".loadMoreButton");
 						loadMoreButton.parentElement.removeChild(loadMoreButton);
@@ -81,7 +81,7 @@ var newsList = {
 
 							resultElement.appendChild(imgElement);
 							resultElement.appendChild(rightSideContainer);
-							document.querySelector(".resultsContainer").appendChild(resultElement);
+							document.querySelector(".newsList .resultsContainer").appendChild(resultElement);
 						}
 
 						if (data.length === this.searchRange.max - this.searchRange.min) {
@@ -91,23 +91,23 @@ var newsList = {
 							loadMoreButton.addEventListener("click", function () {
 								newsList.loadMoreResults();
 							});
-							document.querySelector(".resultsContainer").appendChild(loadMoreButton);
+							document.querySelector(".newsList .resultsContainer").appendChild(loadMoreButton);
 						}
 					}
 
 					//Hide the loading screen and show the results container
-					document.querySelector(".loadingContainer").classList.add("hidden");
-					document.querySelector(".resultsContainer").classList.remove("hidden");
-					document.querySelector(".errorMessageContainer").classList.add("hidden");
+					document.querySelector(".newsList .loadingContainer").classList.add("hidden");
+					document.querySelector(".newsList .resultsContainer").classList.remove("hidden");
+					document.querySelector(".newsList .errorMessageContainer").classList.add("hidden");
 				},
 				(error) => {
-					document.querySelector(".errorMessageContainer .title").textContent = "Something Went Wrong";
-					document.querySelector(".errorMessageContainer .subtitle").textContent = "Failed to load news articles.";
+					document.querySelector(".newsList .errorMessageContainer .title").textContent = "Something Went Wrong";
+					document.querySelector(".newsList .errorMessageContainer .subtitle").textContent = "Failed to load news articles.";
 
 					//Hide the loading screen and show the error message container
-					document.querySelector(".loadingContainer").classList.add("hidden");
-					document.querySelector(".resultsContainer").classList.add("hidden");
-					document.querySelector(".errorMessageContainer").classList.remove("hidden");
+					document.querySelector(".newsList .loadingContainer").classList.add("hidden");
+					document.querySelector(".newsList .resultsContainer").classList.add("hidden");
+					document.querySelector(".newsList .errorMessageContainer").classList.remove("hidden");
 				}
 			);
 	},

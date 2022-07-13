@@ -131,9 +131,9 @@ fetch("/api/news/list/?min=1&max=15")
 					year: "numeric",
 				});
 				infoContainer.appendChild(publicationDateElement);
-				var authorElement = document.createElement("p");
-				authorElement.textContent = item.author;
-				infoContainer.appendChild(authorElement);
+				var contentPreviewElement = document.createElement("p");
+				contentPreviewElement.textContent = item.content_preview;
+				infoContainer.appendChild(contentPreviewElement);
 
 				infoElement.appendChild(titleElement);
 				infoElement.appendChild(subtitleElement);
