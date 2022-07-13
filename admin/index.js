@@ -89,9 +89,8 @@ var databaseList = {
 			while (document.querySelector(".list.database .resultsContainer").firstChild) {
 				document.querySelector(".list.database .resultsContainer").removeChild(document.querySelector(".list.database .resultsContainer").firstChild);
 			}
-			//Reset min and max
+			//Reset min
 			databaseList.searchRange.min = 1;
-			databaseList.searchRange.max = 21;
 		}
 
 		//Fetch new results
