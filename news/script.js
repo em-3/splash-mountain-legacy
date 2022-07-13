@@ -66,7 +66,7 @@ var newsList = {
 
 							var authorImageElement = document.createElement("img");
 							authorImageElement.className = "authorImage";
-							authorImageElement.src = "/images/authors/" + currentArticleData.author.toLowerCase().replace(" ", "") + ".png";
+							authorImageElement.src = "/images/authors/" + currentArticleData.author.toLowerCase().replaceAll(/[ _.]/g, "") + ".jpg";
 							authorContainerElement.appendChild(authorImageElement);
 
 							var authorNameElement = document.createElement("p");
