@@ -85,6 +85,9 @@ var databaseList = {
 		}
 
 		if (!preservePreviousResults) {
+			//Detect scroll position
+			var scrollPositionY = window.scrollY;
+
 			//Clear the current results
 			while (document.querySelector(".list.database .resultsContainer").firstChild) {
 				document.querySelector(".list.database .resultsContainer").removeChild(document.querySelector(".list.database .resultsContainer").firstChild);
@@ -219,6 +222,11 @@ var databaseList = {
 					document.querySelector(".list.database .loadingContainer").classList.add("hidden");
 					document.querySelector(".list.database .resultsContainer").classList.remove("hidden");
 					document.querySelector(".list.database .errorMessageContainer").classList.add("hidden");
+
+					//Scroll back to where the user was
+					if (!preservePreviousResults) {
+						window.scrollTo(0, scrollPositionY);
+					}
 				},
 				(error) => {
 					document.querySelector(".list.database .errorMessageContainer .title").textContent = "Something Went Wrong";
