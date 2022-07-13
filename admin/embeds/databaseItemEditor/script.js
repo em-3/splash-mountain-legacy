@@ -338,6 +338,7 @@ function showItemDetails(itemDetails) {
 				"In the Park",
 				"Critter Country",
 				"Frontierland",
+				"Briar Patch Store",
 				"Attraction",
 				"Exterior",
 				"Queue",
