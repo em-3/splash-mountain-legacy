@@ -15,6 +15,10 @@ var filters = [
 		id: "scene",
 		label: "Scene",
 		values: [
+			"In the Park",
+			"Critter Country",
+			"Frontierland",
+			"Attraction",
 			"Exterior",
 			"Queue",
 			"Loading Zone",
@@ -32,7 +36,7 @@ var filters = [
 			"ZDDD Homecoming",
 			"ZDDD Unload",
 			"Photos",
-			"Exit"
+			"Exit",
 		],
 		max: 1,
 	},
