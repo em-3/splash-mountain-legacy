@@ -331,6 +331,14 @@ function share() {
 	}
 }
 
+function displayItemID() {
+	if (localStorage.getItem("adminAccess") == "true") {
+		var parkElement = document.querySelector(".park");
+		parkElement.textContent = loadedItemDetails.id;
+		parkElement.onclick = null;
+	}
+}
+
 var audioPlayer = {
 	player: undefined,
 	refreshInterval: undefined,
