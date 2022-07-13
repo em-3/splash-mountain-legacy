@@ -110,6 +110,7 @@ if(isset($_GET["code"])) {
                 <div class="links">
                     <a href="/">Home</a>
                     <a href="/database">Database</a>
+                    <a href="/news">News</a>
                     <a href="/about">About</a>
                     <a class="admin current" href="/admin">Admin</a>
                     <button class="search" onclick="searchBar.onfocus();">

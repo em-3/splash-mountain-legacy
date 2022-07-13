@@ -1,4 +1,4 @@
-main div.databaseBrowser {
+main section.databaseBrowser {
   min-height: calc(100vh - 55pt);
 }
 

@@ -7,7 +7,7 @@ require_once __DIR__ . "/../site_lock.php";
 <head>
 
     <meta charset="utf-8">
-    <title>Loading - Splash Mountain Legacy</title>
+    <title>News - Splash Mountain Legacy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@ require_once __DIR__ . "/../site_lock.php";
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
     <meta name="keywords"
@@ -54,7 +54,7 @@ require_once __DIR__ . "/../site_lock.php";
             <div class="links">
                 <a href="/">Home</a>
                 <a href="/database">Database</a>
-                <a href="/news">News</a>
+                <a class="current" href="/news">News</a>
                 <a href="/about">About</a>
                 <a class="admin hidden" href="/admin">Admin</a>
                 <button class="search" onclick="searchBar.onfocus();">
@@ -95,7 +95,19 @@ require_once __DIR__ . "/../site_lock.php";
     </div>
 
     <main>
-        
+        <div class="loadingContainer">
+            <div class="loadingAnimationEllipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="resultsContainer hidden"></div>
+        <div class="errorMessageContainer hidden">
+            <h2 class="title"></h2>
+            <p class="subtitle"></p>
+        </div>
     </main>
 
     <footer>
@@ -142,7 +154,7 @@ require_once __DIR__ . "/../site_lock.php";
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/search.js"></script>
-    <script src="../script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 
