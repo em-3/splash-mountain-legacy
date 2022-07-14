@@ -95,7 +95,32 @@ require_once __DIR__ . "/../site_lock.php";
     </div>
 
     <main>
-        
+        <section class="articleViewer">
+            <div class="loadingContainer">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="articleDisplay hidden">
+                <section class="articleHeader">
+                    <img class="thumbnail">
+                    <h1 class="title"></h1>
+                    <h3 class="subtitle"></h3>
+                    <div class="authorContainer">
+                        <img class="authorImage">
+                        <p class="authorName"></p>
+                    </div>
+                </section>
+                <section class="articleContent"></section>
+            </div>
+            <div class="errorMessageContainer hidden">
+                <h2 class="title"></h2>
+                <p class="subtitle"></p>
+            </div>
+        </section>
     </main>
 
     <footer>
