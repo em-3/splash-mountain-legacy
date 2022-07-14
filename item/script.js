@@ -400,6 +400,7 @@ function onYouTubeIframeAPIReady() {
 		videoId: loadedItemDetails.video_id,
 		playerVars: {
 			playsinline: 1,
+			vq: "tiny"
 		},
 		events: {
 			onReady: onPlayerReady,
