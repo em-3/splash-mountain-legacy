@@ -122,13 +122,41 @@ if(!$id_only) {
         $stmt .= " OR `hidden` = 1";
     }
 
-    $stmt .= "))";
+    $stmt .= ")) ORDER BY ";
 
     //Sort the results by the specified field
-    if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
-        $stmt .= " ORDER BY `" . $_GET["sort_by"] . "` " . $sort_by[$_GET["sort_by"]];
+    if(isset($_GET["sort_by"]) && $_GET["sort_by"] == "scene") {
+        $stmt .= " " .  <<<EOT
+        CASE `scene`
+        WHEN "In the Park" THEN 1
+        WHEN "Critter Country" THEN 2
+        WHEN "Frontierland" THEN 3
+        WHEN "Briar Patch Store" THEN 4
+        WHEN "Attraction" THEN 5
+        WHEN "Exterior" THEN 6
+        WHEN "Queue" THEN 7
+        WHEN "Loading Zone" THEN 8
+        WHEN "Lift A" THEN 9
+        WHEN "Briar Patch" THEN 10
+        WHEN "Lift B" THEN 11
+        WHEN "HDYD Exterior" THEN 12
+        WHEN "HDYD Interior" THEN 13
+        WHEN "EGALP Pre-Bees" THEN 14
+        WHEN "EGALP Bees" THEN 15
+        WHEN "EGALP LP" THEN 16
+        WHEN "Final Lift" THEN 17
+        WHEN "ZDDD Exterior" THEN 18
+        WHEN "ZDDD Showboat" THEN 19
+        WHEN "ZDDD Homecoming" THEN 20
+        WHEN "ZDDD Unload" THEN 21
+        WHEN "Photos" THEN 22
+        WHEN "Exit" THEN 23
+        END
+        EOT;
+    }else if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
+        $stmt .= "`" . $_GET["sort_by"] . "` " . $sort_by[$_GET["sort_by"]];
     }else {
-        $stmt .= " ORDER BY `name` ASC";
+        $stmt .= "`name` ASC";
     }
 
     if(isset($_GET["max"])) {
