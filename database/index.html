@@ -106,6 +106,15 @@ require_once __DIR__ . "/../site_lock.php";
                         <div class="filters"></div>
                         <div class="addFilter" onclick="showFilterSelect()">+</div>
                     </div>
+                    <div class="sortByContainer">
+                        <p>Sort By:</p>
+                        <select name="sortBy" class="sortBy" id="sortBy" onchange="databaseBrowser.refreshResults()">
+                            <option value="name" selected>Name</option>
+                            <option value="scene">Scene</option>
+                            <option value="newest_first">Date Added (Newest First)</option>
+                            <option value="oldest_first">Date Added (Oldest First)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="filterSelect hidden">

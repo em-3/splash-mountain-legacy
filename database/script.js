@@ -177,6 +177,11 @@ var databaseBrowser = {
 			}
 		}
 
+		var sortByElement = document.querySelector("#sortBy");
+		var sortByValue = sortByElement.options[sortByElement.selectedIndex].value;
+		PHPParams += character + "sort_by=" + sortByValue;
+		character = "&";
+
 		if (!preservePreviousResults) {
 			databaseBrowser.searchRange.min = 1;
 			databaseBrowser.searchRange.max = 21;
