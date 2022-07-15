@@ -177,7 +177,14 @@ var databaseBrowser = {
 			}
 		}
 
+		var sortByElement = document.querySelector("#sortBy");
+		var sortByValue = sortByElement.options[sortByElement.selectedIndex].value;
+		PHPParams += character + "sort_by=" + sortByValue;
+		character = "&";
+
 		if (!preservePreviousResults) {
+			databaseBrowser.searchRange.min = 1;
+			databaseBrowser.searchRange.max = 21;
 			//Clear the current results from .resultsContainer
 			while (document.querySelector(".databaseBrowser .resultsContainer").firstChild) {
 				document.querySelector(".databaseBrowser .resultsContainer").removeChild(document.querySelector(".databaseBrowser .resultsContainer").firstChild);
@@ -185,7 +192,7 @@ var databaseBrowser = {
 		}
 
 		//Fetch new results
-		fetch("/api/search/" + PHPParams + character + "min=" + this.searchRange.min + "&max=" + this.searchRange.max)
+		fetch("/api/search/" + PHPParams + character + "min=" + databaseBrowser.searchRange.min + "&max=" + databaseBrowser.searchRange.max)
 			.then((response) => response.json())
 			.then(
 				(data) => {

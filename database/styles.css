@@ -32,10 +32,14 @@ main {
   justify-content: flex-start;
   position: absolute;
   top: 50%;
-  left: 7pt;
-  margin-right: 7pt;
+  left: 7.5pt;
+  margin-right: 7.5pt;
   transform: translateY(-50%);
   transition: opacity 0.2s ease;
+}
+
+.controls {
+  min-width: calc(100% - 15pt);
 }
 
 .controls.hidden,
@@ -71,6 +75,7 @@ main {
 
 .filterBar {
   display: flex;
+  margin-right: 10pt;
 }
 
 .filterBar .filters {
@@ -100,7 +105,10 @@ main {
   font-weight: bold;
   font-size: 10pt;
   padding: 0;
+  width: 40pt;
   height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-left: 5pt;
   color: var(--primary-text-color);
 }
@@ -132,6 +140,40 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.sortByContainer {
+  width: 125pt;
+  background: var(--page-background-color);
+  border-radius: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 5pt;
+  margin: 0 7.5pt 0 auto;
+}
+
+.sortByContainer p {
+  margin: 0 2pt 0 0;
+}
+
+.sortByContainer select {
+  appearance: none;
+  width: 65pt;
+  font: inherit;
+  font-weight: bold;
+  border: none;
+  color: var(--primary-text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sortByContainer select:focus {
+  outline: none;
 }
 
 .filterSelect .closeButton {

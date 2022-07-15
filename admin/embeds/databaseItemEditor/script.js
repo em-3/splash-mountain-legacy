@@ -944,6 +944,10 @@ async function updateItem() {
 }
 
 async function deleteItem() {
+	if (!confirm("Are you sure you'd like to delete this item?")) {
+		return;
+	}
+
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
 

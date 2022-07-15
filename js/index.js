@@ -1,5 +1,5 @@
 //Populate the database additions container with the newest items
-fetch("/api/search/?sort_by=date_added&min=1&max=15")
+fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 	.then((response) => response.json())
 	.then(
 		(data) => {
