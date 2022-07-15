@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../../scripts/init.php";
 require_once __DIR__ . "/../../admin/scripts/init_admin.php";
 
-$sort_by = ["name" => "ASC", "timestamp" => "DESC", "date_added" => "DESC"];
+$sort_by = ["name" => "ASC", "timestamp" => "DESC", "newest_first" => "DESC", "oldest_first" => "ASC"];
 $available_params = ["type", "park", "scene"];
 $params = array();
 $id_only = false;
@@ -153,6 +153,8 @@ if(!$id_only) {
         WHEN "Exit" THEN 23
         END
         EOT;
+    }else if(isset($_GET["sort_by"]) && (($_GET["sort_by"] == "newest_first") || ($_GET["sort_by"] == "oldest_first"))) {
+        $stmt .= "`date_added` " . $sort_by[$_GET["sort_by"]];
     }else if(isset($_GET["sort_by"]) && array_key_exists($_GET["sort_by"], $sort_by)) {
         $stmt .= "`" . $_GET["sort_by"] . "` " . $sort_by[$_GET["sort_by"]];
     }else {
