@@ -27,7 +27,7 @@ header.hidden {
 
 .shareButton {
   font-weight: bold;
-  background: white;
+  background: var(--page-background-color);
   padding: 2pt 5pt;
   border-radius: 5pt;
   cursor: pointer;
