@@ -1,3 +1,14 @@
+<?php
+
+require_once __DIR__ . "/../../scripts/init_admin.php";
+
+//Redirect the user if they're not logged in
+if(!check_authentication() || !check_clearance(0)) {
+    header("Location: /login/index.php");
+    exit;
+}
+
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -46,41 +57,35 @@
             <h1>An unidentified error has occured.</h1>
         </section>
         <section class="editor hidden">
-            <div class="articleInfo">
+            <div class="itemInfo">
                 <div class="thumbnail">
                     <img src="" class="hidden">
                     <iframe src="" class="hidden" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="textContainer">
-                    <h1 class="articleName"></h1>
-                    <p>Article ID: <span class="articleID" style="font-weight: bold;"></span></p>
+                    <h3 class="itemType"></h3>
+                    <h1 class="itemName"></h1>
+                    <p>Item ID: <span class="itemID" style="font-weight: bold;"></span></p>
                 </div>
             </div>
-            <div class="articleEditor">
+            <div class="itemEditor">
                 <div class="properties"></div>
-                <div class="content">
-                    <h3>Article Content</h3>
-                    <div class="fields"></div>
-                    <div class="addSection">
-                        <p class="icon">+ Add:</p>
-                    </div>
-                </div>
                 <h2 class="errorMessage hidden"></h2>
-                <div class="actions existingArticle hidden">
+                <div class="actions existingItem hidden">
                     <div class="passive">
                         <button class="cancel" onclick="closeEditor()">Cancel Changes</button>
-                        <button class="save" onclick="updateArticle()">Update Article</button>
+                        <button class="save" onclick="updateItem()">Update Item</button>
                     </div>
                     <div class="danger">
-                        <button class="delete" onclick="deleteArticle()">Delete Article</button>
+                        <button class="delete" onclick="deleteItem()">Delete Item</button>
                     </div>
                 </div>
-                <div class="actions newArticle hidden">
+                <div class="actions newItem hidden">
                     <div class="danger">
                         <button class="cancel" onclick="closeEditor()">Cancel</button>
                     </div>
                     <div class="passive">
-                        <button class="save" onclick="uploadArticle()">Upload Article</button>
+                        <button class="save" onclick="uploadItem()">Upload Item</button>
                     </div>
                 </div>
             </div>
@@ -108,6 +113,7 @@
     </main>
 
     <script src="/js/global.js"></script>
+    <script src="/admin/EXIF.js"></script>
     <script src="script.js"></script>
 
 </body>
