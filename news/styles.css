@@ -73,7 +73,12 @@ main section > h1 {
 
 .article .right {
     width: 100%;
+    height: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .article .right .title {
@@ -95,7 +100,7 @@ main section > h1 {
 }
 
 .article .right .contentPreview {
-    margin: 0;
+    margin: 0 0 auto 0;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
