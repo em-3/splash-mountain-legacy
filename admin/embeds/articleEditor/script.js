@@ -201,7 +201,7 @@ function showArticleDetails(articleDetails) {
 			select.name = "author";
 			select.id = "author";
 
-			var options = ["Splash Mountain Legacy Staff", "91J Loves Disney", "EM_3", "MickeyWaffleCo."];
+			var options = ["Splash Mountain Legacy Staff", "91J", "EM_3", "MickeyWaffleCo."];
 			for (var i = 0; i < options.length; i++) {
 				var currentOption = options[i];
 				var optionElement = document.createElement("option");
