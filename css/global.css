@@ -178,43 +178,76 @@ footer {
   background: var(--color-3);
   color: white;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   text-align: center;
   gap: 5pt;
+  padding: 15pt;
+}
+
+footer > * {
+  width: calc(50% - 10pt);
 }
 
 @media only screen and (max-width: 770px) {
   footer {
     flex-direction: column;
-    padding: 0 0 10pt 0;
     gap: 0;
   }
-
+  footer > * {
+    width: 100%;
+    text-align: center !important;
+  }
+  footer .logoContainer {
+    flex-direction: column;
+    gap: 5pt;
+  }
   footer .links {
-    margin-top: 5pt;
+    margin-bottom: 10pt;
+  }
+  footer .credits a {
+    margin: 0 5pt;
   }
 }
 
-footer .logo img {
+footer .left {
+  text-align: left;
+}
+
+footer .right {
+  height: 100%;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer .logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15pt;
+}
+
+footer .logo {
   height: 50pt;
   width: auto;
-  margin-top: 5pt;
+  margin: 0;
   cursor: pointer;
 }
 
 footer .links {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 5pt;
 }
 
 footer .links .link {
   background: var(--page-background-color);
-  width: 35pt;
-  height: 35pt;
+  width: 30pt;
+  height: 30pt;
   border-radius: 5pt;
   display: flex;
   align-items: center;
@@ -264,5 +297,5 @@ footer .credits h3 {
 footer .credits a {
   color: white;
   text-decoration: none;
-  margin: 0 5pt;
+  margin: 0 0 0 5pt;
 }
