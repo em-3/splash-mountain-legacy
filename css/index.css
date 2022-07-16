@@ -167,6 +167,7 @@ section.featured.news .content .item {
 }
 
 section.featured.news .content .item .imageContainer {
+  width: 180pt;
   margin: 10pt 5pt 10pt 10pt;
   position: relative;
 }
