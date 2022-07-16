@@ -330,12 +330,12 @@ function showArticleDetails(articleDetails) {
 				if (date && time) {
 					return {
 						include: true,
-						value: new Date(date + " " + time).toUTCString(),
+						value: Math.floor(new Date(date + " " + time).getTime() / 1000),
 					};
 				} else if (date) {
 					return {
 						include: true,
-						value: new Date(date).toUTCString(),
+						value: Math.floor(new Date(date).getTime() / 1000),
 					};
 				} else {
 					return {
@@ -346,7 +346,7 @@ function showArticleDetails(articleDetails) {
 			} else {
 				return {
 					include: true,
-					value: new Date().toUTCString(),
+					value: Math.floor(new Date().getTime() / 1000),
 				};
 			}
 		},
