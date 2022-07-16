@@ -110,18 +110,8 @@ fetch("/api/news/list/?min=1&max=15")
 				var infoElement = document.createElement("div");
 				infoElement.className = "info";
 
-				var titleElement = document.createElement("h3");
-				titleElement.className = "title";
-				titleElement.textContent = item.title;
-
-				var subtitleElement = document.createElement("h4");
-				subtitleElement.className = "subtitle";
-				subtitleElement.textContent = item.subtitle;
-
-				var infoContainer = document.createElement("div");
-				infoContainer.className = "infoContainer";
-
 				var publicationDateElement = document.createElement("p");
+				publicationDateElement.className = "publicationDate";
 				var publicationDateObject = new Date(0);
 				publicationDateObject.setUTCSeconds(Number(item.publication_timestamp));
 				publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
@@ -130,14 +120,23 @@ fetch("/api/news/list/?min=1&max=15")
 					month: "long",
 					year: "numeric",
 				});
-				infoContainer.appendChild(publicationDateElement);
-				var contentPreviewElement = document.createElement("p");
-				contentPreviewElement.textContent = item.content_preview;
-				infoContainer.appendChild(contentPreviewElement);
 
+				var titleElement = document.createElement("h3");
+				titleElement.className = "title";
+				titleElement.textContent = item.title;
+
+				var subtitleElement = document.createElement("h4");
+				subtitleElement.className = "subtitle";
+				subtitleElement.textContent = item.subtitle;
+
+				var contentPreviewElement = document.createElement("p");
+				contentPreviewElement.className = "contentPreview";
+				contentPreviewElement.textContent = item.content_preview;
+
+				infoElement.appendChild(publicationDateElement);
 				infoElement.appendChild(titleElement);
 				infoElement.appendChild(subtitleElement);
-				infoElement.appendChild(infoContainer);
+				infoElement.appendChild(contentPreviewElement);
 
 				currentItemElement.appendChild(imageContainer);
 				currentItemElement.appendChild(infoElement);
