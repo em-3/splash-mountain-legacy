@@ -17,8 +17,8 @@ section a {
   display: block;
   width: fit-content;
   margin: 10pt 0 0 0;
-  background: #5f66ea;
-  color: #2a2b2e;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
   font: inherit;
   font-weight: bold;
   text-decoration: none;
@@ -30,7 +30,16 @@ section a {
   transition: all 0.1s ease;
 }
 
+section a:first-of-type {
+  background: #5f66ea;
+  color: #2a2b2e;
+}
+
 section a:hover {
+  background: var(--page-background-color);
+}
+
+section a:first-of-type:hover {
   background: #2a2b2e;
   color: #5f66ea;
 }
@@ -61,7 +70,7 @@ section.creators {
   padding: 20pt 0 20pt 0;
 }
 
-section.creators h2 {
+section.creators > h2 {
   margin-left: 20pt;
 }
 
@@ -76,31 +85,41 @@ section.creators h2 {
 }
 
 .creatorList .creator {
-  width: 180pt;
+  width: 250pt;
   margin-right: 20pt;
   background: var(--content-background-color);
   border-radius: 10pt;
-  padding: 10pt;
+  padding: 15pt 15pt 5pt 15pt;
   display: inline-flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  text-align: center;
 }
 
 .creatorList .creator.link {
   cursor: pointer;
 }
 
+.creatorList .creator .nameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .creatorList .creator img {
   width: 50pt;
   height: 50pt;
   border-radius: 50%;
-  margin-bottom: 10pt;
+  margin-bottom: 5pt;
 }
 
-.creatorList .creator .info h2 {
-  margin: 0 0 5pt 0;
+.creatorList .creator h2 {
+  margin: 0 0 0 10pt;
+}
+
+.creatorList .creator .info {
+  margin-left: 60pt;
+  transform: translate(0, -10pt);
 }
 
 .creatorList .creator .info ul {
