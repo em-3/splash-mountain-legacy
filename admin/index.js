@@ -326,7 +326,7 @@ var newsList = {
 		}
 
 		//Fetch new results
-		fetch("/api/news/list/" + PHPParams + character + "min=" + newsList.searchRange.min + "&max=" + newsList.searchRange.max + "&show_unpublihshed=true")
+		fetch("/api/news/list/" + PHPParams + character + "min=" + newsList.searchRange.min + "&max=" + newsList.searchRange.max + "&show_unpublished=true")
 			.then((response) => response.json())
 			.then(
 				(data) => {
