@@ -13,6 +13,19 @@ main section {
   max-width: min(500pt, calc(100vw - 20pt));
 }
 
+main section.finalCountdown .title {
+  font-size: 100pt;
+  border-radius: 15pt;
+  width: 200pt;
+  text-align: center;
+}
+
+main section.finalCountdown .subtitle,
+main section.finalCountdown .description,
+main section.finalCountdown ~ .link {
+  display: none;
+}
+
 .title,
 .subtitle {
   background: white;
