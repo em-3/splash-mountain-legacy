@@ -55,6 +55,9 @@ function showArticle() {
 	document.querySelector(".articleViewer .loadingContainer").classList.add("hidden");
 	document.querySelector(".articleViewer .articleDisplay").classList.remove("hidden");
 	document.querySelector(".articleViewer .errorMessageContainer").classList.add("hidden");
+
+	//Update the page title
+	document.querySelector("title").textContent = loadedArticleDetails.title + " - Splash Mountain Legacy";
 }
 
 function showErrorScreen() {
