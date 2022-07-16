@@ -345,8 +345,8 @@ function showArticleDetails(articleDetails) {
 				}
 			} else {
 				return {
-					include: true,
-					value: Math.floor(new Date().getTime() / 1000),
+					include: false,
+					fail: false,
 				};
 			}
 		},
