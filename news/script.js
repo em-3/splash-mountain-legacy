@@ -61,6 +61,9 @@ var newsList = {
 							contentPreviewElement.className = "contentPreview";
 							contentPreviewElement.textContent = currentArticleData.content_preview;
 
+							var authorDateContainer = document.createElement("div");
+							authorDateContainer.className = "authorDateContainer";
+
 							var authorContainerElement = document.createElement("div");
 							authorContainerElement.className = "authorContainer";
 
@@ -74,10 +77,24 @@ var newsList = {
 							authorNameElement.textContent = currentArticleData.author;
 							authorContainerElement.appendChild(authorNameElement);
 
+							authorDateContainer.appendChild(authorContainerElement);
+
+							var publicationDateElement = document.createElement("p");
+							publicationDateElement.className = "publicationDate";
+							var publicationDateObject = new Date(0);
+							publicationDateObject.setUTCSeconds(Number(currentArticleData.publication_timestamp));
+							publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
+								weekday: "short",
+								day: "numeric",
+								month: "long",
+								year: "numeric",
+							});
+							authorDateContainer.appendChild(publicationDateElement);
+
 							rightSideContainer.appendChild(titleElement);
 							rightSideContainer.appendChild(subtitleElement);
 							rightSideContainer.appendChild(contentPreviewElement);
-							rightSideContainer.appendChild(authorContainerElement);
+							rightSideContainer.appendChild(authorDateContainer);
 
 							resultElement.appendChild(imgElement);
 							resultElement.appendChild(rightSideContainer);

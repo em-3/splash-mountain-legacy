@@ -40,7 +40,7 @@ main section > h1 {
 .newsList .resultsContainer {
     display: grid;
     grid-template-columns: repeat(1, 100%);
-    grid-auto-rows: 100pt;
+    grid-auto-rows: 140pt;
     gap: 10pt;
     padding: 10pt;
     margin: 0 auto;
@@ -58,7 +58,7 @@ main section > h1 {
 
 .article {
     background: var(--content-background-color);
-    padding: 5pt;
+    padding: 15pt;
     border-radius: 10pt;
     display: flex;
     align-items: center;
@@ -66,8 +66,8 @@ main section > h1 {
 }
 
 .article img {
-    width: 70pt;
-    margin: 10pt;
+    width: 150pt;
+    margin-right: 15pt;
     border-radius: 5pt;
 }
 
@@ -79,7 +79,7 @@ main section > h1 {
 .article .right .title {
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -103,6 +103,13 @@ main section > h1 {
     text-overflow: ellipsis;
 }
 
+.article .right .authorDateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 15pt;
+}
+
 .article .right .authorContainer {
     display: flex;
     align-items: center;
@@ -118,6 +125,10 @@ main section > h1 {
 }
 
 .article .right .authorName {
+    margin: 0;
+}
+
+.article .right .publicationDate {
     margin: 0;
 }
 
