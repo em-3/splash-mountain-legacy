@@ -15,6 +15,11 @@ var timeOutHasExpired = false;
 //Show the header to allow the user to close the window even if the item fails to load
 document.querySelector("header").classList.remove("hidden");
 
+//If the user is authenticated, show the Edit in Admin Console button
+if (localStorage.getItem("adminAccess") === "true") {
+	document.querySelector(".buttonContainer .openInAdminConsole").classList.remove("hidden");
+}
+
 //Fetch the item details and content
 if (id) {
 	//Start a timeout
@@ -331,6 +336,14 @@ function share() {
 	}
 }
 
+function openInAdminConsole() {
+	if (embedded) {
+		window.top.postMessage("openAdmin" + id, "*");
+	} else {
+		window.location.href = "/admin/?openEditor=item&id=" + loadedItemDetails.id;
+	}
+}
+
 function displayItemID() {
 	if (localStorage.getItem("adminAccess") == "true") {
 		var parkElement = document.querySelector(".park");
@@ -400,7 +413,7 @@ function onYouTubeIframeAPIReady() {
 		videoId: loadedItemDetails.video_id,
 		playerVars: {
 			playsinline: 1,
-			vq: "tiny"
+			vq: "tiny",
 		},
 		events: {
 			onReady: onPlayerReady,
@@ -432,7 +445,7 @@ function showErrorScreen() {
 	document.querySelector(".errorScreen").classList.remove("hidden");
 }
 
-function closeItemDetails() {
+function closeItemViewer() {
 	if (audioPlayer.player) {
 		audioPlayer.player.stopVideo();
 	}

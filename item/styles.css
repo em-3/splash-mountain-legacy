@@ -25,14 +25,6 @@ header.hidden {
   opacity: 0;
 }
 
-.shareButton {
-  font-weight: bold;
-  background: var(--page-background-color);
-  padding: 2pt 5pt;
-  border-radius: 5pt;
-  cursor: pointer;
-}
-
 .contentContainer {
   width: 100%;
 }
@@ -313,6 +305,27 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border: 2pt solid var(--secondary-content-background-color);
   padding: 5pt;
   border-radius: 5pt;
+}
+
+.buttonContainer button {
+  width: 100%;
+  max-width: 150pt;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  border: none;
+  border-radius: 10pt;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 10pt 0;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 5pt;
+  transition: 0.1s ease background;
+}
+
+.buttonContainer button:hover {
+  background: var(--page-background-color);
 }
 
 @media only screen and (min-width: 900px) {

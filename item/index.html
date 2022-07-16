@@ -37,11 +37,10 @@ require_once __DIR__ . "/../site_lock.php";
 
     <main>
         <header class="hidden">
-            <picture onclick="closeItemDetails()">
+            <picture onclick="closeItemViewer()">
                 <source srcset="/images/icons/arrow-white.svg" media="(prefers-color-scheme: dark)">
                 <img src="/images/icons/arrow-black.svg" width="auto" height="30pt">
             </picture>
-            <div class="shareButton" onclick="share()">Share</div>
         </header>
         <div class="contentContainer">
             <div class="loadingScreen">
@@ -84,6 +83,11 @@ require_once __DIR__ . "/../site_lock.php";
                     <div class="version hidden"></div>
                 </div>
                 <div class="content"></div>
+            </div>
+
+            <div class="buttonContainer">
+                <button class="share" onclick="share()">Share</button>
+                <button class="openInAdminConsole hidden" onclick="openInAdminConsole()">Edit in Admin Console</button>
             </div>
         </div>
     </main>
