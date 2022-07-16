@@ -168,6 +168,7 @@ section.featured.news .content .item {
 
 section.featured.news .content .item .imageContainer {
   margin: 10pt 5pt 10pt 10pt;
+  position: relative;
 }
 
 section.featured.news .content .item .imageContainer img {
@@ -175,6 +176,10 @@ section.featured.news .content .item .imageContainer img {
   width: 180pt;
   height: auto;
   border-radius: 5pt;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 section.featured.news .content .item .info {
