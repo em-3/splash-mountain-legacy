@@ -8,7 +8,7 @@ var filters = [
 	{
 		id: "type",
 		label: "Type",
-		values: ["image", "video", "audio", "text"],
+		values: ["image", "video", "audio", "text", "date"],
 		max: 1,
 	},
 	{
