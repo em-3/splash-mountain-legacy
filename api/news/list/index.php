@@ -5,10 +5,10 @@ require_once __DIR__ . "/../../../admin/scripts/init_admin.php";
 
 $params = array();
 
-$stmt = "SELECT `id`, `title`, `subtitle`, `author`, `publication_timestamp`, `thumbnail`, `content` FROM `news_articles` WHERE `publication_timestamp` < CURRENT_TIMESTAMP()";
+$stmt = "SELECT `id`, `title`, `subtitle`, `author`, `publication_timestamp`, `thumbnail`, `content` FROM `news_articles`";
 
-if(isset($_GET["show_unpublished"]) && $_GET["show_unpublished"] == "true" && check_authentication()) {
-    $stmt .= " OR `publication_timestamp` > CURRENT_TIMESTAMP()";
+if(!isset($_GET["show_unpublished"]) || $_GET["show_unpublished"] != "true" || !check_authentication()) {
+    $stmt .= " WHERE `publication_timestamp` < UNIX_TIMESTAMP()";
 }
 
 //Check if there is a query parameter
