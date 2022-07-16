@@ -9,11 +9,11 @@ class ArticleEntry extends Entry {
     }
 
     public static function getOptionalFields() {
-        return ["publication_date"];
+        return ["publication_timestamp"];
     }
 
     public static function getModifiableFields() {
-        return ["title", "subtitle", "author", "content", "publication_date"];
+        return ["title", "subtitle", "author", "content", "publication_timestamp"];
     }
 
 }
