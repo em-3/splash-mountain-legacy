@@ -444,7 +444,7 @@ var newsList = {
 				newsList.searchRange.min +
 				"&max=" +
 				newsList.searchRange.max +
-				"&show_unpublihshed=true"
+				"&show_unpublished=true"
 		)
 			.then((response) => response.json())
 			.then(
