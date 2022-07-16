@@ -263,6 +263,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   width: 100%;
   padding: 10pt;
   border-radius: 10pt;
+  margin-bottom: 10pt;
 }
 
 .itemInfoContainer .metadata p {
@@ -307,9 +308,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-radius: 5pt;
 }
 
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15pt;
+}
+
 .buttonContainer button {
   width: 100%;
-  max-width: 150pt;
   background: var(--content-background-color);
   color: var(--primary-text-color);
   border: none;
@@ -319,7 +326,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-size: 10pt;
   padding: 10pt 0;
   cursor: pointer;
-  display: block;
   margin-bottom: 5pt;
   transition: 0.1s ease background;
 }
@@ -340,6 +346,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 
   .contentContainer .contentDisplay {
+    height: 100%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .buttonContainer {
+    height: 45pt;
+  }
+  .buttonContainer button {
     height: 100%;
   }
 }
