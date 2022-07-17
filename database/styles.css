@@ -163,6 +163,7 @@ main {
   font: inherit;
   font-weight: bold;
   border: none;
+  background: var(--page-background-color);
   color: var(--primary-text-color);
   cursor: pointer;
   display: flex;
