@@ -271,7 +271,7 @@ function showItemContent(itemDetails) {
 					contentDisplayElement.textContent = date.getFullYear();
 					break;
 				case "month":
-					contentDisplayElement.textContent = date.toLocaleString("en-US", { month: "long" }) + date.getFullYear();
+					contentDisplayElement.textContent = date.toLocaleString("en-US", { month: "long" }) + " " + date.getFullYear();
 					break;
 				case "day":
 					contentDisplayElement.textContent =
