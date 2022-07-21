@@ -28,6 +28,9 @@ $tags = call_user_func_array("array_merge", $tags);
 //Remove duplicates
 $tags = array_unique($tags);
 
+//Sort Alphabetically
+sort($tags, SORT_NATURAL | SORT_FLAG_CASE);
+
 //Output the arry as JSON
 header("Content-Type: application/json");
 echo json_encode(array_values($tags));
