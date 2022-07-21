@@ -80,6 +80,19 @@ section {
   flex-direction: column;
 }
 
+.propertyContainer .inputContainer {
+  width: 100%;
+  display: flex;
+}
+
+.propertyContainer .inputContainer input {
+  flex-grow: 1;
+}
+
+.propertyContainer .inputContainer select {
+  width: 95pt;
+}
+
 .propertyContainer select {
   appearance: none;
   font: inherit;

@@ -45,7 +45,8 @@ function showItemDetails(itemDetails) {
 				for (var i = 0; i < options.length; i++) {
 					var currentOption = options[i];
 					var optionElement = document.createElement("option");
-					optionElement.textContent = currentOption[0].toUpperCase() + currentOption.slice(1);
+					optionElement.textContent =
+						currentOption[0].toUpperCase() + currentOption.slice(1);
 					optionElement.value = currentOption;
 					select.appendChild(optionElement);
 				}
@@ -56,7 +57,9 @@ function showItemDetails(itemDetails) {
 
 					var image = document.querySelector(".image");
 					var videoID = document.querySelector(".videoID");
-					var cameraInfoContainer = document.querySelector(".cameraInfoContainer");
+					var cameraInfoContainer = document.querySelector(
+						".cameraInfoContainer"
+					);
 					var samplingRate = document.querySelector(".samplingRate");
 
 					image.classList.add("hidden");
@@ -125,43 +128,69 @@ function showItemDetails(itemDetails) {
 						if (timecode) {
 							var dateTimeSplit = timecode.split(/\D/);
 							var dateTimeSplit = timecode.split(/\D/);
-							var date = dateTimeSplit[0] + "-" + dateTimeSplit[1] + "-" + dateTimeSplit[2];
-							var time = dateTimeSplit[3] + ":" + dateTimeSplit[4];
+							var date =
+								dateTimeSplit[0] +
+								"-" +
+								dateTimeSplit[1] +
+								"-" +
+								dateTimeSplit[2];
+							var time =
+								dateTimeSplit[3] + ":" + dateTimeSplit[4];
 							document.querySelector("#date").value = date;
 							document.querySelector("#time").value = time;
 						}
-						document.querySelector("#make").value = EXIF.getTag(this, "Make") || "";
-						document.querySelector("#model").value = EXIF.getTag(this, "Model") || "";
-						document.querySelector("#focalLength").value = EXIF.getTag(this, "FocalLength") || "";
-						document.querySelector("#softwareVersion").value = EXIF.getTag(this, "Software") || "";
+						document.querySelector("#make").value =
+							EXIF.getTag(this, "Make") || "";
+						document.querySelector("#model").value =
+							EXIF.getTag(this, "Model") || "";
+						document.querySelector("#focalLength").value =
+							EXIF.getTag(this, "FocalLength") || "";
+						document.querySelector("#softwareVersion").value =
+							EXIF.getTag(this, "Software") || "";
 						var exposureTime = EXIF.getTag(this, "ExposureTime");
 						if (exposureTime) {
-							document.querySelector("#exposureTime").value = exposureTime.numerator + "/" + exposureTime.denominator;
+							document.querySelector("#exposureTime").value =
+								exposureTime.numerator +
+								"/" +
+								exposureTime.denominator;
 						}
-						document.querySelector("#fNumber").value = EXIF.getTag(this, "FNumber") || "";
-						document.querySelector("#flash").value = EXIF.getTag(this, "Flash") || "";
+						document.querySelector("#fNumber").value =
+							EXIF.getTag(this, "FNumber") || "";
+						document.querySelector("#flash").value =
+							EXIF.getTag(this, "Flash") || "";
 
 						var colorSpace = EXIF.getTag(this, "ColorSpace");
 						if (colorSpace) {
 							switch (colorSpace) {
 								case 1:
-									document.querySelector("#colorSpace").value = "sRGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "sRGB";
 									break;
 								case 2:
-									document.querySelector("#colorSpace").value = "Adobe RGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Adobe RGB";
 									break;
 								case 3:
-									document.querySelector("#colorSpace").value = "Wide Gamut RGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Wide Gamut RGB";
 									break;
 								case 4:
-									document.querySelector("#colorSpace").value = "ICC Profile";
+									document.querySelector(
+										"#colorSpace"
+									).value = "ICC Profile";
 									break;
 								case 65535:
-									document.querySelector("#colorSpace").value = "Uncalibrated";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Uncalibrated";
 									break;
 							}
 						}
-						document.querySelector("#samplingRate").value = EXIF.getTag(this, "SamplingRate") || "";
+						document.querySelector("#samplingRate").value =
+							EXIF.getTag(this, "SamplingRate") || "";
 					});
 				}
 			};
@@ -180,7 +209,11 @@ function showItemDetails(itemDetails) {
 					fail: false,
 				};
 			} else {
-				if (!document.querySelector(".image").classList.contains("hidden")) {
+				if (
+					!document
+						.querySelector(".image")
+						.classList.contains("hidden")
+				) {
 					if (file) {
 						return {
 							include: true,
@@ -246,7 +279,11 @@ function showItemDetails(itemDetails) {
 					};
 				}
 			} else {
-				if (!document.querySelector(".videoID").classList.contains("hidden")) {
+				if (
+					!document
+						.querySelector(".videoID")
+						.classList.contains("hidden")
+				) {
 					if (value) {
 						return {
 							include: true,
@@ -461,6 +498,100 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Tags
+	properties.push({
+		name: "Tags",
+		propertyName: "tags",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("tags");
+			var label = document.createElement("label");
+			label.for = "tags";
+			label.textContent = "Tags";
+
+			var inputContainer = document.createElement("div");
+			inputContainer.classList.add("inputContainer");
+
+			var input = document.createElement("input");
+			input.name = "tags";
+			input.id = "tags";
+			input.placeholder = "Enter a comma-separated list of tags.";
+			input.oninput = function () {
+				var value = input.value;
+				var tags = value.split(",");
+				for (var o = 0; o < select.options.length; o++) {
+					select.options[o].disabled = false;
+				}
+				for (var i = 0; i < tags.length; i++) {
+					var tag = tags[i].trim();
+					for (var o = 0; o < select.options.length; o++) {
+						if (select.options[o].value === tag) {
+							select.options[o].disabled = true;
+						}
+					}
+				}
+			};
+			inputContainer.appendChild(input);
+
+			var select = document.createElement("select");
+			select.name = "tagSuggestions";
+			select.id = "tagSuggestions";
+			select.onchange = function () {
+				if (select.selectedIndex == 0) return;
+				var selectedOption = select.options[select.selectedIndex];
+				if (input.value.length === 0) {
+					input.value = selectedOption.value;
+				} else if (input.value.charAt(input.value.length - 1) === ",") {
+					input.value += selectedOption.value;
+				} else {
+					input.value += "," + selectedOption.value;
+				}
+				selectedOption.disabled = true;
+				select.selectedIndex = 0;
+			};
+
+			var defaultOption = document.createElement("option");
+			defaultOption.textContent = "Choose a Tag";
+			defaultOption.value = "none";
+			select.appendChild(defaultOption);
+
+			(async function () {
+				var tagList = await fetch("/api/tags/");
+				tagList = await tagList.json();
+				for (var i = 0; i < tagList.length; i++) {
+					var option = document.createElement("option");
+					option.textContent = tagList[i];
+					option.value = tagList[i];
+					select.appendChild(option);
+				}
+			})();
+
+			inputContainer.appendChild(select);
+
+			if (mode === "editor") {
+				input.value = itemDetails.tags;
+			}
+
+			container.appendChild(label);
+			container.appendChild(inputContainer);
+			return container;
+		},
+		valueGetter: function () {
+			var values = document.querySelector("#tags").value;
+			if (values) {
+				return {
+					include: true,
+					value: values,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
 	//Author
 	properties.push({
 		name: "Author",
@@ -489,8 +620,17 @@ function showItemDetails(itemDetails) {
 			linkInput.name = "authorLink";
 			linkInput.id = "authorLink";
 			//Get the portion of the author link between square brackets
-			if (mode === "editor" && itemDetails.author && itemDetails.author.indexOf("[") >= 0) {
-				linkInput.value = itemDetails.author.match(/\[(.*)\]/)[0].substr(1, itemDetails.author.match(/\[(.*)\]/)[0].length - 2);
+			if (
+				mode === "editor" &&
+				itemDetails.author &&
+				itemDetails.author.indexOf("[") >= 0
+			) {
+				linkInput.value = itemDetails.author
+					.match(/\[(.*)\]/)[0]
+					.substr(
+						1,
+						itemDetails.author.match(/\[(.*)\]/)[0].length - 2
+					);
 			}
 			container.appendChild(linkLabel);
 			container.appendChild(linkInput);
@@ -551,7 +691,11 @@ function showItemDetails(itemDetails) {
 			timeInput.type = "time";
 			timeInput.name = "time";
 			timeInput.id = "time";
-			if (mode === "editor" && itemDetails.timestamp && itemDetails.timestamp.indexOf(" ") !== -1) {
+			if (
+				mode === "editor" &&
+				itemDetails.timestamp &&
+				itemDetails.timestamp.indexOf(" ") !== -1
+			) {
 				timeInput.value = itemDetails.timestamp.split(" ")[1];
 			}
 			timestampContainer.appendChild(timeInput);
@@ -567,7 +711,9 @@ function showItemDetails(itemDetails) {
 			for (var i = 0; i < precisionOptions.length; i++) {
 				var option = document.createElement("option");
 				option.value = precisionOptions[i];
-				option.textContent = precisionOptions[i][0].toUpperCase() + precisionOptions[i].slice(1);
+				option.textContent =
+					precisionOptions[i][0].toUpperCase() +
+					precisionOptions[i].slice(1);
 				precisionSelect.appendChild(option);
 			}
 			if (mode === "editor" && metadata.precision) {
@@ -685,7 +831,8 @@ function showItemDetails(itemDetails) {
 			var flashInput = document.createElement("input");
 			flashInput.name = "flash";
 			flashInput.id = "flash";
-			flashInput.placeholder = "Flash did not fire, compulsory flash mode";
+			flashInput.placeholder =
+				"Flash did not fire, compulsory flash mode";
 			if (mode === "editor" && metadata.flash) {
 				flashInput.value = metadata.flash;
 			}
@@ -731,7 +878,9 @@ function showItemDetails(itemDetails) {
 			}
 			samplingRateContainer.appendChild(samplingRateInput);
 
-			if (!(mode === "editor" && (type === "video" || type === "audio"))) {
+			if (
+				!(mode === "editor" && (type === "video" || type === "audio"))
+			) {
 				samplingRateContainer.classList.add("hidden");
 			}
 			container.appendChild(samplingRateContainer);
@@ -741,11 +890,13 @@ function showItemDetails(itemDetails) {
 		valueGetter: function () {
 			var updatedMetadata = {};
 			var elements = {};
-			elements.timestampPrecision = document.getElementById("timestampPrecision");
+			elements.timestampPrecision =
+				document.getElementById("timestampPrecision");
 			elements.make = document.getElementById("make");
 			elements.model = document.getElementById("model");
 			elements.focalLength = document.getElementById("focalLength");
-			elements.softwareVersion = document.getElementById("softwareVersion");
+			elements.softwareVersion =
+				document.getElementById("softwareVersion");
 			elements.exposureTime = document.getElementById("exposureTime");
 			elements.fNumber = document.getElementById("fNumber");
 			elements.flash = document.getElementById("flash");
@@ -762,7 +913,11 @@ function showItemDetails(itemDetails) {
 				updatedMetadata.model = elements.model.value;
 			}
 
-			if (!document.querySelector(".cameraInfoContainer").classList.contains("hidden")) {
+			if (
+				!document
+					.querySelector(".cameraInfoContainer")
+					.classList.contains("hidden")
+			) {
 				if (elements.focalLength.value) {
 					updatedMetadata.focalLength = elements.focalLength.value;
 				}
@@ -783,7 +938,10 @@ function showItemDetails(itemDetails) {
 				}
 			}
 
-			if (!elements.samplingRate.classList.contains("hidden") && elements.samplingRate.value) {
+			if (
+				!elements.samplingRate.classList.contains("hidden") &&
+				elements.samplingRate.value
+			) {
 				updatedMetadata.samplingRate = elements.samplingRate.value;
 			}
 
@@ -797,7 +955,9 @@ function showItemDetails(itemDetails) {
 	//Show the item details
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
-		document.querySelector(".editor .properties").appendChild(currentProperty.constructor());
+		document
+			.querySelector(".editor .properties")
+			.appendChild(currentProperty.constructor());
 	}
 
 	if (mode === "editor") {
@@ -805,12 +965,14 @@ function showItemDetails(itemDetails) {
 		switch (type) {
 			case "image":
 				thumbnailElement = document.querySelector(".thumbnail img");
-				thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail";
+				thumbnailElement.src =
+					"/resources/" + itemDetails.image + "/thumbnail";
 				break;
 			case "video":
 			case "audio":
 				thumbnailElement = document.querySelector(".thumbnail iframe");
-				thumbnailElement.src = "https://www.youtube.com/embed/" + itemDetails.video_id;
+				thumbnailElement.src =
+					"https://www.youtube.com/embed/" + itemDetails.video_id;
 				break;
 		}
 		if (thumbnailElement) {
@@ -821,7 +983,9 @@ function showItemDetails(itemDetails) {
 		document.querySelector(".itemType").textContent = type;
 		document.querySelector(".itemName").textContent = itemDetails.name;
 
-		document.querySelector(".actions.existingItem").classList.remove("hidden");
+		document
+			.querySelector(".actions.existingItem")
+			.classList.remove("hidden");
 	} else {
 		document.querySelector(".itemInfo").classList.add("hidden");
 		document.querySelector(".actions.newItem").classList.remove("hidden");
@@ -843,11 +1007,19 @@ async function uploadItem() {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
 		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -878,17 +1050,34 @@ async function uploadItem() {
 				.then((response) => response.json())
 				.then((result) => {
 					if (result.status === "success") {
-						document.querySelector(".responseContainer .title").textContent = "Done.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Your item has been added to the database.";
-						document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Done.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent =
+							"Your item has been added to the database.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = "Item ID: " + result.id;
 					} else {
-						document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-						document.querySelector(".responseContainer .message").textContent = result.error;
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Congratulations, you broke something.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent = "Good going.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = result.error;
 					}
 
-					document.querySelector(".progressContainer").classList.add("hidden");
-					document.querySelector(".responseContainer").classList.remove("hidden");
+					document
+						.querySelector(".progressContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".responseContainer")
+						.classList.remove("hidden");
 				});
 		});
 }
@@ -905,11 +1094,19 @@ async function updateItem() {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
 		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -930,13 +1127,19 @@ async function updateItem() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The item has been updated.";
-		document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+		document.querySelector(".responseContainer .title").textContent =
+			"Done.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"The item has been updated.";
+		document.querySelector(".responseContainer .message").textContent =
+			"Item ID: " + result.id;
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		document.querySelector(".responseContainer .title").textContent =
+			"Congratulations, you broke something.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"Good going.";
+		document.querySelector(".responseContainer .message").textContent =
+			result.error;
 	}
 
 	document.querySelector(".progressContainer").classList.add("hidden");
@@ -962,13 +1165,18 @@ async function deleteItem() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The item has been removed from the database.";
+		document.querySelector(".responseContainer .title").textContent =
+			"Done.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"The item has been removed from the database.";
 		document.querySelector(".responseContainer .message").textContent = "";
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		document.querySelector(".responseContainer .title").textContent =
+			"Congratulations, you broke something.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"Good going.";
+		document.querySelector(".responseContainer .message").textContent =
+			result.error;
 	}
 
 	document.querySelector(".progressContainer").classList.add("hidden");
