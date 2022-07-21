@@ -48,9 +48,11 @@ fetch("/api/tags/")
 	.then((request) => request.json())
 	.then((data) => {
 		var tagFilterOption = {};
-		tagFilterOption.id = "tag";
+		tagFilterOption.id = "tags";
+		tagFilterOption.parameterName = "tags[]";
 		tagFilterOption.label = "Tag";
 		tagFilterOption.values = data;
+		tagFilterOption.max = data.length;
 		filters.push(tagFilterOption);
 		createFilterOptions();
 	});
@@ -102,6 +104,29 @@ function hideFilterSelect() {
 	document.querySelector(".filterSelect").classList.add("hidden");
 }
 
+function updateDisabledFilters(id) {
+	//Get current values of identical filters
+	var values = [];
+	var filters = document.querySelectorAll(".filterBar .filter." + id);
+	for (var i = 0; i < filters.length; i++) {
+		var filter = filters[i];
+		var select = filter.querySelector("select");
+		var value = select.options[select.selectedIndex].value;
+		values.push(value);
+	}
+	for (var i = 0; i < filters.length; i++) {
+		var options = filters[i].querySelector("select").options;
+		for (var j = 0; j < options.length; j++) {
+			var option = options[j];
+			if (values.includes(option.value)) {
+				option.disabled = true;
+			} else {
+				option.disabled = false;
+			}
+		}
+	}
+}
+
 function addFilter(filterObject) {
 	var filterElement = document.createElement("div");
 	filterElement.classList.add("filter");
@@ -114,15 +139,36 @@ function addFilter(filterObject) {
 	var filterSelect = document.createElement("select");
 	filterSelect.setAttribute("name", filterObject.id);
 	filterSelect.addEventListener("change", function () {
+		updateDisabledFilters(filterObject.id);
 		databaseBrowser.refreshResults();
 	});
 
+	//Get current values of identical filters
+	var currentlyUsedValues = [];
+	var currentlyUsedFilters = document.querySelectorAll(
+		".filterBar .filter." + filterObject.id
+	);
+	for (var i = 0; i < currentlyUsedFilters.length; i++) {
+		var currentlyUsedFilter = currentlyUsedFilters[i];
+		var currentlyUsedFilterSelect =
+			currentlyUsedFilter.querySelector("select");
+		var currentlyUsedFilterValue =
+			currentlyUsedFilterSelect.options[
+				currentlyUsedFilterSelect.selectedIndex
+			].value;
+		currentlyUsedValues.push(currentlyUsedFilterValue);
+	}
+
+	var defaultHasBeenSelected = false;
 	for (var j = 0; j < filterObject.values.length; j++) {
 		var filterSelectOption = document.createElement("option");
-		filterSelectOption.setAttribute("value", filterObject.values[j]);
+		filterSelectOption.value = filterObject.values[j];
 		filterSelectOption.textContent = filterObject.values[j];
-		if (j === 0) {
+		if (currentlyUsedValues.includes(filterObject.values[j])) {
+			filterSelectOption.disabled = true;
+		} else if (defaultHasBeenSelected == false) {
 			filterSelectOption.setAttribute("selected", true);
+			defaultHasBeenSelected = true;
 		}
 		filterSelect.appendChild(filterSelectOption);
 	}
@@ -152,6 +198,7 @@ function addFilter(filterObject) {
 			.classList.add("disabled");
 	}
 
+	updateDisabledFilters(filterObject.id);
 	databaseBrowser.refreshResults();
 }
 
@@ -199,15 +246,26 @@ var databaseBrowser = {
 			".filterBar .filters .filter"
 		);
 		for (var i = 0; i < activeFilters.length; i++) {
-			var filterID = activeFilters[i].classList[1];
+			var currentFilter = activeFilters[i];
+			var filterID = currentFilter.classList[1];
+
+			var parameterName;
+			for (var j = 0; j < filters.length; j++) {
+				if (filters[j].id === filterID) {
+					parameterName = filters[j].parameterName;
+				}
+			}
+
 			//Get the selected option for this filter's select element.
-			var filterElement = document.querySelector(
-				"select[name='" + filterID + "']"
-			);
+			var filterElement = currentFilter.querySelector("select");
 			var filterValue =
 				filterElement.options[filterElement.selectedIndex].value;
 			if (filterValue != "") {
-				PHPParams += character + filterID + "=" + filterValue;
+				if (parameterName) {
+					PHPParams += character + parameterName + "=" + filterValue;
+				} else {
+					PHPParams += character + filterID + "=" + filterValue;
+				}
 				character = "&";
 			}
 		}
