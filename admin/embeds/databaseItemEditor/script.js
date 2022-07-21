@@ -565,13 +565,13 @@ function showItemDetails(itemDetails) {
 					option.value = tagList[i];
 					select.appendChild(option);
 				}
+				if (mode === "editor") {
+					input.value = itemDetails.tags;
+					input.oninput();
+				}
 			})();
 
 			inputContainer.appendChild(select);
-
-			if (mode === "editor") {
-				input.value = itemDetails.tags;
-			}
 
 			container.appendChild(label);
 			container.appendChild(inputContainer);
