@@ -33,7 +33,7 @@ if(isset($_GET["query"])) {
             $stmt .= " OR (";
 
             //Add each word to the tags query
-            $words = explode(",", $query);
+            $words = explode(" ", $query);
             for($i = 0; $i < count($words); $i++) {
                 if($i > 0) {
                     $stmt .= " AND ";
@@ -91,7 +91,7 @@ if(!$id_only) {
         }
 
         //Add each tag to the statement
-        $tags = is_array($_GET["tags"]) ? $_GET["tags"] : [$_GET["tags"]];
+        $tags = is_array($_GET["tags"]) ? $_GET["tags"] : explode(",", $_GET["tags"]);
         for($i = 0; $i < count($tags); $i++) {
             if($i != 0) {
                 $stmt .= " AND ";
@@ -103,8 +103,6 @@ if(!$id_only) {
             //Add the tag to the parameters
             $params["tag" . $i] = "%" . $tags[$i] . "%";
         }
-
-        $stmt .= ")";
     }
     
     if(count($params) > 0 && $first) {
