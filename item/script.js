@@ -170,9 +170,9 @@ function showItemDetails() {
 				.querySelector(".itemInfoContainer .tags")
 				.appendChild(tagElement);
 		}
-		document
-			.querySelector(".itemInfoContainer .tags")
-			.classList.remove("hidden");
+		// document
+		// 	.querySelector(".itemInfoContainer .tags")
+		// 	.classList.remove("hidden");
 	}
 	if (metadata && metadata.make && metadata.model) {
 		document.querySelector(".metadata .header .make").textContent =

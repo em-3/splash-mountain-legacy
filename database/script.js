@@ -505,6 +505,7 @@ var databaseBrowser = {
 databaseBrowser.refreshResults();
 
 //Load available tags
+/*
 fetch("/api/tags/")
 	.then((request) => request.json())
 	.then((data) => {
@@ -526,3 +527,4 @@ fetch("/api/tags/")
 			databaseBrowser.refreshResults();
 		}
 	});
+	*/ createFilterOptions();
