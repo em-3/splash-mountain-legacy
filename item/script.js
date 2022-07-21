@@ -17,7 +17,9 @@ document.querySelector("header").classList.remove("hidden");
 
 //If the user is authenticated, show the Edit in Admin Console button
 if (localStorage.getItem("adminAccess") === "true") {
-	document.querySelector(".buttonContainer .openInAdminConsole").classList.remove("hidden");
+	document
+		.querySelector(".buttonContainer .openInAdminConsole")
+		.classList.remove("hidden");
 }
 
 //Fetch the item details and content
@@ -62,24 +64,40 @@ function showItemDetails() {
 		} else {
 			element.appendChild(span);
 		}
-		document.querySelector(".itemInfoContainer").insertBefore(element, document.querySelector(".itemInfoContainer .metadata"));
+		document
+			.querySelector(".itemInfoContainer")
+			.insertBefore(
+				element,
+				document.querySelector(".itemInfoContainer .tags")
+			);
 	}
 
 	//Show the item details
-	document.querySelector(".park").textContent = itemDetails.park + " • " + itemDetails.scene;
+	document.querySelector(".park").textContent =
+		itemDetails.park + " • " + itemDetails.scene;
 	document.querySelector(".name").textContent = itemDetails.name;
 	if (itemDetails.type !== "text") {
 		var descriptionElement = document.createElement("p");
 		descriptionElement.classList.add("description");
 		descriptionElement.textContent = itemDetails.description;
-		document.querySelector(".itemInfoContainer").insertBefore(descriptionElement, document.querySelector(".itemInfoContainer .metadata"));
+		document
+			.querySelector(".itemInfoContainer")
+			.insertBefore(
+				descriptionElement,
+				document.querySelector(".itemInfoContainer .tags")
+			);
 	}
 	if (itemDetails.author) {
 		if (itemDetails.author.match(/\[([^\][]+)]/g)) {
 			createDetailProperty(
 				"Author",
 				itemDetails.author.replace(/\[([^\][]+)]/g, ""),
-				itemDetails.author.match(/\[([^\][]+)]/g)[0].substring(1, itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1)
+				itemDetails.author
+					.match(/\[([^\][]+)]/g)[0]
+					.substring(
+						1,
+						itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
+					)
 			);
 		} else {
 			createDetailProperty("Author", itemDetails.author);
@@ -129,12 +147,43 @@ function showItemDetails() {
 
 		createDetailProperty("Timestamp", timestampValue);
 	}
+	if (itemDetails.tags) {
+		var tags = itemDetails.tags.split(",");
+		for (var i = 0; i < tags.length; i++) {
+			var tag = tags[i];
+			var tagElement = document.createElement("p");
+			tagElement.classList.add("tag");
+			tagElement.textContent = tag;
+			(function (tag) {
+				tagElement.onclick = function () {
+					if (embedded) {
+						window.top.postMessage(
+							"navigateTo/database/?tag=" + tag,
+							"*"
+						);
+					} else {
+						window.location.href = "/database/?tag=" + tag;
+					}
+				};
+			})(tag);
+			document
+				.querySelector(".itemInfoContainer .tags")
+				.appendChild(tagElement);
+		}
+		document
+			.querySelector(".itemInfoContainer .tags")
+			.classList.remove("hidden");
+	}
 	if (metadata && metadata.make && metadata.model) {
-		document.querySelector(".metadata .header .make").textContent = metadata.make;
-		document.querySelector(".metadata .header .model").textContent = metadata.model;
+		document.querySelector(".metadata .header .make").textContent =
+			metadata.make;
+		document.querySelector(".metadata .header .model").textContent =
+			metadata.model;
 
 		if (metadata.software) {
-			var versionElement = document.querySelector(".metadata .header .version");
+			var versionElement = document.querySelector(
+				".metadata .header .version"
+			);
 			versionElement.textContent = metadata.software;
 			versionElement.classList.remove("hidden");
 		}
@@ -176,14 +225,19 @@ function showItemContent(itemDetails) {
 		case "image":
 			var thumbnailElement = document.createElement("img");
 			thumbnailElement.classList.add("thumbnail");
-			thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail";
-			document.querySelector(".contentDisplay").appendChild(thumbnailElement);
+			thumbnailElement.src =
+				"/resources/" + itemDetails.image + "/thumbnail";
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(thumbnailElement);
 
 			var loadingContainer = document.createElement("div");
 			loadingContainer.classList.add("loadingContainer");
 
 			var loadingAnimationContainer = document.createElement("div");
-			loadingAnimationContainer.classList.add("loadingAnimationContainer");
+			loadingAnimationContainer.classList.add(
+				"loadingAnimationContainer"
+			);
 			loadingAnimationContainer.innerHTML = `
                 <div class="loadingAnimationEllipsis">
                     <div></div>
@@ -199,21 +253,34 @@ function showItemContent(itemDetails) {
 
 			loadingContainer.appendChild(loadingAnimationContainer);
 			loadingContainer.appendChild(loadingText);
-			document.querySelector(".contentDisplay").appendChild(loadingContainer);
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(loadingContainer);
 
 			var contentDisplayElement = document.createElement("img");
 			contentDisplayElement.classList.add("main");
 			contentDisplayElement.classList.add("hidden");
 			contentDisplayElement.onload = function () {
-				document.querySelector(".contentDisplay .thumbnail").classList.add("hidden");
-				document.querySelector(".contentDisplay .loadingContainer").classList.add("hidden");
-				document.querySelector(".contentDisplay .main").classList.remove("hidden");
+				document
+					.querySelector(".contentDisplay .thumbnail")
+					.classList.add("hidden");
+				document
+					.querySelector(".contentDisplay .loadingContainer")
+					.classList.add("hidden");
+				document
+					.querySelector(".contentDisplay .main")
+					.classList.remove("hidden");
 			};
-			contentDisplayElement.src = "/resources/" + itemDetails.image + "/main";
-			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+			contentDisplayElement.src =
+				"/resources/" + itemDetails.image + "/main";
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(contentDisplayElement);
 
 			document.querySelector(".loadingScreen").classList.add("hidden");
-			document.querySelector(".contentDisplay").classList.remove("hidden");
+			document
+				.querySelector(".contentDisplay")
+				.classList.remove("hidden");
 			break;
 		case "video":
 			var contentDisplayElementContainer = document.createElement("div");
@@ -223,13 +290,18 @@ function showItemContent(itemDetails) {
 			contentDisplayElement.id = "player";
 
 			contentDisplayElementContainer.appendChild(contentDisplayElement);
-			document.querySelector(".contentDisplay").appendChild(contentDisplayElementContainer);
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(contentDisplayElementContainer);
 
 			var scriptElement = document.createElement("script");
 			scriptElement.src = "https://www.youtube.com/iframe_api";
 
 			var firstScriptTag = document.getElementsByTagName("script")[0];
-			firstScriptTag.parentNode.insertBefore(scriptElement, firstScriptTag);
+			firstScriptTag.parentNode.insertBefore(
+				scriptElement,
+				firstScriptTag
+			);
 			break;
 		case "audio":
 			document.querySelector(".contentDisplay").innerHTML = `
@@ -254,13 +326,18 @@ function showItemContent(itemDetails) {
 			var playerElement = document.createElement("div");
 			playerElement.id = "player";
 			playerElement.classList.add("hidden");
-			document.querySelector(".contentDisplay").appendChild(playerElement);
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(playerElement);
 
 			var scriptElement = document.createElement("script");
 			scriptElement.src = "https://www.youtube.com/iframe_api";
 
 			var firstScriptTag = document.getElementsByTagName("script")[0];
-			firstScriptTag.parentNode.insertBefore(scriptElement, firstScriptTag);
+			firstScriptTag.parentNode.insertBefore(
+				scriptElement,
+				firstScriptTag
+			);
 			break;
 		case "date":
 			var contentDisplayElement = document.createElement("h1");
@@ -271,11 +348,20 @@ function showItemContent(itemDetails) {
 					contentDisplayElement.textContent = date.getFullYear();
 					break;
 				case "month":
-					contentDisplayElement.textContent = date.toLocaleString("en-US", { month: "long" }) + " " + date.getFullYear();
+					contentDisplayElement.textContent =
+						date.toLocaleString("en-US", { month: "long" }) +
+						" " +
+						date.getFullYear();
 					break;
 				case "day":
 					contentDisplayElement.textContent =
-						date.toLocaleString("en-US", { weekday: "long" }) + ", " + date.toLocaleString("en-US", { month: "long" }) + " " + date.getDate() + ", " + date.getFullYear();
+						date.toLocaleString("en-US", { weekday: "long" }) +
+						", " +
+						date.toLocaleString("en-US", { month: "long" }) +
+						" " +
+						date.getDate() +
+						", " +
+						date.getFullYear();
 					break;
 				case "hour":
 					contentDisplayElement.textContent =
@@ -287,7 +373,10 @@ function showItemContent(itemDetails) {
 						", " +
 						date.getFullYear() +
 						" at " +
-						date.toLocaleString("en-US", { hour: "numeric", hour12: true });
+						date.toLocaleString("en-US", {
+							hour: "numeric",
+							hour12: true,
+						});
 					break;
 				case "minute":
 					contentDisplayElement.textContent =
@@ -306,16 +395,24 @@ function showItemContent(itemDetails) {
 						});
 					break;
 			}
-			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(contentDisplayElement);
 			document.querySelector(".loadingScreen").classList.add("hidden");
-			document.querySelector(".contentDisplay").classList.remove("hidden");
+			document
+				.querySelector(".contentDisplay")
+				.classList.remove("hidden");
 			break;
 		case "text":
 			var contentDisplayElement = document.createElement("h2");
 			contentDisplayElement.textContent = loadedItemDetails.description;
-			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+			document
+				.querySelector(".contentDisplay")
+				.appendChild(contentDisplayElement);
 			document.querySelector(".loadingScreen").classList.add("hidden");
-			document.querySelector(".contentDisplay").classList.remove("hidden");
+			document
+				.querySelector(".contentDisplay")
+				.classList.remove("hidden");
 			break;
 	}
 
@@ -328,19 +425,26 @@ function share() {
 	if (navigator.share) {
 		navigator.share({
 			title: loadedItemDetails.name,
-			url: "https://splashmountainlegacy.com/item/" + loadedItemDetails.id,
+			url:
+				"https://splashmountainlegacy.com/item/" + loadedItemDetails.id,
 		});
 	} else {
-		navigator.clipboard.writeText("https://splashmountainlegacy.com/item/" + loadedItemDetails.id);
+		navigator.clipboard.writeText(
+			"https://splashmountainlegacy.com/item/" + loadedItemDetails.id
+		);
 		document.querySelector(".shareButton").textContent = "Copied Link";
 	}
 }
 
 function openInAdminConsole() {
 	if (embedded) {
-		window.top.postMessage("openAdmin" + id, "*");
+		window.top.postMessage(
+			"navigateTo/admin/?openEditor=item&id=" + loadedItemDetails.id,
+			"*"
+		);
 	} else {
-		window.location.href = "/admin/?openEditor=item&id=" + loadedItemDetails.id;
+		window.location.href =
+			"/admin/?openEditor=item&id=" + loadedItemDetails.id;
 	}
 }
 
@@ -369,12 +473,16 @@ var audioPlayer = {
 		if (audioPlayer.isPlaying) {
 			document.querySelector(".pausePlayButton").classList.add("playing");
 		} else {
-			document.querySelector(".pausePlayButton").classList.remove("playing");
+			document
+				.querySelector(".pausePlayButton")
+				.classList.remove("playing");
 		}
 	},
 	updateProgressBar: function () {
-		document.querySelector(".progressBarFill").style.width = (audioPlayer.currentTime / audioPlayer.length) * 100 + "%";
-		document.querySelector(".progressBarInput").value = audioPlayer.currentTime;
+		document.querySelector(".progressBarFill").style.width =
+			(audioPlayer.currentTime / audioPlayer.length) * 100 + "%";
+		document.querySelector(".progressBarInput").value =
+			audioPlayer.currentTime;
 	},
 
 	oninput: function () {
@@ -387,7 +495,10 @@ var audioPlayer = {
 		audioPlayer.player.seekTo(value, true);
 		audioPlayer.updateProgressBar();
 		if (audioPlayer.isPlaying) {
-			audioPlayer.refreshInterval = setInterval(audioPlayer.updateProgressBar, 500);
+			audioPlayer.refreshInterval = setInterval(
+				audioPlayer.updateProgressBar,
+				500
+			);
 		}
 	},
 
@@ -425,7 +536,8 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-	document.querySelector(".audioControls input").min = audioPlayer.currentTime;
+	document.querySelector(".audioControls input").min =
+		audioPlayer.currentTime;
 	document.querySelector(".audioControls input").max = audioPlayer.length;
 	event.target.playVideo();
 }
@@ -433,7 +545,10 @@ function onPlayerStateChange(event) {
 	audioPlayer.updatePlayPauseButton();
 	audioPlayer.updateProgressBar();
 	if (audioPlayer.isPlaying) {
-		audioPlayer.refreshInterval = setInterval(audioPlayer.updateProgressBar, 500);
+		audioPlayer.refreshInterval = setInterval(
+			audioPlayer.updateProgressBar,
+			500
+		);
 	} else {
 		clearInterval(audioPlayer.refreshInterval);
 	}

@@ -1,5 +1,6 @@
 function showItemDetails(id) {
-	document.querySelector(".itemDetailsContainer iframe").src = "/item/" + id + "/?embedded=true";
+	document.querySelector(".itemDetailsContainer iframe").src =
+		"/item/" + id + "/?embedded=true";
 	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
 	document.body.classList.add("noScroll");
 }
@@ -15,8 +16,8 @@ window.onmessage = function (e) {
 		showItemDetails(e.data.substring(7));
 	} else if (e.data === "closeDetails") {
 		hideItemDetails();
-	} else if (e.data.indexOf("openAdmin") === 0) {
-		window.location.href = "/admin/?openEditor=item&id=" + e.data.substring(9);
+	} else if (e.data.indexOf("navigateTo") === 0) {
+		window.location.href = e.data.substring(10);
 	}
 };
 

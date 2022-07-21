@@ -43,20 +43,6 @@ var filters = [
 	},
 ];
 
-//Load available tags
-fetch("/api/tags/")
-	.then((request) => request.json())
-	.then((data) => {
-		var tagFilterOption = {};
-		tagFilterOption.id = "tags";
-		tagFilterOption.parameterName = "tags[]";
-		tagFilterOption.label = "Tag";
-		tagFilterOption.values = data;
-		tagFilterOption.max = data.length;
-		filters.push(tagFilterOption);
-		createFilterOptions();
-	});
-
 function createFilterOptions() {
 	//Loop through each filter and create an option element for for it.
 	for (var i = 0; i < filters.length; i++) {
@@ -127,7 +113,7 @@ function updateDisabledFilters(id) {
 	}
 }
 
-function addFilter(filterObject) {
+function addFilter(filterObject, selectedOption) {
 	var filterElement = document.createElement("div");
 	filterElement.classList.add("filter");
 	filterElement.classList.add(filterObject.id);
@@ -166,6 +152,12 @@ function addFilter(filterObject) {
 		filterSelectOption.textContent = filterObject.values[j];
 		if (currentlyUsedValues.includes(filterObject.values[j])) {
 			filterSelectOption.disabled = true;
+		} else if (
+			selectedOption &&
+			selectedOption === filterObject.values[j] &&
+			!currentlyUsedValues.includes(selectedOption)
+		) {
+			filterSelectOption.setAttribute("selected", true);
 		} else if (defaultHasBeenSelected == false) {
 			filterSelectOption.setAttribute("selected", true);
 			defaultHasBeenSelected = true;
@@ -279,19 +271,6 @@ var databaseBrowser = {
 		if (!preservePreviousResults) {
 			databaseBrowser.searchRange.min = 1;
 			databaseBrowser.searchRange.max = 21;
-			//Clear the current results from .resultsContainer
-			while (
-				document.querySelector(".databaseBrowser .resultsContainer")
-					.firstChild
-			) {
-				document
-					.querySelector(".databaseBrowser .resultsContainer")
-					.removeChild(
-						document.querySelector(
-							".databaseBrowser .resultsContainer"
-						).firstChild
-					);
-			}
 		}
 
 		//Fetch new results
@@ -307,6 +286,24 @@ var databaseBrowser = {
 			.then((response) => response.json())
 			.then(
 				(data) => {
+					if (!preservePreviousResults) {
+						//Clear the current results from .resultsContainer
+						while (
+							document.querySelector(
+								".databaseBrowser .resultsContainer"
+							).firstChild
+						) {
+							document
+								.querySelector(
+									".databaseBrowser .resultsContainer"
+								)
+								.removeChild(
+									document.querySelector(
+										".databaseBrowser .resultsContainer"
+									).firstChild
+								);
+						}
+					}
 					if (!preservePreviousResults && data.length === 0) {
 						var noResults = document.createElement("p");
 						noResults.className = "noResults";
@@ -506,3 +503,26 @@ var databaseBrowser = {
 };
 
 databaseBrowser.refreshResults();
+
+//Load available tags
+fetch("/api/tags/")
+	.then((request) => request.json())
+	.then((data) => {
+		var tagFilterOption = {};
+		tagFilterOption.id = "tags";
+		tagFilterOption.parameterName = "tags[]";
+		tagFilterOption.label = "Tag";
+		tagFilterOption.values = data;
+		tagFilterOption.max = data.length;
+		filters.push(tagFilterOption);
+		//Load in filter options
+		createFilterOptions();
+		//Check URL parameters to determine whether to add a tag filter
+		var url = new URL(window.location.href);
+		var params = url.searchParams;
+		var tag = params.get("tag");
+		if (tag) {
+			addFilter(tagFilterOption, tag);
+			databaseBrowser.refreshResults();
+		}
+	});
