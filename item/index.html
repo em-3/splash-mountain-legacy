@@ -34,10 +34,7 @@
 
     <main>
         <header class="hidden">
-            <picture onclick="closeItemViewer()">
-                <source srcset="/images/icons/arrow-white.svg" media="(prefers-color-scheme: dark)">
-                <img src="/images/icons/arrow-black.svg" width="auto" height="30pt">
-            </picture>
+            <i class="gg-close" onclick="closeItemViewer()"></i>
         </header>
         <div class="contentContainer">
             <div class="loadingScreen">
@@ -63,10 +60,7 @@
         </div>
         <div class="itemInfoContainer hidden">
             <div class="parkContainer">
-                <picture>
-                    <source srcset="/images/icons/location-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="/images/icons/location-black.svg" width="auto" height="20pt">
-                </picture>
+                <i class="gg-pin"></i>
                 <h2 class="park" onclick="displayItemID()"></h2>
             </div>
             <h1 class="name"></h1>

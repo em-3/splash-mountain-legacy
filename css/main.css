@@ -78,16 +78,9 @@ header .links .search {
   padding: 0;
   height: 30pt;
   width: 30pt;
-}
-
-header .links .search picture {
-  width: 22px;
-  height: 22px;
-}
-
-header .links .search picture img {
-  /*Balance visually instead of aligning perfectly centered*/
-  transform: translate(0, 1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header .searchBox {
