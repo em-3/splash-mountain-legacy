@@ -3,7 +3,9 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 	.then((response) => response.json())
 	.then(
 		(data) => {
-			var container = document.querySelector(".databaseAdditions .content");
+			var container = document.querySelector(
+				".databaseAdditions .content"
+			);
 			data.forEach((item) => {
 				var currentItemElement = document.createElement("div");
 				currentItemElement.className = "item";
@@ -24,17 +26,25 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 				} else if (item.type === "video") {
 					var pictureElement = null;
 					var imgElement = document.createElement("img");
-					imgElement.src = "https://img.youtube.com/vi/" + item.video_id + "/mqdefault.jpg";
+					imgElement.src =
+						"https://img.youtube.com/vi/" +
+						item.video_id +
+						"/mqdefault.jpg";
 					imageContainer.appendChild(imgElement);
 				} else {
 					var pictureElement = document.createElement("picture");
 
 					var sourceElement = document.createElement("source");
-					sourceElement.srcset = "/images/icons/types/" + item.type + "-white.png";
-					sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
+					sourceElement.srcset =
+						"/images/icons/types/" + item.type + "-white.png";
+					sourceElement.setAttribute(
+						"media",
+						"(prefers-color-scheme: dark)"
+					);
 
 					var imgElement = document.createElement("img");
-					imgElement.src = "/images/icons/types/" + item.type + "-black.png";
+					imgElement.src =
+						"/images/icons/types/" + item.type + "-black.png";
 
 					pictureElement.appendChild(sourceElement);
 					pictureElement.appendChild(imgElement);
@@ -63,7 +73,10 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 				infoContainer.appendChild(typeElement);
 				if (item.author) {
 					var authorElement = document.createElement("p");
-					authorElement.textContent = item.author.replace(/\[([^\][]+)]/g, "");
+					authorElement.textContent = item.author.replace(
+						/\[([^\][]+)]/g,
+						""
+					);
 					infoContainer.appendChild(authorElement);
 				}
 
@@ -76,12 +89,18 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 
 				container.appendChild(currentItemElement);
 			});
-			document.querySelector(".databaseAdditions .loading").classList.add("hidden");
+			document
+				.querySelector(".databaseAdditions .loading")
+				.classList.add("hidden");
 			container.classList.remove("hidden");
 		},
 		(error) => {
-			document.querySelector(".databaseAdditions .loading").classList.add("hidden");
-			document.querySelector(".databaseAdditions .error").classList.remove("hidden");
+			document
+				.querySelector(".databaseAdditions .loading")
+				.classList.add("hidden");
+			document
+				.querySelector(".databaseAdditions .error")
+				.classList.remove("hidden");
 		}
 	);
 
@@ -110,17 +129,6 @@ fetch("/api/news/list/?min=1&max=15")
 				var infoElement = document.createElement("div");
 				infoElement.className = "info";
 
-				var publicationDateElement = document.createElement("p");
-				publicationDateElement.className = "publicationDate";
-				var publicationDateObject = new Date(0);
-				publicationDateObject.setUTCSeconds(Number(item.publication_timestamp));
-				publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
-					weekday: "short",
-					day: "numeric",
-					month: "long",
-					year: "numeric",
-				});
-
 				var titleElement = document.createElement("h3");
 				titleElement.className = "title";
 				titleElement.textContent = item.title;
@@ -129,14 +137,23 @@ fetch("/api/news/list/?min=1&max=15")
 				subtitleElement.className = "subtitle";
 				subtitleElement.textContent = item.subtitle;
 
-				var contentPreviewElement = document.createElement("p");
-				contentPreviewElement.className = "contentPreview";
-				contentPreviewElement.textContent = item.content_preview;
+				var publicationDateElement = document.createElement("p");
+				publicationDateElement.className = "publicationDate";
+				var publicationDateObject = new Date(0);
+				publicationDateObject.setUTCSeconds(
+					Number(item.publication_timestamp)
+				);
+				publicationDateElement.textContent =
+					publicationDateObject.toLocaleDateString("en-US", {
+						weekday: "short",
+						day: "numeric",
+						month: "long",
+						year: "numeric",
+					});
 
-				infoElement.appendChild(publicationDateElement);
 				infoElement.appendChild(titleElement);
 				infoElement.appendChild(subtitleElement);
-				infoElement.appendChild(contentPreviewElement);
+				infoElement.appendChild(publicationDateElement);
 
 				currentItemElement.appendChild(imageContainer);
 				currentItemElement.appendChild(infoElement);
@@ -154,6 +171,10 @@ fetch("/api/news/list/?min=1&max=15")
 
 //When the user navigates to a different browser tab, replace the video element with a picture element to prevent a frozen animation.
 window.onblur = function () {
-	document.querySelector("section.header .foreground video").classList.add("hidden");
-	document.querySelector("section.header .foreground img").classList.remove("hidden");
+	document
+		.querySelector("section.header .foreground video")
+		.classList.add("hidden");
+	document
+		.querySelector("section.header .foreground img")
+		.classList.remove("hidden");
 };
