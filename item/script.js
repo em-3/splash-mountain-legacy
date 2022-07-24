@@ -15,10 +15,10 @@ var timeOutHasExpired = false;
 //Show the header to allow the user to close the window even if the item fails to load
 document.querySelector("header").classList.remove("hidden");
 
-//If the user is authenticated, show the Edit in Admin Console button
+//If the user is authenticated, show the Edit Item button
 if (localStorage.getItem("adminAccess") === "true") {
 	document
-		.querySelector(".buttonContainer .openInAdminConsole")
+		.querySelector(".buttonContainer .editItem")
 		.classList.remove("hidden");
 }
 
@@ -436,16 +436,10 @@ function share() {
 	}
 }
 
-function openInAdminConsole() {
-	if (embedded) {
-		window.top.postMessage(
-			"navigateTo/admin/?openEditor=item&id=" + loadedItemDetails.id,
-			"*"
-		);
-	} else {
-		window.location.href =
-			"/admin/?openEditor=item&id=" + loadedItemDetails.id;
-	}
+function editItem() {
+	window.location.href =
+		"/admin/embeds/databaseItemEditor/?mode=editor&fromViewer=true&id=" +
+		loadedItemDetails.id;
 }
 
 function displayItemID() {

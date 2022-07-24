@@ -1190,5 +1190,10 @@ function showErrorScreen() {
 }
 
 function closeEditor() {
-	window.top.postMessage("closeItemEditor", "*");
+	if (params.get("fromViewer") === "true") {
+		window.history.back();
+		return false;
+	} else {
+		window.top.postMessage("closeItemEditor", "*");
+	}
 }
