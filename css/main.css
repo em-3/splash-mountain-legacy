@@ -236,6 +236,84 @@ main {
   display: block !important;
 }
 
+.dialog {
+  background: var(--page-background-color);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 400pt;
+  padding: 20pt;
+  border-radius: 10pt;
+  box-shadow: 0 0 20px var(--shadow-color);
+  z-index: 6;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.dialog .title {
+  margin: 0 0 10pt 0;
+}
+
+.dialog .message {
+  margin: 0 0 10pt 0;
+}
+
+.dialog .buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.dialog input {
+  background: var(--content-background-color);
+  border: none;
+  border-radius: 10pt;
+  padding: 10pt;
+  margin-bottom: 10pt;
+  font: inherit;
+  font-size: 11pt;
+  height: 30pt;
+  width: 100%;
+  color: inherit;
+}
+
+.dialog input:focus {
+  outline: none;
+}
+
+.dialog .buttonContainer button {
+  margin: 0 0 0 10pt;
+  padding: 5pt 10pt;
+  border-radius: 5pt;
+  border: none;
+  background: var(--content-background-color);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.dialog .buttonContainer button.active {
+  background: var(--color-1);
+}
+
+.dialog .buttonContainer button.destructive {
+  background: var(--destructive-color);
+}
+
+.dialog .buttonContainer button:hover {
+  background: var(--page-background-color);
+}
+
+.dialog.hidden {
+  transform: translate(-50%, 20pt);
+  opacity: 0;
+  pointer-events: none;
+  display: block !important;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -249,7 +327,8 @@ main {
   transition: opacity 0.2s ease;
 }
 
-.itemDetailsContainer:not(.hidden) + .overlay {
+.itemDetailsContainer:not(.hidden) + .overlay,
+.dialog:not(.hidden) + .overlay {
   opacity: 0.5;
   pointer-events: auto;
   display: block !important;
