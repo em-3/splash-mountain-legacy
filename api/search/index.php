@@ -114,28 +114,21 @@ if(!$id_only) {
         $stmt .= " WHERE (";
     }
 
-    // $stmt .= "(`hidden` = 0";
-
-    // if(isset($_GET["show_hidden"]) && $_GET["show_hidden"] == "true" && check_authentication()) {
-    //     $stmt .= " OR `hidden` = 1";
-    // }
-
     //Check if the visibility parameter is set
-    if(isset($_GET["visibility"]) && in_array($_GET["visibility"], ["public", "private", "all"])) {
-        //If the visibility is set to public or all show public items
-        if($_GET["visibility"] == "public" || $_GET["visibility"] == "all") {
+    if(isset($_GET["visibility"]) && in_array($_GET["visibility"], ["private", "all"]) && check_authentication() && check_clearance(0)) {
+        //If the visibility is set to all show public items
+        if($_GET["visibility"] == "all") {
             $stmt .= "(`hidden` = 0";
         }
-        
-        //Check if the user has clearance and is attempting to view hidden items
-        if(check_authentication() && check_clearance(0) && ($_GET["visibility"] == "private" || $_GET["visibility"] == "all")) {
-            //If the visibility is set to all add an OR clause
-            if($_GET["visibility"] == "all") {
-                $stmt .= " OR ";
-            }
 
-            $stmt .= "`hidden` = 1";
+        //If the visibility is set to all add an OR clause
+        if($_GET["visibility"] == "all") {
+            $stmt .= " OR ";
+        }else {
+            $stmt .= "(";
         }
+
+        $stmt .= "`hidden` = 1";
     }else {
         //Otherwise show only public items
         $stmt .= "(`hidden` = 0";
