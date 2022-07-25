@@ -114,10 +114,31 @@ if(!$id_only) {
         $stmt .= " WHERE (";
     }
 
-    $stmt .= "(`hidden` = 0";
+    // $stmt .= "(`hidden` = 0";
 
-    if(isset($_GET["show_hidden"]) && $_GET["show_hidden"] == "true" && check_authentication()) {
-        $stmt .= " OR `hidden` = 1";
+    // if(isset($_GET["show_hidden"]) && $_GET["show_hidden"] == "true" && check_authentication()) {
+    //     $stmt .= " OR `hidden` = 1";
+    // }
+
+    //Check if the visibility parameter is set
+    if(isset($_GET["visibility"]) && in_array($_GET["visibility"], ["public", "private", "all"])) {
+        //If the visibility is set to public or all show public items
+        if($_GET["visibility"] == "public" || $_GET["visibility"] == "all") {
+            $stmt .= "(`hidden` = 0";
+        }
+        
+        //Check if the user has clearance and is attempting to view hidden items
+        if(check_authentication() && check_clearance(0) && ($_GET["visibility"] == "private" || $_GET["visibility"] == "all")) {
+            //If the visibility is set to all add an OR clause
+            if($_GET["visibility"] == "all") {
+                $stmt .= " OR ";
+            }
+
+            $stmt .= "`hidden` = 1";
+        }
+    }else {
+        //Otherwise show only public items
+        $stmt .= "(`hidden` = 0";
     }
 
     $stmt .= ")) ORDER BY ";
@@ -193,7 +214,7 @@ foreach($params as $param=>$param_value) {
 //Execute the statement
 $stmt->execute();
 
-//Convert the results to JSON and ouput them
+//Convert the results to JSON and output them
 header("Content-Type: application/json");
 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
