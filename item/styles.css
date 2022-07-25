@@ -14,8 +14,8 @@ header {
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-header picture {
-  display: flex;
+header i {
+  --ggs: 1.5;
   cursor: pointer;
 }
 
