@@ -328,7 +328,8 @@ main {
 }
 
 .itemDetailsContainer:not(.hidden) + .overlay,
-.dialog:not(.hidden) + .overlay {
+.dialog:not(.hidden) + .overlay,
+.overlay.show {
   opacity: 0.5;
   pointer-events: auto;
   display: block !important;
