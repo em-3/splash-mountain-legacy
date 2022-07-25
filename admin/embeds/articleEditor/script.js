@@ -55,7 +55,9 @@ for (var i = 0; i < keys.length; i++) {
 
 function addContentField(type, content) {
 	contentFields.push(type.constructor(content));
-	document.querySelector(".fields").appendChild(contentFields[contentFields.length - 1].element);
+	document
+		.querySelector(".fields")
+		.appendChild(contentFields[contentFields.length - 1].element);
 }
 
 function showArticleDetails(articleDetails) {
@@ -93,7 +95,11 @@ function showArticleDetails(articleDetails) {
 					fail: false,
 				};
 			} else {
-				if (!document.querySelector(".thumbnail").classList.contains("hidden")) {
+				if (
+					!document
+						.querySelector(".thumbnail")
+						.classList.contains("hidden")
+				) {
 					if (file) {
 						return {
 							include: true,
@@ -201,7 +207,12 @@ function showArticleDetails(articleDetails) {
 			select.name = "author";
 			select.id = "author";
 
-			var options = ["Splash Mountain Legacy Staff", "91J", "EM_3", "MickeyWaffleCo."];
+			var options = [
+				"Splash Mountain Legacy Staff",
+				"91J",
+				"EM_3",
+				"MickeyWaffleCo.",
+			];
 			for (var i = 0; i < options.length; i++) {
 				var currentOption = options[i];
 				var optionElement = document.createElement("option");
@@ -254,7 +265,8 @@ function showArticleDetails(articleDetails) {
 			for (var i = 0; i < options.length; i++) {
 				var currentOption = options[i];
 				var optionElement = document.createElement("option");
-				optionElement.textContent = currentOption[0].toUpperCase() + currentOption.slice(1);
+				optionElement.textContent =
+					currentOption[0].toUpperCase() + currentOption.slice(1);
 				optionElement.value = currentOption;
 				select.appendChild(optionElement);
 			}
@@ -262,7 +274,9 @@ function showArticleDetails(articleDetails) {
 			select.value = "Now";
 			select.onchange = function () {
 				var newValue = select.value;
-				var publicationTimestamp = document.querySelector(".publicationTimestamp");
+				var publicationTimestamp = document.querySelector(
+					".publicationTimestamp"
+				);
 
 				switch (newValue) {
 					case "Now":
@@ -304,7 +318,9 @@ function showArticleDetails(articleDetails) {
 			dateInput.name = "date";
 			dateInput.id = "date";
 			if (mode === "editor") {
-				dateInput.value = new Date(articleDetails.publication_timestamp).toString().substring(0, 10);
+				dateInput.value = new Date(articleDetails.publication_timestamp)
+					.toString()
+					.substring(0, 10);
 			}
 			container.appendChild(dateInput);
 
@@ -317,7 +333,9 @@ function showArticleDetails(articleDetails) {
 			timeInput.name = "time";
 			timeInput.id = "time";
 			if (mode === "editor") {
-				timeInput.value = new Date(articleDetails.publication_timestamp).toString().substring(11, 16);
+				timeInput.value = new Date(articleDetails.publication_timestamp)
+					.toString()
+					.substring(11, 16);
 			}
 			container.appendChild(timeInput);
 
@@ -330,7 +348,9 @@ function showArticleDetails(articleDetails) {
 				if (date && time) {
 					return {
 						include: true,
-						value: Math.floor(new Date(date + " " + time).getTime() / 1000),
+						value: Math.floor(
+							new Date(date + " " + time).getTime() / 1000
+						),
 					};
 				} else if (date) {
 					return {
@@ -355,27 +375,37 @@ function showArticleDetails(articleDetails) {
 	//Show the article details
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
-		document.querySelector(".editor .properties").appendChild(currentProperty.constructor());
+		document
+			.querySelector(".editor .properties")
+			.appendChild(currentProperty.constructor());
 	}
 
 	//Article info preview
 	if (mode === "editor") {
 		var thumbnailElement = document.querySelector(".thumbnail img");
-		thumbnailElement.src = "/resources/" + articleDetails.thumbnail + "/thumbnail";
+		thumbnailElement.src =
+			"/resources/" + articleDetails.thumbnail + "/thumbnail";
 		thumbnailElement.classList.remove("hidden");
 
 		document.querySelector(".articleID").textContent = id;
-		document.querySelector(".articleName").textContent = articleDetails.title;
+		document.querySelector(".articleName").textContent =
+			articleDetails.title;
 
-		document.querySelector(".actions.existingArticle").classList.remove("hidden");
+		document
+			.querySelector(".actions.existingArticle")
+			.classList.remove("hidden");
 	} else {
 		document.querySelector(".articleInfo").classList.add("hidden");
-		document.querySelector(".actions.newArticle").classList.remove("hidden");
+		document
+			.querySelector(".actions.newArticle")
+			.classList.remove("hidden");
 	}
 
 	//Article content
 	if (mode === "editor") {
-		var contentFieldsContainer = document.querySelector(".articleEditor .content .fields");
+		var contentFieldsContainer = document.querySelector(
+			".articleEditor .content .fields"
+		);
 		var content = JSON.parse(articleDetails.content);
 		for (var i = 0; i < content.length; i++) {
 			var currentField = content[i];
@@ -401,11 +431,19 @@ async function uploadArticle() {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
 		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -435,17 +473,33 @@ async function uploadArticle() {
 				.then((response) => response.json())
 				.then((result) => {
 					if (result.status === "success") {
-						document.querySelector(".responseContainer .title").textContent = "Done.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Your article has been uploaded.";
-						document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Done.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent = "Your article has been uploaded.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = "Item ID: " + result.id;
 					} else {
-						document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-						document.querySelector(".responseContainer .message").textContent = result.error;
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Congratulations, you broke something.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent = "Good going.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = result.error;
 					}
 
-					document.querySelector(".progressContainer").classList.add("hidden");
-					document.querySelector(".responseContainer").classList.remove("hidden");
+					document
+						.querySelector(".progressContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".responseContainer")
+						.classList.remove("hidden");
 				});
 		});
 }
@@ -462,11 +516,19 @@ async function updateArticle() {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
 		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -479,13 +541,19 @@ async function updateArticle() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The article has been updated.";
-		document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+		document.querySelector(".responseContainer .title").textContent =
+			"Done.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"The article has been updated.";
+		document.querySelector(".responseContainer .message").textContent =
+			"Item ID: " + result.id;
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		document.querySelector(".responseContainer .title").textContent =
+			"Congratulations, you broke something.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"Good going.";
+		document.querySelector(".responseContainer .message").textContent =
+			result.error;
 	}
 
 	document.querySelector(".progressContainer").classList.add("hidden");
@@ -493,6 +561,23 @@ async function updateArticle() {
 }
 
 async function deleteArticle() {
+	var confirm = await dialog.confirm(
+		"Delete Article",
+		"Are you sure you want to delete this article? This action cannot be undone.",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Delete",
+					type: "destructive",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
+		return;
+	}
+
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
 
@@ -507,13 +592,18 @@ async function deleteArticle() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The article has been deleted.";
+		document.querySelector(".responseContainer .title").textContent =
+			"Done.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"The article has been deleted.";
 		document.querySelector(".responseContainer .message").textContent = "";
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		document.querySelector(".responseContainer .title").textContent =
+			"Congratulations, you broke something.";
+		document.querySelector(".responseContainer .subtitle").textContent =
+			"Good going.";
+		document.querySelector(".responseContainer .message").textContent =
+			result.error;
 	}
 
 	document.querySelector(".progressContainer").classList.add("hidden");
@@ -526,6 +616,22 @@ function showErrorScreen() {
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
-function closeEditor() {
+async function closeEditor() {
+	var confirm = await dialog.confirm(
+		"Close Editor",
+		"Are you sure you want to close the editor? You'll lose any unpublished changes.",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Close",
+					type: "active",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
+		return;
+	}
 	window.top.postMessage("closeArticleEditor", "*");
 }

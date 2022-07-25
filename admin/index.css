@@ -24,12 +24,13 @@ main section h1 {
   justify-content: space-between;
 }
 
-.toolbar .buttons a {
+.toolbar .buttons button {
   padding: 5pt 10pt;
   background: var(--page-background-color);
   color: var(--primary-text-color);
+  border: none;
   border-radius: 5pt;
-  text-decoration: none;
+  font: inherit;
   font-weight: bold;
 }
 

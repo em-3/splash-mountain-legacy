@@ -118,6 +118,8 @@ if(!check_authentication() || !check_clearance(0)) {
         </section>
     </main>
 
+    <div class="overlay"></div>
+
     <script src="/js/global.js"></script>
     <script src="script.js"></script>
 

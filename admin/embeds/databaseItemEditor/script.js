@@ -1147,7 +1147,20 @@ async function updateItem() {
 }
 
 async function deleteItem() {
-	if (!confirm("Are you sure you'd like to delete this item?")) {
+	var confirm = await dialog.confirm(
+		"Delete Item",
+		"Are you sure you want to delete this item? This action cannot be undone.",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Delete",
+					type: "destructive",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
 		return;
 	}
 
@@ -1189,7 +1202,24 @@ function showErrorScreen() {
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
-function closeEditor() {
+async function closeEditor() {
+	var confirm = await dialog.confirm(
+		"Close Editor",
+		"Are you sure you want to close the editor? You'll lose any unsaved changes.",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Close",
+					type: "active",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
+		return;
+	}
+
 	if (params.get("fromViewer") === "true") {
 		window.history.back();
 		return false;

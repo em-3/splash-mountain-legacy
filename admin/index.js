@@ -55,9 +55,15 @@ var databaseList = {
 				clearTimeout(this.timeoutID);
 			}
 
-			document.querySelector(".list.database .loadingContainer").classList.remove("hidden");
-			document.querySelector(".list.database .resultsContainer").classList.add("hidden");
-			document.querySelector(".list.database .errorMessageContainer").classList.add("hidden");
+			document
+				.querySelector(".list.database .loadingContainer")
+				.classList.remove("hidden");
+			document
+				.querySelector(".list.database .resultsContainer")
+				.classList.add("hidden");
+			document
+				.querySelector(".list.database .errorMessageContainer")
+				.classList.add("hidden");
 
 			//Wait a second before updating the search results
 			this.timeoutID = setTimeout(databaseList.refreshResults, 1000);
@@ -82,7 +88,9 @@ var databaseList = {
 		var PHPParams = "";
 		var character = "?";
 
-		var filterValue = document.querySelector(".list.database .filters .searchField input").value;
+		var filterValue = document.querySelector(
+			".list.database .filters .searchField input"
+		).value;
 		if (filterValue != "") {
 			PHPParams += character + "query=" + filterValue;
 			character = "&";
@@ -90,10 +98,14 @@ var databaseList = {
 
 		for (var i = 0; i < databaseList.filters.length; i++) {
 			//Get the selected option for this filter's select element.
-			var filterElement = document.querySelector("select[name='" + databaseList.filters[i].id + "']");
-			var filterValue = filterElement.options[filterElement.selectedIndex].value;
+			var filterElement = document.querySelector(
+				"select[name='" + databaseList.filters[i].id + "']"
+			);
+			var filterValue =
+				filterElement.options[filterElement.selectedIndex].value;
 			if (filterValue != "" && filterValue != "All") {
-				PHPParams += character + databaseList.filters[i].id + "=" + filterValue;
+				PHPParams +=
+					character + databaseList.filters[i].id + "=" + filterValue;
 				character = "&";
 			}
 		}
@@ -103,15 +115,33 @@ var databaseList = {
 			var scrollPositionY = window.scrollY;
 
 			//Clear the current results
-			while (document.querySelector(".list.database .resultsContainer").firstChild) {
-				document.querySelector(".list.database .resultsContainer").removeChild(document.querySelector(".list.database .resultsContainer").firstChild);
+			while (
+				document.querySelector(".list.database .resultsContainer")
+					.firstChild
+			) {
+				document
+					.querySelector(".list.database .resultsContainer")
+					.removeChild(
+						document.querySelector(
+							".list.database .resultsContainer"
+						).firstChild
+					);
 			}
 			//Reset min
 			databaseList.searchRange.min = 1;
 		}
 
 		//Fetch new results
-		fetch("/api/search/" + PHPParams + character + "min=" + databaseList.searchRange.min + "&max=" + databaseList.searchRange.max + "&show_hidden=true")
+		fetch(
+			"/api/search/" +
+				PHPParams +
+				character +
+				"min=" +
+				databaseList.searchRange.min +
+				"&max=" +
+				databaseList.searchRange.max +
+				"&show_hidden=true"
+		)
 			.then((response) => response.json())
 			.then(
 				(data) => {
@@ -119,14 +149,24 @@ var databaseList = {
 						var noResults = document.createElement("p");
 						noResults.className = "noResults";
 						noResults.textContent = "No results found.";
-						document.querySelector(".list.database .resultsContainer").appendChild(noResults);
+						document
+							.querySelector(".list.database .resultsContainer")
+							.appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
-						var loadMoreButton = document.querySelector(".list.database .loadMoreButton");
-						loadMoreButton.parentElement.removeChild(loadMoreButton);
+						var loadMoreButton = document.querySelector(
+							".list.database .loadMoreButton"
+						);
+						loadMoreButton.parentElement.removeChild(
+							loadMoreButton
+						);
 					} else {
 						if (preservePreviousResults) {
-							var loadMoreButton = document.querySelector(".list.database .loadMoreButton");
-							loadMoreButton.parentElement.removeChild(loadMoreButton);
+							var loadMoreButton = document.querySelector(
+								".list.database .loadMoreButton"
+							);
+							loadMoreButton.parentElement.removeChild(
+								loadMoreButton
+							);
 						}
 
 						for (var i = 0; i < data.length; i++) {
@@ -144,28 +184,46 @@ var databaseList = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail";
+								imgElement.src =
+									"/resources/" +
+									currentItemData.image +
+									"/thumbnail";
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src = "https://img.youtube.com/vi/" + currentItemData.video_id + "/mqdefault.jpg";
+								imgElement.src =
+									"https://img.youtube.com/vi/" +
+									currentItemData.video_id +
+									"/mqdefault.jpg";
 							} else {
-								var pictureElement = document.createElement("picture");
+								var pictureElement =
+									document.createElement("picture");
 								pictureElement.className = "image";
 
-								var sourceElement = document.createElement("source");
-								sourceElement.srcset = "/images/icons/types/" + currentItemData.type + "-white.png";
-								sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
+								var sourceElement =
+									document.createElement("source");
+								sourceElement.srcset =
+									"/images/icons/types/" +
+									currentItemData.type +
+									"-white.png";
+								sourceElement.setAttribute(
+									"media",
+									"(prefers-color-scheme: dark)"
+								);
 
 								var imgElement = document.createElement("img");
-								imgElement.src = "/images/icons/types/" + currentItemData.type + "-black.png";
+								imgElement.src =
+									"/images/icons/types/" +
+									currentItemData.type +
+									"-black.png";
 
 								pictureElement.appendChild(sourceElement);
 								pictureElement.appendChild(imgElement);
 							}
 
-							var rightSideContainer = document.createElement("div");
+							var rightSideContainer =
+								document.createElement("div");
 							rightSideContainer.className = "right";
 
 							if (currentItemData.hidden === "1") {
@@ -183,11 +241,14 @@ var databaseList = {
 							nameElement.className = "name";
 							nameElement.textContent = currentItemData.name;
 
-							var descriptionElement = document.createElement("p");
+							var descriptionElement =
+								document.createElement("p");
 							descriptionElement.className = "description";
-							descriptionElement.textContent = currentItemData.description;
+							descriptionElement.textContent =
+								currentItemData.description;
 
-							var infoContainerElement = document.createElement("div");
+							var infoContainerElement =
+								document.createElement("div");
 							infoContainerElement.className = "infoContainer";
 
 							var parkElement = document.createElement("p");
@@ -203,13 +264,19 @@ var databaseList = {
 							if (currentItemData.author) {
 								var authorElement = document.createElement("p");
 								authorElement.className = "author";
-								authorElement.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+								authorElement.textContent =
+									currentItemData.author.replace(
+										/\[([^\][]+)]/g,
+										""
+									);
 								infoContainerElement.appendChild(authorElement);
 							}
 
 							rightSideContainer.appendChild(sceneElement);
 							rightSideContainer.appendChild(nameElement);
-							rightSideContainer.appendChild(infoContainerElement);
+							rightSideContainer.appendChild(
+								infoContainerElement
+							);
 							rightSideContainer.appendChild(descriptionElement);
 
 							if (pictureElement) {
@@ -218,24 +285,46 @@ var databaseList = {
 								resultElement.appendChild(imgElement);
 							}
 							resultElement.appendChild(rightSideContainer);
-							document.querySelector(".list.database .resultsContainer").appendChild(resultElement);
+							document
+								.querySelector(
+									".list.database .resultsContainer"
+								)
+								.appendChild(resultElement);
 						}
 
-						if (data.length === databaseList.searchRange.max - databaseList.searchRange.min) {
-							var loadMoreButton = document.createElement("button");
+						if (
+							data.length ===
+							databaseList.searchRange.max -
+								databaseList.searchRange.min
+						) {
+							var loadMoreButton =
+								document.createElement("button");
 							loadMoreButton.className = "loadMoreButton";
 							loadMoreButton.textContent = "Load More";
-							loadMoreButton.addEventListener("click", function () {
-								databaseList.loadMoreResults();
-							});
-							document.querySelector(".list.database .resultsContainer").appendChild(loadMoreButton);
+							loadMoreButton.addEventListener(
+								"click",
+								function () {
+									databaseList.loadMoreResults();
+								}
+							);
+							document
+								.querySelector(
+									".list.database .resultsContainer"
+								)
+								.appendChild(loadMoreButton);
 						}
 					}
 
 					//Hide the loading screen and show the results container
-					document.querySelector(".list.database .loadingContainer").classList.add("hidden");
-					document.querySelector(".list.database .resultsContainer").classList.remove("hidden");
-					document.querySelector(".list.database .errorMessageContainer").classList.add("hidden");
+					document
+						.querySelector(".list.database .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.database .resultsContainer")
+						.classList.remove("hidden");
+					document
+						.querySelector(".list.database .errorMessageContainer")
+						.classList.add("hidden");
 
 					//Scroll back to where the user was
 					if (!preservePreviousResults) {
@@ -243,13 +332,23 @@ var databaseList = {
 					}
 				},
 				(error) => {
-					document.querySelector(".list.database .errorMessageContainer .title").textContent = "Something Went Wrong";
-					document.querySelector(".list.database .errorMessageContainer .subtitle").textContent = "Failed to load database items.";
+					document.querySelector(
+						".list.database .errorMessageContainer .title"
+					).textContent = "Something Went Wrong";
+					document.querySelector(
+						".list.database .errorMessageContainer .subtitle"
+					).textContent = "Failed to load database items.";
 
 					//Hide the loading screen and show the error message container
-					document.querySelector(".list.database .loadingContainer").classList.add("hidden");
-					document.querySelector(".list.database .resultsContainer").classList.add("hidden");
-					document.querySelector(".list.database .errorMessageContainer").classList.remove("hidden");
+					document
+						.querySelector(".list.database .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.database .resultsContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.database .errorMessageContainer")
+						.classList.remove("hidden");
 				}
 			);
 	},
@@ -261,25 +360,34 @@ var databaseList = {
 };
 
 function showNewItemEditor() {
-	document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/?mode=newItem";
+	document.querySelector(".databaseItemEditorContainer iframe").src =
+		"/admin/embeds/databaseItemEditor/?mode=newItem";
 
 	document.querySelector(".overlay").classList.add("active");
-	document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+	document
+		.querySelector(".databaseItemEditorContainer")
+		.classList.remove("hidden");
 }
 
 function showDatabaseItemEditor(itemID) {
-	document.querySelector(".databaseItemEditorContainer iframe").src = "/admin/embeds/databaseItemEditor/?mode=editor&id=" + itemID;
+	document.querySelector(".databaseItemEditorContainer iframe").src =
+		"/admin/embeds/databaseItemEditor/?mode=editor&id=" + itemID;
 
 	document.querySelector(".overlay").classList.add("active");
-	document.querySelector(".databaseItemEditorContainer").classList.remove("hidden");
+	document
+		.querySelector(".databaseItemEditorContainer")
+		.classList.remove("hidden");
 }
 
 function hideItemEditor() {
 	document.querySelector(".overlay").classList.remove("active");
-	document.querySelector(".databaseItemEditorContainer").classList.add("hidden");
+	document
+		.querySelector(".databaseItemEditorContainer")
+		.classList.add("hidden");
 
 	setTimeout(function () {
-		document.querySelector(".databaseItemEditorContainer iframe").src = "about:blank";
+		document.querySelector(".databaseItemEditorContainer iframe").src =
+			"about:blank";
 	}, 500);
 }
 
@@ -297,9 +405,15 @@ var newsList = {
 				clearTimeout(this.timeoutID);
 			}
 
-			document.querySelector(".list.news .loadingContainer").classList.remove("hidden");
-			document.querySelector(".list.news .resultsContainer").classList.add("hidden");
-			document.querySelector(".list.news .errorMessageContainer").classList.add("hidden");
+			document
+				.querySelector(".list.news .loadingContainer")
+				.classList.remove("hidden");
+			document
+				.querySelector(".list.news .resultsContainer")
+				.classList.add("hidden");
+			document
+				.querySelector(".list.news .errorMessageContainer")
+				.classList.add("hidden");
 
 			//Wait a second before updating the search results
 			this.timeoutID = setTimeout(newsList.refreshResults, 1000);
@@ -312,7 +426,9 @@ var newsList = {
 		var PHPParams = "";
 		var character = "?";
 
-		var filterValue = document.querySelector(".list.news .filters .searchField input").value;
+		var filterValue = document.querySelector(
+			".list.news .filters .searchField input"
+		).value;
 		if (filterValue != "") {
 			PHPParams += character + "query=" + filterValue;
 			character = "&";
@@ -320,13 +436,30 @@ var newsList = {
 
 		if (!preservePreviousResults) {
 			//Clear the current results
-			while (document.querySelector(".list.news .resultsContainer").firstChild) {
-				document.querySelector(".list.news .resultsContainer").removeChild(document.querySelector(".list.news .resultsContainer").firstChild);
+			while (
+				document.querySelector(".list.news .resultsContainer")
+					.firstChild
+			) {
+				document
+					.querySelector(".list.news .resultsContainer")
+					.removeChild(
+						document.querySelector(".list.news .resultsContainer")
+							.firstChild
+					);
 			}
 		}
 
 		//Fetch new results
-		fetch("/api/news/list/" + PHPParams + character + "min=" + newsList.searchRange.min + "&max=" + newsList.searchRange.max + "&show_unpublished=true")
+		fetch(
+			"/api/news/list/" +
+				PHPParams +
+				character +
+				"min=" +
+				newsList.searchRange.min +
+				"&max=" +
+				newsList.searchRange.max +
+				"&show_unpublished=true"
+		)
 			.then((response) => response.json())
 			.then(
 				(data) => {
@@ -334,14 +467,24 @@ var newsList = {
 						var noResults = document.createElement("p");
 						noResults.className = "noResults";
 						noResults.textContent = "No results found.";
-						document.querySelector(".list.news .resultsContainer").appendChild(noResults);
+						document
+							.querySelector(".list.news .resultsContainer")
+							.appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
-						var loadMoreButton = document.querySelector(".list.news .loadMoreButton");
-						loadMoreButton.parentElement.removeChild(loadMoreButton);
+						var loadMoreButton = document.querySelector(
+							".list.news .loadMoreButton"
+						);
+						loadMoreButton.parentElement.removeChild(
+							loadMoreButton
+						);
 					} else {
 						if (preservePreviousResults) {
-							var loadMoreButton = document.querySelector(".list.news .loadMoreButton");
-							loadMoreButton.parentElement.removeChild(loadMoreButton);
+							var loadMoreButton = document.querySelector(
+								".list.news .loadMoreButton"
+							);
+							loadMoreButton.parentElement.removeChild(
+								loadMoreButton
+							);
 						}
 
 						for (var i = 0; i < data.length; i++) {
@@ -357,9 +500,13 @@ var newsList = {
 
 							var imgElement = document.createElement("img");
 							imgElement.className = "image";
-							imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail";
+							imgElement.src =
+								"/resources/" +
+								currentItemData.thumbnail +
+								"/thumbnail";
 
-							var rightSideContainer = document.createElement("div");
+							var rightSideContainer =
+								document.createElement("div");
 							rightSideContainer.className = "right";
 
 							if (currentItemData.hidden === "1") {
@@ -375,21 +522,33 @@ var newsList = {
 
 							var subtitleElement = document.createElement("p");
 							subtitleElement.className = "subtitle";
-							subtitleElement.textContent = currentItemData.subtitle;
+							subtitleElement.textContent =
+								currentItemData.subtitle;
 
-							var infoContainerElement = document.createElement("div");
+							var infoContainerElement =
+								document.createElement("div");
 							infoContainerElement.className = "infoContainer";
 
-							var publicationDateElement = document.createElement("p");
-							publicationDateElement.className = "publicationDate";
+							var publicationDateElement =
+								document.createElement("p");
+							publicationDateElement.className =
+								"publicationDate";
 							var publicationDateObject = new Date(0);
-							publicationDateObject.setUTCSeconds(Number(currentItemData.publication_timestamp));
-							publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
-								day: "numeric",
-								month: "long",
-								year: "numeric",
-							});
-							infoContainerElement.appendChild(publicationDateElement);
+							publicationDateObject.setUTCSeconds(
+								Number(currentItemData.publication_timestamp)
+							);
+							publicationDateElement.textContent =
+								publicationDateObject.toLocaleDateString(
+									"en-US",
+									{
+										day: "numeric",
+										month: "long",
+										year: "numeric",
+									}
+								);
+							infoContainerElement.appendChild(
+								publicationDateElement
+							);
 
 							var authorElement = document.createElement("p");
 							authorElement.className = "author";
@@ -398,37 +557,66 @@ var newsList = {
 
 							rightSideContainer.appendChild(titleElement);
 							rightSideContainer.appendChild(subtitleElement);
-							rightSideContainer.appendChild(infoContainerElement);
+							rightSideContainer.appendChild(
+								infoContainerElement
+							);
 
 							resultElement.appendChild(imgElement);
 							resultElement.appendChild(rightSideContainer);
-							document.querySelector(".list.news .resultsContainer").appendChild(resultElement);
+							document
+								.querySelector(".list.news .resultsContainer")
+								.appendChild(resultElement);
 						}
 
-						if (data.length === newsList.searchRange.max - newsList.searchRange.min) {
-							var loadMoreButton = document.createElement("button");
+						if (
+							data.length ===
+							newsList.searchRange.max - newsList.searchRange.min
+						) {
+							var loadMoreButton =
+								document.createElement("button");
 							loadMoreButton.className = "loadMoreButton";
 							loadMoreButton.textContent = "Load More";
-							loadMoreButton.addEventListener("click", function () {
-								newsList.loadMoreResults();
-							});
-							document.querySelector(".list.news .resultsContainer").appendChild(loadMoreButton);
+							loadMoreButton.addEventListener(
+								"click",
+								function () {
+									newsList.loadMoreResults();
+								}
+							);
+							document
+								.querySelector(".list.news .resultsContainer")
+								.appendChild(loadMoreButton);
 						}
 					}
 
 					//Hide the loading screen and show the results container
-					document.querySelector(".list.news .loadingContainer").classList.add("hidden");
-					document.querySelector(".list.news .resultsContainer").classList.remove("hidden");
-					document.querySelector(".list.news .errorMessageContainer").classList.add("hidden");
+					document
+						.querySelector(".list.news .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.news .resultsContainer")
+						.classList.remove("hidden");
+					document
+						.querySelector(".list.news .errorMessageContainer")
+						.classList.add("hidden");
 				},
 				(error) => {
-					document.querySelector(".list.news .errorMessageContainer .title").textContent = "Something Went Wrong";
-					document.querySelector(".list.news .errorMessageContainer .subtitle").textContent = "Failed to load news articles.";
+					document.querySelector(
+						".list.news .errorMessageContainer .title"
+					).textContent = "Something Went Wrong";
+					document.querySelector(
+						".list.news .errorMessageContainer .subtitle"
+					).textContent = "Failed to load news articles.";
 
 					//Hide the loading screen and show the error message container
-					document.querySelector(".list.news .loadingContainer").classList.add("hidden");
-					document.querySelector(".list.news .resultsContainer").classList.add("hidden");
-					document.querySelector(".list.news .errorMessageContainer").classList.remove("hidden");
+					document
+						.querySelector(".list.news .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.news .resultsContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".list.news .errorMessageContainer")
+						.classList.remove("hidden");
 				}
 			);
 	},
@@ -440,17 +628,23 @@ var newsList = {
 };
 
 function showNewArticleEditor() {
-	document.querySelector(".articleEditorContainer iframe").src = "/admin/embeds/articleEditor/?mode=newArticle";
+	document.querySelector(".articleEditorContainer iframe").src =
+		"/admin/embeds/articleEditor/?mode=newArticle";
 
 	document.querySelector(".overlay").classList.add("active");
-	document.querySelector(".articleEditorContainer").classList.remove("hidden");
+	document
+		.querySelector(".articleEditorContainer")
+		.classList.remove("hidden");
 }
 
 function showExistingArticleEditor(articleID) {
-	document.querySelector(".articleEditorContainer iframe").src = "/admin/embeds/articleEditor/?mode=editor&id=" + articleID;
+	document.querySelector(".articleEditorContainer iframe").src =
+		"/admin/embeds/articleEditor/?mode=editor&id=" + articleID;
 
 	document.querySelector(".overlay").classList.add("active");
-	document.querySelector(".articleEditorContainer").classList.remove("hidden");
+	document
+		.querySelector(".articleEditorContainer")
+		.classList.remove("hidden");
 }
 
 function hideArticleEditor() {
@@ -458,8 +652,30 @@ function hideArticleEditor() {
 	document.querySelector(".articleEditorContainer").classList.add("hidden");
 
 	setTimeout(function () {
-		document.querySelector(".articleEditorContainer iframe").src = "about:blank";
+		document.querySelector(".articleEditorContainer iframe").src =
+			"about:blank";
 	}, 500);
+}
+
+async function logout() {
+	var confirm = await dialog.confirm(
+		"Logout",
+		"Are you sure you want to logout?",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Logout",
+					type: "active",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
+		return;
+	}
+
+	window.location.href = "/logout.php";
 }
 
 //Loop through each filter and create an element for for it.
@@ -492,7 +708,9 @@ for (var i = 0; i < databaseList.filters.length; i++) {
 
 	filterElement.appendChild(filterName);
 	filterElement.appendChild(filterSelect);
-	document.querySelector(".list.database .filters .optionMenus").appendChild(filterElement);
+	document
+		.querySelector(".list.database .filters .optionMenus")
+		.appendChild(filterElement);
 }
 
 databaseList.refreshResults();
