@@ -153,23 +153,3 @@ var dialog = {
 		return button;
 	},
 };
-
-dialog
-	.prompt("Test Prompt", "This is a test prompt.", {
-		placeholder: "Placeholder",
-	})
-	.then(function (inputValue) {
-		dialog.alert("Test Alert", inputValue);
-	});
-dialog
-	.confirm("Test Confirm", "This is a test confirm.", {
-		cancellable: true,
-		buttons: [
-			{ text: "Yes", type: "active" },
-			{ text: "No", type: "passive" },
-			{ text: "Burn it", type: "destructive" },
-		],
-	})
-	.then(function (name) {
-		dialog.alert("Test Alert", "Button " + name);
-	});
