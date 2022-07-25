@@ -167,7 +167,7 @@ function addFilter(filterObject, selectedOption) {
 
 	var removeButton = document.createElement("div");
 	removeButton.classList.add("removeButton");
-	removeButton.textContent = "✕";
+	removeButton.innerHTML = "<i class='gg-close'></i>";
 	removeButton.addEventListener("click", function () {
 		document
 			.querySelector(".availableFilters .filter." + filterObject.id)

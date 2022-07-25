@@ -123,7 +123,7 @@ main {
   border-radius: 3pt;
   font-weight: bold;
   height: 15pt;
-  padding: 2pt;
+  padding: 2pt 0;
   margin-left: 5pt;
   cursor: pointer;
   display: flex;
@@ -131,7 +131,8 @@ main {
   justify-content: center;
 }
 
-.filterBar .addFilter {
+.filterBar .addFilter,
+.filterSelect .closeButton {
   background: var(--page-background-color);
   border-radius: 5pt;
   padding: 0 5pt;
@@ -178,16 +179,7 @@ main {
 }
 
 .filterSelect .closeButton {
-  background: var(--page-background-color);
-  height: 20pt;
-  border-radius: 5pt;
-  padding: 0 5pt;
-  margin-right: 10pt;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-right: 5pt;
 }
 
 .filterSelect .availableFilters {

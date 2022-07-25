@@ -54,10 +54,7 @@
                 <a href="/about">About</a>
                 <a class="admin hidden" href="/admin">Admin</a>
                 <button class="search" onclick="document.querySelector('.searchField input').focus()">
-                    <picture>
-                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                    </picture>
+                    <i class="gg-search"></i>
                 </button>
             </div>
         </div>
@@ -100,7 +97,9 @@
                     </div>
                     <div class="filterBar">
                         <div class="filters"></div>
-                        <div class="addFilter" onclick="showFilterSelect()">+</div>
+                        <div class="addFilter" onclick="showFilterSelect()">
+                            <i class="gg-math-plus"></i>
+                        </div>
                     </div>
                     <div class="sortByContainer">
                         <p>Sort By:</p>
@@ -114,7 +113,9 @@
                 </div>
 
                 <div class="filterSelect hidden">
-                    <div class="closeButton" onclick="hideFilterSelect()">✕</div>
+                    <div class="closeButton" onclick="hideFilterSelect()">
+                        <i class="gg-close"></i>
+                    </div>
                     <div class="availableFilters"></div>
                 </div>
                 

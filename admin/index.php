@@ -56,10 +56,7 @@ if(!check_authentication() || !check_clearance(0)) {
                 <a href="/about">About</a>
                 <a class="admin current" href="/admin">Admin</a>
                 <button class="search" onclick="searchBar.onfocus();">
-                    <picture>
-                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                    </picture>
+                    <i class="gg-search"></i>
                 </button>
             </div>
         </div>
