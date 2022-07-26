@@ -174,6 +174,8 @@ abstract class Entry {
      * @throws \Exception If the deletion fails
      */
     public function deleteEntry() {
+        $this->handleEntryDelete();
+
         $sql = "DELETE FROM `" . $this->table_name . "` WHERE id = ?";
 
         $stmt = $this->database->prepare($sql);
@@ -189,6 +191,8 @@ abstract class Entry {
      * @throws \Exception If the creation failed
      */
     private function createEntry() {
+        $this->handleEntryCreate($this->data);
+
         $sql = "INSERT INTO `" . $this->table_name . "` (";
 
         //Add the ID to the data to be inserted
@@ -228,6 +232,8 @@ abstract class Entry {
      * @throws \Exception If the update failed
      */
     private function updateEntry() {
+        $this->handleEntryUpdate($this->data);
+
         $sql = "UPDATE `" . $this->table_name . "` SET";
 
         //Add the keys
@@ -265,6 +271,23 @@ abstract class Entry {
      * @param mixed &$field The data being put into the entry
      */
     protected function handleDataPut(&$field, &$data) {}
+
+    /**
+     * Hook method which is called before the entry is created
+     * @param array $data A read only copy of the data being created
+     */
+    protected function handleEntryCreate($data) {}
+
+    /**
+     * Hook method which is called before the entry is deleted
+     */
+    protected function handleEntryDelete() {}
+
+    /**
+     * Hook method which is called before the entry is updated
+     * @param array $data A read only copy of the data being updated
+     */
+    protected function handleEntryUpdate($data) {}
 
     /**
      * Returns the list of available fields for this entry.
