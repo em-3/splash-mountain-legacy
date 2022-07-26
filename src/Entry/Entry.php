@@ -1,6 +1,8 @@
 <?php
 
-namespace SplmlFoundation\SplashMountainLegacyBackend;
+namespace SplmlFoundation\SplashMountainLegacyBackend\Entry;
+
+use SplmlFoundation\SplashMountainLegacyBackend\Resource;
 
 abstract class Entry {
 

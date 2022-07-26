@@ -1,6 +1,6 @@
 <?php
 
-namespace SplmlFoundation\SplashMountainLegacyBackend;
+namespace SplmlFoundation\SplashMountainLegacyBackend\Entry;
 
 class ItemEntry extends Entry {
 
