@@ -90,67 +90,56 @@ if(!check_authentication() || !check_clearance(0)) {
     </div>
 
     <main>
-        <section>
-            <div class="toolbar">
-                <h1>Admin Console</h1>
-                <div class="buttons">
-                    <button onclick="logout()" class="logout">Logout</a>
+        <section class="header">
+            <h1>Admin Console</h1>
+            <div class="profileInformation">
+                <img src="/images/mwc.jpg" alt="" class="profilePicture">
+                <div class="text">
+                    <h3 class="name">Name</h3>
+                    <p class="authorizationLevel">Authorization Level</p>
                 </div>
+                <button class="logout" onclick="logout()">
+                    <i class="gg-log-out"></i>
+                </button>
             </div>
-            <div class="content">
-                <div class="tabContainer">
-                    <div class="tab database selected" onclick="selectTab('database')">Database Items</div>
-                    <div class="tab news" onclick="selectTab('news')">News Articles</div>
+        </section>
+        <section class="pageLinks">
+            <a href="/admin/database">
+                <div class="pageLink databaseBrowser">
+                    <div class="icon">
+                        <i class="gg-database"></i>
+                    </div>
+                    <div class="text">
+                        <h2>Database Browser</h2>
+                        <p>Upload, edit, and delete items.</p>
+                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-                <div class="list database">
-                    <div class="toolbar">
-                        <div class="filters">
-                            <div class="searchField">
-                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()" onchange="databaseList.searchBar.onchange()">
-                            </div>
-                            <div class="optionMenus"></div>
-                        </div>
-                        <div class="addItemButton" onclick="showNewItemEditor()"><span>+</span> New Item</div>
+            </a>
+            <a href="/admin/newsList">
+                <div class="pageLink newsList">
+                    <div class="icon">
+                        <i class="gg-file-document"></i>
                     </div>
-                    <div class="loadingContainer">
-                        <div class="loadingAnimationEllipsis">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                    <div class="text">
+                        <h2>News List</h2>
+                        <p>Create, edit, and delete news articles.</p>
                     </div>
-                    <div class="resultsContainer hidden"></div>
-                    <div class="errorMessageContainer hidden">
-                        <h2 class="title"></h2>
-                        <p class="subtitle"></p>
-                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-                <div class="list news hidden">
-                    <div class="toolbar">
-                        <div class="filters">
-                            <div class="searchField">
-                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()"
-                                    onchange="databaseList.searchBar.onchange()">
-                            </div>
-                        </div>
-                        <div class="addItemButton" onclick="showNewArticleEditor()"><span>+</span> New Article</div>
+            </a>
+            <a href="/admin/auditLog">
+                <div class="pageLink auditLog">
+                    <div class="icon">
+                        <i class="gg-play-list-search"></i>
                     </div>
-                    <div class="loadingContainer">
-                        <div class="loadingAnimationEllipsis">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                    <div class="text">
+                        <h2>Audit Log</h2>
+                        <p>View a history of database changes.</p>
                     </div>
-                    <div class="resultsContainer hidden"></div>
-                    <div class="errorMessageContainer hidden">
-                        <h2 class="title"></h2>
-                        <p class="subtitle"></p>
-                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-            </div>
+            </a>
         </section>
     </main>
 

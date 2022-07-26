@@ -392,16 +392,9 @@ header .links .search {
   padding: 0;
   height: 30pt;
   width: 30pt;
-}
-
-header .links .search picture {
-  width: 22px;
-  height: 22px;
-}
-
-header .links .search picture img {
-  /*Balance visually instead of aligning perfectly centered*/
-  transform: translate(0, 1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header .searchBox {
@@ -613,6 +606,12 @@ main {
 .dialog .buttonContainer button.active {
   background: var(--color-1);
   color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dialog .buttonContainer button.active {
+    background: var(--color-2);
+  }
 }
 
 .dialog .buttonContainer button.destructive {
