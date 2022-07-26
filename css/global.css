@@ -551,7 +551,7 @@ main {
 }
 
 .dialog {
-  background: var(--page-background-color);
+  background: var(--content-background-color);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -581,7 +581,7 @@ main {
 }
 
 .dialog input {
-  background: var(--content-background-color);
+  background: var(--page-background-color);
   border: none;
   border-radius: 10pt;
   padding: 10pt;
@@ -602,23 +602,27 @@ main {
   padding: 5pt 10pt;
   border-radius: 5pt;
   border: none;
-  background: var(--content-background-color);
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
   font: inherit;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.1s ease;
+  transition: all 0.1s ease;
 }
 
 .dialog .buttonContainer button.active {
   background: var(--color-1);
+  color: black;
 }
 
 .dialog .buttonContainer button.destructive {
   background: var(--destructive-color);
+  color: white;
 }
 
 .dialog .buttonContainer button:hover {
-  background: var(--page-background-color);
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
 }
 
 .dialog.hidden {
