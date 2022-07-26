@@ -14,7 +14,7 @@ var filters = [
 	{
 		id: "visibility",
 		label: "Visibility",
-		values: ["All", "Public", "Private"],
+		values: ["Public", "Private"],
 		valueCase: "lower",
 		max: 1,
 	},
@@ -221,6 +221,12 @@ var databaseBrowser = {
 				}
 				character = "&";
 			}
+		}
+
+		//If no visibility filter has been speicifically set, default to showing all items.
+		if (PHPParams.indexOf("visibility") == -1) {
+			PHPParams += character + "visibility=all";
+			character = "&";
 		}
 
 		var sortByElement = document.querySelector("#sortBy");
