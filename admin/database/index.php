@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/scripts/init_admin.php";
+require_once __DIR__ . "/../scripts/init_admin.php";
 
 //Redirect the user if they're not logged in
 if(!check_authentication() || !check_clearance(0)) {
@@ -28,6 +28,15 @@ if(!check_authentication() || !check_clearance(0)) {
     <meta name="keywords"
         content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
 
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9N1M0HPYP7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-9N1M0HPYP7');
+    </script>
+
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -47,7 +56,7 @@ if(!check_authentication() || !check_clearance(0)) {
             <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
             <img src="/images/logo-black.png">
         </picture>
-
+    
         <div class="linksContainer">
             <div class="links">
                 <a href="/">Home</a>
@@ -55,15 +64,17 @@ if(!check_authentication() || !check_clearance(0)) {
                 <a href="/news">News</a>
                 <a href="/about">About</a>
                 <a class="admin current" href="/admin">Admin</a>
-                <button class="search" onclick="searchBar.onfocus();">
-                    <i class="gg-search"></i>
+                <button class="search" onclick="document.querySelector('.searchField input').focus()">
+                    <picture>
+                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
+                    </picture>
                 </button>
             </div>
         </div>
-
+    
         <div class="searchBox">
-            <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
-                onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+            <input type="text" class="searchField" placeholder="Search">
             <div class="clearButton" onclick="searchBar.close()">
                 <picture>
                     <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
@@ -90,68 +101,50 @@ if(!check_authentication() || !check_clearance(0)) {
     </div>
 
     <main>
-        <section class="header">
-            <h1>Admin Console</h1>
-            <div class="profileInformation">
-                <img src="/images/mwc.jpg" alt="" class="profilePicture">
-                <div class="text">
-                    <h3 class="name">Name</h3>
-                    <p class="authorizationLevel">Authorization Level</p>
+        <section class="databaseBrowser">
+            <div class="searchControls">
+
+                <div class="controls">
+                    <div class="searchField">
+                        <input type="text" placeholder="Filter" oninput="databaseBrowser.searchBar.oninput()"
+                            onchange="databaseBrowser.searchBar.onchange()">
+                    </div>
+                    <div class="filterBar">
+                        <div class="filters"></div>
+                        <div class="addFilter" onclick="showFilterSelect()">+</div>
+                    </div>
+                    <div class="sortByContainer">
+                        <p>Sort By:</p>
+                        <select name="sortBy" class="sortBy" id="sortBy" onchange="databaseBrowser.refreshResults()">
+                            <option value="name" selected>Name</option>
+                            <option value="scene">Scene</option>
+                            <option value="newest_first">Date Added (Newest First)</option>
+                            <option value="oldest_first">Date Added (Oldest First)</option>
+                        </select>
+                    </div>
                 </div>
-                <button class="logout" onclick="logout()">
-                    <i class="gg-log-out"></i>
-                </button>
+
+                <div class="filterSelect hidden">
+                    <div class="closeButton" onclick="hideFilterSelect()">✕</div>
+                    <div class="availableFilters"></div>
+                </div>
+                
+            </div>
+            <div class="loadingContainer">
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="resultsContainer hidden"></div>
+            <div class="errorMessageContainer hidden">
+                <h2 class="title"></h2>
+                <p class="subtitle"></p>
             </div>
         </section>
-        <section class="pageLinks">
-            <a href="/admin/database">
-                <div class="pageLink databaseBrowser">
-                    <div class="icon">
-                        <i class="gg-database"></i>
-                    </div>
-                    <div class="text">
-                        <h2>Database Browser</h2>
-                        <p>Upload, edit, and delete items.</p>
-                    </div>
-                    <i class="gg-chevron-right"></i>
-                </div>
-            </a>
-            <a href="/admin/newsList">
-                <div class="pageLink newsList">
-                    <div class="icon">
-                        <i class="gg-file-document"></i>
-                    </div>
-                    <div class="text">
-                        <h2>News List</h2>
-                        <p>Create, edit, and delete news articles.</p>
-                    </div>
-                    <i class="gg-chevron-right"></i>
-                </div>
-            </a>
-            <a href="/admin/auditLog">
-                <div class="pageLink auditLog">
-                    <div class="icon">
-                        <i class="gg-play-list-search"></i>
-                    </div>
-                    <div class="text">
-                        <h2>Audit Log</h2>
-                        <p>View a history of database changes.</p>
-                    </div>
-                    <i class="gg-chevron-right"></i>
-                </div>
-            </a>
-        </section>
     </main>
-
-    <div class="overlay"></div>
-
-    <div class="editorContainer databaseItemEditorContainer hidden">
-        <iframe src="" frameborder="0"></iframe>
-    </div>
-
-    <div class="editorContainer articleEditorContainer hidden">
-        <iframe src="" frameborder="0"></iframe>
-    </div>
 
     <footer>
         <div class="left">
@@ -200,8 +193,8 @@ if(!check_authentication() || !check_clearance(0)) {
 
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/search.js"></script>
     <script src="script.js"></script>
+    <script src="/js/search.js"></script>
 
 </body>
 
