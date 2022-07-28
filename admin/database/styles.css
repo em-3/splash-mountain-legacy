@@ -7,7 +7,7 @@ main {
 }
 
 .searchControls {
-  margin: 10pt;
+  margin: 0 10pt 10pt 10pt;
   height: 35pt;
   background: var(--content-background-color);
   border-radius: 10pt;

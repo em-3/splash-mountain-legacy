@@ -22,6 +22,7 @@ if(!check_authentication() || !check_clearance(0)) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/admin/admin-global.css">
     <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
@@ -91,16 +92,18 @@ if(!check_authentication() || !check_clearance(0)) {
 
     <main>
         <section class="header">
-            <h1>Admin Console</h1>
-            <div class="profileInformation">
-                <img src="/images/mwc.jpg" alt="" class="profilePicture">
-                <div class="text">
-                    <h3 class="name">Name</h3>
-                    <p class="authorizationLevel">Authorization Level</p>
+            <div class="text">
+                <h1>Admin Console</h1>
+                <div class="profileInformation">
+                    <img src="/images/mwc.jpg" alt="" class="profilePicture">
+                    <div class="text">
+                        <h3 class="name">Name</h3>
+                        <p class="authorizationLevel">Authorization Level</p>
+                    </div>
+                    <button class="logout" onclick="logout()">
+                        <i class="gg-log-out"></i>
+                    </button>
                 </div>
-                <button class="logout" onclick="logout()">
-                    <i class="gg-log-out"></i>
-                </button>
             </div>
         </section>
         <section class="pageLinks">

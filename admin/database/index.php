@@ -22,6 +22,7 @@ if(!check_authentication() || !check_clearance(0)) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/admin/admin-global.css">
     <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
@@ -101,9 +102,18 @@ if(!check_authentication() || !check_clearance(0)) {
     </div>
 
     <main>
+        <section class="header">
+            <div class="text">
+                <h1 class="title">Database</h1>
+                <h2 class="subtitle">Admin Console</h2>
+            </div>
+            <a href="/admin" class="backLink">
+                <i class="gg-chevron-left"></i>
+                <span>Back to Admin Home</span>
+            </a>
+        </section>
         <section class="databaseBrowser">
             <div class="searchControls">
-
                 <div class="controls">
                     <div class="searchField">
                         <input type="text" placeholder="Filter" oninput="databaseBrowser.searchBar.oninput()"

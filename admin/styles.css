@@ -18,11 +18,12 @@ section.header {
   margin-bottom: 15pt;
 }
 
-section.header h1 {
-  margin: 0 0 10pt 0;
+section.header .text {
+  width: 100%;
 }
 
 div.profileInformation {
+  margin-top: 10pt;
   display: flex;
   align-items: center;
   justify-content: flex-start;
