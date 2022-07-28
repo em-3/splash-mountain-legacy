@@ -95,10 +95,10 @@ if(!check_authentication() || !check_clearance(0)) {
             <div class="text">
                 <h1>Admin Console</h1>
                 <div class="profileInformation">
-                    <img src="/images/mwc.jpg" alt="" class="profilePicture">
+                    <img src="/images/authors/splashmountainlegacystaff.jpg" alt="" class="profilePicture">
                     <div class="text">
-                        <h3 class="name">Name</h3>
-                        <p class="authorizationLevel">Authorization Level</p>
+                        <h3 class="name">Loading...</h3>
+                        <p class="authorizationLevel">Fetching user profile.</p>
                     </div>
                     <button class="logout" onclick="logout()">
                         <i class="gg-log-out"></i>
