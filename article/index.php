@@ -4,7 +4,17 @@
 <head>
 
     <meta charset="utf-8">
-    <title>Loading - Splash Mountain Legacy</title>
+    <title><?php
+        $article_id = substr($url, strrpos($url, '/') + 1);
+        echo $article_id;
+        if($article_id) {
+            $json = file_get_contents("/api/news/article/{$article_id}");
+            $article_details = json_decode($json);
+            echo $obj->title;
+        }else{
+            echo "Error";
+        }
+    ?> - Splash Mountain Legacy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
