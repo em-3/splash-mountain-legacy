@@ -8,13 +8,12 @@ $available_params = ["type", "park", "scene"];
 $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
-$results;
 $stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `image`, `video_id`, `scene`, `hidden` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
-    if(preg_match("/[A-Za-z0-9\/]{11}/", $query)) {
+    if(preg_match("/[A-Za-z0-9-_]{11}/", $query)) {
         //Add the query to the list of parameters
         $params["id"] = $query;
         
@@ -26,7 +25,21 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query";
+        $stmt .= " WHERE (";
+
+        $matches = ["name", "author", "description", "scene"];
+
+        if(isset($_GET["match"])) {
+            $matches = is_array($_GET["match"]) ? $_GET["match"] : explode(",", $_GET["match"]);
+        }
+
+        for($i = 0; $i < count($matches); $i++) {
+            if($i > 0) {
+                $stmt .= " OR ";
+            }
+
+            $stmt .= "`" . $matches[$i] . "` LIKE :query";
+        }
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {
