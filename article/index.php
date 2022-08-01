@@ -1,21 +1,18 @@
+<?php
+
+require_once __DIR__ . "/../scripts/init.php";
+require_once __DIR__ . "/../scripts/viewer_meta.php";
+
+?>
 <!DOCTYPE HTML>
 <html>
 
 <head>
 
     <meta charset="utf-8">
-    <title><?php
-        $article_id = substr($url, strrpos($url, '/') + 1);
-        echo $article_id;
-        if($article_id) {
-            $json = file_get_contents("/api/news/article/{$article_id}");
-            $article_details = json_decode($json);
-            echo $obj->title;
-        }else{
-            echo "Error";
-        }
-    ?> - Splash Mountain Legacy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+
+    <?php output_meta_tags("/article/", "news_articles", "title", "subtitle", "thumbnail"); ?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
