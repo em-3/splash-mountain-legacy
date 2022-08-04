@@ -111,7 +111,7 @@ if(isset($_GET["code"])) {
                 <a href="/database">Database</a>
                 <a href="/news">News</a>
                 <a href="/about">About</a>
-                <a class="admin current" href="/admin">Admin</a>
+                <a class="admin hidden" href="/admin">Admin</a>
                 <button class="search" onclick="searchBar.onfocus();">
                     <i class="gg-search"></i>
                 </button>
