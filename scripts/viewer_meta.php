@@ -44,9 +44,9 @@ function output_meta_tags($base_url, $table_name, $title_field, $description_fie
 
 function output_error() {
     return <<<EOT
-    <title>Invalid URL</title>
-    <meta name="title" content="Invalid URL">
-    <meta name="description" content="This is not a valid URL">
+    <title>Error - Splash Mountain Legacy</title>
+    <meta name="title" content="Error">
+    <meta name="description" content="The article details could not be loaded.">
     EOT;
 }
 

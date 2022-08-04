@@ -20,7 +20,6 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="../styles.css">
 
-    <meta name="description" content="Splash Mountain images, videos, audio, and more.">
     <meta name="keywords"
         content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
 
