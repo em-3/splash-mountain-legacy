@@ -105,29 +105,29 @@ if(isset($_GET["code"])) {
             <img src="/images/logo-black.png">
         </picture>
 
-        <!-- <div class="linksContainer">
-                <div class="links">
-                    <a href="/">Home</a>
-                    <a href="/database">Database</a>
-                    <a href="/news">News</a>
-                    <a href="/about">About</a>
-                    <a class="admin current" href="/admin">Admin</a>
-                    <button class="search" onclick="searchBar.onfocus();">
-                        <i class="gg-search"></i>
-                    </button>
-                </div>
+        <div class="linksContainer">
+            <div class="links">
+                <a href="/">Home</a>
+                <a href="/database">Database</a>
+                <a href="/news">News</a>
+                <a href="/about">About</a>
+                <a class="admin current" href="/admin">Admin</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <i class="gg-search"></i>
+                </button>
             </div>
-        
-            <div class="searchBox">
-                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
-                    onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
-                <div class="clearButton" onclick="searchBar.close()">
-                    <picture>
-                        <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
-                    </picture>
-                </div>
-            </div> -->
+        </div>
+    
+        <div class="searchBox">
+            <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
+                onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+            <div class="clearButton" onclick="searchBar.close()">
+                <picture>
+                    <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
+                    <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
+                </picture>
+            </div>
+        </div>
     </header>
 
     <div class="searchResultsContainer">
