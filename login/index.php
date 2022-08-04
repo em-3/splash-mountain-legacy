@@ -178,7 +178,7 @@ if(isset($_GET["code"])) {
             </h3>
             <?php if(check_authentication()) { ?>
             <!-- User is allowed access -->
-            <button class="continueButton" onclick="window.location.href='/'">Continue</button>
+            <button class="continueButton" onclick="window.location.href='/admin'">Continue</button>
             <?php }else { ?>
             <!-- User is not allowed access -->
             <p class="authLevelWarning">Sorry, you don't have access to the site yet.</p>
