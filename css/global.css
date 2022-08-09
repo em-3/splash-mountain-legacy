@@ -565,6 +565,12 @@ main {
 
 .dialog .message {
   margin: 0 0 10pt 0;
+  white-space: pre-line;
+  word-break: break-all;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
 .dialog .buttonContainer {

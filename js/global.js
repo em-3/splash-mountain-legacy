@@ -49,7 +49,7 @@ var dialog = {
 		dialogElement.classList.add("hidden");
 		dialogElement.innerHTML = `
             <h1 class="title">${title}</h1>
-            <p class="message">${message}</p>
+            <p class="message" lang="en">${message}</p>
         `;
 
 		if (type === "prompt") {
@@ -90,14 +90,10 @@ var dialog = {
 				for (var i = 0; i < options.buttons.length; i++) {
 					(function (i) {
 						buttonContainer.appendChild(
-							dialog.createButton(
-								options.buttons[i].text,
-								options.buttons[i].type,
-								function () {
-									dialog.callbacks.dismiss();
-									resolve(i);
-								}
-							)
+							dialog.createButton(options.buttons[i].text, options.buttons[i].type, function () {
+								dialog.callbacks.dismiss();
+								resolve(i);
+							})
 						);
 					})(i);
 				}
@@ -112,10 +108,7 @@ var dialog = {
 				break;
 		}
 
-		document.body.insertBefore(
-			dialogElement,
-			document.querySelector(".overlay")
-		);
+		document.body.insertBefore(dialogElement, document.querySelector(".overlay"));
 		requestAnimationFrame(function () {
 			document.querySelector(".dialog").classList.remove("hidden");
 		});

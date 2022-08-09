@@ -131,7 +131,7 @@ if(!check_authentication() || !check_clearance(0)) {
                     <i class="gg-chevron-right"></i>
                 </div>
             </a>
-            <a href="/admin/auditLog">
+            <a href="/admin/audit-log">
                 <div class="pageLink auditLog">
                     <div class="icon">
                         <i class="gg-play-list-search"></i>
