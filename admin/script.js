@@ -3,7 +3,7 @@ fetch("/api/profile/index.php")
 	.then((reponse) => reponse.json())
 	.then((data) => {
 		if (data.status === "success") {
-			var profileInfo = JSON.parse(data.user_data);
+			var profileInfo = data.user_data;
 			document.querySelector(".profileInformation .profilePicture").src = profileInfo.avatar_url;
 			document.querySelector(".profileInformation .name").textContent = profileInfo.username;
 			var authorizationLevel;
