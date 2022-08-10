@@ -2,7 +2,8 @@
 
 require_once __DIR__ . "/../scripts/init.php";
 
-use Wohali\OAuth2\Client\Provider\Discord;
+use SplmlFoundation\SplashMountainLegacyBackend\Discord;
+use Wohali\OAuth2\Client\Provider\Discord as Provider;
 
 //Redirect the user if they're already logged in
 if(check_authentication()) {
@@ -16,7 +17,7 @@ $user;
 //Regenerate the session ID to prevent session fixation attacks
 session_regenerate_id();
 
-$provider = new Discord([
+$provider = new Provider([
     "clientId" => $_ENV["DISCORD_CLIENT_ID"],
     "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
     "redirectUri" => $_ENV["DISCORD_REDIRECT_URI_PREFIX"] . "/login/index.php"
@@ -46,17 +47,13 @@ if(isset($_GET["code"])) {
         $_SESSION["token"] = $token->getToken();
     
         try {
-            $user = $provider->getResourceOwner($token);
+            $discord = new Discord($_SESSION["token"], $database, "discord_users");
 
-            //Get the user's data from the database
-            $stmt = $database->prepare("SELECT `clearance` FROM discord_users WHERE `id` = ?");
-            $stmt->execute([$user->getId()]);
+            $user = $discord->getUserDetails();
 
-            //Check if the user exists
-            if($stmt->rowCount() == 1) {
-                //Store their clearance level and ID
-                $_SESSION["id"] = $user->getId();
-                $_SESSION["clearance"] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]["clearance"];
+            if(isset($user["clearance"])) {
+                $_SESSION["id"] = $user["id"];
+                $_SESSION["clearance"] = $user["clearance"];
             }
         }catch(Exception $e) {
             $error = "An exception occurred: " . $e->getMessage();
@@ -163,8 +160,8 @@ if(isset($_GET["code"])) {
         <?php }else { ?>
         <!-- Authentication succeeded -->
         <section class="welcomeContainer">
-            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
-            <h1 class="name"><?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?></h1>
+            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user["id"] . "/" . $user["avatar_hash"]; ?>">
+            <h1 class="name"><?php echo $user["username"] . "#" . $user["discriminator"]; ?></h1>
             <h3 class="authLevel">
                 <?php
                     if(!isset($_SESSION["clearance"])) {
