@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../../scripts/init.php";
 
 use League\OAuth2\Client\Token\AccessToken;
-use Wohali\OAuth2\Client\Provider\Discord;
+use SplmlFoundation\SplashMountainLegacyBackend\Discord;
 
 if(!check_authentication()) {
     http_response_code(401);
@@ -33,23 +33,16 @@ if(isset($_SESSION["cooldown"]) && time() < $_SESSION["cooldown"]) {
 
 $_SESSION["last_accessed"] = time();
 
-$provider = new Discord([
-    "clientId" => $_ENV["DISCORD_CLIENT_ID"],
-    "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
-    "redirectUri" => $_ENV["DISCORD_REDIRECT_URI_PREFIX"] . "/login/index.php"
-]);
+$discord = new Discord($_SESSION["token"], $database, "discord_users");
 
 try {
     //Get the user's details
-    $user = $provider->getResourceOwner(new AccessToken(["access_token" => $_SESSION["token"]]));
+    $user_data = $discord->getUserDetails($_SESSION["id"]);
 
-    $user_data = new stdClass();
-    $user_data->clearance = $_SESSION["clearance"];
-    $user_data->username = $user->getUsername() . "#" . $user->getDiscriminator();
-    $user_data->avatar_url = "https://cdn.discordapp.com/avatars/" . $user->getID() . "/" . $user->getAvatarHash();
+    $user_data["avatar_url"] = "https://cdn.discordapp.com/avatars/" . $user_data["id"] . "/" . $user_data["avatar_hash"];
 
     header("Content-Type: application/json");
-    exit(json_encode(["status" => "success", "user_data" => json_encode($user_data)]));
+    exit(json_encode(["status" => "success", "user_data" => $user_data]));
 }catch(Exception $e) {
     header("Content-Type: application/json");
     die(json_encode(["status" => "error", "error" => "Something went wrong fetching user details. Error: " + $e->getMessage()]));
