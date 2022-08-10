@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
-use League\OAuth2\Client\Token\AccessToken;
 use SplmlFoundation\SplashMountainLegacyBackend\Discord;
 
 if(!check_authentication()) {
@@ -36,10 +35,15 @@ $_SESSION["last_accessed"] = time();
 $discord = new Discord($_SESSION["token"], $database, "discord_users");
 
 try {
-    //Get the user's details
-    $user_data = $discord->getUserDetails($_SESSION["id"]);
+    $id = $_SESSION["id"];
 
-    $user_data["avatar_url"] = "https://cdn.discordapp.com/avatars/" . $user_data["id"] . "/" . $user_data["avatar_hash"];
+    //If an ID is provided attempt to load the details for that ID
+    if(isset($_GET["id"])) {
+        $id = preg_filter("/[^0-9]*/", "", $_GET["id"]);
+    }
+
+    //Get the user's details
+    $user_data = $discord->getUserDetails($id);
 
     header("Content-Type: application/json");
     exit(json_encode(["status" => "success", "user_data" => $user_data]));
