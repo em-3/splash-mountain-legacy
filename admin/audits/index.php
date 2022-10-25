@@ -5,7 +5,7 @@ require_once __DIR__ . "/../scripts/endpoint_utils.php";
 
 check_request("GET");
 
-$sql = "SELECT `id`, `timestamp`, `type`, `action`, `item_id`, `user_id`, `changes` FROM `audit_log`";
+$sql = "SELECT `id`, `timestamp`, `type`, `action`, `item_id`, `user_id`, `changes` FROM `audit_log` ORDER BY `timestamp` DESC";
 
 try {
     $stmt = $database->prepare($sql);

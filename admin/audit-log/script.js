@@ -1,3 +1,5 @@
+var userInformation = {};
+
 var auditLog = {
 	searchRange: {
 		min: 1,
@@ -10,10 +12,10 @@ var auditLog = {
 		}
 
 		//Fetch new results
-		fetch("/admin/audits/" + "?min=" + auditLog.searchRange.min + "&max=" + auditLog.searchRange.max)
+		fetch("/admin/audits/?min=" + auditLog.searchRange.min + "&max=" + auditLog.searchRange.max)
 			.then((response) => response.json())
 			.then(
-				(data) => {
+				async (data) => {
 					if (data.status !== "success") {
 						return;
 					} else {
@@ -78,12 +80,61 @@ var auditLog = {
 							var itemIDElement = document.createElement("p");
 							itemIDElement.className = "itemID";
 							itemIDElement.textContent = currentLogData.item_id;
+							((itemID) => {
+								itemIDElement.addEventListener("click", () => {
+									navigator.clipboard.writeText(itemID);
+									dialog.alert("Copied", "Item ID copied to clipboard.");
+								});
+							})(currentLogData.item_id);
 							resultElement.appendChild(itemIDElement);
 
-							var userIDElement = document.createElement("p");
-							userIDElement.className = "userID";
-							userIDElement.textContent = currentLogData.user_id;
-							resultElement.appendChild(userIDElement);
+							var userInfoContainer = document.createElement("div");
+							userInfoContainer.className = "userInfoContainer";
+							var profilePicture = document.createElement("img");
+							var usernameElement = document.createElement("p");
+
+							userInfoContainer.appendChild(profilePicture);
+							userInfoContainer.appendChild(usernameElement);
+							resultElement.appendChild(userInfoContainer);
+
+							var currentUserInfo;
+							if (userInformation[currentLogData.user_id]) {
+								currentUserInfo = userInformation[currentLogData.user_id];
+								profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
+								usernameElement.textContent = currentUserInfo.username;
+							} else {
+								currentUserInfo = await fetch("/api/profile/?id=" + currentLogData.user_id);
+								currentUserInfo = await currentUserInfo.json();
+								currentUserInfo = currentUserInfo.user_data;
+								userInformation[currentLogData.user_id] = currentUserInfo;
+								profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
+								usernameElement.textContent = currentUserInfo.username;
+
+								userInfoContainer.addEventListener("click", () => {
+									dialog.confirm("Copy", "What would you like to copy?", {
+										buttons: [
+											{
+												text: "User ID",
+												type: "passive",
+											},
+											{
+												text: "Username",
+												type: "active",
+											},
+										],
+										cancellable: true,
+									}).then(function (selected) {
+										switch (selected) {
+											case 0:
+												navigator.clipboard.writeText(currentUserInfo.id);
+												break;
+											case 1:
+												navigator.clipboard.writeText(currentUserInfo.username);
+												break;
+										}
+									});
+								});
+							}
 
 							var changesButton = document.createElement("button");
 							changesButton.className = "changesButton";

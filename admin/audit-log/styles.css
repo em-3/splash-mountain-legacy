@@ -55,7 +55,7 @@ main {
   border-radius: 5pt;
 }
 
-.auditLog .resultsContainer .logRow > * {
+.auditLog .resultsContainer .logRow>* {
   padding: 5pt;
   display: flex;
   align-items: center;
@@ -63,7 +63,7 @@ main {
 }
 
 .auditLog .resultsContainer .logRow button {
-  margin: 0;
+  margin: 5pt;
   padding: 0 5pt;
   border: none;
   background: var(--content-background-color);
@@ -72,6 +72,18 @@ main {
   font-size: 10pt;
   border-radius: 5pt;
   cursor: pointer;
+}
+
+.auditLog .resultsContainer .logRow .itemID,
+.auditLog .resultsContainer .logRow .userInfoContainer {
+  cursor: pointer;
+}
+
+.auditLog .resultsContainer .logRow .userInfoContainer img {
+  width: 25pt;
+  height: 25pt;
+  border-radius: 50%;
+  margin-right: 5pt;
 }
 
 .auditLog .resultsContainer .loadMoreButton {

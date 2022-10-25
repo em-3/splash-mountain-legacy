@@ -86,10 +86,12 @@ div.profileInformation button.logout {
   background: var(--color-1);
   color: black;
 }
+
 .pageLink.newsList {
   background: var(--color-2);
   color: white;
 }
+
 .pageLink.auditLog {
   background: #36AA8D;
   color: white;
@@ -100,7 +102,6 @@ div.profileInformation button.logout {
   width: 40pt;
   height: 40pt;
   border-radius: 10pt;
-  margin-right: 15pt;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,6 +117,7 @@ div.profileInformation button.logout {
 }
 
 .pageLink .text {
+  margin-left: 15pt;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

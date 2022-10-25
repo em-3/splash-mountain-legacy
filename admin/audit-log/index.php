@@ -126,7 +126,7 @@ if(!check_authentication() || !check_clearance(0)) {
                     <p>Type</p>
                     <p>Action</p>
                     <p>Item ID</p>
-                    <p>User ID</p>
+                    <p>User</p>
                     <p>Changes</p>
                     <p>Timestamp</p>
             </div>
