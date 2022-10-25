@@ -83,7 +83,7 @@ var auditLog = {
 							((itemID) => {
 								itemIDElement.addEventListener("click", () => {
 									navigator.clipboard.writeText(itemID);
-									dialog.alert("Copied", "Item ID copied to clipboard.");
+									notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
 								});
 							})(currentLogData.item_id);
 							resultElement.appendChild(itemIDElement);
@@ -110,7 +110,7 @@ var auditLog = {
 								profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
 								usernameElement.textContent = currentUserInfo.username;
 
-								userInfoContainer.addEventListener("click", () => {
+								userInfoContainer.onclick = () => {
 									dialog.confirm("Copy", "What would you like to copy?", {
 										buttons: [
 											{
@@ -127,13 +127,15 @@ var auditLog = {
 										switch (selected) {
 											case 0:
 												navigator.clipboard.writeText(currentUserInfo.id);
+												notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
 												break;
 											case 1:
 												navigator.clipboard.writeText(currentUserInfo.username);
+												notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
 												break;
 										}
 									});
-								});
+								};
 							}
 
 							var changesButton = document.createElement("button");

@@ -146,3 +146,74 @@ var dialog = {
 		return button;
 	},
 };
+
+var notification = {
+	queue: [],
+	isRendering: false,
+	addToQueue: async function (type, icon, title, message, options) {
+		return new Promise(function (resolve, reject) {
+			notification.queue.push([type, icon, title, message, options, resolve, reject]);
+
+			if (!notification.isRendering) {
+				notification.renderLoop();
+				return;
+			}
+		});
+	},
+	renderLoop: function () {
+		notification.isRendering = true;
+		var next = notification.queue[0];
+		if (next) {
+			notification.render(
+				next[0], // Type
+				next[1], // Icon
+				next[2], // Title
+				next[3], // Message
+				next[4], // Options
+				function (value) {
+					//Run the notification's resolve function
+					next[5](value);
+					//Continue the queue
+					notification.queue.shift();
+					setTimeout(notification.renderLoop, 200);
+				}
+			);
+		} else {
+			notification.isRendering = false;
+		}
+	},
+	render: function (type, icon, title, message, options, resolve, reject) {
+		var notificationElement = document.createElement("div");
+		notificationElement.classList.add("notification");
+		notificationElement.classList.add("hidden");
+		if (type) {
+			notificationElement.classList.add(type);
+		}
+		notificationElement.innerHTML = `
+			<div class="icon">
+				<i class="gg-${icon}"></i>
+			</div>
+			<div class="content">
+				<p class="title">${title}</p>
+				<p class="message">${message}</p>
+			</div>
+		`;
+
+		document.body.insertBefore(notificationElement, document.querySelector(".overlay"));
+		requestAnimationFrame(function () {
+			document.querySelector(".notification").classList.remove("hidden");
+		});
+
+		setTimeout(function () {
+			notificationElement.classList.add("hidden");
+			setTimeout(function () {
+				notificationElement.parentElement.removeChild(notificationElement);
+				resolve();
+			}, 500);
+		}, options?.duration || 3000);
+	},
+
+	show: function (type, icon, title, message, options) {
+		return this.addToQueue(type, icon, title, message, options);
+	}
+};
