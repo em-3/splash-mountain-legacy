@@ -100,16 +100,16 @@ var auditLog = {
 							var currentUserInfo;
 							if (userInformation[currentLogData.user_id]) {
 								currentUserInfo = userInformation[currentLogData.user_id];
-								profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
-								usernameElement.textContent = currentUserInfo.username;
 							} else {
 								currentUserInfo = await fetch("/api/profile/?id=" + currentLogData.user_id);
 								currentUserInfo = await currentUserInfo.json();
 								currentUserInfo = currentUserInfo.user_data;
 								userInformation[currentLogData.user_id] = currentUserInfo;
-								profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
-								usernameElement.textContent = currentUserInfo.username;
+							}
 
+							profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
+							usernameElement.textContent = currentUserInfo.username;
+							(function (currentUserInfo) {
 								userInfoContainer.onclick = () => {
 									dialog.confirm("Copy", "What would you like to copy?", {
 										buttons: [
@@ -134,9 +134,9 @@ var auditLog = {
 												notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
 												break;
 										}
-									});
+									}, function () {});
 								};
-							}
+							})(currentUserInfo);
 
 							var changesButton = document.createElement("button");
 							changesButton.className = "changesButton";
