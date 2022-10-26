@@ -5,7 +5,13 @@ require_once __DIR__ . "/../scripts/endpoint_utils.php";
 
 check_request("GET");
 
-$sql = "SELECT `id`, `timestamp`, `type`, `action`, `item_id`, `user_id`, `changes` FROM `audit_log` ORDER BY `timestamp` DESC";
+$sql = "SELECT `id`, `timestamp`, `type`, `action`, `item_id`, `user_id`, `changes` FROM `audit_log` ORDER BY `timestamp`";
+
+if(isset($_GET["sort_order"]) && ($_GET["sort_order"] == "oldest_first")) {
+    $sql .= " ASC";
+} else {
+    $sql .= " DESC";
+}
 
 try {
     $stmt = $database->prepare($sql);
