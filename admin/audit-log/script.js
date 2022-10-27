@@ -5,14 +5,27 @@ var auditLog = {
 		min: 1,
 		max: 21,
 	},
+	data: null,
+	filterType: null,
+	filterValue: null,
+	sortOrder: 'newest_first',
+	
 	refreshResults: function (preservePreviousResults) {
 		if (!preservePreviousResults) {
 			auditLog.searchRange.min = 1;
 			auditLog.searchRange.max = 21;
 		}
 
+		var url = "/admin/audits/?min=" + auditLog.searchRange.min + "&max=" + auditLog.searchRange.max;
+		if (auditLog.filterType && auditLog.filterValue) {
+			url += "&filter_type=" + auditLog.filterType + "&filter_value=" + auditLog.filterValue;
+		}
+		if (auditLog.sortOrder) {
+			url += "&sort_order=" + auditLog.sortOrder;
+		}
+
 		//Fetch new results
-		fetch("/admin/audits/?min=" + auditLog.searchRange.min + "&max=" + auditLog.searchRange.max)
+		fetch(url)
 			.then((response) => response.json())
 			.then(
 				async (data) => {
@@ -20,6 +33,7 @@ var auditLog = {
 						return;
 					} else {
 						data = data.audit_data;
+						auditLog.data = data;
 					}
 
 					if (!preservePreviousResults) {
@@ -54,9 +68,15 @@ var auditLog = {
 							if (currentLogData.type === "article") {
 								typeIconContainer.title = "Article";
 								typeIconElement.classList.add("gg-file-document");
+								typeIconContainer.onclick = function () {
+									auditLog.applyFilter("type", "article");
+								};
 							} else if (currentLogData.type === "item") {
 								typeIconContainer.title = "Item";
 								typeIconElement.classList.add("gg-file");
+								typeIconContainer.onclick = function () {
+									auditLog.applyFilter("type", "item");
+								};
 							}
 							typeIconContainer.appendChild(typeIconElement);
 							resultElement.appendChild(typeIconContainer);
@@ -67,12 +87,21 @@ var auditLog = {
 							if (currentLogData.action === "create") {
 								actionIconContainer.title = "Created";
 								actionIconElement.classList.add("gg-add");
+								actionIconContainer.onclick = function () {
+									auditLog.applyFilter("action", "create");
+								}
 							} else if (currentLogData.action === "modify") {
 								actionIconContainer.title = "Edited";
 								actionIconElement.classList.add("gg-edit-exposure");
+								actionIconContainer.onclick = function () {
+									auditLog.applyFilter("action", "modify");
+								}
 							} else if (currentLogData.action === "delete") {
 								actionIconContainer.title = "Deleted";
 								actionIconElement.classList.add("gg-remove");
+								actionIconContainer.onclick = function () {
+									auditLog.applyFilter("action", "delete");
+								};
 							}
 							actionIconContainer.appendChild(actionIconElement);
 							resultElement.appendChild(actionIconContainer);
@@ -82,8 +111,29 @@ var auditLog = {
 							itemIDElement.textContent = currentLogData.item_id;
 							((itemID) => {
 								itemIDElement.addEventListener("click", () => {
-									navigator.clipboard.writeText(itemID);
-									notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
+									dialog.confirm("Item", "What would you like to do?", {
+										buttons: [
+											{
+												text: "Copy ID",
+												type: "passive"
+											},
+											{
+												text: "Filter to Item",
+												type: "active"
+											}
+										],
+										cancellable: true
+									}).then(function (selected) {
+										switch (selected) {
+											case 0:
+												navigator.clipboard.writeText(itemID);
+												notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
+												break;
+											case 1:
+												auditLog.applyFilter("item_id", itemID);
+												break;
+										}
+									})
 								});
 							})(currentLogData.item_id);
 							resultElement.appendChild(itemIDElement);
@@ -111,27 +161,48 @@ var auditLog = {
 							usernameElement.textContent = currentUserInfo.username;
 							(function (currentUserInfo) {
 								userInfoContainer.onclick = () => {
-									dialog.confirm("Copy", "What would you like to copy?", {
+									dialog.confirm("User", "What would you like to do?", {
 										buttons: [
 											{
-												text: "User ID",
-												type: "passive",
+												text: "Copy",
+												type: "passive"
 											},
 											{
-												text: "Username",
-												type: "active",
-											},
+												text: "Filter to User",
+												type: "active"
+											}
 										],
-										cancellable: true,
+										cancellable: true
 									}).then(function (selected) {
 										switch (selected) {
 											case 0:
-												navigator.clipboard.writeText(currentUserInfo.id);
-												notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
+												dialog.confirm("Copy", "What would you like to copy?", {
+													buttons: [
+														{
+															text: "User ID",
+															type: "passive",
+														},
+														{
+															text: "Username",
+															type: "active",
+														},
+													],
+													cancellable: true,
+												}).then(function (selected) {
+													switch (selected) {
+														case 0:
+															navigator.clipboard.writeText(currentUserInfo.id);
+															notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
+															break;
+														case 1:
+															navigator.clipboard.writeText(currentUserInfo.username);
+															notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
+															break;
+													}
+												}, function () {});
 												break;
 											case 1:
-												navigator.clipboard.writeText(currentUserInfo.username);
-												notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
+												auditLog.applyFilter("user_id", currentUserInfo.id);
 												break;
 										}
 									}, function () {});
@@ -187,6 +258,15 @@ var auditLog = {
 		this.searchRange.min += 20;
 		this.searchRange.max += 20;
 		this.refreshResults(true);
+	},
+	applyFilter: function (type, value) {
+		if (this.filterType === type && this.filterValue === value) {
+			this.sortOrder = (this.sortOrder === "ASC") ? "DESC" : "ASC";
+		} else {
+			this.filterType = type;
+			this.filterValue = value;
+		}
+		this.refreshResults();
 	},
 	showChanges: function (changes) {
 		var changesList = "";
