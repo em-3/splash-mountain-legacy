@@ -123,12 +123,28 @@ if(!check_authentication() || !check_clearance(0)) {
             </div>
             <div class="resultsContainer hidden">
                 <div class="header">
-                    <p>Type</p>
-                    <p>Action</p>
-                    <p>Item ID</p>
-                    <p>User</p>
-                    <p>Changes</p>
-                    <p>Timestamp</p>
+                    <div class="type">
+                        <p>Type</p>
+                        <span class="filterValue"></span>
+                    </div>
+                    <div class="action">
+                        <p>Action</p>
+                        <span class="filterValue"></span>
+                    </div>
+                    <div class="item_id">
+                        <p>Item ID</p>
+                        <span class="filterValue"></span>
+                    </div>
+                    <div class="user_id">
+                        <p>User</p>
+                        <span class="filterValue"></span>
+                    </div>
+                    <div>
+                        <p>Changes</p>
+                    </div>
+                    <div>
+                        <p>Timestamp</p>
+                    </div>
             </div>
             </div>
             <div class="errorMessageContainer hidden">

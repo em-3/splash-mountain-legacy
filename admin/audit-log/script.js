@@ -212,11 +212,15 @@ var auditLog = {
 							var changesButton = document.createElement("button");
 							changesButton.className = "changesButton";
 							changesButton.textContent = "View Changes";
-							(function (changes) {
-								changesButton.addEventListener("click", function () {
-									auditLog.showChanges(changes);
-								});
-							})(JSON.parse(currentLogData.changes));
+							if (currentLogData.action === "delete") {
+								changesButton.disabled = true;
+							} else {
+								(function (changes) {
+									changesButton.addEventListener("click", function () {
+										auditLog.showChanges(changes);
+									});
+								})(JSON.parse(currentLogData.changes));
+							}
 							resultElement.appendChild(changesButton);
 
 							var timestampElement = document.createElement("p");
@@ -259,14 +263,22 @@ var auditLog = {
 		this.searchRange.max += 20;
 		this.refreshResults(true);
 	},
-	applyFilter: function (type, value) {
-		if (this.filterType === type && this.filterValue === value) {
-			this.sortOrder = (this.sortOrder === "ASC") ? "DESC" : "ASC";
-		} else {
-			this.filterType = type;
-			this.filterValue = value;
+	applyFilter: function (type, value) {auditLog
+		if (auditLog.filterType !== null && auditLog.filterValue !== null) {
+			document.querySelector(".auditLog .header ." + auditLog.filterType).classList.remove("filtered");
+			document.querySelector(".auditLog .header ." + auditLog.filterType).onclick = null;
+			document.querySelector(".auditLog .header ." + auditLog.filterType + " .filterValue").textContent = "";
+			auditLog.filterType = null;
+			auditLog.filterValue = null;
 		}
-		this.refreshResults();
+		if (type && value) {
+			auditLog.filterType = type;
+			auditLog.filterValue = value;
+			document.querySelector(".auditLog .header ." + type).classList.add("filtered");
+			document.querySelector(".auditLog .header ." + type).onclick = auditLog.applyFilter;
+			document.querySelector(".auditLog .header ." + type + " .filterValue").textContent = value;
+		}
+		auditLog.refreshResults();
 	},
 	showChanges: function (changes) {
 		var changesList = "";

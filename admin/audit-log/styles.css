@@ -38,15 +38,29 @@ main {
   display: grid;
   gap: 5pt;
   grid-template-columns: min-content min-content auto auto auto auto;
-  grid-template-rows: 25pt;
+  grid-template-rows: 40pt;
   grid-auto-rows: min-content;
 }
 
 .auditLog .resultsContainer .header {
   display: contents;
-  font-weight: bold;
   text-align: center;
-  vertical-align: center;
+}
+
+.auditLog .resultsContainer .header div {
+  padding: 5pt;
+  transition: background 0.1s ease;
+}
+
+.auditLog .resultsContainer .header div.filtered {
+  background: var(--content-background-color);
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.auditLog .resultsContainer .header div p {
+  font-weight: bold;
+  margin: 0 0 2pt 0;
 }
 
 .auditLog .resultsContainer .logRow {
@@ -74,8 +88,12 @@ main {
   cursor: pointer;
 }
 
-.auditLog .resultsContainer .logRow .itemID,
-.auditLog .resultsContainer .logRow .userInfoContainer {
+.auditLog .resultsContainer .logRow button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auditLog .resultsContainer .logRow>*:not(:last-child) {
   cursor: pointer;
 }
 
