@@ -121,7 +121,9 @@ if(!check_authentication() || !check_clearance(0)) {
                     </div>
                     <div class="filterBar">
                         <div class="filters"></div>
-                        <div class="addFilter" onclick="showFilterSelect()">+</div>
+                        <div class="addFilter" onclick="showFilterSelect()">
+                            <i class="gg-math-plus"></i>
+                        </div>
                     </div>
                     <div class="sortByContainer">
                         <p>Sort By:</p>
@@ -135,7 +137,9 @@ if(!check_authentication() || !check_clearance(0)) {
                 </div>
 
                 <div class="filterSelect hidden">
-                    <div class="closeButton" onclick="hideFilterSelect()">✕</div>
+                    <div class="closeButton" onclick="hideFilterSelect()">
+                        <i class="gg-close"></i>
+                    </div>
                     <div class="availableFilters"></div>
                 </div>
                 

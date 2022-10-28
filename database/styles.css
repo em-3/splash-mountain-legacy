@@ -143,6 +143,10 @@ main {
   justify-content: center;
 }
 
+.filterBar .addFilter i {
+  margin-top: 0;
+}
+
 .sortByContainer {
   width: 125pt;
   background: var(--page-background-color);
