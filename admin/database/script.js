@@ -386,6 +386,22 @@ var databaseBrowser = {
 
 databaseBrowser.refreshResults();
 
+function showItemEditor() {
+	document.querySelector(".itemDetailsContainer iframe").src = "/admin/embeds/databaseItemEditor/?mode=newItem";
+	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+}
+
+function hideItemEditor() {
+	document.querySelector(".itemDetailsContainer").classList.add("hidden");
+}
+
+//Listen for iframe requests
+window.addEventListener("message", function (e) {
+	if (e.data.indexOf("closeEditor") === 0) {
+		hideItemEditor();
+	}
+});
+
 //Load available tags
 fetch("/api/tags/")
 	.then((request) => request.json())

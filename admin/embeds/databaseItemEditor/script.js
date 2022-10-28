@@ -6,6 +6,9 @@ if (mode === "editor") {
 	var id = params.get("id");
 }
 
+var unsavedChanges = false;
+
+var itemDetails = undefined;
 var properties = [];
 
 //Fetch the item details and content
@@ -21,6 +24,7 @@ if (mode === "editor" && id) {
 
 function showItemDetails(itemDetails) {
 	if (mode === "editor") {
+		window.itemDetails = itemDetails;
 		var type = itemDetails.type;
 		var metadata = JSON.parse(itemDetails.metadata);
 	}
@@ -955,9 +959,13 @@ function showItemDetails(itemDetails) {
 	//Show the item details
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
+		var currentPropertyElement = currentProperty.constructor();
+		currentPropertyElement.addEventListener("input", function () {
+			unsavedChanges = true;
+		});
 		document
 			.querySelector(".editor .properties")
-			.appendChild(currentProperty.constructor());
+			.appendChild(currentPropertyElement);
 	}
 
 	if (mode === "editor") {
@@ -1060,6 +1068,7 @@ async function uploadItem() {
 						document.querySelector(
 							".responseContainer .message"
 						).textContent = "Item ID: " + result.id;
+						unsavedChanges = false;
 					} else {
 						document.querySelector(
 							".responseContainer .title"
@@ -1093,7 +1102,7 @@ async function updateItem() {
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
-		if (currentPropertyValue.include) {
+		if (currentPropertyValue.include && (currentPropertyValue.value !== itemDetails[currentProperty.propertyName])) {
 			formData.append(
 				currentProperty.propertyName,
 				currentPropertyValue.value
@@ -1114,10 +1123,14 @@ async function updateItem() {
 
 	var date = document.querySelector(".editor #date").value;
 	var time = document.querySelector(".editor #time").value;
+	var timestamp = undefined;
 	if (date && time) {
-		formData.append("timestamp", date + " " + time);
+		timestamp = date + " " + time;
 	} else if (date) {
-		formData.append("timestamp", date);
+		timestamp = date;
+	}
+	if (timestamp && (timestamp !== itemDetails.timestamp)) {
+		formData.append("timestamp", timestamp);
 	}
 
 	var response = await fetch("/admin/item/modify.php", {
@@ -1133,6 +1146,7 @@ async function updateItem() {
 			"The item has been updated.";
 		document.querySelector(".responseContainer .message").textContent =
 			"Item ID: " + result.id;
+		unsavedChanges = false;
 	} else {
 		document.querySelector(".responseContainer .title").textContent =
 			"Congratulations, you broke something.";
@@ -1203,27 +1217,29 @@ function showErrorScreen() {
 }
 
 async function closeEditor() {
-	var confirm = await dialog.confirm(
-		"Close Editor",
-		"Are you sure you want to close the editor? You'll lose any unsaved changes.",
-		{
-			cancellable: true,
-			buttons: [
-				{
-					text: "Close",
-					type: "active",
-				},
-			],
+	if (unsavedChanges) {
+		var confirm = await dialog.confirm(
+			"Close Editor",
+			"Are you sure you want to close the editor? You'll lose any unsaved changes.",
+			{
+				cancellable: true,
+				buttons: [
+					{
+						text: "Close",
+						type: "active",
+					},
+				],
+			}
+		);
+		if (confirm !== 0) {
+			return;
 		}
-	);
-	if (confirm !== 0) {
-		return;
 	}
 
 	if (params.get("fromViewer") === "true") {
 		window.history.back();
 		return false;
 	} else {
-		window.top.postMessage("closeItemEditor", "*");
+		window.top.postMessage("closeEditor", "*");
 	}
 }

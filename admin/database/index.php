@@ -111,6 +111,10 @@ if(!check_authentication() || !check_clearance(0)) {
                 <i class="gg-chevron-left"></i>
                 <span>Back to Admin Home</span>
             </a>
+            <a onclick="showItemEditor()" class="addItem">
+                <i class="gg-math-plus"></i>
+                <span>Create Item</span>
+            </a>
         </section>
         <section class="databaseBrowser">
             <div class="searchControls">

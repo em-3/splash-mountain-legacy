@@ -7,16 +7,17 @@ main {
 }
 
 header {
-  background: var(--content-background-color);
   width: 100%;
-  height: 35pt;
-  padding-left: 20pt;
+  height: 40pt;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  padding: 0 20pt;
+  background: var(--content-background-color);
 }
 
-header picture {
+header i {
+  --ggs: 1.5;
   cursor: pointer;
 }
 
@@ -141,23 +142,46 @@ section {
 
 .editor .itemEditor .actions button {
   background: var(--content-background-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 2pt 5pt;
   color: var(--primary-text-color);
-  font: inherit;
-  transition: border-color 0.1s ease;
+  border: none;
+  border-radius: 5pt;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 10pt 15pt;
   cursor: pointer;
+  margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
 .editor .itemEditor .actions button:hover {
-  border-color: var(--primary-text-color) !important;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
 }
 
 .editor .itemEditor .actions .danger button {
-  background: #ff6f66;
-  border-color: #ff5449;
+  background: var(--destructive-color);
   color: white;
+}
+
+.editor .itemEditor .actions .danger button:hover {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+}
+
+.editor .itemEditor .actions button .icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor .itemEditor .actions button span {
+  margin-left: 2pt;
 }
 
 .centered {

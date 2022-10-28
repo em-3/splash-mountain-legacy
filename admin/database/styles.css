@@ -1,3 +1,11 @@
+section.header a.addItem i {
+  --ggs: 0.8;
+}
+
+section.header a.addItem span {
+  margin-left: 2.5pt;
+}
+
 main section.databaseBrowser {
   min-height: calc(100vh - 55pt);
 }
