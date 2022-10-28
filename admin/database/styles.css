@@ -245,6 +245,25 @@ main {
   padding: 0 10pt 10pt 10pt;
 }
 
+.databaseBrowser .resultsContainer .noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.databaseBrowser .resultsContainer .noResults .iconContainer i {
+  margin: auto;
+  transform: rotate(45deg);
+}
+
+.databaseBrowser .resultsContainer .noResults h2 {
+  margin: 5pt 0 5pt 0;
+  font-size: 15pt;
+}
+
+.databaseBrowser .resultsContainer .noResults p {
+  margin: 0;
+}
+
 .databaseBrowser .resultsContainer .loadMoreButton {
   background: var(--content-background-color);
   border-radius: 10pt;
