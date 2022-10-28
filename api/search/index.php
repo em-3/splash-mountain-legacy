@@ -105,23 +105,30 @@ if(!$id_only) {
 
         //Add each tag to the statement
         $tags = is_array($_GET["tags"]) ? $_GET["tags"] : explode(",", $_GET["tags"]);
-        for($i = 0; $i < count($tags); $i++) {
-            if($i != 0) {
-                $stmt .= " AND ";
-            }
+        
+        if($tags[0] === "UNTAGGED") {
+            $stmt .= "(`tags` IS NULL)";
+            $first = false;
+            $untaggedMode = true;
+        }else {
+            for($i = 0; $i < count($tags); $i++) {
+                if($i != 0) {
+                    $stmt .= " AND ";
+                }
 
-            //Add the tag to the statement
-            $stmt .= "`tags` LIKE :tag" . $i;
-            
-            //Add the tag to the parameters
-            $params["tag" . $i] = "%" . $tags[$i] . "%";
+                //Add the tag to the statement
+                $stmt .= "`tags` LIKE :tag" . $i;
+                
+                //Add the tag to the parameters
+                $params["tag" . $i] = "%" . $tags[$i] . "%";
+            }
         }
     }
     
     if(count($params) > 0 && $first) {
         $stmt .= " AND (";
         $first = false;
-    }else if(count($params) > 0) {
+    }else if(count($params) > 0 || $untaggedMode === true) {
         $stmt .= " AND ";
     }else {
         $stmt .= " WHERE (";

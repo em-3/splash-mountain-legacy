@@ -410,7 +410,7 @@ fetch("/api/tags/")
 		tagFilterOption.id = "tags";
 		tagFilterOption.parameterName = "tags[]";
 		tagFilterOption.label = "Tag";
-		tagFilterOption.values = data;
+		tagFilterOption.values = ["UNTAGGED"].concat(data);
 		tagFilterOption.max = data.length;
 
 		filters.push(tagFilterOption);
