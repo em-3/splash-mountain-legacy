@@ -11,7 +11,7 @@ function hideItemDetails() {
 }
 
 //Listen for iframe requests
-window.onmessage = function (e) {
+window.addEventListener("message", function (e) {
 	if (e.data.indexOf("details") === 0) {
 		showItemDetails(e.data.substring(7));
 	} else if (e.data === "closeDetails") {
@@ -19,7 +19,7 @@ window.onmessage = function (e) {
 	} else if (e.data.indexOf("navigateTo") === 0) {
 		window.location.href = e.data.substring(10);
 	}
-};
+});
 
 //Show admin console link if user has previously logged in
 if (localStorage.getItem("adminAccess") === "true") {

@@ -1,6 +1,7 @@
 main {
   width: 100%;
   height: 100%;
+  margin-top: 40pt;
 }
 
 header {
@@ -9,6 +10,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row !important;
   padding: 0 20pt;
   background: var(--content-background-color);
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -29,7 +31,7 @@ header.hidden {
   width: 100%;
 }
 
-.contentContainer > * {
+.contentContainer>* {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -73,17 +75,18 @@ header.hidden {
   transform: translateY(100pt);
 }
 
+.contentContainer .contentDisplay h1,
 .contentContainer .contentDisplay h2 {
   padding: 0 20pt;
 }
 
-.contentContainer .contentDisplay > img {
+.contentContainer .contentDisplay>img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer {
+.contentDisplay .thumbnail~.loadingContainer {
   position: absolute;
   bottom: 10pt;
   left: 50%;
@@ -99,18 +102,18 @@ header.hidden {
   cursor: none;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer:hover {
+.contentDisplay .thumbnail~.loadingContainer:hover {
   opacity: 0;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer .loadingAnimationContainer {
+.contentDisplay .thumbnail~.loadingContainer .loadingAnimationContainer {
   position: absolute;
   left: -5pt;
   top: calc(50% + 1pt);
   transform: translate(0, -50%) scale(0.5);
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer p {
+.contentDisplay .thumbnail~.loadingContainer p {
   margin: 0 0 0 35pt;
 }
 
@@ -356,11 +359,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 10pt 0;
   cursor: pointer;
   margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
   transition: 0.1s ease background;
 }
 
 .buttonContainer button:hover {
   background: var(--page-background-color);
+}
+
+.buttonContainer button span {
+  margin-left: 5pt;
 }
 
 @media only screen and (min-width: 900px) {
@@ -374,6 +383,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
     grid-column: 1 / 3;
   }
 
+  .contentContainer {
+    height: calc(100vh - 40pt);
+  }
+
   .contentContainer .contentDisplay {
     height: 100%;
   }
@@ -383,6 +396,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   .buttonContainer {
     height: 45pt;
   }
+
   .buttonContainer button {
     height: 100%;
   }
