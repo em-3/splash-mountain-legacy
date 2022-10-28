@@ -10,7 +10,14 @@ $min = 0;
 $max = 0;
 
 if(isset($_GET["filter_type"]) && isset($_GET["filter_value"])) {
-    $sql .= " WHERE :filter_type = :filter_value";
+    $allowed_values = ["user_id", "item_id", "type", "action"];
+    $filter_type = $_GET["filter_type"];
+    foreach($allowed_values as $value) {
+        if($filter_type == $value) {
+            $sql .= " WHERE " . $filter_type . " = :fvalue";
+            break;
+        }
+    }
 }
 
 if(isset($_GET["sort_order"]) && ($_GET["sort_order"] == "oldest_first")) {
@@ -35,15 +42,14 @@ if(isset($_GET["max"])) {
     }
 
     //Update the statement to include the min and max
-    $stmt .= " LIMIT :min, :max";
+    $sql .= " LIMIT :min, :max";
 }
 
 try {
     $stmt = $database->prepare($sql);
 
     if(isset($_GET["filter_type"]) && isset($_GET["filter_value"])) {
-        $stmt->bindValue(":filter_type", $_GET["filter_type"]);
-        $stmt->bindValue(":filter_value", $_GET["filter_value"]);
+        $stmt->bindValue(":fvalue", $_GET["filter_value"]);
     }
 
     if(isset($_GET["max"])) {
