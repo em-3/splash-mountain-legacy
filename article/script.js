@@ -35,7 +35,7 @@ function checkTimeout(articleDetails) {
 }
 
 function showArticle() {
-	document.querySelector(".articleHeader .thumbnail").src = "/resources/" + loadedArticleDetails.thumbnail + "/main";
+	document.querySelector(".articleHeader .thumbnail").src = "/resources/" + loadedArticleDetails.thumbnail + "/main.jpg";
 	document.querySelector(".articleHeader .title").textContent = loadedArticleDetails.title;
 	document.querySelector(".articleHeader .subtitle").textContent = loadedArticleDetails.subtitle;
 	document.querySelector(".articleHeader .authorImage").src = "/images/authors/" + loadedArticleDetails.author.toLowerCase().replaceAll(/[ _.]/g, "") + ".jpg";
