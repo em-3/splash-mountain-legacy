@@ -14,7 +14,7 @@ $stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `image`, `video_id`, `sc
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
-    if(preg_match("/[A-Za-z0-9\/]{11}/", $query)) {
+    if(preg_match("/^[A-Za-z0-9\/]{11}$/", $query)) {
         //Add the query to the list of parameters
         $params["id"] = $query;
         
