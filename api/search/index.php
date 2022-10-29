@@ -151,7 +151,9 @@ if(!$id_only) {
         WHEN "ZDDD Unload" THEN 21
         WHEN "Photos" THEN 22
         WHEN "Exit" THEN 23
-        END
+        END,
+        `name`,
+        `park`
         EOT;
     }else if(isset($_GET["sort_by"]) && (($_GET["sort_by"] == "newest_first") || ($_GET["sort_by"] == "oldest_first"))) {
         $stmt .= "`date_added` " . $sort_by[$_GET["sort_by"]];
@@ -195,7 +197,7 @@ foreach($params as $param=>$param_value) {
 //Execute the statement
 $stmt->execute();
 
-//Convert the results to JSON and ouput them
+//Convert the results to JSON and output them
 header("Content-Type: application/json");
 echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
