@@ -19,7 +19,7 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 				if (item.type === "image") {
 					var pictureElement = null;
 					var imgElement = document.createElement("img");
-					imgElement.src = "/resources/" + item.image + "/thumbnail";
+					imgElement.src = "/resources/" + item.image + "/thumbnail.jpg";
 					imageContainer.appendChild(imgElement);
 				} else if (item.type === "video") {
 					var pictureElement = null;
@@ -104,7 +104,7 @@ fetch("/api/news/list/?min=1&max=15")
 				imageContainer.className = "imageContainer";
 
 				var imgElement = document.createElement("img");
-				imgElement.src = "/resources/" + item.thumbnail + "/thumbnail";
+				imgElement.src = "/resources/" + item.thumbnail + "/thumbnail.jpg";
 				imageContainer.appendChild(imgElement);
 
 				var infoElement = document.createElement("div");

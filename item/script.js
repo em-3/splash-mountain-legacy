@@ -176,7 +176,7 @@ function showItemContent(itemDetails) {
 		case "image":
 			var thumbnailElement = document.createElement("img");
 			thumbnailElement.classList.add("thumbnail");
-			thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail";
+			thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail.jpg";
 			document.querySelector(".contentDisplay").appendChild(thumbnailElement);
 
 			var loadingContainer = document.createElement("div");
@@ -209,7 +209,7 @@ function showItemContent(itemDetails) {
 				document.querySelector(".contentDisplay .loadingContainer").classList.add("hidden");
 				document.querySelector(".contentDisplay .main").classList.remove("hidden");
 			};
-			contentDisplayElement.src = "/resources/" + itemDetails.image + "/main";
+			contentDisplayElement.src = "/resources/" + itemDetails.image + "/main.jpg";
 			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
 
 			document.querySelector(".loadingScreen").classList.add("hidden");

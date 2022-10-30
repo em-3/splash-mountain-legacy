@@ -144,7 +144,7 @@ var databaseList = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail";
+								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
@@ -357,7 +357,7 @@ var newsList = {
 
 							var imgElement = document.createElement("img");
 							imgElement.className = "image";
-							imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail";
+							imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail.jpg";
 
 							var rightSideContainer = document.createElement("div");
 							rightSideContainer.className = "right";
