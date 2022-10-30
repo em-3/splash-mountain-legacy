@@ -347,10 +347,7 @@ var databaseBrowser = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src =
-									"/resources/" +
-									currentItemData.image +
-									"/thumbnail";
+								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");

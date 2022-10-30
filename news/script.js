@@ -44,7 +44,7 @@ var newsList = {
 
 							var imgElement = document.createElement("img");
 							imgElement.className = "thumbnail";
-							imgElement.src = "/resources/" + currentArticleData.thumbnail + "/thumbnail";
+							imgElement.src = "/resources/" + currentArticleData.thumbnail + "/thumbnail.jpg";
 
 							var rightSideContainer = document.createElement("div");
 							rightSideContainer.className = "right";

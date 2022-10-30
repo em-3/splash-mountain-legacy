@@ -973,8 +973,7 @@ function showItemDetails(itemDetails) {
 		switch (type) {
 			case "image":
 				thumbnailElement = document.querySelector(".thumbnail img");
-				thumbnailElement.src =
-					"/resources/" + itemDetails.image + "/thumbnail";
+				thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail.jpg";
 				break;
 			case "video":
 			case "audio":

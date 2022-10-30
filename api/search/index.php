@@ -8,12 +8,13 @@ $available_params = ["type", "park", "scene"];
 $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
-$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `image`, `video_id`, `scene`, `hidden` FROM `item_index`";
+$results;
+$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `description`, `image`, `video_id`, `scene`, `hidden` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
-    if(preg_match("/[A-Za-z0-9-_]{11}/", $query)) {
+    if(preg_match("/^[A-Za-z0-9\/]{11}$/", $query)) {
         //Add the query to the list of parameters
         $params["id"] = $query;
         
@@ -183,7 +184,9 @@ if(!$id_only) {
         WHEN "ZDDD Unload" THEN 21
         WHEN "Photos" THEN 22
         WHEN "Exit" THEN 23
-        END
+        END,
+        `name`,
+        `park`
         EOT;
     }else if(isset($_GET["sort_by"]) && (($_GET["sort_by"] == "newest_first") || ($_GET["sort_by"] == "oldest_first"))) {
         $stmt .= "`date_added` " . $sort_by[$_GET["sort_by"]];
