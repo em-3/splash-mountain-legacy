@@ -383,8 +383,7 @@ function showArticleDetails(articleDetails) {
 	//Article info preview
 	if (mode === "editor") {
 		var thumbnailElement = document.querySelector(".thumbnail img");
-		thumbnailElement.src =
-			"/resources/" + articleDetails.thumbnail + "/thumbnail";
+		thumbnailElement.src = "/resources/" + articleDetails.thumbnail + "/thumbnail.jpg";
 		thumbnailElement.classList.remove("hidden");
 
 		document.querySelector(".articleID").textContent = id;

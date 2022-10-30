@@ -184,10 +184,14 @@ var databaseList = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
+<<<<<<< HEAD
 								imgElement.src =
 									"/resources/" +
 									currentItemData.image +
 									"/thumbnail";
+=======
+								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
+>>>>>>> origin/main
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
@@ -500,10 +504,14 @@ var newsList = {
 
 							var imgElement = document.createElement("img");
 							imgElement.className = "image";
+<<<<<<< HEAD
 							imgElement.src =
 								"/resources/" +
 								currentItemData.thumbnail +
 								"/thumbnail";
+=======
+							imgElement.src = "/resources/" + currentItemData.thumbnail + "/thumbnail.jpg";
+>>>>>>> origin/main
 
 							var rightSideContainer =
 								document.createElement("div");

@@ -54,7 +54,7 @@ var searchBar = {
 		if (resultItem.type === "image") {
 			var imgElement = document.createElement("img");
 			imgElement.className = "image";
-			imgElement.src = "/resources/" + resultItem.image + "/thumbnail";
+			imgElement.src = "/resources/" + resultItem.image + "/thumbnail.jpg";
 		} else if (resultItem.type === "video") {
 			var pictureElement = null;
 			var imgElement = document.createElement("img");
