@@ -110,29 +110,28 @@ var auditLog = {
 							itemIDElement.className = "itemID";
 							itemIDElement.textContent = currentLogData.item_id;
 							((itemID) => {
-								itemIDElement.addEventListener("click", () => {
-									dialog.confirm("Item", "What would you like to do?", {
-										buttons: [
+								itemIDElement.addEventListener("click", (e) => {
+									contextMenu.present({
+										x: e.clientX,
+										y: e.clientY,
+										items: [
 											{
-												text: "Copy ID",
-												type: "passive"
+												label: "Filter to Item",
+												icon: "filters",
+												type: "active",
+												callback: () => {
+													auditLog.applyFilter("item_id", itemID);
+												}
 											},
 											{
-												text: "Filter to Item",
-												type: "active"
+												label: "Copy Item ID",
+												icon: "asterisk",
+												callback: () => {
+													navigator.clipboard.writeText(itemID);
+													notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
+												}
 											}
-										],
-										cancellable: true
-									}).then(function (selected) {
-										switch (selected) {
-											case 0:
-												navigator.clipboard.writeText(itemID);
-												notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
-												break;
-											case 1:
-												auditLog.applyFilter("item_id", itemID);
-												break;
-										}
+										]
 									})
 								});
 							})(currentLogData.item_id);
@@ -160,52 +159,37 @@ var auditLog = {
 							profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
 							usernameElement.textContent = currentUserInfo.username;
 							(function (currentUserInfo) {
-								userInfoContainer.onclick = () => {
-									dialog.confirm("User", "What would you like to do?", {
-										buttons: [
+								userInfoContainer.onclick = (e) => {
+									contextMenu.present({
+										x: e.clientX,
+										y: e.clientY,
+										items: [
 											{
-												text: "Copy",
-												type: "passive"
+												label: "Filter to User",
+												icon: "filters",
+												type: "active",
+												callback: () => {
+													auditLog.applyFilter("user_id", currentUserInfo.id);
+												}
 											},
 											{
-												text: "Filter to User",
-												type: "active"
-											}
-										],
-										cancellable: true
-									}).then(function (selected) {
-										switch (selected) {
-											case 0:
-												dialog.confirm("Copy", "What would you like to copy?", {
-													buttons: [
-														{
-															text: "User ID",
-															type: "passive",
-														},
-														{
-															text: "Username",
-															type: "active",
-														},
-													],
-													cancellable: true,
-												}).then(function (selected) {
-													switch (selected) {
-														case 0:
-															navigator.clipboard.writeText(currentUserInfo.id);
-															notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
-															break;
-														case 1:
-															navigator.clipboard.writeText(currentUserInfo.username);
-															notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
-															break;
-													}
-												}, function () {});
-												break;
-											case 1:
-												auditLog.applyFilter("user_id", currentUserInfo.id);
-												break;
-										}
-									}, function () {});
+												label: "Copy User ID",
+												icon: "asterisk",
+												callback: () => {
+													navigator.clipboard.writeText(currentUserInfo.id);
+													notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
+												}
+											},
+											{
+												label: "Copy Username",
+												icon: "details-less",
+												callback: () => {
+													navigator.clipboard.writeText(currentUserInfo.username);
+													notification.show("passive", "copy", "Copied", "Username copied to clipboard.");
+												}
+											},
+										]
+									})
 								};
 							})(currentUserInfo);
 
