@@ -16,7 +16,8 @@ header {
   justify-content: flex-start;
 }
 
-header picture {
+header i {
+  --ggs: 1.5;
   cursor: pointer;
 }
 
@@ -74,86 +75,144 @@ section {
   margin: auto;
 }
 
-.editor .articleEditor .properties .propertyContainer {
-  margin: 0 20pt 20pt 20pt;
-  display: flex;
-  flex-direction: column;
+.properties .selectContainer {
+  position: relative;
 }
 
-.propertyContainer select {
+.properties .selectContainer i {
+  position: absolute;
+  top: 50%;
+  right: 10pt;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.properties select {
+  background: var(--content-background-color);
   appearance: none;
   font: inherit;
   padding: 5pt;
   border-radius: 5pt;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
   cursor: pointer;
 }
 
-.propertyContainer select:focus {
-  outline: none;
+.fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.propertyContainer input,
-.propertyContainer textarea {
+.fields>* {
+  width: 100%;
   border-radius: 5pt;
-  background: var(--content-background-color);
+  transition: all 0.2s ease;
+}
+
+.properties>*:not(.selectContainer),
+.properties select,
+.fields input,
+.fields textarea {
+  width: 100%;
   color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
+  border: none;
+  border-radius: 5pt;
   padding: 5pt;
   font: inherit;
-  transition: border 0.1s ease;
+  transition: all 0.2s ease;
 }
 
-.propertyContainer textarea {
-  resize: vertical;
-  min-height: 100pt;
-}
-
-.propertyContainer input:focus,
-.propertyContainer textarea:focus {
-  border-color: var(--primary-text-color);
+.properties *:focus,
+.fields *:focus {
   outline: none;
+}
+
+.properties>*:not(.selectContainer):hover,
+.properties select:hover,
+.fields :not(.container):hover,
+.fields :not(.container):focus {
+  background: var(--content-background-color) !important;
+}
+
+.properties #title {
+  margin: 10pt 0 2.5pt 0;
+  font-size: 25pt;
+  font-weight: bold;
+}
+
+.properties #subtitle {
+  margin: 0 0 5pt 0;
+  font-size: 15pt;
+  font-style: italic;
 }
 
 .fields textarea {
-  width: 100%;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 5pt;
-  font: inherit;
-  transition: border 0.1s ease;
   resize: vertical;
   min-height: 100pt;
 }
 
-.fields textarea:focus {
-  border-color: var(--primary-text-color);
-  outline: none;
-}
-
-.addSection {
-  margin-bottom: 10pt;;
-}
-
-.addSection * {
-  display: inline-block;
-}
-
-.addSection .icon {
+.fields .header {
+  margin: 15pt 0 5pt 0;
+  font-size: 20pt;
   font-weight: bold;
-  margin: 0 5pt 0 0;
-  cursor: default;
 }
 
-.addSection div {
+.fields .subheader {
+  margin: 5pt 0 5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 15pt;
+  font-style: italic;
+}
+
+.fields .header+.subheader {
+  margin-top: -2.5pt;
+}
+
+.fields .quote {
+  margin: 5pt 0 2.5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 15pt;
+  font-style: italic;
+}
+
+.fields .author {
+  margin: 0 0 5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 12pt;
+  text-align: end;
+  width: fit-content;
+  float: right;
+}
+
+.fields .divider {
+  margin: 10pt 0 10pt 0;
+  width: 100%;
+  height: 3pt;
+  border-radius: 1.5pt;
+  background: var(--secondary-text-color);
+}
+
+.addContentField {
   background: var(--content-background-color);
+  margin: 10pt 0 20pt 0;
   padding: 5pt 10pt;
   border-radius: 5pt;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.addContentField .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5pt;
+  transform: translate(0, 1pt);
+}
+
+.addContentField p {
+  margin: 0;
 }
 
 .addSection div p {
@@ -171,23 +230,46 @@ section {
 
 .editor .articleEditor .actions button {
   background: var(--content-background-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 2pt 5pt;
   color: var(--primary-text-color);
-  font: inherit;
-  transition: border-color 0.1s ease;
+  border: none;
+  border-radius: 5pt;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 10pt 15pt;
   cursor: pointer;
+  margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
 .editor .articleEditor .actions button:hover {
-  border-color: var(--primary-text-color) !important;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
 }
 
 .editor .articleEditor .actions .danger button {
-  background: #ff6f66;
-  border-color: #ff5449;
+  background: var(--destructive-color);
   color: white;
+}
+
+.editor .articleEditor .actions .danger button:hover {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+}
+
+.editor .articleEditor .actions button .icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor .articleEditor .actions button span {
+  margin-left: 2pt;
 }
 
 .centered {

@@ -13,6 +13,7 @@
   --color-2: rgb(94, 157, 191);
   --color-3: rgb(58, 53, 45);
   --destructive-color: #ff6f66;
+  --secondary-destructive-color: #FF463E;
   --main-gradient: linear-gradient(to bottom right,
       var(--color-1) 0%,
       var(--color-2) 100%);
@@ -645,6 +646,13 @@ main {
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
+.dialog.hidden {
+  transform: translate(-50%, 20pt);
+  opacity: 0;
+  pointer-events: none;
+  display: block !important;
+}
+
 .dialog .title {
   margin: 0 0 10pt 0;
 }
@@ -716,11 +724,89 @@ main {
   color: var(--primary-text-color);
 }
 
-.dialog.hidden {
-  transform: translate(-50%, 20pt);
+.contextMenu {
+  background: var(--content-background-color);
+  position: fixed;
+  width: calc(100vw - 20pt);
+  max-width: 150pt;
+  padding: 5pt;
+  border-radius: 10pt;
+  box-shadow: 0 0 20px var(--shadow-color);
+  z-index: 8;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.contextMenu.hidden {
+  transform: translate(0, 20pt);
   opacity: 0;
   pointer-events: none;
   display: block !important;
+}
+
+.contextMenu>div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 2.5pt 10pt;
+  border-radius: 5pt;
+  border: none;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contextMenu>div:not(:last-child) {
+  margin-bottom: 5pt;
+}
+
+.contextMenu>div .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10pt;
+  width: 20pt;
+  height: 20pt;
+}
+
+.contextMenu>div p {
+  margin: 0;
+}
+
+.contextMenu>div.active {
+  background: var(--color-1);
+  color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .contextMenu>div.active {
+    background: var(--color-2);
+  }
+}
+
+.contextMenu>div.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: normal;
+}
+
+.contextMenu>div.destructive {
+  background: var(--destructive-color);
+  color: white;
+}
+
+.contextMenu>div:hover {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+}
+
+.contextMenu>div.destructive:hover {
+  background: var(--secondary-destructive-color);
+  color: white;
 }
 
 .overlay {

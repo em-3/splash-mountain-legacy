@@ -217,3 +217,104 @@ var notification = {
 		return this.addToQueue(type, icon, title, message, options);
 	}
 };
+
+var contextMenu = {
+	present: function (options) {
+		//Clear previous menu if present
+		var previousMenu = document.querySelector(".contextMenu");
+		if (previousMenu) {
+			contextMenu.callbacks.dismiss();
+		}
+
+		var container = document.createElement("div");
+		container.classList.add("contextMenu");
+		container.classList.add("hidden");
+
+		var items = options.items;
+		for (var i = 0; i < items.length; i++) {
+			var button = document.createElement("div");
+			if (items[i].type) {
+				button.classList.add(items[i].type);
+			}
+			if (items[i].disabled) {
+				button.classList.add("disabled");
+			}
+			(function (i) {
+				button.addEventListener("click", function () {
+					items[i].callback();
+					contextMenu.callbacks.dismiss();
+				});
+			})(i);
+
+			var iconContainer = document.createElement("div");
+			iconContainer.classList.add("icon");
+			var icon = document.createElement("i");
+			icon.classList.add("gg-" + items[i].icon);
+			iconContainer.appendChild(icon);
+			button.appendChild(iconContainer);
+
+			var textContainer = document.createElement("p");
+			textContainer.textContent = items[i].label;
+			button.appendChild(textContainer);
+
+			container.appendChild(button);
+		}
+
+		document.body.insertBefore(container, document.querySelector(".overlay"));
+
+		//Calculate visible position of the context menu and adjust to fit on screen
+		var x = options.x;
+		var y = options.y;
+		var width = container.offsetWidth;
+		var height = container.offsetHeight;
+		var windowWidth = window.innerWidth;
+		var windowHeight = window.innerHeight;
+		if (x + width > windowWidth) {
+			if (x - width > 0) {
+				x -= width;
+			} else {
+				x = windowWidth - width - 10;
+			}
+		}
+		if (y + height > windowHeight) {
+			if (y - height > 0) {
+				y -= height;
+			} else {
+				y = windowHeight - height - 10;
+			}
+		}
+		container.style.left = x + "px";
+		container.style.top = y + "px";
+
+		requestAnimationFrame(function () {
+			container.classList.remove("hidden");
+			//Dismiss menu when clicking outside of it
+			var dismiss = function (e) {
+				if (e.target && e.target.closest && e.target.closest(".contextMenu")) {
+					return;
+				}
+				container.classList.add("hidden");
+				setTimeout(function () {
+					if (container && container.parentElement) {
+						container.parentElement.removeChild(container);
+					}
+				}, 200);
+				document.removeEventListener("click", dismiss);
+				window.removeEventListener("scroll", dismiss);
+			}
+			document.addEventListener("click", dismiss);
+			window.addEventListener("scroll", dismiss);
+		});
+	},
+	callbacks: {
+		dismiss: function () {
+			var menu = document.querySelector(".contextMenu");
+			menu.classList.add("hidden");
+			setTimeout(function () {
+				if (menu && menu.parentElement) {
+					menu.parentElement.removeChild(menu);
+				}
+			}, 200);
+		}
+	}
+};
