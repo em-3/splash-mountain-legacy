@@ -149,7 +149,7 @@ var contentFieldConstructors = {
 	},
 	divider: {
 		name: "Divider",
-		icon: "border-bottom",
+		icon: "format-separator",
 		constructor(content) {
 			var container = document.createElement("div");
 			var divider = document.createElement("div");
