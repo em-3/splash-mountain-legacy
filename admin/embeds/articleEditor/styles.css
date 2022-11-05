@@ -4,16 +4,18 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40pt;
 }
 
 header {
-  background: var(--content-background-color);
   width: 100%;
-  height: 35pt;
-  padding-left: 20pt;
+  height: 40pt;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-direction: row;
+  padding: 0 20pt;
+  background: var(--content-background-color);
 }
 
 header i {
