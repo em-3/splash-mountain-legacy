@@ -38,7 +38,7 @@ var newsList = {
 							resultElement.className = "article";
 							(function (id) {
 								resultElement.onclick = function () {
-									window.location.href = "/article/" + id;
+									showArticleEditor(id);
 								};
 							})(currentArticleData.id);
 
@@ -135,13 +135,18 @@ var newsList = {
 	},
 };
 
-function showArticleEditor() {
-	document.querySelector(".itemDetailsContainer iframe").src = "/admin/embeds/articleEditor/?mode=newArticle";
+function showArticleEditor(id) {
+	if (id) {
+		document.querySelector(".itemDetailsContainer iframe").src = "/admin/embeds/articleEditor/?mode=editor&id=" + id;
+	} else {
+		document.querySelector(".itemDetailsContainer iframe").src = "/admin/embeds/articleEditor/?mode=newArticle";
+	}
 	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
 }
 
 function hideArticleEditor() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
+	newsList.refreshResults();
 }
 
 //Listen for iframe requests

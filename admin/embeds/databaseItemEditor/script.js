@@ -960,9 +960,6 @@ function showItemDetails(itemDetails) {
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
 		var currentPropertyElement = currentProperty.constructor();
-		currentPropertyElement.addEventListener("input", function () {
-			unsavedChanges = true;
-		});
 		document
 			.querySelector(".editor .properties")
 			.appendChild(currentPropertyElement);
@@ -1214,6 +1211,11 @@ function showErrorScreen() {
 	document.querySelector(".loadingContainer").classList.add("hidden");
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
+
+//Listen for any change events
+document.addEventListener("change", function (event) {
+	unsavedChanges = true;
+});
 
 async function closeEditor() {
 	if (unsavedChanges) {

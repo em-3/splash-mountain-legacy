@@ -6,6 +6,8 @@ if (mode === "editor") {
 	var id = params.get("id");
 }
 
+var unsavedChanges = false;
+
 var properties = [];
 
 //Fetch the article details and content
@@ -92,7 +94,7 @@ var contentFieldConstructors = {
 			var element;
 			if (mode === "editor") {
 				element = document.createElement("img");
-				element.src = content;
+				element.src = "/resources/" + content + "/thumbnail.jpg";
 			} else {
 				element = document.createElement("input");
 				element.type = "file";
@@ -104,7 +106,7 @@ var contentFieldConstructors = {
 				element: element,
 				getValue: function () {
 					if (mode === "editor") {
-						return this.element.src;
+						return content;
 					} else {
 						return this.element.files[0];
 					}
@@ -577,9 +579,10 @@ function showArticleDetails(articleDetails) {
 		},
 	});
 
-	//Show the article details
+	//Show the article property fields
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
+		var currentPropertyElement = currentProperty.constructor();
 		document
 			.querySelector(".editor .properties")
 			.appendChild(currentProperty.constructor());
@@ -613,9 +616,7 @@ function showArticleDetails(articleDetails) {
 		var content = JSON.parse(articleDetails.content);
 		for (var i = 0; i < content.length; i++) {
 			var currentField = content[i];
-			if (typeof currentField === "string") {
-				addContentField(contentFieldConstructors.text, currentField);
-			}
+			addContentField(contentFieldConstructors[currentField.type], currentField.content);
 		}
 	}
 
@@ -715,6 +716,7 @@ async function uploadArticle() {
 				document.querySelector(
 					".responseContainer .message"
 				).textContent = "Item ID: " + result.id;
+				unsavedChanges = false;
 			} else {
 				document.querySelector(
 					".responseContainer .title"
@@ -779,6 +781,7 @@ async function updateArticle() {
 			"The article has been updated.";
 		document.querySelector(".responseContainer .message").textContent =
 			"Item ID: " + result.id;
+		unsavedChanges = false;
 	} else {
 		document.querySelector(".responseContainer .title").textContent =
 			"Congratulations, you broke something.";
@@ -848,22 +851,29 @@ function showErrorScreen() {
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
+//Listen for any change events
+document.addEventListener("change", function (event) {
+	unsavedChanges = true;
+});
+
 async function closeEditor() {
-	var confirm = await dialog.confirm(
-		"Close Editor",
-		"Are you sure you want to close the editor? You'll lose any unpublished changes.",
-		{
-			cancellable: true,
-			buttons: [
-				{
-					text: "Close",
-					type: "active",
-				},
-			],
+	if (unsavedChanges) {
+		var confirm = await dialog.confirm(
+			"Close Editor",
+			"Are you sure you want to close the editor? You'll lose any unpublished changes.",
+			{
+				cancellable: true,
+				buttons: [
+					{
+						text: "Close",
+						type: "active",
+					},
+				],
+			}
+		);
+		if (confirm !== 0) {
+			return;
 		}
-	);
-	if (confirm !== 0) {
-		return;
 	}
 	
 	if (params.get("fromViewer") === "true") {
