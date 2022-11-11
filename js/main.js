@@ -21,9 +21,65 @@ window.addEventListener("message", function (e) {
 	}
 });
 
+//Highlight the proper link in the header for the current page
+var linkAssociations = {
+	"login": null,
+	"admin": "admin",
+	"admin/database": "admin",
+	"admin/news": "admin",
+	"admin/audit": "admin",
+	"database": "database",
+	"item": "database",
+	"news": "news",
+	"article": "news",
+	"about": "about",
+	"/": "home"
+};
+var pathname = window.location.pathname;
+for (var key in linkAssociations) {
+	if (pathname.indexOf(key) !== -1) {
+		if (linkAssociations[key] === null) {
+			break;
+		}
+		document.querySelector("header .links ." + linkAssociations[key]).classList.add("current");
+		break;
+	}
+}
+
 //Show admin console link if user has previously logged in
 if (localStorage.getItem("adminAccess") === "true") {
-	document.querySelector("header .links .admin").classList.remove("hidden");
+	var adminLink = document.querySelector("header .links .admin");
+	adminLink.classList.remove("hidden");
+	adminLink.addEventListener("contextmenu", function (e) {
+		e.preventDefault();
+		contextMenu.present({
+			x: e.clientX,
+			y: e.clientY,
+			items: [
+				{
+					icon: "database",
+					label: "Database",
+					callback: function () {
+						window.location.href = "/admin/database";
+					}
+				},
+				{
+					icon: "file-document",
+					label: "News List",
+					callback: function () {
+						window.location.href = "/admin/newsList";
+					}
+				},
+				{
+					icon: "play-list-search",
+					label: "Audit Log",
+					callback: function () {
+						window.location.href = "/admin/audit-log";
+					}
+				}
+			],
+		});
+	});
 }
 
 //Listen for the Konami code

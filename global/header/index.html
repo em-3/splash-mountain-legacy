@@ -6,10 +6,10 @@
 
     <div class="linksContainer">
         <div class="links">
-            <a href="/">Home</a>
-            <a href="/database">Database</a>
-            <a href="/news">News</a>
-            <a href="/about">About</a>
+            <a class="home" href="/">Home</a>
+            <a class="database" href="/database">Database</a>
+            <a class="news" href="/news">News</a>
+            <a class="about" href="/about">About</a>
             <a class="admin hidden" href="/admin">Admin</a>
             <button class="search" onclick="searchBar.onfocus();">
                 <i class="gg-search"></i>
@@ -20,10 +20,8 @@
     <div class="searchBox">
         <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()" onfocus="searchBar.onfocus()"
             onblur="searchBar.onblur()">
-        <div class="clearButton" onclick="searchBar.close()">
-            <picture>
-                <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
-            </picture>
+        <div class="clearButton" title="Close Search" onclick="searchBar.close()">
+            <i class="gg-close"></i>
         </div>
     </div>
 </header>

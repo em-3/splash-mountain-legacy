@@ -387,6 +387,13 @@ header .links>* {
   border: none;
   cursor: pointer;
   transition: background 0.2s ease;
+  /* disable text selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 header .links>*:not(:last-child) {
@@ -454,12 +461,6 @@ header .searchBox .clearButton {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
-}
-
-header .searchBox .clearButton picture {
-  width: 14px;
-  height: 14px;
-  display: flex;
 }
 
 header.searchActive .searchBox .clearButton {
