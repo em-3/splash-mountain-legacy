@@ -143,6 +143,10 @@ main {
   justify-content: center;
 }
 
+.filterBar .addFilter i {
+  margin-top: 0;
+}
+
 .sortByContainer {
   width: 125pt;
   background: var(--page-background-color);
@@ -235,6 +239,25 @@ main {
   grid-auto-rows: 100pt;
   gap: 10pt;
   padding: 0 10pt 10pt 10pt;
+}
+
+.databaseBrowser .resultsContainer .noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.databaseBrowser .resultsContainer .noResults .iconContainer i {
+  margin: auto;
+  transform: rotate(45deg);
+}
+
+.databaseBrowser .resultsContainer .noResults h2 {
+  margin: 5pt 0 5pt 0;
+  font-size: 15pt;
+}
+
+.databaseBrowser .resultsContainer .noResults p {
+  margin: 0;
 }
 
 .databaseBrowser .resultsContainer .loadMoreButton {

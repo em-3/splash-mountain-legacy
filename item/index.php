@@ -1,3 +1,9 @@
+<?php
+
+require_once __DIR__ . "/../scripts/init.php";
+require_once __DIR__ . "/../scripts/viewer_meta.php";
+
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -5,6 +11,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+
+    <?php output_meta_tags("/item/", "item_index", "name", "description", "image"); ?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,8 +87,14 @@
             </div>
 
             <div class="buttonContainer">
-                <button class="share" onclick="share()">Share</button>
-                <button class="editItem hidden" onclick="editItem()">Edit Item</button>
+                <button class="share" onclick="share()">
+                    <i class="gg-export" style="transform: translate(1px, 3px) scale(0.8)"></i>
+                    <span>Share</span>
+                </button>
+                <button class="editItem hidden" onclick="editItem()">
+                    <i class="gg-edit-exposure"></i>
+                    <span>Edit Item</span>
+                </button>
             </div>
         </div>
     </main>

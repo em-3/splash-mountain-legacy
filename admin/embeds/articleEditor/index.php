@@ -38,10 +38,7 @@ if(!check_authentication() || !check_clearance(0)) {
 <body ontouchstart class>
 
     <header>
-        <picture onclick="closeEditor()">
-            <source srcset="/images/icons/arrow-white.svg" media="(prefers-color-scheme: dark)">
-            <img src="/images/icons/arrow-black.svg" width="auto" height="30pt">
-        </picture>
+        <i class="gg-close" onclick="closeEditor()"></i>
     </header>
 
     <main>
@@ -70,28 +67,43 @@ if(!check_authentication() || !check_clearance(0)) {
             <div class="articleEditor">
                 <div class="properties"></div>
                 <div class="content">
-                    <h3>Article Content</h3>
                     <div class="fields"></div>
-                    <div class="addSection">
-                        <p class="icon">+ Add:</p>
+                    <div class="addContentField">
+                        <div class="icon"><i class="gg-math-plus"></i></div>
+                        <p>Add Section</p>
                     </div>
                 </div>
                 <h2 class="errorMessage hidden"></h2>
                 <div class="actions existingArticle hidden">
                     <div class="passive">
-                        <button class="cancel" onclick="closeEditor()">Cancel Changes</button>
-                        <button class="save" onclick="updateArticle()">Update Article</button>
+                        <button class="cancel" onclick="closeEditor()">
+                            <div class="icon"><i class="gg-close"></i></div>
+                            <span>Cancel Changes</span>
+                        </button>
+                        <button class="save" onclick="updateArticle()">
+                            <div class="icon"><i class="gg-drive"></i></div>
+                            <span>Update Article</span>
+                        </button>
                     </div>
                     <div class="danger">
-                        <button class="delete" onclick="deleteArticle()">Delete Article</button>
+                        <button class="delete" onclick="deleteArticle()">
+                            <div class="icon"><i class="gg-trash"></i></div>
+                            <span>Delete Article</span>
+                        </button>
                     </div>
                 </div>
                 <div class="actions newArticle hidden">
                     <div class="danger">
-                        <button class="cancel" onclick="closeEditor()">Cancel</button>
+                        <button class="cancel" onclick="closeEditor()">
+                            <div class="icon"><i class="gg-close"></i></div>
+                            <span>Cancel</span>
+                        </button>
                     </div>
                     <div class="passive">
-                        <button class="save" onclick="uploadArticle()">Upload Article</button>
+                        <button class="save" onclick="uploadArticle()">
+                            <div class="icon"><i class="gg-software-upload"></i></div>
+                            <span>Upload Article</span>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,8 @@
 
 require_once __DIR__ . "/../scripts/init.php";
 
-use Wohali\OAuth2\Client\Provider\Discord;
+use SplmlFoundation\SplashMountainLegacyBackend\Discord;
+use Wohali\OAuth2\Client\Provider\Discord as Provider;
 
 //Redirect the user if they're already logged in
 if(check_authentication()) {
@@ -16,7 +17,7 @@ $user;
 //Regenerate the session ID to prevent session fixation attacks
 session_regenerate_id();
 
-$provider = new Discord([
+$provider = new Provider([
     "clientId" => $_ENV["DISCORD_CLIENT_ID"],
     "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
     "redirectUri" => $_ENV["DISCORD_REDIRECT_URI_PREFIX"] . "/login/index.php"
@@ -46,17 +47,13 @@ if(isset($_GET["code"])) {
         $_SESSION["token"] = $token->getToken();
     
         try {
-            $user = $provider->getResourceOwner($token);
+            $discord = new Discord($_SESSION["token"], $database, "discord_users");
 
-            //Get the user's data from the database
-            $stmt = $database->prepare("SELECT `clearance` FROM discord_users WHERE `id` = ?");
-            $stmt->execute([$user->getId()]);
+            $user = $discord->getUserDetails();
 
-            //Check if the user exists
-            if($stmt->rowCount() == 1) {
-                //Store their clearance level and ID
-                $_SESSION["id"] = $user->getId();
-                $_SESSION["clearance"] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]["clearance"];
+            if(isset($user["clearance"])) {
+                $_SESSION["id"] = $user["id"];
+                $_SESSION["clearance"] = $user["clearance"];
             }
         }catch(Exception $e) {
             $error = "An exception occurred: " . $e->getMessage();
@@ -105,29 +102,29 @@ if(isset($_GET["code"])) {
             <img src="/images/logo-black.png">
         </picture>
 
-        <!-- <div class="linksContainer">
-                <div class="links">
-                    <a href="/">Home</a>
-                    <a href="/database">Database</a>
-                    <a href="/news">News</a>
-                    <a href="/about">About</a>
-                    <a class="admin current" href="/admin">Admin</a>
-                    <button class="search" onclick="searchBar.onfocus();">
-                        <i class="gg-search"></i>
-                    </button>
-                </div>
+        <div class="linksContainer">
+            <div class="links">
+                <a href="/">Home</a>
+                <a href="/database">Database</a>
+                <a href="/news">News</a>
+                <a href="/about">About</a>
+                <a class="admin hidden" href="/admin">Admin</a>
+                <button class="search" onclick="searchBar.onfocus();">
+                    <i class="gg-search"></i>
+                </button>
             </div>
-        
-            <div class="searchBox">
-                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
-                    onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
-                <div class="clearButton" onclick="searchBar.close()">
-                    <picture>
-                        <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
-                    </picture>
-                </div>
-            </div> -->
+        </div>
+    
+        <div class="searchBox">
+            <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
+                onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
+            <div class="clearButton" onclick="searchBar.close()">
+                <picture>
+                    <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
+                    <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
+                </picture>
+            </div>
+        </div>
     </header>
 
     <div class="searchResultsContainer">
@@ -163,8 +160,8 @@ if(isset($_GET["code"])) {
         <?php }else { ?>
         <!-- Authentication succeeded -->
         <section class="welcomeContainer">
-            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
-            <h1 class="name"><?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?></h1>
+            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user["id"] . "/" . $user["avatar_hash"]; ?>">
+            <h1 class="name"><?php echo $user["username"] . "#" . $user["discriminator"]; ?></h1>
             <h3 class="authLevel">
                 <?php
                     if(!isset($_SESSION["clearance"])) {
@@ -178,7 +175,7 @@ if(isset($_GET["code"])) {
             </h3>
             <?php if(check_authentication()) { ?>
             <!-- User is allowed access -->
-            <button class="continueButton" onclick="window.location.href='/'">Continue</button>
+            <button class="continueButton" onclick="window.location.href='/admin'">Continue</button>
             <?php }else { ?>
             <!-- User is not allowed access -->
             <p class="authLevelWarning">Sorry, you don't have access to the site yet.</p>

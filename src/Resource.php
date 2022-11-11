@@ -143,12 +143,12 @@ class Resource {
                 $resource_location = $this->resource_directory . "$id";
 
                 //Delete any files that were created
-                if(file_exists($resource_location . "/main")) {
-                    unlink($resource_location . "/main");
+                if(file_exists($resource_location . "/main.jpg")) {
+                    unlink($resource_location . "/main.jpg");
                 }
 
-                if(file_exists($resource_location . "/thumbnail")) {
-                    unlink($resource_location . "/thumbnail");
+                if(file_exists($resource_location . "/thumbnail.jpg")) {
+                    unlink($resource_location . "/thumbnail.jpg");
                 }
 
                 if(file_exists($resource_location)) {
@@ -176,14 +176,14 @@ class Resource {
         }
 
         //Move the image to the directory
-        if(!move_uploaded_file($this->file["tmp_name"], $this->resource_directory . $this->getID() . "/main")) {
+        if(!imagejpeg(imagecreatefromstring(file_get_contents($this->file["tmp_name"])), $this->resource_directory . $this->getID() . "/main.jpg")) {
             throw new \Exception("Could not upload image");
         }
     }
 
     protected function generateThumbnail() {
-        $inputPath = $this->resource_directory . $this->getID() . "/main";
-        $outputPath = $this->resource_directory . $this->getID() . "/thumbnail";
+        $inputPath = $this->resource_directory . $this->getID() . "/main.jpg";
+        $outputPath = $this->resource_directory . $this->getID() . "/thumbnail.jpg";
 
         //Convert the image into a GD image
         $image_gd = imagecreatefromstring(file_get_contents($inputPath));
@@ -231,7 +231,7 @@ class Resource {
 
         //Save the thumbnail
         if(!imagejpeg($thumbnail_gd, $outputPath)) {
-            throw new \Exception("Failed to save thumbnail");
+            throw new \Exception("Failed to save thumbnail.jpg");
         }
     }
 
@@ -277,12 +277,12 @@ class Resource {
                 $resource_location = $this->resource_directory . "$id";
 
                 //Delete any files that were created
-                if(file_exists($resource_location . "/main")) {
-                    unlink($resource_location . "/main");
+                if(file_exists($resource_location . "/main.jpg")) {
+                    unlink($resource_location . "/main.jpg");
                 }
 
-                if(file_exists($resource_location . "/thumbnail")) {
-                    unlink($resource_location . "/thumbnail");
+                if(file_exists($resource_location . "/thumbnail.jpg")) {
+                    unlink($resource_location . "/thumbnail.jpg");
                 }
 
                 if(file_exists($resource_location)) {

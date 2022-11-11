@@ -9,12 +9,12 @@ $params = array();
 $id_only = false;
 $tag_mode = isset($_GET["tags"]);
 $results;
-$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `image`, `video_id`, `scene`, `hidden` FROM `item_index`";
+$stmt = "SELECT `id`, `name`, `type`, `park`, `author`, `description`, `image`, `video_id`, `scene`, `hidden` FROM `item_index`";
 
 if(isset($_GET["query"])) {
     $query = rawurldecode($_GET["query"]);
 
-    if(preg_match("/[A-Za-z0-9\/]{11}/", $query)) {
+    if(preg_match("/^[A-Za-z0-9\/]{11}$/", $query)) {
         //Add the query to the list of parameters
         $params["id"] = $query;
         
@@ -26,7 +26,21 @@ if(isset($_GET["query"])) {
         $params["query"] = "%" . $query . "%";
 
         //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query";
+        $stmt .= " WHERE (";
+
+        $matches = ["name", "author", "description", "scene"];
+
+        if(isset($_GET["match"])) {
+            $matches = is_array($_GET["match"]) ? $_GET["match"] : explode(",", $_GET["match"]);
+        }
+
+        for($i = 0; $i < count($matches); $i++) {
+            if($i > 0) {
+                $stmt .= " OR ";
+            }
+
+            $stmt .= "`" . $matches[$i] . "` LIKE :query";
+        }
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {
@@ -92,23 +106,30 @@ if(!$id_only) {
 
         //Add each tag to the statement
         $tags = is_array($_GET["tags"]) ? $_GET["tags"] : explode(",", $_GET["tags"]);
-        for($i = 0; $i < count($tags); $i++) {
-            if($i != 0) {
-                $stmt .= " AND ";
-            }
+        
+        if($tags[0] === "UNTAGGED") {
+            $stmt .= "(`tags` IS NULL)";
+            $first = false;
+            $untaggedMode = true;
+        }else {
+            for($i = 0; $i < count($tags); $i++) {
+                if($i != 0) {
+                    $stmt .= " AND ";
+                }
 
-            //Add the tag to the statement
-            $stmt .= "`tags` LIKE :tag" . $i;
-            
-            //Add the tag to the parameters
-            $params["tag" . $i] = "%" . $tags[$i] . "%";
+                //Add the tag to the statement
+                $stmt .= "`tags` LIKE :tag" . $i;
+                
+                //Add the tag to the parameters
+                $params["tag" . $i] = "%" . $tags[$i] . "%";
+            }
         }
     }
     
     if(count($params) > 0 && $first) {
         $stmt .= " AND (";
         $first = false;
-    }else if(count($params) > 0) {
+    }else if(count($params) > 0 || $untaggedMode === true) {
         $stmt .= " AND ";
     }else {
         $stmt .= " WHERE (";
@@ -163,7 +184,9 @@ if(!$id_only) {
         WHEN "ZDDD Unload" THEN 21
         WHEN "Photos" THEN 22
         WHEN "Exit" THEN 23
-        END
+        END,
+        `name`,
+        `park`
         EOT;
     }else if(isset($_GET["sort_by"]) && (($_GET["sort_by"] == "newest_first") || ($_GET["sort_by"] == "oldest_first"))) {
         $stmt .= "`date_added` " . $sort_by[$_GET["sort_by"]];

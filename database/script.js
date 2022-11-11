@@ -305,12 +305,16 @@ var databaseBrowser = {
 						}
 					}
 					if (!preservePreviousResults && data.length === 0) {
-						var noResults = document.createElement("p");
+						var noResults = document.createElement("div");
 						noResults.className = "noResults";
-						noResults.textContent = "No results found.";
-						document
-							.querySelector(".databaseBrowser .resultsContainer")
-							.appendChild(noResults);
+						noResults.innerHTML = `
+							<div class="iconContainer">
+								<i class="gg-bee"></i>
+							</div>
+							<h2>There's Nothing In Here But Bees!</h2>
+							<p>We couldn't find any results.</p>
+						`;
+						document.querySelector(".databaseBrowser .resultsContainer").appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
 						var loadMoreButton = document.querySelector(
 							".databaseBrowser .loadMoreButton"
@@ -343,10 +347,7 @@ var databaseBrowser = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src =
-									"/resources/" +
-									currentItemData.image +
-									"/thumbnail";
+								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");

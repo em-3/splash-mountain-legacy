@@ -225,11 +225,8 @@ function showItemContent(itemDetails) {
 		case "image":
 			var thumbnailElement = document.createElement("img");
 			thumbnailElement.classList.add("thumbnail");
-			thumbnailElement.src =
-				"/resources/" + itemDetails.image + "/thumbnail";
-			document
-				.querySelector(".contentDisplay")
-				.appendChild(thumbnailElement);
+			thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail.jpg";
+			document.querySelector(".contentDisplay").appendChild(thumbnailElement);
 
 			var loadingContainer = document.createElement("div");
 			loadingContainer.classList.add("loadingContainer");
@@ -271,11 +268,16 @@ function showItemContent(itemDetails) {
 					.querySelector(".contentDisplay .main")
 					.classList.remove("hidden");
 			};
+<<<<<<< HEAD
 			contentDisplayElement.src =
 				"/resources/" + itemDetails.image + "/main";
 			document
 				.querySelector(".contentDisplay")
 				.appendChild(contentDisplayElement);
+=======
+			contentDisplayElement.src = "/resources/" + itemDetails.image + "/main.jpg";
+			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
+>>>>>>> origin/main
 
 			document.querySelector(".loadingScreen").classList.add("hidden");
 			document

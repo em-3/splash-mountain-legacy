@@ -1,3 +1,27 @@
+//Get user profile information
+fetch("/api/profile/index.php")
+	.then((reponse) => reponse.json())
+	.then((data) => {
+		if (data.status === "success") {
+			var profileInfo = data.user_data;
+			document.querySelector(".profileInformation .profilePicture").src = "https://cdn.discordapp.com/avatars/" + profileInfo.id + "/" + profileInfo.avatar_hash;
+			document.querySelector(".profileInformation .name").textContent = profileInfo.username;
+			var authorizationLevel;
+			switch (profileInfo.clearance) {
+				case "0":
+					authorizationLevel = "Admin";
+					break;
+				case "1":
+					authorizationLevel = "Launch Team";
+					break;
+			}
+			document.querySelector(".profileInformation .authorizationLevel").textContent = authorizationLevel;
+		} else {
+			document.querySelector(".profileInformation .name").textContent = "Error";
+			document.querySelector(".profileInformation .authorizationLevel").textContent = "Failed to load user profile.";
+		}
+	});
+
 //Parse PHP parameters from the URL
 var url = new URL(window.location.href);
 var params = url.searchParams;
@@ -259,42 +283,6 @@ async function logout() {
 
 	window.location.href = "/logout.php";
 }
-
-//Loop through each filter and create an element for for it.
-for (var i = 0; i < databaseList.filters.length; i++) {
-	var currentFilter = databaseList.filters[i];
-
-	var filterElement = document.createElement("div");
-	filterElement.classList.add("optionMenu");
-	filterElement.classList.add(currentFilter.id);
-
-	var filterName = document.createElement("p");
-	filterName.classList.add("name");
-	filterName.textContent = currentFilter.label + ":";
-
-	var filterSelect = document.createElement("select");
-	filterSelect.setAttribute("name", currentFilter.id);
-	filterSelect.addEventListener("change", function () {
-		databaseList.refreshResults();
-	});
-
-	for (var j = 0; j < currentFilter.values.length; j++) {
-		var filterSelectOption = document.createElement("option");
-		filterSelectOption.setAttribute("value", currentFilter.values[j]);
-		filterSelectOption.textContent = currentFilter.values[j];
-		if (j === 0) {
-			filterSelectOption.setAttribute("selected", true);
-		}
-		filterSelect.appendChild(filterSelectOption);
-	}
-
-	filterElement.appendChild(filterName);
-	filterElement.appendChild(filterSelect);
-	document.querySelector(".list.database .filters .optionMenus").appendChild(filterElement);
-}
-
-databaseList.refreshResults();
-newsList.refreshResults();
 
 window.onmessage = function (e) {
 	if (e.data === "closeItemEditor") {

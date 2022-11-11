@@ -136,7 +136,7 @@ function addFilter(filterObject, selectedOption) {
 
 	var removeButton = document.createElement("div");
 	removeButton.classList.add("removeButton");
-	removeButton.textContent = "✕";
+	removeButton.innerHTML = "<i class='gg-close'></i>";
 	removeButton.addEventListener("click", function () {
 		document.querySelector(".availableFilters .filter." + filterObject.id).classList.remove("disabled");
 		filterElement.parentElement.removeChild(filterElement);
@@ -251,9 +251,15 @@ var databaseBrowser = {
 						}
 					}
 					if (!preservePreviousResults && data.length === 0) {
-						var noResults = document.createElement("p");
+						var noResults = document.createElement("div");
 						noResults.className = "noResults";
-						noResults.textContent = "No results found.";
+						noResults.innerHTML = `
+							<div class="iconContainer">
+								<i class="gg-bee"></i>
+							</div>
+							<h2>There's Nothing In Here But Bees!</h2>
+							<p>We couldn't find any results.</p>
+						`;
 						document.querySelector(".databaseBrowser .resultsContainer").appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
 						var loadMoreButton = document.querySelector(".databaseBrowser .loadMoreButton");
@@ -380,6 +386,22 @@ var databaseBrowser = {
 
 databaseBrowser.refreshResults();
 
+function showItemEditor() {
+	document.querySelector(".itemDetailsContainer iframe").src = "/admin/embeds/databaseItemEditor/?mode=newItem";
+	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+}
+
+function hideItemEditor() {
+	document.querySelector(".itemDetailsContainer").classList.add("hidden");
+}
+
+//Listen for iframe requests
+window.addEventListener("message", function (e) {
+	if (e.data.indexOf("closeEditor") === 0) {
+		hideItemEditor();
+	}
+});
+
 //Load available tags
 fetch("/api/tags/")
 	.then((request) => request.json())
@@ -388,7 +410,7 @@ fetch("/api/tags/")
 		tagFilterOption.id = "tags";
 		tagFilterOption.parameterName = "tags[]";
 		tagFilterOption.label = "Tag";
-		tagFilterOption.values = data;
+		tagFilterOption.values = ["UNTAGGED"].concat(data);
 		tagFilterOption.max = data.length;
 
 		filters.push(tagFilterOption);

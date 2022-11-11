@@ -1,3 +1,11 @@
+section.header a.addItem i {
+  --ggs: 0.8;
+}
+
+section.header a.addItem span {
+  margin-left: 2.5pt;
+}
+
 main section.databaseBrowser {
   min-height: calc(100vh - 55pt);
 }
@@ -7,7 +15,7 @@ main {
 }
 
 .searchControls {
-  margin: 10pt;
+  margin: 0 10pt 10pt 10pt;
   height: 35pt;
   background: var(--content-background-color);
   border-radius: 10pt;
@@ -131,7 +139,8 @@ main {
   justify-content: center;
 }
 
-.filterBar .addFilter {
+.filterBar .addFilter,
+.filterSelect .closeButton {
   background: var(--page-background-color);
   border-radius: 5pt;
   padding: 0 5pt;
@@ -140,6 +149,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.filterBar .addFilter i {
+  margin-top: 0;
 }
 
 .sortByContainer {
@@ -178,16 +191,7 @@ main {
 }
 
 .filterSelect .closeButton {
-  background: var(--page-background-color);
-  height: 20pt;
-  border-radius: 5pt;
-  padding: 0 5pt;
-  margin-right: 10pt;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-right: 5pt;
 }
 
 .filterSelect .availableFilters {
@@ -243,6 +247,25 @@ main {
   grid-auto-rows: 100pt;
   gap: 10pt;
   padding: 0 10pt 10pt 10pt;
+}
+
+.databaseBrowser .resultsContainer .noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.databaseBrowser .resultsContainer .noResults .iconContainer i {
+  margin: auto;
+  transform: rotate(45deg);
+}
+
+.databaseBrowser .resultsContainer .noResults h2 {
+  margin: 5pt 0 5pt 0;
+  font-size: 15pt;
+}
+
+.databaseBrowser .resultsContainer .noResults p {
+  margin: 0;
 }
 
 .databaseBrowser .resultsContainer .loadMoreButton {
