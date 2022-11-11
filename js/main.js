@@ -57,6 +57,14 @@ if (localStorage.getItem("adminAccess") === "true") {
 			y: e.clientY,
 			items: [
 				{
+					icon: "home",
+					label: "Admin Home",
+					type: "active",
+					callback: function () {
+						window.location.href = "/admin";
+					}
+				},
+				{
 					icon: "database",
 					label: "Database",
 					callback: function () {

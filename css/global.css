@@ -31,6 +31,11 @@
   }
 }
 
+/* CSS.gg corrections */
+.gg-home {
+  margin-bottom: -6.5px;
+}
+
 .hidden {
   display: none !important;
 }
