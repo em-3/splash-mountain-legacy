@@ -46,19 +46,33 @@ div.profileInformation div.text p {
   font-size: 11pt;
 }
 
-div.profileInformation button.logout {
+div.actions {
+  margin-top: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10pt;
+}
+
+div.actions button {
   background: var(--page-background-color);
   color: var(--primary-text-color);
   border-radius: 5pt;
   border: none;
   padding: 5pt;
-  width: 25pt;
-  margin-left: auto;
   font-weight: bold;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+div.actions button .icon {
+  margin-right: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
 }
 
 .pageLinks a {

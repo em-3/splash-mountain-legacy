@@ -71,8 +71,15 @@ if(!check_authentication() || !check_clearance(0)) {
                         <h3 class="name">Loading...</h3>
                         <p class="authorizationLevel">Fetching user profile.</p>
                     </div>
-                    <button class="logout" onclick="logout()" title="Logout">
-                        <i class="gg-log-out"></i>
+                </div>
+                <div class="actions">
+                    <button class="create" onclick="">
+                        <div class="icon"><i class="gg-math-plus"></i></div>
+                        <span>Create</span>
+                    </button>
+                    <button class="logout" onclick="logout()">
+                        <div class="icon"><i class="gg-log-out"></i></div>
+                        <span>Logout</span>
                     </button>
                 </div>
             </div>

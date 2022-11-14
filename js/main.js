@@ -5,6 +5,26 @@ function showItemDetails(id) {
 	document.body.classList.add("noScroll");
 }
 
+function showDatabaseItemEditor(id) {
+	var iframe = document.querySelector(".itemDetailsContainer iframe");
+	if (id) {
+		iframe.src = "/admin/embeds/databaseItemEditor/?mode=editor&id=" + id;
+	} else {
+		iframe.src = "/admin/embeds/databaseItemEditor/?mode=newItem";
+	}
+	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+}
+
+function showArticleEditor(id) {
+	var iframe = document.querySelector(".itemDetailsContainer iframe");
+	if (id) {
+		iframe.src = "/admin/embeds/articleEditor/?mode=editor&id=" + id;
+	} else {
+		iframe.src = "/admin/embeds/articleEditor/?mode=newArticle";
+	}
+	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+}
+
 function hideItemDetails() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
 	document.body.classList.remove("noScroll");
@@ -14,7 +34,7 @@ function hideItemDetails() {
 window.addEventListener("message", function (e) {
 	if (e.data.indexOf("details") === 0) {
 		showItemDetails(e.data.substring(7));
-	} else if (e.data === "closeDetails") {
+	} else if (e.data === "closeDetails" || e.data === "closeEditor") {
 		hideItemDetails();
 	} else if (e.data.indexOf("navigateTo") === 0) {
 		window.location.href = e.data.substring(10);
@@ -59,7 +79,6 @@ if (localStorage.getItem("adminAccess") === "true") {
 				{
 					icon: "home",
 					label: "Admin Home",
-					type: "active",
 					callback: function () {
 						window.location.href = "/admin";
 					}
@@ -83,6 +102,22 @@ if (localStorage.getItem("adminAccess") === "true") {
 					label: "Audit Log",
 					callback: function () {
 						window.location.href = "/admin/audit-log";
+					}
+				},
+				{
+					icon: "file-add",
+					label: "New Item",
+					type: "active",
+					callback: function () {
+						showDatabaseItemEditor();
+					}
+				},
+				{
+					icon: "file-document",
+					label: "New Article",
+					type: "active",
+					callback: function () {
+						showArticleEditor();
 					}
 				}
 			],
