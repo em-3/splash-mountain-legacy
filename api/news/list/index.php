@@ -66,6 +66,10 @@ foreach($articles as &$article) {
                 //Store the string on the main article object
                 $article["content_preview"] = $item;
                 break;
+            }else if(is_object($item) && isset($item->type) && $item->type == "paragraph") {
+                //Store the paragraph on the main article object
+                $article["content_preview"] = $item->content;
+                break;
             }
         }
     }
