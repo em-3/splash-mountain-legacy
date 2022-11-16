@@ -41,7 +41,7 @@ main {
     padding: 20pt 20pt;
 }
 
-.articleDisplay .articleHeader > * {
+.articleDisplay .articleHeader>* {
     animation: AnimateIn 2s ease both;
 }
 
@@ -57,7 +57,7 @@ main {
     }
 }
 
-.articleDisplay .articleHeader img {
+.articleDisplay .articleHeader>img {
     aspect-ratio: 16/9;
     width: 100%;
     border-radius: 10pt;
@@ -90,6 +90,8 @@ main {
     width: 20pt;
     height: 20pt;
     margin: 0 5pt 0 0;
+    box-shadow: 0 0 2pt var(--shadow-color);
+    border-radius: 5pt;
 }
 
 .articleDisplay .articleHeader .authorName {
@@ -112,6 +114,59 @@ main {
     }
 }
 
-.articleDisplay .articleContent > p {
+.articleContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     font-size: 12pt;
+}
+
+.articleContent>* {
+    width: 100%;
+    border-radius: 5pt;
+    transition: all 0.2s ease;
+}
+
+.articleContent .header {
+    margin: 15pt 0 5pt 0;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+.articleContent .subheader {
+    margin: 5pt 0;
+    font-size: 15pt;
+    font-style: italic;
+}
+
+.articleContent .header+.subheader {
+    margin-top: -2.5pt;
+}
+
+.articleContent .imageContainer * {
+    width: 100%;
+    border-radius: 10pt;
+}
+
+.articleContent .quote {
+    margin: 5pt 0 2.5pt 0;
+    font-size: 15pt;
+    font-style: italic;
+}
+
+.articleContent .author {
+    margin: 0 0 5pt 0;
+    font-size: 12pt;
+    text-align: end;
+    width: fit-content;
+    float: right;
+}
+
+.articleContent .divider {
+    margin: 10pt 0 10pt 0;
+    width: 100%;
+    height: 3pt;
+    border-radius: 1.5pt;
+    background: var(--secondary-text-color);
 }

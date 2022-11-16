@@ -130,10 +130,18 @@ section {
 }
 
 .properties>*:not(.selectContainer):hover,
+.properties>*:not(.selectContainer):focus,
 .properties select:hover,
 .fields :not(.container):hover,
 .fields :not(.container):focus {
   background: var(--content-background-color) !important;
+}
+
+.properties #title,
+.properties #subtitle {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 0;
 }
 
 .properties #title {

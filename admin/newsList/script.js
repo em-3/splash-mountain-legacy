@@ -42,62 +42,94 @@ var newsList = {
 								};
 							})(currentArticleData.id);
 
-							var imgElement = document.createElement("img");
-							imgElement.className = "thumbnail";
-							imgElement.src = "/resources/" + currentArticleData.thumbnail + "/thumbnail.jpg";
+							var upperContainer = document.createElement("div");
+							upperContainer.classList.add("container");
 
-							var rightSideContainer = document.createElement("div");
-							rightSideContainer.className = "right";
+							var thumbnailContainer = document.createElement("div");
+							thumbnailContainer.classList.add("thumbnailContainer");
+
+							var thumbnail = document.createElement("img");
+							thumbnail.classList.add("thumbnail");
+							thumbnail.src = "/resources/" + currentArticleData.thumbnail + "/thumbnail.jpg";
+
+							var imageElement = document.createElement("img");
+							imageElement.classList.add("thumbnail");
+							imageElement.classList.add("hidden");
+							(function (thumbnail, image) {
+								image.onload = function () {
+									thumbnail.classList.add("hidden");
+									image.classList.remove("hidden");
+								}
+							})(thumbnail, imageElement);
+							imageElement.src = "/resources/" + currentArticleData.thumbnail + "/main.jpg";
+
+							thumbnailContainer.appendChild(thumbnail);
+							thumbnailContainer.appendChild(imageElement);
+
+							var textContainer = document.createElement("div");
+							textContainer.classList.add("textContainer");
 
 							var titleElement = document.createElement("h1");
-							titleElement.className = "title";
+							titleElement.classList.add("title");
 							titleElement.textContent = currentArticleData.title;
 
 							var subtitleElement = document.createElement("h3");
-							subtitleElement.className = "subtitle";
+							subtitleElement.classList.add("subtitle");
 							subtitleElement.textContent = currentArticleData.subtitle;
 
 							var contentPreviewElement = document.createElement("p");
-							contentPreviewElement.className = "contentPreview";
+							contentPreviewElement.classList.add("contentPreview");
 							contentPreviewElement.textContent = currentArticleData.content_preview;
 
 							var authorDateContainer = document.createElement("div");
-							authorDateContainer.className = "authorDateContainer";
+							authorDateContainer.classList.add("authorDateContainer");
 
 							var authorContainerElement = document.createElement("div");
-							authorContainerElement.className = "authorContainer";
+							authorContainerElement.classList.add("authorContainer");
 
 							var authorImageElement = document.createElement("img");
-							authorImageElement.className = "authorImage";
+							authorImageElement.classList.add("authorImage");
 							authorImageElement.src = "/images/authors/" + currentArticleData.author.toLowerCase().replaceAll(/[ _.]/g, "") + ".jpg";
 							authorContainerElement.appendChild(authorImageElement);
 
 							var authorNameElement = document.createElement("p");
-							authorNameElement.className = "authorName";
+							authorNameElement.classList.add("authorName");
 							authorNameElement.textContent = currentArticleData.author;
 							authorContainerElement.appendChild(authorNameElement);
 
 							authorDateContainer.appendChild(authorContainerElement);
 
 							var publicationDateElement = document.createElement("p");
-							publicationDateElement.className = "publicationDate";
+							publicationDateElement.classList.add("publicationDate");
 							var publicationDateObject = new Date(0);
 							publicationDateObject.setUTCSeconds(Number(currentArticleData.publication_timestamp));
-							publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
-								weekday: "short",
-								day: "numeric",
-								month: "long",
-								year: "numeric",
-							});
+							// If the publication date is today, display the time to the minute
+							// If the publication date was yesterday, display "Yesterday"
+							if (publicationDateObject.toDateString() === new Date().toDateString()) {
+								publicationDateElement.textContent = publicationDateObject.toLocaleTimeString([], {
+									hour: "numeric",
+									minute: "2-digit"
+								});
+							} else if (publicationDateObject.toDateString() === new Date(new Date().setDate(new Date().getDate() - 1)).toDateString()) {
+								publicationDateElement.textContent = "Yesterday";
+							} else {
+								publicationDateElement.textContent = publicationDateObject.toLocaleDateString("en-US", {
+									day: "numeric",
+									month: "long",
+									year: "numeric",
+								});
+							}
 							authorDateContainer.appendChild(publicationDateElement);
 
-							rightSideContainer.appendChild(titleElement);
-							rightSideContainer.appendChild(subtitleElement);
-							rightSideContainer.appendChild(contentPreviewElement);
-							rightSideContainer.appendChild(authorDateContainer);
+							textContainer.appendChild(titleElement);
+							textContainer.appendChild(subtitleElement);
+							upperContainer.appendChild(thumbnailContainer);
+							upperContainer.appendChild(textContainer);
+							resultElement.appendChild(upperContainer);
 
-							resultElement.appendChild(imgElement);
-							resultElement.appendChild(rightSideContainer);
+							resultElement.appendChild(contentPreviewElement);
+							resultElement.appendChild(authorDateContainer);
+
 							document.querySelector(".newsList .resultsContainer").appendChild(resultElement);
 						}
 

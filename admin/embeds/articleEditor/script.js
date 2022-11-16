@@ -10,11 +10,16 @@ var unsavedChanges = false;
 
 var properties = [];
 
+var uneditedArticleContent = null;
+
 //Fetch the article details and content
 if (mode === "editor" && id) {
 	fetch("/api/news/article/" + id)
 		.then((response) => response.json())
-		.then(showArticleDetails, showErrorScreen);
+		.then(function (content) {
+			uneditedArticleContent = content;
+			showArticleDetails(content)
+		}, showErrorScreen);
 } else if (mode === "newArticle") {
 	showArticleDetails();
 } else {
@@ -90,9 +95,9 @@ var contentFieldConstructors = {
 		name: "Image",
 		icon: "image",
 		constructor(content) {
-			//If the page is in editor mode, show the image. Otherwise, allow the user to upload an image.
+			//If the page is in editor mode and this is an existing image, show the image. Otherwise, allow the user to upload an image.
 			var element;
-			if (mode === "editor") {
+			if (mode === "editor" && content) {
 				element = document.createElement("img");
 				element.src = "/resources/" + content + "/thumbnail.jpg";
 			} else {
@@ -105,9 +110,9 @@ var contentFieldConstructors = {
 				type: "image",
 				element: element,
 				getValue: function () {
-					if (mode === "editor") {
+					if (mode === "editor" && content) {
 						return content;
-					} else {
+					} else if (this.element.files.length > 0) {
 						return this.element.files[0];
 					}
 				}
@@ -154,7 +159,7 @@ var contentFieldConstructors = {
 		icon: "format-separator",
 		constructor(content) {
 			var container = document.createElement("div");
-			var divider = document.createElement("div");
+			var divider = document.createElement("hr");
 			divider.classList.add("container");
 			divider.classList.add("divider");
 			container.appendChild(divider);
@@ -294,6 +299,12 @@ document.querySelector(".addContentField").addEventListener("click", (e) => {
 });
 
 function showArticleDetails(articleDetails) {
+
+	function textareaAutogrow(textarea) {
+		textarea.style.height = "auto";
+		textarea.style.height = textarea.scrollHeight + "px";
+	}
+
 	//Thumbnail
 	properties.push({
 		name: "Thumbnail",
@@ -349,13 +360,20 @@ function showArticleDetails(articleDetails) {
 		name: "Title",
 		propertyName: "title",
 		constructor: function () {
-			var input = document.createElement("input");
+			var input = document.createElement("textarea");
 			input.name = "title";
 			input.id = "title";
 			input.placeholder = "Title";
 			if (mode === "editor") {
 				input.value = articleDetails.title;
 			}
+			//Autogrow textarea
+			input.addEventListener("input", () => {
+				textareaAutogrow(input)
+			});
+			window.addEventListener("resize", () => {
+				textareaAutogrow(input)
+			});
 			return input;
 		},
 		valueGetter: function () {
@@ -378,13 +396,20 @@ function showArticleDetails(articleDetails) {
 		name: "Subtitle",
 		propertyName: "subtitle",
 		constructor: function () {
-			var input = document.createElement("input");
+			var input = document.createElement("textarea");
 			input.name = "subtitle";
 			input.id = "subtitle";
 			input.placeholder = "Subtitle";
 			if (mode === "editor") {
 				input.value = articleDetails.subtitle;
 			}
+			//Autogrow textarea
+			input.addEventListener("input", () => {
+				textareaAutogrow(input)
+			});
+			window.addEventListener("resize", () => {
+				textareaAutogrow(input)
+			});
 			return input;
 		},
 		valueGetter: function () {
@@ -616,19 +641,38 @@ function showArticleDetails(articleDetails) {
 		var content = JSON.parse(articleDetails.content);
 		for (var i = 0; i < content.length; i++) {
 			var currentField = content[i];
-			addContentField(contentFieldConstructors[currentField.type], currentField.content);
+			//If the field is a string, add a paragraph
+			if (typeof currentField === "string") {
+				addContentField(contentFieldConstructors.paragraph, currentField);
+			} else {
+				addContentField(contentFieldConstructors[currentField.type], currentField.content);
+			}
 		}
 	}
 
 	document.querySelector(".loadingContainer").classList.add("hidden");
 	requestAnimationFrame(function () {
 		document.querySelector(".editor").classList.remove("hidden");
+		//Resize the title and subtitle textareas
+		var title = document.querySelector(".editor #title");
+		var subtitle = document.querySelector(".editor #subtitle");
+		title.style.height = title.scrollHeight + "px";
+		subtitle.style.height = subtitle.scrollHeight + "px";
 	});
 }
 
 async function uploadArticle() {
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		document.querySelector("#package").checked = true;
+	});
+
+	//Start a timer
+	var timerExpired = false;
+	setTimeout(() => {
+		timerExpired = true;
+	}, 7000);
 
 	//Contact bootstrap endpoint to get article ID
 	var articleID = null;
@@ -706,41 +750,48 @@ async function uploadArticle() {
 	})
 		.then((response) => response.json())
 		.then((result) => {
-			if (result.status === "success") {
-				document.querySelector(
-					".responseContainer .title"
-				).textContent = "Done.";
-				document.querySelector(
-					".responseContainer .subtitle"
-				).textContent = "Your article has been uploaded.";
-				document.querySelector(
-					".responseContainer .message"
-				).textContent = "Item ID: " + result.id;
-				unsavedChanges = false;
-			} else {
-				document.querySelector(
-					".responseContainer .title"
-				).textContent = "Congratulations, you broke something.";
-				document.querySelector(
-					".responseContainer .subtitle"
-				).textContent = "Good going.";
-				document.querySelector(
-					".responseContainer .message"
-				).textContent = result.error;
-			}
+			setInterval(() => {
+				if (timerExpired) {
+					if (result.status === "success") {
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Done.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent = "Your article has been uploaded.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = "Item ID: " + result.id;
+						unsavedChanges = false;
+					} else {
+						document.querySelector(
+							".responseContainer .title"
+						).textContent = "Congratulations, you broke something.";
+						document.querySelector(
+							".responseContainer .subtitle"
+						).textContent = "Good going.";
+						document.querySelector(
+							".responseContainer .message"
+						).textContent = result.error;
+					}
 
-			document
-				.querySelector(".progressContainer")
-				.classList.add("hidden");
-			document
-				.querySelector(".responseContainer")
-				.classList.remove("hidden");
+					document
+						.querySelector(".progressContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".responseContainer")
+						.classList.remove("hidden");
+				}
+			}, 500);
 		});
 }
 
 async function updateArticle() {
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		document.querySelector("#package").checked = true;
+	});
 
 	var formData = new FormData();
 
@@ -767,6 +818,72 @@ async function updateArticle() {
 			return;
 		}
 	}
+
+	var content = [];
+
+	//Collect all the previously uploaded image IDs
+	var imageIDs = [];
+	var uneditedContentFields = JSON.parse(uneditedArticleContent.content);
+	for (var i = 0; i < uneditedContentFields.length; i++) {
+		var currentField = uneditedContentFields[i];
+		if (currentField.type === "image") {
+			var imageID = currentField.content;
+			imageIDs.push(imageID);
+		}
+	}
+	console.log(imageIDs);
+
+	for (var i = 0; i < contentFields.length; i++) {
+		var currentField = contentFields[i];
+
+		//If the item is an image, check to see if it's been previously uploaded.
+		if (currentField.type === "image") {
+			var matched = false;
+			var image = currentField.getValue();
+
+			for (var j = 0; j < imageIDs.length; j++) {
+				var currentImageID = imageIDs[j];
+				if (image === currentImageID) {
+					matched = true;
+					content.push({
+						type: "image",
+						content: currentImageID,
+					});
+					break;
+				}
+			}
+
+			if (!matched) {
+				//Upload the image file
+				var imageID = null;
+				var imageFormData = new FormData();
+				imageFormData.append("resource", image);
+				imageFormData.append("associated_id", id);
+				await fetch("/admin/resources/upload.php", {
+					method: "POST",
+					body: imageFormData,
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.status = "success") {
+							imageID = data.id;
+						} else {
+							reject(data);
+						}
+					});
+				content.push({
+					type: "image",
+					content: imageID,
+				});
+			}
+		} else {
+			content.push({
+				type: currentField.type,
+				content: currentField.getValue(),
+			});
+		}
+	}
+	formData.append("content", JSON.stringify(content));
 
 	var response = await fetch("/admin/news/modify.php", {
 		method: "POST",

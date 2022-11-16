@@ -14,8 +14,8 @@ section.header a.addArticle span {
     margin-left: 2.5pt;
 }
 
+.newsList,
 .newsList .loadingContainer,
-.newsList .resultsContainer,
 .newsList .errorMessageContainer {
     min-height: calc(100vh - 55pt);
 }
@@ -41,12 +41,12 @@ section.header a.addArticle span {
 
 .newsList .resultsContainer {
     display: grid;
-    grid-template-columns: repeat(1, 100%);
-    grid-auto-rows: 140pt;
+    width: 920pt;
+    grid-template-columns: repeat(3, 300pt);
+    grid-auto-rows: minmax(300pt, auto);
     gap: 10pt;
     padding: 10pt;
     margin: 0 auto;
-    max-width: 500pt;
 }
 
 .newsList .resultsContainer .loadMoreButton {
@@ -63,19 +63,14 @@ section.header a.addArticle span {
     padding: 15pt;
     border-radius: 10pt;
     display: flex;
+    flex-direction: column;
     align-items: center;
     cursor: pointer;
 }
 
-.article img {
-    width: 150pt;
-    margin-right: 15pt;
-    border-radius: 5pt;
-}
-
-.article .right {
+.article .container {
     width: 100%;
-    height: 100%;
+    margin-bottom: 10pt;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -83,8 +78,29 @@ section.header a.addArticle span {
     align-items: flex-start;
 }
 
-.article .right .title {
-    margin: 0;
+.article .container img {
+    width: 100%;
+    border-radius: 5pt;
+    /* Crop to 16/9 */
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 16/9;
+}
+
+.article .container .title {
+    margin: 5pt 0 0 0;
+}
+
+.article .container .subtitle {
+    margin: 0 0 1.5pt 0;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.article .contentPreview {
+    width: 100%;
+    text-align: start;
+    margin: 0 0 10pt 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -92,62 +108,51 @@ section.header a.addArticle span {
     text-overflow: ellipsis;
 }
 
-.article .right .subtitle {
-    margin: 0 0 1.5pt 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.article .right .contentPreview {
-    margin: 0 0 auto 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.article .right .authorDateContainer {
+.article .authorDateContainer {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 15pt;
-    margin-top: 3pt;
+    margin-top: auto;
 }
 
-.article .right .authorContainer {
+.article .authorContainer {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
-.article .right .authorImage {
+.article .authorImage {
     width: 20pt;
     height: 20pt;
+    border-radius: 5pt;
     margin: 0 5pt 0 0;
 }
 
-.article .right .authorName {
+.article .authorName {
     margin: 0;
 }
 
-.article .right .publicationDate {
+.article .publicationDate {
     margin: 0;
     white-space: nowrap;
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 1350px) {
     .newsList .resultsContainer {
-        /* grid-template-columns: repeat(2, calc((100% - 10pt) / 2)); */
+        width: 100%;
+        padding: 20pt;
+        grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
     }
 }
 
-@media only screen and (max-width: 670px) {
-    .article img {
-        width: 50pt;
-        margin: 10pt 10pt 10pt 5pt;
+@media only screen and (max-width: 700px) {
+    .newsList .resultsContainer {
+        padding: 10pt;
+        grid-template-columns: 100%;
+    }
+
+    .newsList .article {
+        padding: 10pt;
     }
 }
