@@ -268,16 +268,8 @@ function showItemContent(itemDetails) {
 					.querySelector(".contentDisplay .main")
 					.classList.remove("hidden");
 			};
-<<<<<<< HEAD
-			contentDisplayElement.src =
-				"/resources/" + itemDetails.image + "/main";
-			document
-				.querySelector(".contentDisplay")
-				.appendChild(contentDisplayElement);
-=======
 			contentDisplayElement.src = "/resources/" + itemDetails.image + "/main.jpg";
 			document.querySelector(".contentDisplay").appendChild(contentDisplayElement);
->>>>>>> origin/main
 
 			document.querySelector(".loadingScreen").classList.add("hidden");
 			document
