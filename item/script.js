@@ -415,12 +415,33 @@ function showItemContent(itemDetails) {
 	});
 }
 
-function share() {
+function share(e) {
 	if (navigator.share) {
-		navigator.share({
-			title: loadedItemDetails.name,
-			url:
-				"https://splashmountainlegacy.com/item/" + loadedItemDetails.id,
+		contextMenu.present({
+			x: e.clientX,
+			y: e.clientY,
+			items: [
+				{
+					icon: "link",
+					label: "Copy Link",
+					callback: function () {
+						navigator.clipboard.writeText(
+							"https://splashmountainlegacy.com/item/" + loadedItemDetails.id
+						);
+						notification.addToQueue("progress", "link", "Copied", "Link copied to clipboard.")
+					}
+				},
+				{
+					icon: "share",
+					label: "Share Link",
+					callback: function () {
+						navigator.share({
+							title: loadedItemDetails.name,
+							url: window.location.href
+						});
+					}
+				}
+			]
 		});
 	} else {
 		navigator.clipboard.writeText(

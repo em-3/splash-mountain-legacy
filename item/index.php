@@ -87,7 +87,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             </div>
 
             <div class="buttonContainer">
-                <button class="share" onclick="share()">
+                <button class="share" onclick="share(event)">
                     <i class="gg-export" style="transform: translate(1px, 3px) scale(0.8)"></i>
                     <span>Share</span>
                 </button>
