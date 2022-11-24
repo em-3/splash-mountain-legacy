@@ -93,6 +93,13 @@ main {
   justify-content: center;
 }
 
+.filterBar .filters .filter .value {
+  font-size: 10pt;
+  font-weight: bold;
+  color: var(--primary-text-color);
+  margin: 0 0 0 5pt;
+}
+
 .filterBar .filters .filter select {
   -webkit-appearance: none;
   -moz-appearance: none;

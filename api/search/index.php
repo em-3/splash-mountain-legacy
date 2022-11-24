@@ -25,10 +25,10 @@ if(isset($_GET["query"])) {
         //Format the query and add it to the parameters
         $params["query"] = "%" . $query . "%";
 
-        //Search for the query in name, author, and description fields
+        //Search for the query in name, scene, and description fields
         $stmt .= " WHERE (";
 
-        $matches = ["name", "author", "description", "scene"];
+        $matches = ["name", "description", "scene"];
 
         if(isset($_GET["match"])) {
             $matches = is_array($_GET["match"]) ? $_GET["match"] : explode(",", $_GET["match"]);
@@ -89,6 +89,26 @@ if(!$id_only) {
             //Add the parameter to the statement
             $stmt .= "`$param` = :$param";
         }
+    }
+
+    //If the user has specified the author parameter, match the author name
+    if(isset($_GET["author"])) {
+        //If there is more than one parameter, add an AND
+        if(count($params) > 0 && $first) {
+            $stmt .= " AND (";
+            $first = false;
+        }else if(count($params) > 0) {
+            $stmt .= " AND ";
+        }else {
+            $stmt .= " WHERE (";
+            $first = false;
+        }
+
+        //Set the author's name
+        $params["author"] = $_GET["author"];
+        
+        //Add the author name to the statement
+        $stmt .= "`author` LIKE CONCAT(:author, '%')";
     }
 
     //If the user has specified tags as a search parameter, add the tags to the statement

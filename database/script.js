@@ -12,6 +12,11 @@ var filters = [
 		max: 1,
 	},
 	{
+		id: "author",
+		label: "Author",
+		hidden: true,
+	},
+	{
 		id: "scene",
 		label: "Scene",
 		values: [
@@ -47,6 +52,10 @@ function createFilterOptions() {
 	//Loop through each filter and create an option element for for it.
 	for (var i = 0; i < filters.length; i++) {
 		var currentFilter = filters[i];
+
+		if (currentFilter.hidden) {
+			continue;
+		}
 
 		var filterElement = document.createElement("div");
 		filterElement.classList.add("filter");
@@ -122,62 +131,73 @@ function addFilter(filterObject, selectedOption) {
 	filterName.classList.add("name");
 	filterName.textContent = filterObject.label + ":";
 
-	var filterSelect = document.createElement("select");
-	filterSelect.setAttribute("name", filterObject.id);
-	filterSelect.addEventListener("change", function () {
-		updateDisabledFilters(filterObject.id);
-		databaseBrowser.refreshResults();
-	});
-
-	//Get current values of identical filters
-	var currentlyUsedValues = [];
-	var currentlyUsedFilters = document.querySelectorAll(
-		".filterBar .filter." + filterObject.id
-	);
-	for (var i = 0; i < currentlyUsedFilters.length; i++) {
-		var currentlyUsedFilter = currentlyUsedFilters[i];
-		var currentlyUsedFilterSelect =
-			currentlyUsedFilter.querySelector("select");
-		var currentlyUsedFilterValue =
-			currentlyUsedFilterSelect.options[
-				currentlyUsedFilterSelect.selectedIndex
-			].value;
-		currentlyUsedValues.push(currentlyUsedFilterValue);
-	}
-
-	var defaultHasBeenSelected = false;
-	for (var j = 0; j < filterObject.values.length; j++) {
-		var filterSelectOption = document.createElement("option");
-		filterSelectOption.value = filterObject.values[j];
-		filterSelectOption.textContent = filterObject.values[j];
-		if (currentlyUsedValues.includes(filterObject.values[j])) {
-			filterSelectOption.disabled = true;
-		} else if (
-			selectedOption &&
-			selectedOption === filterObject.values[j] &&
-			!currentlyUsedValues.includes(selectedOption)
-		) {
-			filterSelectOption.setAttribute("selected", true);
-		} else if (defaultHasBeenSelected == false) {
-			filterSelectOption.setAttribute("selected", true);
-			defaultHasBeenSelected = true;
+	if (!filterObject.hidden) {
+		var filterSelect = document.createElement("select");
+		filterSelect.setAttribute("name", filterObject.id);
+		filterSelect.addEventListener("change", function () {
+			updateDisabledFilters(filterObject.id);
+			databaseBrowser.refreshResults();
+		});
+		//Get current values of identical filters
+		var currentlyUsedValues = [];
+		var currentlyUsedFilters = document.querySelectorAll(
+			".filterBar .filter." + filterObject.id
+		);
+		for (var i = 0; i < currentlyUsedFilters.length; i++) {
+			var currentlyUsedFilter = currentlyUsedFilters[i];
+			var currentlyUsedFilterSelect =
+				currentlyUsedFilter.querySelector("select");
+			var currentlyUsedFilterValue =
+				currentlyUsedFilterSelect.options[
+					currentlyUsedFilterSelect.selectedIndex
+				].value;
+			currentlyUsedValues.push(currentlyUsedFilterValue);
 		}
-		filterSelect.appendChild(filterSelectOption);
+		var defaultHasBeenSelected = false;
+		for (var j = 0; j < filterObject.values.length; j++) {
+			var filterSelectOption = document.createElement("option");
+			filterSelectOption.value = filterObject.values[j];
+			filterSelectOption.textContent = filterObject.values[j];
+			if (currentlyUsedValues.includes(filterObject.values[j])) {
+				filterSelectOption.disabled = true;
+			} else if (
+				selectedOption &&
+				selectedOption === filterObject.values[j] &&
+				!currentlyUsedValues.includes(selectedOption)
+			) {
+				filterSelectOption.setAttribute("selected", true);
+				defaultHasBeenSelected = true;
+				defaultHasBeenSelected = true;
+			} else if (defaultHasBeenSelected == false) {
+				filterSelectOption.setAttribute("selected", true);
+				defaultHasBeenSelected = true;
+			}
+			filterSelect.appendChild(filterSelectOption);
+		}
+	} else {
+		var filterValueDisplay = document.createElement("p");
+		filterValueDisplay.classList.add("value");
+		filterValueDisplay.textContent = selectedOption;
 	}
 
 	var removeButton = document.createElement("div");
 	removeButton.classList.add("removeButton");
 	removeButton.innerHTML = "<i class='gg-close'></i>";
 	removeButton.addEventListener("click", function () {
-		document
-			.querySelector(".availableFilters .filter." + filterObject.id)
-			.classList.remove("disabled");
+		if (!filterObject.hidden) {
+			document.querySelector(".availableFilters .filter." + filterObject.id)
+				.classList.remove("disabled");
+		}
 		filterElement.parentElement.removeChild(filterElement);
 		databaseBrowser.refreshResults();
 	});
 
 	filterElement.appendChild(filterName);
-	filterElement.appendChild(filterSelect);
+	if (!filterObject.hidden) {
+		filterElement.appendChild(filterSelect)
+	} else {
+		filterElement.appendChild(filterValueDisplay);
+	}
 	filterElement.appendChild(removeButton);
 	document.querySelector(".filterBar .filters").appendChild(filterElement);
 
@@ -190,7 +210,7 @@ function addFilter(filterObject, selectedOption) {
 			.classList.add("disabled");
 	}
 
-	updateDisabledFilters(filterObject.id);
+	if (!filterObject.hidden) updateDisabledFilters(filterObject.id);
 	databaseBrowser.refreshResults();
 }
 
@@ -248,10 +268,15 @@ var databaseBrowser = {
 				}
 			}
 
-			//Get the selected option for this filter's select element.
-			var filterElement = currentFilter.querySelector("select");
-			var filterValue =
-				filterElement.options[filterElement.selectedIndex].value;
+			//If the filter isn't a hidden filter, get the selected value
+			if (!currentFilter.querySelector(".value")) {
+				//Get the selected option for this filter's select element.
+				var filterElement = currentFilter.querySelector("select");
+				var filterValue =
+					filterElement.options[filterElement.selectedIndex].value;
+			} else {
+				var filterValue = currentFilter.querySelector(".value").textContent;
+			}
 			if (filterValue != "") {
 				if (parameterName) {
 					PHPParams += character + parameterName + "=" + filterValue;
@@ -528,4 +553,19 @@ fetch("/api/tags/")
 			databaseBrowser.refreshResults();
 		}
 	});
-	*/ createFilterOptions();
+	*/
+
+createFilterOptions();
+
+//Check the URL for a query and/or filters
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has("query")) {
+	document.querySelector(
+		".databaseBrowser .searchField input"
+	).value = urlParams.get("query");
+}
+for (var i = 0; i < filters.length; i++) {
+	if (urlParams.has(filters[i].id)) {
+		addFilter(filters[i], urlParams.get(filters[i].id));
+	}
+}
