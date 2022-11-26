@@ -395,12 +395,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 560px) {
   .buttonContainer {
-    height: 45pt;
+    flex-direction: column;
+    gap: 5pt;
+    margin-top: 10pt;
   }
 
   .buttonContainer button {
-    height: 100%;
+    width: 100%;
+    margin: 0;
   }
 }

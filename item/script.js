@@ -15,11 +15,10 @@ var timeOutHasExpired = false;
 //Show the header to allow the user to close the window even if the item fails to load
 document.querySelector("header").classList.remove("hidden");
 
-//If the user is authenticated, show the Edit Item button
+//If the user is authenticated, show the admin buttons
 if (localStorage.getItem("adminAccess") === "true") {
-	document
-		.querySelector(".buttonContainer .editItem")
-		.classList.remove("hidden");
+	document.querySelector(".buttonContainer .editItem").classList.remove("hidden");
+	document.querySelector(".buttonContainer .copyID").classList.remove("hidden");
 }
 
 //Fetch the item details and content
@@ -483,12 +482,9 @@ function editItem() {
 		loadedItemDetails.id;
 }
 
-function displayItemID() {
-	if (localStorage.getItem("adminAccess") == "true") {
-		var parkElement = document.querySelector(".park");
-		parkElement.textContent = loadedItemDetails.id;
-		parkElement.onclick = null;
-	}
+function copyItemID() {
+	navigator.clipboard.writeText(loadedItemDetails.id);
+	notification.addToQueue("progress", "copy", "Copied", "Item ID copied to clipboard.")
 }
 
 var audioPlayer = {

@@ -69,7 +69,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
         <div class="itemInfoContainer hidden">
             <div class="parkContainer">
                 <i class="gg-pin"></i>
-                <h2 class="park" onclick="displayItemID()"></h2>
+                <h2 class="park"></h2>
             </div>
             <h1 class="name"></h1>
             <div class="tags hidden">
@@ -94,6 +94,10 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                 <button class="editItem hidden" onclick="editItem()">
                     <i class="gg-edit-exposure"></i>
                     <span>Edit Item</span>
+                </button>
+                <button class="copyID hidden" onclick="copyItemID()">
+                    <i class="gg-copy"></i>
+                    <span>Copy ID</span>
                 </button>
             </div>
         </div>
