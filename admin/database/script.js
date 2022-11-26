@@ -350,7 +350,7 @@ var databaseBrowser = {
 							document.querySelector(".databaseBrowser .resultsContainer").appendChild(resultElement);
 						}
 
-						if (data.length === this.searchRange.max - this.searchRange.min) {
+						if (data.length === databaseBrowser.searchRange.max - databaseBrowser.searchRange.min) {
 							var loadMoreButton = document.createElement("button");
 							loadMoreButton.className = "loadMoreButton";
 							loadMoreButton.textContent = "Load More";
@@ -378,8 +378,8 @@ var databaseBrowser = {
 			);
 	},
 	loadMoreResults: function () {
-		this.searchRange.min += 20;
-		this.searchRange.max += 20;
+		databaseBrowser.searchRange.min += 20;
+		databaseBrowser.searchRange.max += 20;
 		this.refreshResults(true);
 	},
 };

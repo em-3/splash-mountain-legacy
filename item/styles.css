@@ -252,9 +252,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: bold;
 }
 
-.itemInfoContainer p.property a {
+.itemInfoContainer p.property span.button {
+  background: var(--secondary-content-background-color);
   color: var(--primary-text-color);
-  text-decoration: underline;
+  padding: 1pt 2pt;
+  border-radius: 5pt;
+  cursor: pointer;
 }
 
 .itemInfoContainer p span {

@@ -215,6 +215,7 @@ function addFilter(filterObject, selectedOption) {
 }
 
 var databaseBrowser = {
+	abortController: null,
 	searchRange: {
 		min: 1,
 		max: 21,
@@ -245,6 +246,10 @@ var databaseBrowser = {
 		},
 	},
 	refreshResults: function (preservePreviousResults) {
+		if (databaseBrowser.abortController) {
+			databaseBrowser.abortController.abort();
+		}
+
 		var PHPParams = "";
 		var character = "?";
 
@@ -299,6 +304,7 @@ var databaseBrowser = {
 		}
 
 		//Fetch new results
+		databaseBrowser.abortController = new AbortController();
 		fetch(
 			"/api/search/" +
 				PHPParams +
@@ -306,7 +312,10 @@ var databaseBrowser = {
 				"min=" +
 				databaseBrowser.searchRange.min +
 				"&max=" +
-				databaseBrowser.searchRange.max
+				databaseBrowser.searchRange.max,
+				 {
+					signal: databaseBrowser.abortController.signal,
+				 }
 		)
 			.then((response) => response.json())
 			.then(
@@ -465,7 +474,7 @@ var databaseBrowser = {
 
 						if (
 							data.length ===
-							this.searchRange.max - this.searchRange.min
+							databaseBrowser.searchRange.max - databaseBrowser.searchRange.min
 						) {
 							var loadMoreButton =
 								document.createElement("button");
@@ -522,8 +531,8 @@ var databaseBrowser = {
 			);
 	},
 	loadMoreResults: function () {
-		this.searchRange.min += 20;
-		this.searchRange.max += 20;
+		databaseBrowser.searchRange.min += 20;
+		databaseBrowser.searchRange.max += 20;
 		this.refreshResults(true);
 	},
 };

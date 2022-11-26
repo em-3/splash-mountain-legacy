@@ -49,21 +49,17 @@ function showItemDetails() {
 	var itemDetails = loadedItemDetails;
 	var metadata = JSON.parse(loadedItemDetails.metadata);
 
-	function createDetailProperty(label, value, link) {
+	function createDetailProperty(label, value, action) {
 		var element = document.createElement("p");
 		element.classList.add("property");
 		element.textContent = label + ": ";
 		var span = document.createElement("span");
 		span.textContent = value;
-		if (link) {
-			var a = document.createElement("a");
-			a.href = link;
-			a.target = "_blank";
-			a.appendChild(span);
-			element.appendChild(a);
-		} else {
-			element.appendChild(span);
+		if (action) {
+			span.classList.add("button");
+			span.onclick = action;
 		}
+		element.appendChild(span);
 		document
 			.querySelector(".itemInfoContainer")
 			.insertBefore(
@@ -89,15 +85,45 @@ function showItemDetails() {
 	}
 	if (itemDetails.author) {
 		if (itemDetails.author.match(/\[([^\][]+)]/g)) {
-			createDetailProperty(
-				"Author",
-				itemDetails.author.replace(/\[([^\][]+)]/g, ""),
-				itemDetails.author
+			var author = itemDetails.author.replace(/\[([^\][]+)]/g, "");
+			var link = itemDetails.author
 					.match(/\[([^\][]+)]/g)[0]
 					.substring(
 						1,
 						itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
 					)
+			createDetailProperty(
+				"Author",
+				author,
+				function (e) {
+					contextMenu.present({
+						x: e.clientX,
+						y: e.clientY,
+						items: [
+							{
+								icon: "profile",
+								label: "See All Items",
+								callback: function () {
+									if (embedded) {
+										window.top.postMessage(
+											"navigateTo/database/?author=" + author,
+											"*"
+										);
+									} else {
+										window.location.href = "/database/?author=" + author;
+									}
+								}
+							},
+							{
+								icon: "external",
+								label: "Open Link",
+								callback: function () {
+									window.open(link);
+								}
+							}
+						]
+					});
+				}
 			);
 		} else {
 			createDetailProperty("Author", itemDetails.author);
