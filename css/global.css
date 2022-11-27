@@ -335,9 +335,8 @@ body.noScroll {
   overflow: hidden;
 }
 
-header {
+header.globalHeader {
   background: var(--content-background-color);
-  position: relative;
   width: 100%;
   height: 55pt;
   display: flex;
@@ -350,40 +349,44 @@ header {
   z-index: 4;
 }
 
-header .logo {
+header.globalHeader~main {
+  --header-height: 55pt;
+}
+
+header.globalHeader .logo {
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
-header .logo img {
+header.globalHeader .logo img {
   height: 50pt;
   width: auto;
   transition: opacity 0.2s ease;
 }
 
 @media (max-width: 745px) and (min-width: 601px) {
-  header.searchActive .logo {
+  header.globalHeader.searchActive .logo {
     opacity: 0;
   }
 }
 
-header .links {
+header.globalHeader .links {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s ease;
 }
 
-header.searchActive .links {
+header.globalHeader.searchActive .links {
   opacity: 0;
   pointer-events: none;
 }
 
-header .links .current {
+header.globalHeader .links .current {
   background: var(--secondary-content-background-color);
 }
 
-header .links>* {
+header.globalHeader .links>* {
   background: var(--page-background-color);
   color: inherit;
   text-decoration: none;
@@ -405,15 +408,15 @@ header .links>* {
   user-select: none;
 }
 
-header .links>*:not(:last-child) {
+header.globalHeader .links>*:not(:last-child) {
   margin-right: 5pt;
 }
 
-header .links>*:hover {
+header.globalHeader .links>*:hover {
   background: var(--secondary-content-background-color);
 }
 
-header .links .search {
+header.globalHeader .links .search {
   border-radius: 50%;
   padding: 0;
   height: 30pt;
@@ -423,7 +426,7 @@ header .links .search {
   justify-content: center;
 }
 
-header .searchBox {
+header.globalHeader .searchBox {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -433,13 +436,13 @@ header .searchBox {
   transition: all 0.3s ease;
 }
 
-header.searchActive .searchBox {
+header.globalHeader.searchActive .searchBox {
   outline: none;
   opacity: 1;
   pointer-events: all;
 }
 
-header .searchBox .searchField {
+header.globalHeader .searchBox .searchField {
   background: var(--page-background-color);
   border: none;
   border-radius: 10pt;
@@ -450,11 +453,11 @@ header .searchBox .searchField {
   color: inherit;
 }
 
-header .searchBox .searchField:focus {
+header.globalHeader .searchBox .searchField:focus {
   outline: none;
 }
 
-header .searchBox .clearButton {
+header.globalHeader .searchBox .clearButton {
   position: absolute;
   height: 18pt;
   width: 18pt;
@@ -472,12 +475,12 @@ header .searchBox .clearButton {
   transition: opacity 0.2s ease;
 }
 
-header.searchActive .searchBox .clearButton {
+header.globalHeader.searchActive .searchBox .clearButton {
   opacity: 1;
   pointer-events: auto;
 }
 
-header.searchActive~.searchResultsContainer {
+header.globalHeader.searchActive~.searchResultsContainer {
   opacity: 1;
   pointer-events: all;
   transform: translate(-50%, 0);

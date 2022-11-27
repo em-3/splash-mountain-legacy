@@ -12,9 +12,6 @@ if (!id) {
 var loadedItemDetails;
 var timeOutHasExpired = false;
 
-//Show the header to allow the user to close the window even if the item fails to load
-document.querySelector("header").classList.remove("hidden");
-
 //If the user is authenticated, show the admin buttons
 if (localStorage.getItem("adminAccess") === "true") {
 	document.querySelector(".buttonContainer .editItem").classList.remove("hidden");
@@ -437,6 +434,13 @@ function showItemContent(itemDetails) {
 
 	requestAnimationFrame(function () {
 		document.querySelector(".contentDisplay").classList.remove("invisible");
+		setTimeout(function () {
+			//If the item is a video or image...
+			if (itemType == "video"|| itemType == "image") {
+				checkAutohide();
+				window.addEventListener("resize", checkAutohide);
+			}
+		}, 200);
 	});
 }
 
@@ -589,6 +593,80 @@ function showErrorScreen() {
 	//Hide the loading screen and show the error screen
 	document.querySelector(".loadingScreen").classList.add("hidden");
 	document.querySelector(".errorScreen").classList.remove("hidden");
+}
+
+function getRenderedSize(contains, cWidth, cHeight, width, height, pos){
+	var oRatio = width / height,
+		cRatio = cWidth / cHeight;
+	return function() {
+		if (contains ? (oRatio > cRatio) : (oRatio < cRatio)) {
+			this.width = cWidth;
+			this.height = cWidth / oRatio;
+		} else {
+			this.width = cHeight * oRatio;
+			this.height = cHeight;
+		}      
+		this.left = (cWidth - this.width)*(pos/100);
+		this.right = this.width + this.left;
+		return this;
+	}.call({});
+}
+
+function checkAutohide() {
+	//Check to see if the close button overlaps the content
+	var closeButtonRect = document.querySelector(".closeButton").getBoundingClientRect();
+	if (loadedItemDetails.type == "image") {
+		var contentElement = document.querySelector(".contentDisplay .main");
+		var contentRect = contentElement.getBoundingClientRect();
+		var renderedSize = getRenderedSize(
+			true,
+			contentElement.width,
+			contentElement.height,
+			contentElement.naturalWidth,
+			contentElement.naturalHeight,
+			parseInt(window.getComputedStyle(contentElement).getPropertyValue('object-position').split(' ')[0])
+		);
+		contentRect = {
+			top: (contentRect.bottom - renderedSize.height)/2,
+		}
+	} else {
+		var contentRect = document.querySelector(".videoContainer").getBoundingClientRect();
+	}
+
+	if (closeButtonRect.bottom > contentRect.top) {
+		autohideCloseButton(true);
+	} else {
+		autohideCloseButton(false);
+	}
+}
+
+var closeButton = document.querySelector(".closeButton");
+var mousemoveTimeout = null;
+
+function mousemove() {
+	if (mousemoveTimeout) {
+		clearTimeout(mousemoveTimeout);
+	}
+	closeButton.classList.remove("hidden");
+	mousemoveTimeout = setTimeout(function () {
+		document.querySelector(".closeButton").classList.add("hidden");
+	}, 2000);
+}
+
+function autohideCloseButton(enable) {
+	if (enable) {
+		//Show the close button when the user moves the cursor
+		document.onmousemove = mousemove;
+		document.ontouchstart = mousemove;
+	} else {
+		//Always show the close button
+		document.onmousemove = null;
+		document.ontouchstart = null;
+		document.querySelector(".closeButton").classList.remove("hidden");
+		if (mousemoveTimeout) {
+			clearTimeout(mousemoveTimeout);
+		}
+	}
 }
 
 function closeItemViewer() {

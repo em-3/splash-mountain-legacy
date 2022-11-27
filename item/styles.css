@@ -1,30 +1,33 @@
 main {
+  --header-height: 0pt;
+
   width: 100%;
   height: 100%;
-  margin-top: 40pt;
+  margin-top: var(--header-height);
 }
 
-header {
-  width: 100%;
-  height: 40pt;
+.closeButton {
+  position: fixed;
+  top: 15pt;
+  left: 15pt;
+  background: var(--page-background-color);
+  box-shadow: 0 0 5pt var(--shadow-color);
+  border-radius: 50%;
+  width: 22.5pt;
+  height: 22.5pt;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  flex-direction: row !important;
-  padding: 0 20pt;
-  background: var(--content-background-color);
-  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-header i {
-  --ggs: 1.5;
   cursor: pointer;
+  z-index: 1;
+  transition: opacity 0.2s ease;
 }
 
-header.hidden {
+.closeButton.hidden {
   display: flex !important;
-  transform: translateY(100%);
   opacity: 0;
+  pointer-events: none;
+  cursor: default;
 }
 
 .contentContainer {
@@ -39,11 +42,11 @@ header.hidden {
 }
 
 .loadingScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorMessageContainer {
@@ -63,7 +66,7 @@ header.hidden {
 .contentContainer .contentDisplay {
   width: 100%;
   height: auto;
-  max-height: calc(100vh - 40pt);
+  max-height: calc(100vh - var(--header-height));
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -82,7 +85,7 @@ header.hidden {
 
 .contentContainer .contentDisplay>img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -375,11 +378,27 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin-left: 5pt;
 }
 
+.closeMessage {
+  position: absolute;
+  bottom: 10pt;
+  bottom: calc(env(safe-area-inset-bottom) + 15pt);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--secondary-text-color);
+  transition: opacity 0.2s ease;
+}
+
+.closeButton:not(.hidden)~.closeMessage {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
 @media only screen and (min-width: 900px) {
   main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 40pt calc(100vh - 40pt);
+    grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
   }
 
   main header {
@@ -387,11 +406,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   }
 
   .contentContainer {
-    height: calc(100vh - 40pt);
+    height: calc(100vh - var(--header-height));
   }
 
   .contentContainer .contentDisplay {
     height: 100%;
+  }
+
+  .closeMessage {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
   }
 }
 

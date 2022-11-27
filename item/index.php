@@ -40,10 +40,17 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
 <body ontouchstart class>
 
+    <?php
+    // If the embedded parameter isn't set, include the global header
+    if (!isset($_GET["embedded"])) {
+        include '../global/header/index.html';
+    }
+    ?>
+
     <main>
-        <header class="hidden">
-            <i class="gg-close" onclick="closeItemViewer()"></i>
-        </header>
+        <div class="closeButton" onclick="closeItemViewer()">
+            <i class="gg-close"></i>
+        </div>
         <div class="contentContainer">
             <div class="loadingScreen">
                 <div class="loadingAnimationContainer">
@@ -101,6 +108,8 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                 </button>
             </div>
         </div>
+
+        <p class="closeMessage">Tap anywhere to show close button.</p>
     </main>
 
     <script src="/js/global.js"></script>
