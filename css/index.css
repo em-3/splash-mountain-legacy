@@ -1,34 +1,34 @@
-header {
+header.globalHeader {
   position: absolute;
   justify-content: center;
   background: transparent;
 }
 
-header .logo {
+header.globalHeader .logo {
   display: none;
 }
 
-header .links > * {
+header.globalHeader .links>* {
   background: rgba(300, 300, 300, 0.5);
   color: black;
 }
 
-header .links > *.current {
+header.globalHeader .links>*.current {
   background: rgba(300, 300, 300, 0.8);
 }
 
-header .links > *:hover {
+header.globalHeader .links>*:hover {
   background: rgba(300, 300, 300, 0.8);
 }
 
-header .searchBox .searchField {
+header.globalHeader .searchBox .searchField {
   background: rgba(300, 300, 300, 0.8);
   color: black;
   font-weight: bold;
   transition: background 0.2s ease;
 }
 
-header .searchBox .clearButton {
+header.globalHeader .searchBox .clearButton {
   background: white;
 }
 
@@ -48,7 +48,7 @@ main section.header {
   overflow: hidden;
 }
 
-main section.header > * {
+main section.header>* {
   position: absolute;
   top: 0;
   left: 0;
@@ -209,7 +209,7 @@ section.featured .content .item .imageContainer {
   justify-content: center;
 }
 
-section.featured.databaseAdditions .content .item .imageContainer > img {
+section.featured.databaseAdditions .content .item .imageContainer>img {
   width: 100%;
   height: 100pt;
   object-fit: cover;
