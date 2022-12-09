@@ -95,25 +95,52 @@ var contentFieldConstructors = {
 		name: "Image",
 		icon: "image",
 		constructor(content) {
+			var container = document.createElement("div");
+			container.classList.add("imageContainer");
+			container.classList.add("container");
+
 			//If the page is in editor mode and this is an existing image, show the image. Otherwise, allow the user to upload an image.
-			var element;
 			if (mode === "editor" && content) {
-				element = document.createElement("img");
-				element.src = "/resources/" + content + "/thumbnail.jpg";
+				var thumbnail = document.createElement("img");
+				thumbnail.src = "/resources/" + content.image + "/thumbnail.jpg";
+				container.appendChild(thumbnail);
+
+				var fullImage = document.createElement("img");
+				fullImage.classList.add("hidden");
+				fullImage.onload = function () {
+					thumbnail.classList.add("hidden");
+					fullImage.classList.remove("hidden");
+				};
+				fullImage.src = "/resources/" + content.image + "/main.jpg";
+				container.appendChild(fullImage);
 			} else {
-				element = document.createElement("input");
-				element.type = "file";
-				element.accept = "image/*";
+				var fileUploadElement = document.createElement("input");
+				fileUploadElement.type = "file";
+				fileUploadElement.accept = "image/*";
+				container.appendChild(fileUploadElement);
 			}
+
+			var captionField = document.createElement("input");
+			captionField.type = "text";
+			captionField.classList.add("caption");
+			captionField.placeholder = "Caption";
+			if (mode === "editor" && content && content.caption) {
+				captionField.value = content.caption;
+			}
+			container.appendChild(captionField);
 			
 			var object = {
 				type: "image",
-				element: element,
+				element: container,
 				getValue: function () {
-					if (mode === "editor" && content) {
+					if (mode === "editor") {
+						content.caption = captionField.value;
 						return content;
-					} else if (this.element.files.length > 0) {
-						return this.element.files[0];
+					} else if (fileUploadElement.files.length > 0) {
+						return {
+							file: fileUploadElement.files[0],
+							caption: captionField.value,
+						};
 					}
 				}
 			};
@@ -332,7 +359,7 @@ function showArticleDetails(articleDetails) {
 			} else {
 				if (
 					!document
-						.querySelector(".thumbnail")
+						.querySelector("#thumbnail")
 						.classList.contains("hidden")
 				) {
 					if (file) {
@@ -607,27 +634,32 @@ function showArticleDetails(articleDetails) {
 	//Show the article property fields
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
-		var currentPropertyElement = currentProperty.constructor();
 		document
 			.querySelector(".editor .properties")
 			.appendChild(currentProperty.constructor());
 	}
 
-	//Article info preview
+	//Thumbnail display
 	if (mode === "editor") {
-		var thumbnailElement = document.querySelector(".thumbnail img");
+		var thumbnailElement = document.querySelector(".editor .thumbnail img.thumbnail");
 		thumbnailElement.src = "/resources/" + articleDetails.thumbnail + "/thumbnail.jpg";
 		thumbnailElement.classList.remove("hidden");
 
-		document.querySelector(".articleID").textContent = id;
-		document.querySelector(".articleName").textContent =
-			articleDetails.title;
+		var fullImageElement = document.querySelector(".editor .thumbnail img.full");
+		fullImageElement.onload = function () {
+			thumbnailElement.classList.add("hidden");
+			fullImageElement.classList.remove("hidden");
+		};
+		fullImageElement.src = "/resources/" + articleDetails.thumbnail + "/main.jpg";
+
+		document.querySelector(".articleID span").textContent = id;
+		document.querySelector(".articleID").classList.remove("hidden");
 
 		document
 			.querySelector(".actions.existingArticle")
 			.classList.remove("hidden");
 	} else {
-		document.querySelector(".articleInfo").classList.add("hidden");
+		document.querySelector(".editor .thumbnail").classList.add("hidden");
 		document
 			.querySelector(".actions.newArticle")
 			.classList.remove("hidden");
@@ -636,7 +668,7 @@ function showArticleDetails(articleDetails) {
 	//Article content
 	if (mode === "editor") {
 		var contentFieldsContainer = document.querySelector(
-			".articleEditor .content .fields"
+			".content .fields"
 		);
 		var content = JSON.parse(articleDetails.content);
 		for (var i = 0; i < content.length; i++) {
@@ -712,7 +744,9 @@ async function uploadArticle() {
 
 		//If the item is an image, upload it first.
 		if (currentField.type === "image") {
-			var image = currentField.getValue();
+			var value = currentField.getValue();
+			var image = value.file;
+
 			//Upload the image file
 			var imageID = null;
 			var imageFormData = new FormData();
@@ -732,7 +766,10 @@ async function uploadArticle() {
 				});
 			content.push({
 				type: "image",
-				content: imageID,
+				content: {
+					image: imageID,
+					caption: value.caption,
+				},
 			});
 		} else {
 			content.push({

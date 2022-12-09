@@ -40,6 +40,7 @@ if(!check_authentication() || !check_clearance(0)) {
 
     <header>
         <i class="gg-close" onclick="closeEditor()"></i>
+        <p class="articleID hidden">Article ID: <span></span></p>
     </header>
 
     <main>
@@ -55,57 +56,49 @@ if(!check_authentication() || !check_clearance(0)) {
             <h1>An unidentified error has occured.</h1>
         </section>
         <section class="editor hidden">
-            <div class="articleInfo">
-                <div class="thumbnail">
-                    <img src="" class="hidden">
-                    <iframe src="" class="hidden" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="textContainer">
-                    <h1 class="articleName"></h1>
-                    <p>Article ID: <span class="articleID" style="font-weight: bold;"></span></p>
+            <div class="thumbnail">
+                <img src="" class="thumbnail hidden">
+                <img src="" class="full hidden">
+            </div>
+            <div class="properties"></div>
+            <div class="content">
+                <div class="fields"></div>
+                <div class="addContentField">
+                    <div class="icon"><i class="gg-math-plus"></i></div>
+                    <p>Add Section</p>
                 </div>
             </div>
-            <div class="articleEditor">
-                <div class="properties"></div>
-                <div class="content">
-                    <div class="fields"></div>
-                    <div class="addContentField">
-                        <div class="icon"><i class="gg-math-plus"></i></div>
-                        <p>Add Section</p>
-                    </div>
+            <h2 class="errorMessage hidden"></h2>
+            <div class="actions existingArticle hidden">
+                <div class="passive">
+                    <button class="cancel" onclick="closeEditor()">
+                        <div class="icon"><i class="gg-close"></i></div>
+                        <span>Cancel Changes</span>
+                    </button>
+                    <button class="save" onclick="updateArticle()">
+                        <div class="icon"><i class="gg-drive"></i></div>
+                        <span>Update Article</span>
+                    </button>
                 </div>
-                <h2 class="errorMessage hidden"></h2>
-                <div class="actions existingArticle hidden">
-                    <div class="passive">
-                        <button class="cancel" onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
-                            <span>Cancel Changes</span>
-                        </button>
-                        <button class="save" onclick="updateArticle()">
-                            <div class="icon"><i class="gg-drive"></i></div>
-                            <span>Update Article</span>
-                        </button>
-                    </div>
-                    <div class="danger">
-                        <button class="delete" onclick="deleteArticle()">
-                            <div class="icon"><i class="gg-trash"></i></div>
-                            <span>Delete Article</span>
-                        </button>
-                    </div>
+                <div class="danger">
+                    <button class="delete" onclick="deleteArticle()">
+                        <div class="icon"><i class="gg-trash"></i></div>
+                        <span>Delete Article</span>
+                    </button>
                 </div>
-                <div class="actions newArticle hidden">
-                    <div class="danger">
-                        <button class="cancel" onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
-                            <span>Cancel</span>
-                        </button>
-                    </div>
-                    <div class="passive">
-                        <button class="save" onclick="uploadArticle()">
-                            <div class="icon"><i class="gg-software-upload"></i></div>
-                            <span>Upload Article</span>
-                        </button>
-                    </div>
+            </div>
+            <div class="actions newArticle hidden">
+                <div class="danger">
+                    <button class="cancel" onclick="closeEditor()">
+                        <div class="icon"><i class="gg-close"></i></div>
+                        <span>Cancel</span>
+                    </button>
+                </div>
+                <div class="passive">
+                    <button class="save" onclick="uploadArticle()">
+                        <div class="icon"><i class="gg-software-upload"></i></div>
+                        <span>Upload Article</span>
+                    </button>
                 </div>
             </div>
         </section>

@@ -3,19 +3,23 @@ main {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 40pt;
 }
 
 header {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 40pt;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-direction: row;
   padding: 0 20pt;
   background: var(--content-background-color);
+  z-index: 2;
 }
 
 header i {
@@ -23,58 +27,29 @@ header i {
   cursor: pointer;
 }
 
+header .articleID {
+  cursor: pointer;
+  margin: 0;
+}
+
+header .articleID span {
+  font-weight: bold;
+}
+
 section {
   transition: all 0.2s ease;
 }
 
 .editor {
-  width: 100%;
-  height: 100%;
-  padding: 20pt;
-}
-
-.editor .articleInfo {
-  background: var(--content-background-color);
-  width: calc(100% - 20pt);
-  max-width: 800pt;
-  height: 200pt;
-  border-radius: 10pt;
-  padding: 15pt;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin: auto;
-}
-
-.editor .articleInfo .thumbnail img {
-  width: auto;
-  height: auto;
-  max-height: 150pt;
-  max-width: 260pt;
-  border-radius: 5pt;
-}
-
-.editor .articleInfo .thumbnail iframe {
-  height: 100%;
-  width: auto;
-}
-
-.editor .articleInfo .textContainer {
-  margin-left: 20pt;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.editor .articleInfo .textContainer * {
-  margin: 2.5pt 0 2.5pt 0;
-}
-
-.editor .articleEditor {
   max-width: 500pt;
+  height: 100%;
   padding: 20pt;
-  margin: auto;
+}
+
+.editor .thumbnail img {
+  width: 100%;
+  height: auto;
+  border-radius: 5pt;
 }
 
 .properties .selectContainer {
@@ -116,6 +91,7 @@ section {
 .fields input,
 .fields textarea {
   width: 100%;
+  background: var(--page-background-color);
   color: var(--primary-text-color);
   border: none;
   border-radius: 5pt;
@@ -178,6 +154,16 @@ section {
   margin-top: -2.5pt;
 }
 
+.fields .imageContainer {
+  margin: 5pt 0;
+}
+
+.fields .imageContainer img {
+  width: 100%;
+  height: auto;
+  border-radius: 5pt;
+}
+
 .fields .quote {
   margin: 5pt 0 2.5pt 0;
   padding: 2.5pt 5pt;
@@ -229,16 +215,16 @@ section {
   margin: 0;
 }
 
-.editor .articleEditor .actions {
+.editor .actions {
   display: flex;
   justify-content: space-between;
 }
 
-.editor .articleEditor .actions div {
+.editor .actions div {
   display: flex;
 }
 
-.editor .articleEditor .actions button {
+.editor .actions button {
   background: var(--content-background-color);
   color: var(--primary-text-color);
   border: none;
@@ -255,22 +241,22 @@ section {
   transition: all 0.2s ease;
 }
 
-.editor .articleEditor .actions button:hover {
+.editor .actions button:hover {
   background: var(--page-background-color);
   color: var(--primary-text-color);
 }
 
-.editor .articleEditor .actions .danger button {
+.editor .actions .danger button {
   background: var(--destructive-color);
   color: white;
 }
 
-.editor .articleEditor .actions .danger button:hover {
+.editor .actions .danger button:hover {
   background: var(--content-background-color);
   color: var(--primary-text-color);
 }
 
-.editor .articleEditor .actions button .icon {
+.editor .actions button .icon {
   width: 22px;
   height: 22px;
   display: flex;
@@ -278,7 +264,7 @@ section {
   align-items: center;
 }
 
-.editor .articleEditor .actions button span {
+.editor .actions button span {
   margin-left: 2pt;
 }
 
