@@ -29,7 +29,7 @@ header.globalHeader .searchBox .searchField {
 }
 
 header.globalHeader .searchBox .clearButton {
-  background: white;
+  background: var(--page-background-color);
 }
 
 .searchResultsContainer {
@@ -44,7 +44,7 @@ main {
 main section.header {
   position: relative;
   height: calc(45vh + 55pt);
-  min-height: 200px;
+  min-height: 200pt;
   overflow: hidden;
 }
 
@@ -67,20 +67,54 @@ main section.header .background {
   transform: scale(1.8);
 }
 
+@media (prefers-color-scheme: dark) {
+  main section.header .background {
+    background-image: url("/images/header-night.jpg");
+  }
+}
+
 main section.header .foreground {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 2;
-  mix-blend-mode: screen;
-  background: black;
+  transform: translate(0, 20pt);
 }
 
-main section.header .foreground video,
 main section.header .foreground img {
   width: 75vw;
   max-width: 500px;
-  transform: translate(0, 20pt);
+}
+
+.countdown {
+  text-align: center;
+  margin-top: 30pt;
+}
+
+.countdown .label {
+  font-weight: bold;
+  margin: 0 0 5pt 0;
+}
+
+.countdown .timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  gap: 10pt;
+}
+
+.countdown .timer div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.countdown .timer div h1,
+.countdown .timer div p {
+  margin: 0;
 }
 
 section.featured {
