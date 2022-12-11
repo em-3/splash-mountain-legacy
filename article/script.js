@@ -37,7 +37,48 @@ function checkTimeout(articleDetails) {
 var contentFieldConstructors = {
 	paragraph: function (content) {
 		var element = document.createElement("p");
-		element.textContent = content;
+
+		//Sanitize content
+		content = content.replaceAll(/</g, "&lt;");
+		content = content.replaceAll(/>/g, "&gt;");
+		content = content.replaceAll(/&/g, "&amp;");
+		content = content.replaceAll(/"/g, "&quot;");
+		content = content.replaceAll(/'/g, "&apos;");
+
+		// Parse Markdown formatting
+		// Bold
+		content = content.replaceAll(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+		// Italics
+		content = content.replaceAll(/\*(.*?)\*/g, "<i>$1</i>");
+		// Strikethrough
+		content = content.replaceAll(/~~(.*?)~~/g, "<s>$1</s>");
+		// Underline
+		content = content.replaceAll(/__(.*?)__/g, "<u>$1</u>");
+		// Superscript
+		content = content.replaceAll(/\^\^(.*?)\^\^/g, "<sup>$1</sup>");
+		// Subscript
+		content = content.replaceAll(/,,(.*?),,/g, "<sub>$1</sub>");
+		// Links
+		content = content.replaceAll(/\[(.*?)\]\((.*?)\)/g, "<a href='$2'>$1</a>");
+		// Unordered Lists
+		/* Example:
+		- Item 1
+		- Item 2
+		- Item 3
+		*/
+		content = content.replaceAll(/^- (.*?)(\n|$)/gm, "<li>$1</li>");
+		content = content.replaceAll(/((<li>(.*?)<\/li>)+)/gm, "<ul>$1</ul>\n");
+		// Ordered Lists
+		/* Example:
+		# Item 1
+		# Item 2
+		# Item 3
+		*/
+		content = content.replaceAll(/^# (.*?)(\n|$)/gm, "<li>$1</li>");
+		content = content.replaceAll(/^((<li>(.*?)<\/li>)+)/gm, "<ol>$1</ol>\n");
+
+		// Parse HTML formatting
+		element.innerHTML = content;
 		return element;
 	},
 	header: function (content) {
@@ -118,7 +159,7 @@ function showArticle() {
 
 	//Append a filled square to the last paragraph
 	var paragraphs = document.querySelectorAll(".articleContent p");
-	paragraphs[paragraphs.length - 1].textContent += " \u25A0";
+	paragraphs[paragraphs.length - 1].appendChild(document.createTextNode(" \u25A0"));
 
 	//Hide the loading screen and show the article
 	document.querySelector(".articleViewer .loadingContainer").classList.add("hidden");
