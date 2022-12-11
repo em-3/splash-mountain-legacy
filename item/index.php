@@ -40,10 +40,17 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
 <body ontouchstart class>
 
+    <?php
+    // If the embedded parameter isn't set, include the global header
+    if (!isset($_GET["embedded"])) {
+        include '../global/header/index.html';
+    }
+    ?>
+
     <main>
-        <header class="hidden">
-            <i class="gg-close" onclick="closeItemViewer()"></i>
-        </header>
+        <div class="closeButton" onclick="closeItemViewer()">
+            <i class="gg-close"></i>
+        </div>
         <div class="contentContainer">
             <div class="loadingScreen">
                 <div class="loadingAnimationContainer">
@@ -69,7 +76,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
         <div class="itemInfoContainer hidden">
             <div class="parkContainer">
                 <i class="gg-pin"></i>
-                <h2 class="park" onclick="displayItemID()"></h2>
+                <h2 class="park"></h2>
             </div>
             <h1 class="name"></h1>
             <div class="tags hidden">
@@ -87,10 +94,22 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             </div>
 
             <div class="buttonContainer">
-                <button class="share" onclick="share()">Share</button>
-                <button class="editItem hidden" onclick="editItem()">Edit Item</button>
+                <button class="share" onclick="share(event)">
+                    <i class="gg-export" style="transform: translate(1px, 3px) scale(0.8)"></i>
+                    <span>Share</span>
+                </button>
+                <button class="editItem hidden" onclick="editItem()">
+                    <i class="gg-edit-exposure"></i>
+                    <span>Edit Item</span>
+                </button>
+                <button class="copyID hidden" onclick="copyItemID()">
+                    <i class="gg-copy"></i>
+                    <span>Copy ID</span>
+                </button>
             </div>
         </div>
+
+        <p class="closeMessage">Tap anywhere to show close button.</p>
     </main>
 
     <script src="/js/global.js"></script>

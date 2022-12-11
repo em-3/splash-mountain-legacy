@@ -1,35 +1,35 @@
-header {
+header.globalHeader {
   position: absolute;
   justify-content: center;
   background: transparent;
 }
 
-header .logo {
+header.globalHeader .logo {
   display: none;
 }
 
-header .links > * {
+header.globalHeader .links>* {
   background: rgba(300, 300, 300, 0.5);
   color: black;
 }
 
-header .links > *.current {
+header.globalHeader .links>*.current {
   background: rgba(300, 300, 300, 0.8);
 }
 
-header .links > *:hover {
+header.globalHeader .links>*:hover {
   background: rgba(300, 300, 300, 0.8);
 }
 
-header .searchBox .searchField {
+header.globalHeader .searchBox .searchField {
   background: rgba(300, 300, 300, 0.8);
   color: black;
   font-weight: bold;
   transition: background 0.2s ease;
 }
 
-header .searchBox .clearButton {
-  background: white;
+header.globalHeader .searchBox .clearButton {
+  background: var(--page-background-color);
 }
 
 .searchResultsContainer {
@@ -44,11 +44,11 @@ main {
 main section.header {
   position: relative;
   height: calc(45vh + 55pt);
-  min-height: 200px;
+  min-height: 200pt;
   overflow: hidden;
 }
 
-main section.header > * {
+main section.header>* {
   position: absolute;
   top: 0;
   left: 0;
@@ -67,20 +67,54 @@ main section.header .background {
   transform: scale(1.8);
 }
 
+@media (prefers-color-scheme: dark) {
+  main section.header .background {
+    background-image: url("/images/header-night.jpg");
+  }
+}
+
 main section.header .foreground {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 2;
-  mix-blend-mode: screen;
-  background: black;
+  transform: translate(0, 20pt);
 }
 
-main section.header .foreground video,
 main section.header .foreground img {
   width: 75vw;
   max-width: 500px;
-  transform: translate(0, 20pt);
+}
+
+.countdown {
+  text-align: center;
+  margin-top: 30pt;
+}
+
+.countdown .label {
+  font-weight: bold;
+  margin: 0 0 5pt 0;
+}
+
+.countdown .timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  gap: 10pt;
+}
+
+.countdown .timer div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.countdown .timer div h1,
+.countdown .timer div p {
+  margin: 0;
 }
 
 section.featured {
@@ -209,7 +243,7 @@ section.featured .content .item .imageContainer {
   justify-content: center;
 }
 
-section.featured.databaseAdditions .content .item .imageContainer > img {
+section.featured.databaseAdditions .content .item .imageContainer>img {
   width: 100%;
   height: 100pt;
   object-fit: cover;

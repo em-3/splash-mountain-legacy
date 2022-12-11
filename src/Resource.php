@@ -176,7 +176,7 @@ class Resource {
         }
 
         //Move the image to the directory
-        if(!move_uploaded_file($this->file["tmp_name"], $this->resource_directory . $this->getID() . "/main.jpg")) {
+        if(!imagejpeg(imagecreatefromstring(file_get_contents($this->file["tmp_name"])), $this->resource_directory . $this->getID() . "/main.jpg")) {
             throw new \Exception("Could not upload image");
         }
     }

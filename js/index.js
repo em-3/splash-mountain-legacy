@@ -169,12 +169,61 @@ fetch("/api/news/list/?min=1&max=15")
 		}
 	);
 
-//When the user navigates to a different browser tab, replace the video element with a picture element to prevent a frozen animation.
-window.onblur = function () {
-	document
-		.querySelector("section.header .foreground video")
-		.classList.add("hidden");
-	document
-		.querySelector("section.header .foreground img")
-		.classList.remove("hidden");
-};
+//Update the closing countdown timer
+var currentTimestamp;
+var launchTimestamp = new Date("2023-01-23T05:00:00Z");
+
+const countdownDOM = {
+	container: document.querySelector(".countdown"),
+	days: {
+		container: document.querySelector(".countdown .days"),
+		value: document.querySelector(".countdown .days h1"),
+	},
+	hours: {
+		container: document.querySelector(".countdown .hours"),
+		value: document.querySelector(".countdown .hours h1"),
+	},
+	minutes: {
+		container: document.querySelector(".countdown .minutes"),
+		value: document.querySelector(".countdown .minutes h1"),
+	},
+	seconds: {
+		container: document.querySelector(".countdown .seconds"),
+		value: document.querySelector(".countdown .seconds h1"),
+	}
+}
+
+function updateCountdown() {
+	currentTimestamp = new Date();
+	var difference = launchTimestamp.getTime() - currentTimestamp.getTime();
+
+	//If the launch timestamp is in the past, redirect to index.html.
+	if (difference <= 0) {
+		countdownDOM.container.classList.add("hidden");
+	} else {
+		var countdownString = "";
+
+		var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+		var hours = Math.floor(
+			(difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+		);
+		var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+		if (days <= 0) {
+			countdownDOM.days.container.classList.add("hidden");
+		} else {
+			countdownDOM.days.value.textContent = days;
+		}
+		if (days <= 0 && hours <= 0) {
+			countdownDOM.hours.container.classList.add("hidden");
+		} else {
+			countdownDOM.hours.value.textContent = hours;
+		}
+		countdownDOM.minutes.value.textContent = minutes;
+		countdownDOM.seconds.value.textContent = seconds;
+	}
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);

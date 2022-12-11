@@ -38,7 +38,7 @@ var newsList = {
 							resultElement.className = "article";
 							(function (id) {
 								resultElement.onclick = function () {
-									window.location.href = "/article/" + id;
+									showArticleEditor(id);
 								};
 							})(currentArticleData.id);
 

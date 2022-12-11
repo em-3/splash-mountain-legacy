@@ -3,21 +3,37 @@ main {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 40pt;
 }
 
 header {
-  background: var(--content-background-color);
-  width: 100%;
-  height: 35pt;
-  padding-left: 20pt;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40pt;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0 20pt;
+  background: var(--content-background-color);
+  z-index: 2;
 }
 
-header picture {
+header i {
+  --ggs: 1.5;
   cursor: pointer;
+}
+
+header .articleID {
+  cursor: pointer;
+  margin: 0;
+}
+
+header .articleID span {
+  font-weight: bold;
 }
 
 section {
@@ -25,169 +41,231 @@ section {
 }
 
 .editor {
-  width: 100%;
+  max-width: 500pt;
   height: 100%;
   padding: 20pt;
 }
 
-.editor .articleInfo {
-  background: var(--content-background-color);
-  width: calc(100% - 20pt);
-  max-width: 800pt;
-  height: 200pt;
-  border-radius: 10pt;
-  padding: 15pt;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin: auto;
-}
-
-.editor .articleInfo .thumbnail img {
-  width: auto;
+.editor .thumbnail img {
+  width: 100%;
   height: auto;
-  max-height: 150pt;
-  max-width: 260pt;
   border-radius: 5pt;
 }
 
-.editor .articleInfo .thumbnail iframe {
-  height: 100%;
-  width: auto;
+.properties .selectContainer {
+  position: relative;
 }
 
-.editor .articleInfo .textContainer {
-  margin-left: 20pt;
+.properties .selectContainer i {
+  position: absolute;
+  top: 50%;
+  right: 10pt;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.properties select {
+  background: var(--content-background-color);
+  appearance: none;
+  font: inherit;
+  padding: 5pt;
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.fields {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
 }
 
-.editor .articleInfo .textContainer * {
-  margin: 2.5pt 0 2.5pt 0;
-}
-
-.editor .articleEditor {
-  max-width: 500pt;
-  padding: 20pt;
-  margin: auto;
-}
-
-.editor .articleEditor .properties .propertyContainer {
-  margin: 0 20pt 20pt 20pt;
-  display: flex;
-  flex-direction: column;
-}
-
-.propertyContainer select {
-  appearance: none;
-  font: inherit;
-  padding: 5pt;
+.fields>* {
+  width: 100%;
   border-radius: 5pt;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.propertyContainer select:focus {
+.properties>*:not(.selectContainer),
+.properties select,
+.fields input,
+.fields textarea {
+  width: 100%;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  border: none;
+  border-radius: 5pt;
+  padding: 5pt;
+  font: inherit;
+  transition: all 0.2s ease;
+}
+
+.properties *:focus,
+.fields *:focus {
   outline: none;
 }
 
-.propertyContainer input,
-.propertyContainer textarea {
-  border-radius: 5pt;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  padding: 5pt;
-  font: inherit;
-  transition: border 0.1s ease;
+.properties>*:not(.selectContainer):hover,
+.properties>*:not(.selectContainer):focus,
+.properties select:hover,
+.fields :not(.container):hover,
+.fields :not(.container):focus {
+  background: var(--content-background-color) !important;
 }
 
-.propertyContainer textarea {
-  resize: vertical;
-  min-height: 100pt;
+.properties #title,
+.properties #subtitle {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 0;
 }
 
-.propertyContainer input:focus,
-.propertyContainer textarea:focus {
-  border-color: var(--primary-text-color);
-  outline: none;
+.properties #title {
+  margin: 10pt 0 2.5pt 0;
+  font-size: 25pt;
+  font-weight: bold;
+}
+
+.properties #subtitle {
+  margin: 0 0 5pt 0;
+  font-size: 15pt;
+  font-style: italic;
 }
 
 .fields textarea {
-  width: 100%;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 5pt;
-  font: inherit;
-  transition: border 0.1s ease;
   resize: vertical;
   min-height: 100pt;
 }
 
-.fields textarea:focus {
-  border-color: var(--primary-text-color);
-  outline: none;
-}
-
-.addSection {
-  margin-bottom: 10pt;;
-}
-
-.addSection * {
-  display: inline-block;
-}
-
-.addSection .icon {
+.fields .header {
+  margin: 15pt 0 5pt 0;
+  font-size: 20pt;
   font-weight: bold;
-  margin: 0 5pt 0 0;
-  cursor: default;
 }
 
-.addSection div {
+.fields .subheader {
+  margin: 5pt 0 5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 15pt;
+  font-style: italic;
+}
+
+.fields .header+.subheader {
+  margin-top: -2.5pt;
+}
+
+.fields .imageContainer {
+  margin: 5pt 0;
+}
+
+.fields .imageContainer img {
+  width: 100%;
+  height: auto;
+  border-radius: 5pt;
+}
+
+.fields .quote {
+  margin: 5pt 0 2.5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 15pt;
+  font-style: italic;
+}
+
+.fields .author {
+  margin: 0 0 5pt 0;
+  padding: 2.5pt 5pt;
+  font-size: 12pt;
+  text-align: end;
+  width: fit-content;
+  float: right;
+}
+
+.fields .divider {
+  margin: 10pt 0 10pt 0;
+  width: 100%;
+  height: 3pt;
+  border-radius: 1.5pt;
+  background: var(--secondary-text-color);
+}
+
+.addContentField {
   background: var(--content-background-color);
+  margin: 10pt 0 20pt 0;
   padding: 5pt 10pt;
   border-radius: 5pt;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.addContentField .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5pt;
+  transform: translate(0, 1pt);
+}
+
+.addContentField p {
+  margin: 0;
 }
 
 .addSection div p {
   margin: 0;
 }
 
-.editor .articleEditor .actions {
+.editor .actions {
   display: flex;
   justify-content: space-between;
 }
 
-.editor .articleEditor .actions div {
+.editor .actions div {
   display: flex;
 }
 
-.editor .articleEditor .actions button {
+.editor .actions button {
   background: var(--content-background-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 2pt 5pt;
   color: var(--primary-text-color);
-  font: inherit;
-  transition: border-color 0.1s ease;
+  border: none;
+  border-radius: 5pt;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 10pt 15pt;
   cursor: pointer;
+  margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
-.editor .articleEditor .actions button:hover {
-  border-color: var(--primary-text-color) !important;
+.editor .actions button:hover {
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
 }
 
-.editor .articleEditor .actions .danger button {
-  background: #ff6f66;
-  border-color: #ff5449;
+.editor .actions .danger button {
+  background: var(--destructive-color);
   color: white;
+}
+
+.editor .actions .danger button:hover {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+}
+
+.editor .actions button .icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor .actions button span {
+  margin-left: 2pt;
 }
 
 .centered {

@@ -1,16 +1,28 @@
+<?php
+
+require_once __DIR__ . "/../scripts/init_admin.php";
+
+//Redirect the user if they're not logged in
+if(!check_authentication() || !check_clearance(0)) {
+    header("Location: /login/index.php");
+    exit;
+}
+
+?>
 <!DOCTYPE HTML>
 <html>
 
 <head>
 
     <meta charset="utf-8">
-    <title>News - Splash Mountain Legacy</title>
+    <title>Admin - Splash Mountain Legacy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/admin/admin-global.css">
     <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
@@ -40,7 +52,7 @@
 
 <body ontouchstart class>
 
-    <?php include '../global/header/index.html'; ?>
+    <?php include '../../global/header/index.html'; ?>
 
     <div class="searchResultsContainer">
         <div class="loadingContainer hidden">
@@ -59,8 +71,52 @@
     </div>
 
     <main>
-        <section class="newsList">
-            <h1 class="title">News</h1>
+        <section class="header">
+            <div class="text">
+                <h1 class="title">Database</h1>
+                <h2 class="subtitle">Admin Console</h2>
+            </div>
+            <a href="/admin" class="backLink">
+                <i class="gg-chevron-left"></i>
+                <span>Back to Admin Home</span>
+            </a>
+            <a onclick="showDatabaseItemEditor()" class="addItem">
+                <i class="gg-math-plus"></i>
+                <span>Create Item</span>
+            </a>
+        </section>
+        <section class="databaseBrowser">
+            <div class="searchControls">
+                <div class="controls">
+                    <div class="searchField">
+                        <input type="text" placeholder="Filter" oninput="databaseBrowser.searchBar.oninput()"
+                            onchange="databaseBrowser.searchBar.onchange()">
+                    </div>
+                    <div class="filterBar">
+                        <div class="filters"></div>
+                        <div class="addFilter" onclick="showFilterSelect()">
+                            <i class="gg-math-plus"></i>
+                        </div>
+                    </div>
+                    <div class="sortByContainer">
+                        <p>Sort By:</p>
+                        <select name="sortBy" class="sortBy" id="sortBy" onchange="databaseBrowser.refreshResults()">
+                            <option value="name" selected>Name</option>
+                            <option value="scene">Scene</option>
+                            <option value="newest_first">Date Added (Newest First)</option>
+                            <option value="oldest_first">Date Added (Oldest First)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filterSelect hidden">
+                    <div class="closeButton" onclick="hideFilterSelect()">
+                        <i class="gg-close"></i>
+                    </div>
+                    <div class="availableFilters"></div>
+                </div>
+                
+            </div>
             <div class="loadingContainer">
                 <div class="loadingAnimationEllipsis">
                     <div></div>
@@ -77,7 +133,7 @@
         </section>
     </main>
 
-    <?php include '../global/footer/index.html'; ?>
+    <?php include '../../global/footer/index.html'; ?>
 
     <div class="itemDetailsContainer hidden">
         <iframe src="" frameborder="0"></iframe>
@@ -87,8 +143,8 @@
 
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/search.js"></script>
     <script src="script.js"></script>
+    <script src="/js/search.js"></script>
 
 </body>
 

@@ -1,35 +1,40 @@
 main {
+  --header-height: 0pt;
+
   width: 100%;
   height: 100%;
+  margin-top: var(--header-height);
 }
 
-header {
-  width: 100%;
-  height: 40pt;
+.closeButton {
+  position: fixed;
+  top: 15pt;
+  left: 15pt;
+  background: var(--page-background-color);
+  box-shadow: 0 0 5pt var(--shadow-color);
+  border-radius: 50%;
+  width: 22.5pt;
+  height: 22.5pt;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 20pt;
-  background: var(--content-background-color);
-  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-header i {
-  --ggs: 1.5;
   cursor: pointer;
+  z-index: 1;
+  transition: opacity 0.2s ease;
 }
 
-header.hidden {
+.closeButton.hidden {
   display: flex !important;
-  transform: translateY(100%);
   opacity: 0;
+  pointer-events: none;
+  cursor: default;
 }
 
 .contentContainer {
   width: 100%;
 }
 
-.contentContainer > * {
+.contentContainer>* {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -37,11 +42,11 @@ header.hidden {
 }
 
 .loadingScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorMessageContainer {
@@ -61,7 +66,7 @@ header.hidden {
 .contentContainer .contentDisplay {
   width: 100%;
   height: auto;
-  max-height: calc(100vh - 40pt);
+  max-height: calc(100vh - var(--header-height));
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -73,17 +78,18 @@ header.hidden {
   transform: translateY(100pt);
 }
 
+.contentContainer .contentDisplay h1,
 .contentContainer .contentDisplay h2 {
   padding: 0 20pt;
 }
 
-.contentContainer .contentDisplay > img {
+.contentContainer .contentDisplay>img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer {
+.contentDisplay .thumbnail~.loadingContainer {
   position: absolute;
   bottom: 10pt;
   left: 50%;
@@ -99,18 +105,18 @@ header.hidden {
   cursor: none;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer:hover {
+.contentDisplay .thumbnail~.loadingContainer:hover {
   opacity: 0;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer .loadingAnimationContainer {
+.contentDisplay .thumbnail~.loadingContainer .loadingAnimationContainer {
   position: absolute;
   left: -5pt;
   top: calc(50% + 1pt);
   transform: translate(0, -50%) scale(0.5);
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer p {
+.contentDisplay .thumbnail~.loadingContainer p {
   margin: 0 0 0 35pt;
 }
 
@@ -249,9 +255,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
   font-weight: bold;
 }
 
-.itemInfoContainer p.property a {
+.itemInfoContainer p.property span.button {
+  background: var(--secondary-content-background-color);
   color: var(--primary-text-color);
-  text-decoration: underline;
+  padding: 1pt 2pt;
+  border-radius: 5pt;
+  cursor: pointer;
 }
 
 .itemInfoContainer p span {
@@ -356,6 +365,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 10pt 0;
   cursor: pointer;
   margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
   transition: 0.1s ease background;
 }
 
@@ -363,27 +374,61 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--page-background-color);
 }
 
+.buttonContainer button span {
+  margin-left: 5pt;
+}
+
+.closeMessage {
+  position: absolute;
+  bottom: 10pt;
+  bottom: calc(env(safe-area-inset-bottom) + 15pt);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--secondary-text-color);
+  transition: opacity 0.2s ease;
+}
+
+.closeButton:not(.hidden)~.closeMessage {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
 @media only screen and (min-width: 900px) {
   main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 40pt calc(100vh - 40pt);
+    grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
   }
 
   main header {
     grid-column: 1 / 3;
   }
 
+  .contentContainer {
+    height: calc(100vh - var(--header-height));
+  }
+
   .contentContainer .contentDisplay {
     height: 100%;
   }
+
+  .closeMessage {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+  }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 560px) {
   .buttonContainer {
-    height: 45pt;
+    flex-direction: column;
+    gap: 5pt;
+    margin-top: 10pt;
   }
+
   .buttonContainer button {
-    height: 100%;
+    width: 100%;
+    margin: 0;
   }
 }

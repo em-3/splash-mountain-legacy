@@ -1,7 +1,12 @@
 <?php
 
-require_once __DIR__ . "/../scripts/init.php";
-require_once __DIR__ . "/../scripts/viewer_meta.php";
+require_once __DIR__ . "/../scripts/init_admin.php";
+
+//Redirect the user if they're not logged in
+if(!check_authentication() || !check_clearance(0)) {
+    header("Location: /login/index.php");
+    exit;
+}
 
 ?>
 <!DOCTYPE HTML>
@@ -10,16 +15,17 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 <head>
 
     <meta charset="utf-8">
+    <title>Admin - Splash Mountain Legacy</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-
-    <?php output_meta_tags("/article/", "news_articles", "title", "subtitle", "thumbnail"); ?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="/admin/admin-global.css">
+    <link rel="stylesheet" href="styles.css">
 
+    <meta name="description" content="Splash Mountain images, videos, audio, and more.">
     <meta name="keywords"
         content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
 
@@ -46,7 +52,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
 <body ontouchstart class>
 
-    <?php include '../global/header/index.html'; ?>
+    <?php include '../../global/header/index.html'; ?>
 
     <div class="searchResultsContainer">
         <div class="loadingContainer hidden">
@@ -65,22 +71,30 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     </div>
 
     <main>
-        <section class="articleViewer">
+        <section class="header">
+            <div class="text">
+                <h1 class="title">News List</h1>
+                <h2 class="subtitle">Admin Console</h2>
+            </div>
+            <a href="/admin" class="backLink">
+                <i class="gg-chevron-left"></i>
+                <span>Back to Admin Home</span>
+            </a>
+            <a onclick="showArticleEditor()" class="addArticle">
+                <i class="gg-math-plus"></i>
+                <span>Create Article</span>
+            </a>
+        </section>
+        <section class="newsList">
             <div class="loadingContainer">
-                <i class="gg-loadbar-doc"></i>
+                <div class="loadingAnimationEllipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
-            <div class="articleDisplay hidden">
-                <section class="articleHeader">
-                    <img class="thumbnail">
-                    <h1 class="title"></h1>
-                    <h3 class="subtitle"></h3>
-                    <div class="authorContainer">
-                        <img class="authorImage">
-                        <p class="authorName"></p>
-                    </div>
-                </section>
-                <section class="articleContent"></section>
-            </div>
+            <div class="resultsContainer hidden"></div>
             <div class="errorMessageContainer hidden">
                 <h2 class="title"></h2>
                 <p class="subtitle"></p>
@@ -88,7 +102,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
         </section>
     </main>
 
-    <?php include '../global/footer/index.html'; ?>
+    <?php include '../../global/footer/index.html'; ?>
 
     <div class="itemDetailsContainer hidden">
         <iframe src="" frameborder="0"></iframe>
@@ -99,7 +113,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/search.js"></script>
-    <script src="../script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 

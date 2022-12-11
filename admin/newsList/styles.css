@@ -6,10 +6,12 @@ main {
     overflow: auto;
 }
 
-main section>h1 {
-    text-align: center;
-    margin: 10pt 0 0 0;
-    font-size: 30pt;
+section.header a.addArticle i {
+    --ggs: 0.8;
+}
+
+section.header a.addArticle span {
+    margin-left: 2.5pt;
 }
 
 .newsList,

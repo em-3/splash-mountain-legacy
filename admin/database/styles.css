@@ -1,3 +1,11 @@
+section.header a.addItem i {
+  --ggs: 0.8;
+}
+
+section.header a.addItem span {
+  margin-left: 2.5pt;
+}
+
 main section.databaseBrowser {
   min-height: calc(100vh - 55pt);
 }
@@ -7,7 +15,7 @@ main {
 }
 
 .searchControls {
-  margin: 10pt;
+  margin: 0 10pt 10pt 10pt;
   height: 35pt;
   background: var(--content-background-color);
   border-radius: 10pt;
@@ -93,13 +101,6 @@ main {
   justify-content: center;
 }
 
-.filterBar .filters .filter .value {
-  font-size: 10pt;
-  font-weight: bold;
-  color: var(--primary-text-color);
-  margin: 0 0 0 5pt;
-}
-
 .filterBar .filters .filter select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -130,7 +131,7 @@ main {
   border-radius: 3pt;
   font-weight: bold;
   height: 15pt;
-  padding: 2pt 0;
+  padding: 2pt;
   margin-left: 5pt;
   cursor: pointer;
   display: flex;

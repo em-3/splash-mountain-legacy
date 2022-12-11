@@ -6,13 +6,20 @@ if (mode === "editor") {
 	var id = params.get("id");
 }
 
+var unsavedChanges = false;
+
 var properties = [];
+
+var uneditedArticleContent = null;
 
 //Fetch the article details and content
 if (mode === "editor" && id) {
 	fetch("/api/news/article/" + id)
 		.then((response) => response.json())
-		.then(showArticleDetails, showErrorScreen);
+		.then(function (content) {
+			uneditedArticleContent = content;
+			showArticleDetails(content)
+		}, showErrorScreen);
 } else if (mode === "newArticle") {
 	showArticleDetails();
 } else {
@@ -20,69 +27,324 @@ if (mode === "editor" && id) {
 }
 
 var contentFieldConstructors = {
-	text: {
-		name: "Text",
+	paragraph: {
+		name: "Paragraph",
+		icon: "format-left",
 		constructor(content) {
+			var element = document.createElement("textarea");
+			element.placeholder = "Paragraph";
+			if (content) {
+				element.value = content;
+			}
+
 			var object = {
-				element: document.createElement("textarea"),
+				type: "paragraph",
+				element: element,
 				getValue: function () {
 					return this.element.value;
 				},
 			};
-			if (content) {
-				object.element.value = content;
-			}
 			return object;
 		},
 	},
+	header: {
+		name: "Header",
+		icon: "format-heading",
+		constructor(content) {
+			var element = document.createElement("input");
+			element.type = "text";
+			element.classList.add("header");
+			element.placeholder = "Header";
+			if (content) {
+				element.value = content;
+			}
+
+			var object = {
+				type: "header",
+				element: element,
+				getValue: function () {
+					return this.element.value;
+				},
+			};
+			return object;
+		},
+	},
+	subheader: {
+		name: "Subheader",
+		icon: "details-less",
+		constructor(content) {
+			var element = document.createElement("input");
+			element.type = "text";
+			element.classList.add("subheader");
+			element.placeholder = "Subheader";
+			if (content) {
+				element.value = content;
+			}
+
+			var object = {
+				type: "subheader",
+				element: element,
+				getValue: function () {
+					return this.element.value;
+				},
+			};
+			return object;
+		},
+	},
+	image: {
+		name: "Image",
+		icon: "image",
+		constructor(content) {
+			var container = document.createElement("div");
+			container.classList.add("imageContainer");
+			container.classList.add("container");
+
+			//If the page is in editor mode and this is an existing image, show the image. Otherwise, allow the user to upload an image.
+			if (mode === "editor" && content) {
+				var thumbnail = document.createElement("img");
+				thumbnail.src = "/resources/" + content.image + "/thumbnail.jpg";
+				container.appendChild(thumbnail);
+
+				var fullImage = document.createElement("img");
+				fullImage.classList.add("hidden");
+				fullImage.onload = function () {
+					thumbnail.classList.add("hidden");
+					fullImage.classList.remove("hidden");
+				};
+				fullImage.src = "/resources/" + content.image + "/main.jpg";
+				container.appendChild(fullImage);
+			} else {
+				var fileUploadElement = document.createElement("input");
+				fileUploadElement.type = "file";
+				fileUploadElement.accept = "image/*";
+				container.appendChild(fileUploadElement);
+			}
+
+			var captionField = document.createElement("input");
+			captionField.type = "text";
+			captionField.classList.add("caption");
+			captionField.placeholder = "Caption";
+			if (mode === "editor" && content && content.caption) {
+				captionField.value = content.caption;
+			}
+			container.appendChild(captionField);
+			
+			var object = {
+				type: "image",
+				element: container,
+				getValue: function () {
+					if (mode === "editor") {
+						content.caption = captionField.value;
+						return content;
+					} else if (fileUploadElement.files.length > 0) {
+						return {
+							file: fileUploadElement.files[0],
+							caption: captionField.value,
+						};
+					}
+				}
+			};
+			return object;
+		}
+	},
+	quote: {
+		name: "Quote",
+		icon: "quote",
+		constructor(content) {
+			var container = document.createElement("div");
+			container.classList.add("container");
+			var quote = document.createElement("textarea");
+			quote.classList.add("quote");
+			quote.placeholder = "Quote";
+			var author = document.createElement("input");
+			author.classList.add("author");
+			author.placeholder = "Author";
+			container.appendChild(quote);
+			container.appendChild(author);
+
+			var object = {
+				type: "quote",
+				element: container,
+				quoteElement: quote,
+				authorElement: author,
+				getValue: function () {
+					return {
+						quote: this.quoteElement.value,
+						author: this.authorElement.value,
+					};
+				},
+			};
+			if (content) {
+				object.quoteElement.value = content.quote;
+				object.authorElement.value = content.author;
+			}
+			return object;
+		}
+	},
+	divider: {
+		name: "Divider",
+		icon: "format-separator",
+		constructor(content) {
+			var container = document.createElement("div");
+			var divider = document.createElement("hr");
+			divider.classList.add("container");
+			divider.classList.add("divider");
+			container.appendChild(divider);
+			var object = {
+				type: "divider",
+				element: container,
+				getValue: function () {
+					return null;
+				},
+			};
+			return object;
+		}
+	}
 };
 
 var contentFields = [];
-var keys = Object.keys(contentFieldConstructors);
-for (var i = 0; i < keys.length; i++) {
-	var type = contentFieldConstructors[keys[i]];
-	var element = document.createElement("div");
-	var label = document.createElement("p");
-	label.textContent = type.name;
-	(function () {
-		label.onclick = function () {
-			addContentField(type);
-		};
-	})();
-	element.appendChild(label);
-	document.querySelector(".addSection").appendChild(element);
+
+function addContentField(type, content, position) {
+	var contentField = type.constructor(content);
+	if (typeof position == "number" && position < contentFields.length) {
+		contentFields.splice(position, 0, contentField);
+	} else {
+		contentFields.push(contentField);
+	}
+	var element = contentField.element;
+	(function (contentField) {
+		element.addEventListener("contextmenu", function (event) {
+			event.preventDefault();
+			contextMenu.present({
+				x: event.clientX,
+				y: event.clientY,
+				items: [
+					{
+						icon: "arrow-up",
+						label: "Move up",
+						disabled: contentFields.indexOf(contentField) === 0,
+						callback: function () {
+							var index = contentFields.indexOf(contentField);
+							if (index > 0) {
+								contentFields.splice(index, 1);
+								contentFields.splice(index - 1, 0, contentField);
+								element.parentElement.insertBefore(element, element.previousElementSibling);
+							}
+						}
+					},
+					{
+						icon: "border-top",
+						label: "Insert above",
+						callback: function () {
+							contextMenu.presentFieldTypeSelector(event)
+								.then(function (type) {
+									var index = contentFields.indexOf(contentField);
+									addContentField(type, null, index);
+								});
+						}
+					},
+					{
+						icon: "border-bottom",
+						label: "Insert below",
+						callback: function () {
+							contextMenu.presentFieldTypeSelector(event)
+								.then(function (type) {
+									var index = contentFields.indexOf(contentField);
+									addContentField(type, null, index + 1);
+								});
+						}
+					},
+					{
+						icon: "arrow-down",
+						label: "Move down",
+						disabled: contentFields.indexOf(contentField) === contentFields.length - 1,
+						callback: function () {
+							var index = contentFields.indexOf(contentField);
+							if (index < contentFields.length - 1) {
+								contentFields.splice(index, 1);
+								contentFields.splice(index + 1, 0, contentField);
+								element.parentElement.insertBefore(element, element.nextElementSibling.nextElementSibling);
+							}
+						}
+					},
+					{
+						icon: "trash",
+						label: "Remove",
+						type: "destructive",
+						callback: function () {
+							//Remove the field from the contentfields array and the DOM
+							var index = contentFields.indexOf(contentField);
+							contentFields.splice(index, 1);
+							element.parentElement.removeChild(element);
+						}
+					},
+				]
+			});
+		});
+	})(contentField);
+	var fieldsContainer = document.querySelector(".fields")
+	if (typeof position == "number" && position < contentFields.length) {
+		fieldsContainer.insertBefore(element, fieldsContainer.children[position]);
+	} else {
+		fieldsContainer.appendChild(element);
+	}
 }
 
-function addContentField(type, content) {
-	contentFields.push(type.constructor(content));
-	document
-		.querySelector(".fields")
-		.appendChild(contentFields[contentFields.length - 1].element);
+contextMenu.presentFieldTypeSelector = function (e) {
+	return new Promise(function (resolve, reject) {
+		var options = {
+			x: e.clientX,
+			y: e.clientY,
+			items: [],
+			reject: reject,
+		};
+		var keys = Object.keys(contentFieldConstructors);
+		for (var i = 0; i < keys.length; i++) {
+			var type = contentFieldConstructors[keys[i]];
+			(function (type) {
+				options.items.push({
+					label: type.name,
+					icon: type.icon,
+					callback: function () {
+						resolve(type);
+					}
+				});
+			})(type);
+			if (i === 0) {
+				options.items[i].type = "active";
+			}
+		}
+		contextMenu.present(options);
+	});
 }
+
+document.querySelector(".addContentField").addEventListener("click", (e) => {
+	contextMenu.presentFieldTypeSelector(e)
+		.then(function (type) {
+			addContentField(type);
+		});
+});
 
 function showArticleDetails(articleDetails) {
+
+	function textareaAutogrow(textarea) {
+		textarea.style.height = "auto";
+		textarea.style.height = textarea.scrollHeight + "px";
+	}
+
 	//Thumbnail
 	properties.push({
 		name: "Thumbnail",
 		propertyName: "thumbnail",
 		constructor: function () {
-			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
-			container.classList.add("thumbnail");
-			if (mode === "editor") {
-				container.classList.add("hidden");
-			}
-			var label = document.createElement("label");
-			label.for = "thumbnail";
-			label.textContent = "Thumbnail Image";
 			var input = document.createElement("input");
 			input.type = "file";
 			input.name = "thumbnail";
 			input.id = "thumbnail";
-
-			container.appendChild(label);
-			container.appendChild(input);
-			return container;
+			if (mode === "editor") {
+				input.classList.add("hidden");
+			}
+			return input;
 		},
 		valueGetter: function () {
 			var fileElement = document.querySelector("#thumbnail");
@@ -97,7 +359,7 @@ function showArticleDetails(articleDetails) {
 			} else {
 				if (
 					!document
-						.querySelector(".thumbnail")
+						.querySelector("#thumbnail")
 						.classList.contains("hidden")
 				) {
 					if (file) {
@@ -125,21 +387,21 @@ function showArticleDetails(articleDetails) {
 		name: "Title",
 		propertyName: "title",
 		constructor: function () {
-			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
-			container.classList.add("title");
-			var label = document.createElement("label");
-			label.for = "title";
-			label.textContent = "Title";
-			var input = document.createElement("input");
+			var input = document.createElement("textarea");
 			input.name = "title";
 			input.id = "title";
+			input.placeholder = "Title";
 			if (mode === "editor") {
 				input.value = articleDetails.title;
 			}
-			container.appendChild(label);
-			container.appendChild(input);
-			return container;
+			//Autogrow textarea
+			input.addEventListener("input", () => {
+				textareaAutogrow(input)
+			});
+			window.addEventListener("resize", () => {
+				textareaAutogrow(input)
+			});
+			return input;
 		},
 		valueGetter: function () {
 			var value = document.querySelector("#title").value;
@@ -161,21 +423,21 @@ function showArticleDetails(articleDetails) {
 		name: "Subtitle",
 		propertyName: "subtitle",
 		constructor: function () {
-			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
-			container.classList.add("subtitle");
-			var label = document.createElement("label");
-			label.for = "subtitle";
-			label.textContent = "Subtitle";
-			var input = document.createElement("input");
+			var input = document.createElement("textarea");
 			input.name = "subtitle";
 			input.id = "subtitle";
+			input.placeholder = "Subtitle";
 			if (mode === "editor") {
 				input.value = articleDetails.subtitle;
 			}
-			container.appendChild(label);
-			container.appendChild(input);
-			return container;
+			//Autogrow textarea
+			input.addEventListener("input", () => {
+				textareaAutogrow(input)
+			});
+			window.addEventListener("resize", () => {
+				textareaAutogrow(input)
+			});
+			return input;
 		},
 		valueGetter: function () {
 			var value = document.querySelector("#subtitle").value;
@@ -198,15 +460,11 @@ function showArticleDetails(articleDetails) {
 		propertyName: "author",
 		constructor: function () {
 			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
-			container.classList.add("author");
-			var label = document.createElement("label");
-			label.for = "author";
-			label.textContent = "Author";
+			container.classList.add("selectContainer");
+
 			var select = document.createElement("select");
 			select.name = "author";
 			select.id = "author";
-
 			var options = [
 				"Splash Mountain Legacy Staff",
 				"91J",
@@ -220,15 +478,17 @@ function showArticleDetails(articleDetails) {
 				optionElement.value = currentOption;
 				select.appendChild(optionElement);
 			}
-
 			if (mode === "editor") {
 				select.value = articleDetails.author;
 			} else {
 				select.value = "Splash Mountain Legacy Staff";
 			}
 
-			container.appendChild(label);
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+			
 			container.appendChild(select);
+			container.appendChild(icon);
 			return container;
 		},
 		valueGetter: function () {
@@ -252,16 +512,13 @@ function showArticleDetails(articleDetails) {
 		propertyName: "publicationMode",
 		constructor: function () {
 			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
-			container.classList.add("publicationMode");
-			var label = document.createElement("label");
-			label.for = "publicationMode";
-			label.textContent = "Publish";
+			container.classList.add("selectContainer");
+
 			var select = document.createElement("select");
 			select.name = "publicationMode";
 			select.id = "publicationMode";
 
-			var options = ["Now", "Later"];
+			var options = ["Publish Now", "Publish Later"];
 			for (var i = 0; i < options.length; i++) {
 				var currentOption = options[i];
 				var optionElement = document.createElement("option");
@@ -271,7 +528,7 @@ function showArticleDetails(articleDetails) {
 				select.appendChild(optionElement);
 			}
 
-			select.value = "Now";
+			select.value = "Publish Now";
 			select.onchange = function () {
 				var newValue = select.value;
 				var publicationTimestamp = document.querySelector(
@@ -279,17 +536,20 @@ function showArticleDetails(articleDetails) {
 				);
 
 				switch (newValue) {
-					case "Now":
+					case "Publish Now":
 						publicationTimestamp.classList.add("hidden");
 						break;
-					case "Later":
+					case "Publish Later":
 						publicationTimestamp.classList.remove("hidden");
 						break;
 				}
 			};
-
-			container.appendChild(label);
+			
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+			
 			container.appendChild(select);
+			container.appendChild(icon);
 			return container;
 		},
 		valueGetter: function () {
@@ -305,7 +565,6 @@ function showArticleDetails(articleDetails) {
 		propertyName: "publication_timestamp",
 		constructor: function () {
 			var container = document.createElement("div");
-			container.classList.add("propertyContainer");
 			container.classList.add("publicationTimestamp");
 			container.classList.add("hidden");
 
@@ -372,7 +631,7 @@ function showArticleDetails(articleDetails) {
 		},
 	});
 
-	//Show the article details
+	//Show the article property fields
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
 		document
@@ -380,21 +639,27 @@ function showArticleDetails(articleDetails) {
 			.appendChild(currentProperty.constructor());
 	}
 
-	//Article info preview
+	//Thumbnail display
 	if (mode === "editor") {
-		var thumbnailElement = document.querySelector(".thumbnail img");
+		var thumbnailElement = document.querySelector(".editor .thumbnail img.thumbnail");
 		thumbnailElement.src = "/resources/" + articleDetails.thumbnail + "/thumbnail.jpg";
 		thumbnailElement.classList.remove("hidden");
 
-		document.querySelector(".articleID").textContent = id;
-		document.querySelector(".articleName").textContent =
-			articleDetails.title;
+		var fullImageElement = document.querySelector(".editor .thumbnail img.full");
+		fullImageElement.onload = function () {
+			thumbnailElement.classList.add("hidden");
+			fullImageElement.classList.remove("hidden");
+		};
+		fullImageElement.src = "/resources/" + articleDetails.thumbnail + "/main.jpg";
+
+		document.querySelector(".articleID span").textContent = id;
+		document.querySelector(".articleID").classList.remove("hidden");
 
 		document
 			.querySelector(".actions.existingArticle")
 			.classList.remove("hidden");
 	} else {
-		document.querySelector(".articleInfo").classList.add("hidden");
+		document.querySelector(".editor .thumbnail").classList.add("hidden");
 		document
 			.querySelector(".actions.newArticle")
 			.classList.remove("hidden");
@@ -403,13 +668,16 @@ function showArticleDetails(articleDetails) {
 	//Article content
 	if (mode === "editor") {
 		var contentFieldsContainer = document.querySelector(
-			".articleEditor .content .fields"
+			".content .fields"
 		);
 		var content = JSON.parse(articleDetails.content);
 		for (var i = 0; i < content.length; i++) {
 			var currentField = content[i];
+			//If the field is a string, add a paragraph
 			if (typeof currentField === "string") {
-				addContentField(contentFieldConstructors.text, currentField);
+				addContentField(contentFieldConstructors.paragraph, currentField);
+			} else {
+				addContentField(contentFieldConstructors[currentField.type], currentField.content);
 			}
 		}
 	}
@@ -417,12 +685,34 @@ function showArticleDetails(articleDetails) {
 	document.querySelector(".loadingContainer").classList.add("hidden");
 	requestAnimationFrame(function () {
 		document.querySelector(".editor").classList.remove("hidden");
+		//Resize the title and subtitle textareas
+		var title = document.querySelector(".editor #title");
+		var subtitle = document.querySelector(".editor #subtitle");
+		title.style.height = title.scrollHeight + "px";
+		subtitle.style.height = subtitle.scrollHeight + "px";
 	});
 }
 
 async function uploadArticle() {
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		document.querySelector("#package").checked = true;
+	});
+
+	//Start a timer
+	var timerExpired = false;
+	setTimeout(() => {
+		timerExpired = true;
+	}, 7000);
+
+	//Contact bootstrap endpoint to get article ID
+	var articleID = null;
+	await fetch("/admin/news/bootstrap.php")
+		.then((response) => response.json())
+		.then((data) => {
+			articleID = data.id;
+		});
 
 	var formData = new FormData();
 
@@ -451,26 +741,54 @@ async function uploadArticle() {
 	var content = [];
 	for (var i = 0; i < contentFields.length; i++) {
 		var currentField = contentFields[i];
-		content.push(currentField.getValue());
+
+		//If the item is an image, upload it first.
+		if (currentField.type === "image") {
+			var value = currentField.getValue();
+			var image = value.file;
+
+			//Upload the image file
+			var imageID = null;
+			var imageFormData = new FormData();
+			imageFormData.append("resource", image);
+			imageFormData.append("associated_id", articleID);
+			await fetch("/admin/resources/upload.php", {
+				method: "POST",
+				body: imageFormData,
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.status = "success") {
+						imageID = data.id;
+					} else {
+						reject(data);
+					}
+				});
+			content.push({
+				type: "image",
+				content: {
+					image: imageID,
+					caption: value.caption,
+				},
+			});
+		} else {
+			content.push({
+				type: currentField.type,
+				content: currentField.getValue(),
+			});
+		}
 	}
 	formData.append("content", JSON.stringify(content));
 
-	var itemID;
-	fetch("/admin/news/bootstrap.php")
+	formData.append("id", articleID);
+	fetch("/admin/news/create.php", {
+		method: "POST",
+		body: formData,
+	})
 		.then((response) => response.json())
-		.then((data) => {
-			if (data.status === "success") {
-				itemID = data.id;
-			}
-		})
-		.then(() => {
-			formData.append("id", itemID);
-			fetch("/admin/news/create.php", {
-				method: "POST",
-				body: formData,
-			})
-				.then((response) => response.json())
-				.then((result) => {
+		.then((result) => {
+			setInterval(() => {
+				if (timerExpired) {
 					if (result.status === "success") {
 						document.querySelector(
 							".responseContainer .title"
@@ -481,6 +799,7 @@ async function uploadArticle() {
 						document.querySelector(
 							".responseContainer .message"
 						).textContent = "Item ID: " + result.id;
+						unsavedChanges = false;
 					} else {
 						document.querySelector(
 							".responseContainer .title"
@@ -499,13 +818,17 @@ async function uploadArticle() {
 					document
 						.querySelector(".responseContainer")
 						.classList.remove("hidden");
-				});
+				}
+			}, 500);
 		});
 }
 
 async function updateArticle() {
 	document.querySelector(".editor").classList.add("hidden");
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		document.querySelector("#package").checked = true;
+	});
 
 	var formData = new FormData();
 
@@ -533,6 +856,72 @@ async function updateArticle() {
 		}
 	}
 
+	var content = [];
+
+	//Collect all the previously uploaded image IDs
+	var imageIDs = [];
+	var uneditedContentFields = JSON.parse(uneditedArticleContent.content);
+	for (var i = 0; i < uneditedContentFields.length; i++) {
+		var currentField = uneditedContentFields[i];
+		if (currentField.type === "image") {
+			var imageID = currentField.content;
+			imageIDs.push(imageID);
+		}
+	}
+	console.log(imageIDs);
+
+	for (var i = 0; i < contentFields.length; i++) {
+		var currentField = contentFields[i];
+
+		//If the item is an image, check to see if it's been previously uploaded.
+		if (currentField.type === "image") {
+			var matched = false;
+			var image = currentField.getValue();
+
+			for (var j = 0; j < imageIDs.length; j++) {
+				var currentImageID = imageIDs[j];
+				if (image === currentImageID) {
+					matched = true;
+					content.push({
+						type: "image",
+						content: currentImageID,
+					});
+					break;
+				}
+			}
+
+			if (!matched) {
+				//Upload the image file
+				var imageID = null;
+				var imageFormData = new FormData();
+				imageFormData.append("resource", image);
+				imageFormData.append("associated_id", id);
+				await fetch("/admin/resources/upload.php", {
+					method: "POST",
+					body: imageFormData,
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.status = "success") {
+							imageID = data.id;
+						} else {
+							reject(data);
+						}
+					});
+				content.push({
+					type: "image",
+					content: imageID,
+				});
+			}
+		} else {
+			content.push({
+				type: currentField.type,
+				content: currentField.getValue(),
+			});
+		}
+	}
+	formData.append("content", JSON.stringify(content));
+
 	var response = await fetch("/admin/news/modify.php", {
 		method: "POST",
 		body: formData,
@@ -546,6 +935,7 @@ async function updateArticle() {
 			"The article has been updated.";
 		document.querySelector(".responseContainer .message").textContent =
 			"Item ID: " + result.id;
+		unsavedChanges = false;
 	} else {
 		document.querySelector(".responseContainer .title").textContent =
 			"Congratulations, you broke something.";
@@ -615,22 +1005,35 @@ function showErrorScreen() {
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
+//Listen for any change events
+document.addEventListener("change", function (event) {
+	unsavedChanges = true;
+});
+
 async function closeEditor() {
-	var confirm = await dialog.confirm(
-		"Close Editor",
-		"Are you sure you want to close the editor? You'll lose any unpublished changes.",
-		{
-			cancellable: true,
-			buttons: [
-				{
-					text: "Close",
-					type: "active",
-				},
-			],
+	if (unsavedChanges) {
+		var confirm = await dialog.confirm(
+			"Close Editor",
+			"Are you sure you want to close the editor? You'll lose any unpublished changes.",
+			{
+				cancellable: true,
+				buttons: [
+					{
+						text: "Close",
+						type: "active",
+					},
+				],
+			}
+		);
+		if (confirm !== 0) {
+			return;
 		}
-	);
-	if (confirm !== 0) {
-		return;
 	}
-	window.top.postMessage("closeArticleEditor", "*");
+	
+	if (params.get("fromViewer") === "true") {
+		window.history.back();
+		return false;
+	} else {
+		window.top.postMessage("closeEditor", "*");
+	}
 }
