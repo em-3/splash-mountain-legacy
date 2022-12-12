@@ -1,3 +1,85 @@
+//Load attraction wait times
+function fetchWaitTime(park, url) {
+	return new Promise((resolve, reject) => {
+		fetch(url)
+			.then((response) => response.json())
+			.then(
+				(data) => {
+					var waitTime;
+					var operatingStatus = data.liveData[0].status;
+					switch (operatingStatus) {
+						case "OPERATING":
+							operatingStatus = "Operating";
+							waitTime = data.liveData[0].queue.STANDBY.waitTime + "min";
+							break;
+						case "DOWN":
+							operatingStatus = "Temporarily Closed";
+							waitTime = "Down";
+							break;
+						case "CLOSED":
+							operatingStatus = "Park Closed";
+							waitTime = "Closed";
+							break;
+						case "REFURBISHMENT":
+							operatingStatus = "For Refurbishment";
+							waitTime = "Closed";
+							break;
+					}
+
+					var updatedTime = "Updated ";
+					var updatedAtTimestamp = data.liveData[0].lastUpdated;
+					var updatedAtDate = new Date(updatedAtTimestamp);
+					var timeSinceUpdate = new Date() - updatedAtDate;
+					const daysSinceUpdate = Math.floor(timeSinceUpdate / 86400000);
+					const hoursSinceUpdate = Math.floor(
+						(timeSinceUpdate % 86400000) / 3600000
+					);
+					const minutesSinceUpdate = Math.floor(
+						((timeSinceUpdate % 86400000) % 3600000) / 60000
+					);
+					const secondsSinceUpdate = Math.floor(
+						(((timeSinceUpdate % 86400000) % 3600000) % 60000) / 1000
+					);
+					if (daysSinceUpdate > 0) {
+						updatedTime += daysSinceUpdate + "d, ";
+					}
+					if (hoursSinceUpdate > 0) {
+						updatedTime += hoursSinceUpdate + "h, ";
+					}
+					if (minutesSinceUpdate > 0) {
+						updatedTime += minutesSinceUpdate + "m, ";
+					}
+					updatedTime += secondsSinceUpdate + "s ago";
+
+					var waitTimeElement = document.querySelector(".waitTimes .content ." + park + " .time");
+					var statusElement = document.querySelector(".waitTimes .content ." + park + " .status");
+					var updatedElement = document.querySelector(".waitTimes .content ." + park + " .updatedTime");
+					waitTimeElement.textContent = waitTime;
+					statusElement.textContent = operatingStatus;
+					updatedElement.textContent = updatedTime;
+
+					resolve();
+				},
+				(error) => {
+					reject(error)
+				}
+			);
+	});
+}
+
+Promise.all([
+	fetchWaitTime("dl", "https://api.themeparks.wiki/v1/entity/343b216d-86b1-40c2-83cc-aa5f67b4804b/live"),
+	fetchWaitTime("wdw", "https://api.themeparks.wiki/v1/entity/a5241f3b-4ab5-4902-b5ba-435132ef553d/live"),
+	fetchWaitTime("tdl", "https://api.themeparks.wiki/v1/entity/dfe25d8e-e234-4020-a261-30c6825d0680/live")
+]).then(() => {
+	document.querySelector(".waitTimes .content").classList.remove("hidden");
+	document.querySelector(".waitTimes .loading").classList.add("hidden");
+}).catch((error) => {
+	document.querySelector(".waitTimes .error").classList.remove("hidden");
+	document.querySelector(".waitTimes .loading").classList.add("hidden");
+});
+
+
 //Populate the database additions container with the newest items
 fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 	.then((response) => response.json())
@@ -224,6 +306,5 @@ function updateCountdown() {
 		countdownDOM.seconds.value.textContent = seconds;
 	}
 }
-
 updateCountdown();
 setInterval(updateCountdown, 1000);

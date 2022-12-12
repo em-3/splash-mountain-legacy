@@ -78,6 +78,7 @@ main section.header .foreground {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: white;
   z-index: 2;
   transform: translate(0, 20pt);
 }
@@ -115,6 +116,41 @@ main section.header .foreground img {
 .countdown .timer div h1,
 .countdown .timer div p {
   margin: 0;
+}
+
+section.featured.waitTimes .loading,
+section.featured.waitTimes .error {
+  height: 85pt;
+}
+
+section.waitTimes .content div:first-child {
+  margin-left: 20pt;
+}
+
+section.waitTimes .content div {
+  height: 85pt;
+  min-width: 150pt;
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  padding: 5pt 10pt;
+  text-align: left;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2.5pt;
+  margin-right: 20pt;
+}
+
+section.waitTimes .content div h1,
+section.waitTimes .content div p {
+  margin: 0;
+}
+
+section.waitTimes .content div p.updatedTime {
+  font-size: 8pt;
+  font-style: italic;
+  color: var(--secondary-text-color);
 }
 
 section.featured {
