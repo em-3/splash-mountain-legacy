@@ -67,6 +67,24 @@ function fetchWaitTime(park, url) {
 	});
 }
 
+//Update wait times with current times in California, Florida and Japan
+const timeZoneElements = {
+	dl: document.querySelector(".waitTimes .content .dl .currentTime"),
+	wdw: document.querySelector(".waitTimes .content .wdw .currentTime"),
+	tdl: document.querySelector(".waitTimes .content .tdl .currentTime")
+}
+function updateTimeZoneTimes() {
+	const time = new Date();
+	const timeInCalifornia = new Date(time.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+	timeZoneElements.dl.textContent = timeInCalifornia.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
+	const timeInFlorida = new Date(time.toLocaleString("en-US", { timeZone: "America/New_York" }));
+	timeZoneElements.wdw.textContent = timeInFlorida.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
+	const timeInJapan = new Date(time.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+	timeZoneElements.tdl.textContent = timeInJapan.toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
+}
+updateTimeZoneTimes();
+setInterval(updateTimeZoneTimes, 1000);
+
 Promise.all([
 	fetchWaitTime("dl", "https://api.themeparks.wiki/v1/entity/343b216d-86b1-40c2-83cc-aa5f67b4804b/live"),
 	fetchWaitTime("wdw", "https://api.themeparks.wiki/v1/entity/a5241f3b-4ab5-4902-b5ba-435132ef553d/live"),

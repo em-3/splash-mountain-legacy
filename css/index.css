@@ -123,11 +123,11 @@ section.featured.waitTimes .error {
   height: 85pt;
 }
 
-section.waitTimes .content div:first-child {
+section.waitTimes .content>div:first-child {
   margin-left: 20pt;
 }
 
-section.waitTimes .content div {
+section.waitTimes .content>div {
   height: 85pt;
   min-width: 150pt;
   background: var(--content-background-color);
@@ -140,6 +140,13 @@ section.waitTimes .content div {
   flex-direction: column;
   gap: 2.5pt;
   margin-right: 20pt;
+}
+
+section.waitTimes .content div .top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 section.waitTimes .content div h1,
