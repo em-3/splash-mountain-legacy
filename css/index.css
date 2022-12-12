@@ -337,17 +337,17 @@ section.featured .content .item .info .infoContainer *:last-child {
   text-overflow: ellipsis;
 }
 
-@media only screen and (max-width: 600px) {
-  header {
+@media only screen and (max-width: 700px) {
+  header.globalHeader {
     height: 55pt;
     transition: background 0.2s ease;
   }
 
-  header.searchActive {
+  header.globalHeader.searchActive {
     background: var(--content-background-color);
   }
 
-  header .searchBox {
+  header.globalHeader .searchBox {
     top: 50%;
     bottom: unset;
     transform: translate(-50%, -50%);
@@ -361,10 +361,6 @@ section.featured .content .item .info .infoContainer *:last-child {
 
   main {
     margin-top: 0;
-  }
-
-  main section.header .foreground video {
-    width: 65vw;
   }
 
   section.featured .header h1 {

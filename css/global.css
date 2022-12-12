@@ -843,19 +843,19 @@ main {
   display: block !important;
 }
 
-@media only screen and (max-width: 600px) {
-  header {
+@media only screen and (max-width: 700px) {
+  header.globalHeader {
     height: 100pt;
     flex-direction: column;
     padding: 10pt 10pt 5pt 10pt;
   }
 
-  header .logo,
-  header .links {
+  header.globalHeader .logo,
+  header.globalHeader .links {
     margin: 0;
   }
 
-  header .linksContainer {
+  header.globalHeader .linksContainer {
     width: 100vw;
     overflow: scroll;
 
@@ -863,17 +863,17 @@ main {
     scrollbar-width: none;
   }
 
-  header .linksContainer::-webkit-scrollbar {
+  header.globalHeader .linksContainer::-webkit-scrollbar {
     display: none;
   }
 
-  header .linksContainer .links {
+  header.globalHeader .linksContainer .links {
     padding: 0 10pt;
     min-width: 100vw;
     width: fit-content;
   }
 
-  header .searchBox {
+  header.globalHeader .searchBox {
     top: unset;
     bottom: 5pt;
     transform: translate(-50%, 0);
