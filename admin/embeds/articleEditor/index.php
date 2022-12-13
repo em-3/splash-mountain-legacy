@@ -182,7 +182,7 @@ if(!check_authentication() || !check_clearance(0)) {
                         </button>
                     </div>
                     <div class="passive">
-                        <button onclick="uploadItem()">
+                        <button onclick="uploadArticle()">
                             <div class="icon"><i class="gg-redo"></i></div>
                             <span>Try Again</span>
                         </button>
@@ -196,7 +196,7 @@ if(!check_authentication() || !check_clearance(0)) {
                         </button>
                     </div>
                     <div class="passive">
-                        <button onclick="updateItem()">
+                        <button onclick="updateArticle()">
                             <div class="icon"><i class="gg-redo"></i></div>
                             <span>Try Again</span>
                         </button>
@@ -210,7 +210,7 @@ if(!check_authentication() || !check_clearance(0)) {
                         </button>
                     </div>
                     <div class="passive">
-                        <button onclick="deleteItem()">
+                        <button onclick="deleteArticle()">
                             <div class="icon"><i class="gg-trash"></i></div>
                             <span>Try Again</span>
                         </button>
