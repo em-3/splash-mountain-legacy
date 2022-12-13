@@ -328,6 +328,9 @@ document.querySelector(".addContentField").addEventListener("click", (e) => {
 function showArticleDetails(articleDetails) {
 
 	function textareaAutogrow(textarea) {
+		// Remove line breaks
+		textarea.value = textarea.value.replace(/(\r\n|\n|\r)/gm, "");
+		// Resize
 		textarea.style.height = "auto";
 		textarea.style.height = textarea.scrollHeight + "px";
 	}
