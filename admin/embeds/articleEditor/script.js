@@ -639,7 +639,6 @@ function showArticleDetails(articleDetails) {
 			.appendChild(currentProperty.constructor());
 	}
 
-	//Thumbnail display
 	if (mode === "editor") {
 		var thumbnailElement = document.querySelector(".editor .thumbnail img.thumbnail");
 		thumbnailElement.src = "/resources/" + articleDetails.thumbnail + "/thumbnail.jpg";
@@ -652,8 +651,37 @@ function showArticleDetails(articleDetails) {
 		};
 		fullImageElement.src = "/resources/" + articleDetails.thumbnail + "/main.jpg";
 
+		var articleIDElement = document.querySelector(".articleID");
 		document.querySelector(".articleID span").textContent = id;
-		document.querySelector(".articleID").classList.remove("hidden");
+		articleIDElement.onclick = function(e) {
+			contextMenu.present({
+				x: e.clientX,
+				y: e.clientY,
+				items: [
+					{
+						label: "Copy ID",
+						icon: "copy",
+						callback: function() {
+							navigator.clipboard.writeText(id);
+							notification.addToQueue(
+								"progress",
+								"copy",
+								"Copied",
+								"Article ID copied to clipboard"
+							)
+						}
+					},
+					{
+						label: "Open Article",
+						icon: "external",
+						callback: function() {
+							window.open("/article/" + id);
+						}
+					}
+				]
+			})
+		}
+		articleIDElement.classList.remove("hidden");
 
 		document
 			.querySelector(".actions.existingArticle")
