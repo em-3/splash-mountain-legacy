@@ -291,6 +291,11 @@ section {
   height: 70%;
 }
 
+.noTransition * {
+  transition: none !important;
+  animation: none !important;
+}
+
 .statusContainer {
   height: 30%;
   position: relative;

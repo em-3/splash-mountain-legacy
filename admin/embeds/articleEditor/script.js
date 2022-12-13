@@ -1019,6 +1019,21 @@ async function deleteArticle() {
 		"Requesting article deletion..."
 	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		var packageContainer = document.querySelector(".package_animation");
+		var checkbox = document.querySelector("#package");
+
+		packageContainer.classList.add("noTransition");
+		requestAnimationFrame(() => {
+			checkbox.checked = true;
+			requestAnimationFrame(() => {
+				packageContainer.classList.remove("noTransition");
+				requestAnimationFrame(() => {
+					checkbox.checked = false;
+				});
+			});
+		});
+	});
 
 	var formData = new FormData();
 
