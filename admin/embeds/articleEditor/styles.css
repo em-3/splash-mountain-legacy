@@ -215,16 +215,19 @@ section {
   margin: 0;
 }
 
-.editor .actions {
+.editor .actions,
+.statusContainer .actions {
   display: flex;
   justify-content: space-between;
 }
 
-.editor .actions div {
+.editor .actions div,
+.statusContainer .actions div {
   display: flex;
 }
 
-.editor .actions button {
+.editor .actions button,
+.statusContainer .actions button {
   background: var(--content-background-color);
   color: var(--primary-text-color);
   border: none;
@@ -241,22 +244,26 @@ section {
   transition: all 0.2s ease;
 }
 
-.editor .actions button:hover {
+.editor .actions button:hover,
+.statusContainer .actions button:hover {
   background: var(--page-background-color);
   color: var(--primary-text-color);
 }
 
-.editor .actions .danger button {
+.editor .actions .danger button,
+.statusContainer .actions .danger button {
   background: var(--destructive-color);
   color: white;
 }
 
-.editor .actions .danger button:hover {
+.editor .actions .danger button:hover,
+.statusContainer .actions .danger button:hover {
   background: var(--content-background-color);
   color: var(--primary-text-color);
 }
 
-.editor .actions button .icon {
+.editor .actions button .icon,
+.statusContainer .actions button .icon {
   width: 22px;
   height: 22px;
   display: flex;
@@ -264,7 +271,8 @@ section {
   align-items: center;
 }
 
-.editor .actions button span {
+.editor .actions button span,
+.statusContainer .actions button span {
   margin-left: 2pt;
 }
 
@@ -275,6 +283,51 @@ section {
   align-items: center;
 }
 
-.indeterminate .loadingAnimationEllipses {
-  transform: scale(0.7);
+.progressContainer {
+  height: calc(100% - 55pt);
+}
+
+.package_animation {
+  height: 70%;
+}
+
+.statusContainer {
+  height: 30%;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.statusContainer h1,
+.statusContainer h3,
+.statusContainer p {
+  margin: 0;
+}
+
+.statusContainer h1 {
+  font-size: 30pt;
+}
+
+.statusContainer h3 {
+  font-size: 15pt;
+}
+
+.statusContainer p {
+  margin: 5pt 0;
+}
+
+.statusContainer .actions {
+  position: absolute;
+  bottom: 20pt;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.statusContainer .actions.hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  display: flex !important;
 }

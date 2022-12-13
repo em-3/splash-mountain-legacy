@@ -693,18 +693,24 @@ function showArticleDetails(articleDetails) {
 	});
 }
 
+function updateProgressStatus(title, subtitle, message, actions) {
+	if (typeof title === "string") { document.querySelector(".statusContainer .title").textContent = title; }
+	if (typeof subtitle === "string") { document.querySelector(".statusContainer .subtitle").textContent = subtitle; }
+	if (typeof message === "string") { document.querySelector(".statusContainer .message").textContent = message; }
+	if (typeof actions === "string") { document.querySelector(".statusContainer .actions." + actions).classList.remove("hidden"); }
+}
+
 async function uploadArticle() {
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Uploading",
+		"We're uploading your article.",
+		"Generating article ID..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
 	requestAnimationFrame(() => {
 		document.querySelector("#package").checked = true;
 	});
-
-	//Start a timer
-	var timerExpired = false;
-	setTimeout(() => {
-		timerExpired = true;
-	}, 7000);
 
 	//Contact bootstrap endpoint to get article ID
 	var articleID = null;
@@ -713,6 +719,12 @@ async function uploadArticle() {
 		.then((data) => {
 			articleID = data.id;
 		});
+
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Compiling article properties..."
+	)
 
 	var formData = new FormData();
 
@@ -738,12 +750,24 @@ async function uploadArticle() {
 		}
 	}
 
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Compiling article content..."
+	)
+
 	var content = [];
 	for (var i = 0; i < contentFields.length; i++) {
 		var currentField = contentFields[i];
 
 		//If the item is an image, upload it first.
 		if (currentField.type === "image") {
+			updateProgressStatus(
+				undefined,
+				undefined,
+				"Uploading image..."
+			)
+
 			var value = currentField.getValue();
 			var image = value.file;
 
@@ -771,6 +795,12 @@ async function uploadArticle() {
 					caption: value.caption,
 				},
 			});
+
+			updateProgressStatus(
+				undefined,
+				undefined,
+				"Compiling article content..."
+			)
 		} else {
 			content.push({
 				type: currentField.type,
@@ -778,53 +808,48 @@ async function uploadArticle() {
 			});
 		}
 	}
-	formData.append("content", JSON.stringify(content));
 
+	formData.append("content", JSON.stringify(content));
 	formData.append("id", articleID);
+
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Uploading article..."
+	)
+
 	fetch("/admin/news/create.php", {
 		method: "POST",
 		body: formData,
 	})
 		.then((response) => response.json())
 		.then((result) => {
-			setInterval(() => {
-				if (timerExpired) {
-					if (result.status === "success") {
-						document.querySelector(
-							".responseContainer .title"
-						).textContent = "Done.";
-						document.querySelector(
-							".responseContainer .subtitle"
-						).textContent = "Your article has been uploaded.";
-						document.querySelector(
-							".responseContainer .message"
-						).textContent = "Item ID: " + result.id;
-						unsavedChanges = false;
-					} else {
-						document.querySelector(
-							".responseContainer .title"
-						).textContent = "Congratulations, you broke something.";
-						document.querySelector(
-							".responseContainer .subtitle"
-						).textContent = "Good going.";
-						document.querySelector(
-							".responseContainer .message"
-						).textContent = result.error;
-					}
-
-					document
-						.querySelector(".progressContainer")
-						.classList.add("hidden");
-					document
-						.querySelector(".responseContainer")
-						.classList.remove("hidden");
-				}
-			}, 500);
+			if (result.status === "success") {
+				updateProgressStatus(
+					"Uploaded",
+					"The article has been uploaded successfully.",
+					"Article ID: " + result.id,
+					"success"
+				)
+				unsavedChanges = false;
+			} else {
+				updateProgressStatus(
+					"Upload Failed",
+					"Something went wrong while uploading your article.",
+					result.error,
+					"uploadFailure"
+				)
+			}
 		});
 }
 
 async function updateArticle() {
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Updating",
+		"We're uploading your changes.",
+		"Compiling article properties..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
 	requestAnimationFrame(() => {
 		document.querySelector("#package").checked = true;
@@ -858,6 +883,12 @@ async function updateArticle() {
 
 	var content = [];
 
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Compiling article content..."
+	)
+
 	//Collect all the previously uploaded image IDs
 	var imageIDs = [];
 	var uneditedContentFields = JSON.parse(uneditedArticleContent.content);
@@ -868,7 +899,6 @@ async function updateArticle() {
 			imageIDs.push(imageID);
 		}
 	}
-	console.log(imageIDs);
 
 	for (var i = 0; i < contentFields.length; i++) {
 		var currentField = contentFields[i];
@@ -891,6 +921,12 @@ async function updateArticle() {
 			}
 
 			if (!matched) {
+				updateProgressStatus(
+					undefined,
+					undefined,
+					"Uploading image..."
+				)
+
 				//Upload the image file
 				var imageID = null;
 				var imageFormData = new FormData();
@@ -912,6 +948,12 @@ async function updateArticle() {
 					type: "image",
 					content: imageID,
 				});
+
+				updateProgressStatus(
+					undefined,
+					undefined,
+					"Compiling article content..."
+				)
 			}
 		} else {
 			content.push({
@@ -922,6 +964,12 @@ async function updateArticle() {
 	}
 	formData.append("content", JSON.stringify(content));
 
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Uploading article changes..."
+	)
+
 	var response = await fetch("/admin/news/modify.php", {
 		method: "POST",
 		body: formData,
@@ -929,24 +977,21 @@ async function updateArticle() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent =
-			"Done.";
-		document.querySelector(".responseContainer .subtitle").textContent =
-			"The article has been updated.";
-		document.querySelector(".responseContainer .message").textContent =
-			"Item ID: " + result.id;
+		updateProgressStatus(
+			"Updated",
+			"The article has been updated successfully.",
+			"Article ID: " + result.id,
+			"success"
+		)
 		unsavedChanges = false;
 	} else {
-		document.querySelector(".responseContainer .title").textContent =
-			"Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent =
-			"Good going.";
-		document.querySelector(".responseContainer .message").textContent =
-			result.error;
+		updateProgressStatus(
+			"Update Failed",
+			"Something went wrong while uploading your changes.",
+			result.error,
+			"updateFailure"
+		)
 	}
-
-	document.querySelector(".progressContainer").classList.add("hidden");
-	document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 async function deleteArticle() {
@@ -968,6 +1013,11 @@ async function deleteArticle() {
 	}
 
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Deleting",
+		"We're deleting your article.",
+		"Requesting article deletion..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
 
 	var formData = new FormData();
@@ -981,22 +1031,20 @@ async function deleteArticle() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent =
-			"Done.";
-		document.querySelector(".responseContainer .subtitle").textContent =
-			"The article has been deleted.";
-		document.querySelector(".responseContainer .message").textContent = "";
+		updateProgressStatus(
+			"Deleted",
+			"The article has been successfully deleted.",
+			"",
+			"success"
+		)
 	} else {
-		document.querySelector(".responseContainer .title").textContent =
-			"Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent =
-			"Good going.";
-		document.querySelector(".responseContainer .message").textContent =
-			result.error;
+		updateProgressStatus(
+			"Deletion Failed",
+			"Something went wrong while trying to delete the article.",
+			result.error,
+			"deleteFailure"
+		)
 	}
-
-	document.querySelector(".progressContainer").classList.add("hidden");
-	document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 function showErrorScreen() {
