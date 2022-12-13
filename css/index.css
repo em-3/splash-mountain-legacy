@@ -218,6 +218,7 @@ section.featured .error p {
 section.featured .content {
   white-space: nowrap;
   overflow-x: scroll;
+  align-items: stretch;
 }
 
 section.featured .content .item:first-child {
@@ -236,9 +237,7 @@ section.featured .content .item {
 }
 
 section.featured.news .content .item {
-  width: auto;
-  min-width: 400pt;
-  height: auto;
+  width: 500pt;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -262,7 +261,7 @@ section.featured.news .content .item .info {
 }
 
 section.featured.news .content .item .info .publicationDate {
-  margin: 0 0 2.5pt 0;
+  margin: 2pt 0 2.5pt 0;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 9pt;
