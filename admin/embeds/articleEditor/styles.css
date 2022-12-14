@@ -65,11 +65,8 @@ section {
 }
 
 .properties select {
-  background: var(--content-background-color);
   appearance: none;
   font: inherit;
-  padding: 5pt;
-  border-radius: 5pt;
   cursor: pointer;
 }
 
@@ -107,7 +104,7 @@ section {
 
 .properties>*:not(.selectContainer):hover,
 .properties>*:not(.selectContainer):focus,
-.properties select:hover,
+.properties select,
 .fields :not(.container):hover,
 .fields :not(.container):focus {
   background: var(--content-background-color) !important;

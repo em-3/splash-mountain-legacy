@@ -37,13 +37,13 @@
     --packaged: 1;
 }
 
-.scene {
+.package_animation .scene {
     transform: rotateX(calc(var(--rotate-x, -24) * 1deg)) rotateY(calc(var(--rotate-y, -32) * 1deg)) rotateX(90deg) translate3d(0, 0, calc(var(--height, 20) * -0.5vmin));
 }
 
-.scene *,
-.scene *:after,
-.scene *:before {
+.package_animation .scene *,
+.package_animation .scene *:after,
+.package_animation .scene *:before {
     --step-delay: calc(var(--step, 1) - ((1 - var(--packaged, 0)) * (var(--step) - ((var(--no-of-steps) + 1) - var(--step)))));
     transition: transform calc(var(--speed, 0.2) * 1s) calc((var(--step-delay) * var(--delay, 0.2)) * 1s) ease-in-out, opacity calc(var(--speed, 0.2) * 1s) calc((var(--step-delay) * var(--delay, 0.2)) * 1s) ease-in-out;
 }
