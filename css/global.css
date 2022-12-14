@@ -40,6 +40,14 @@
   margin-left: -8px;
 }
 
+.gg-bulb {
+  margin-top: -5pt;
+}
+
+.gg-pin {
+  margin-top: -5pt;
+}
+
 .hidden {
   display: none !important;
 }

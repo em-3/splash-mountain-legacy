@@ -6,28 +6,73 @@ main {
   margin-top: var(--header-height);
 }
 
+/* Mobile Close Button */
 .closeButton {
   position: fixed;
-  top: 15pt;
-  left: 15pt;
+  left: 50%;
+  bottom: 20pt;
+  transform: translate(-50%, 0);
   background: var(--page-background-color);
   box-shadow: 0 0 5pt var(--shadow-color);
-  border-radius: 50%;
-  width: 22.5pt;
-  height: 22.5pt;
+  border-radius: 15pt;
+  width: auto;
+  height: 30pt;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 1;
-  transition: opacity 0.2s ease;
+  padding: 5pt 10pt;
+  z-index: 5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .closeButton.hidden {
   display: flex !important;
+  pointer-events: none;
+  cursor: default;
+  opacity: 0;
+  transform: translate(-50%, 100%);
+}
+
+.closeButton p {
+  display: block;
+  margin: 0 0 0 2pt;
+}
+
+.itemInfoContainer {
+  padding-bottom: 70pt !important;
+}
+
+/* Narrow Desktop Close Button */
+.hasCursor .closeButton {
+  top: 15pt;
+  left: 15pt;
+  bottom: auto;
+  transform: none;
+  border-radius: 50%;
+  width: 22.5pt;
+  height: 22.5pt;
+  padding: 0;
+  z-index: 1;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.hasCursor .closeButton:hover {
+  background: var(--content-background-color);
+}
+
+.hasCursor .closeButton.hidden {
   opacity: 0;
   pointer-events: none;
   cursor: default;
+}
+
+.hasCursor .closeButton p {
+  display: none;
+}
+
+.hasCursor .itemInfoContainer {
+  padding-bottom: 0 !important;
 }
 
 .contentContainer {
@@ -250,21 +295,37 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin: 5pt 0 10pt 0;
 }
 
-.itemInfoContainer p.property {
-  margin: 0 0 5pt 0;
-  font-weight: bold;
+.itemInfoContainer .propertiesContainer {
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-.itemInfoContainer p.property span.button {
+.propertiesContainer div.property {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5pt;
+  margin: 0 0 10pt 0;
+}
+
+.propertiesContainer div.property .iconContainer {
+  width: 20pt;
+  height: 20pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.propertiesContainer div.property p {
+  margin: 0;
+}
+
+.propertiesContainer div.property p.button {
   background: var(--secondary-content-background-color);
   color: var(--primary-text-color);
-  padding: 1pt 2pt;
+  padding: 2pt 5pt;
   border-radius: 5pt;
   cursor: pointer;
-}
-
-.itemInfoContainer p span {
-  font-weight: normal;
 }
 
 .itemInfoContainer .tags {
@@ -338,19 +399,29 @@ input[type="range"]::-webkit-slider-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5pt;
 }
 
-.itemInfoContainer .metadata .content p {
+.itemInfoContainer .metadata .content div {
   border: 2pt solid var(--secondary-content-background-color);
   padding: 5pt;
   border-radius: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.itemInfoContainer .metadata .content p {
+  margin-left: 5pt;
 }
 
 .buttonContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15pt;
+  gap: 10pt;
 }
 
 .buttonContainer button {
@@ -378,22 +449,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin-left: 5pt;
 }
 
-.closeMessage {
-  position: absolute;
-  bottom: 10pt;
-  bottom: calc(env(safe-area-inset-bottom) + 15pt);
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--secondary-text-color);
-  transition: opacity 0.2s ease;
-}
-
-.closeButton:not(.hidden)~.closeMessage {
-  opacity: 0;
-  pointer-events: none;
-  cursor: default;
-}
-
 @media only screen and (min-width: 900px) {
   main {
     display: grid;
@@ -413,10 +468,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     height: 100%;
   }
 
-  .closeMessage {
-    opacity: 0;
-    pointer-events: none;
-    cursor: default;
+  .itemInfoContainer .propertiesContainer {
+    grid-template-columns: 1fr 1fr;
   }
 }
 

@@ -45,23 +45,27 @@ function showItemDetails() {
 	var itemDetails = loadedItemDetails;
 	var metadata = JSON.parse(loadedItemDetails.metadata);
 
-	function createDetailProperty(label, value, action) {
-		var element = document.createElement("p");
-		element.classList.add("property");
-		element.textContent = label + ": ";
-		var span = document.createElement("span");
-		span.textContent = value;
+	function createDetailProperty(icon, value, action) {
+		var containerElement = document.createElement("div");
+		containerElement.classList.add("property");
+
+		var iconContainer = document.createElement("div");
+		iconContainer.classList.add("iconContainer");
+
+		var iconElement = document.createElement("i");
+		iconElement.classList.add("gg-" + icon);
+
+		var valueElement = document.createElement("p");
+		valueElement.textContent = value;
 		if (action) {
-			span.classList.add("button");
-			span.onclick = action;
+			valueElement.classList.add("button");
+			valueElement.onclick = action;
 		}
-		element.appendChild(span);
-		document
-			.querySelector(".itemInfoContainer")
-			.insertBefore(
-				element,
-				document.querySelector(".itemInfoContainer .tags")
-			);
+
+		iconContainer.appendChild(iconElement);
+		containerElement.appendChild(iconContainer);
+		containerElement.appendChild(valueElement);
+		document.querySelector(".propertiesContainer").appendChild(containerElement);
 	}
 
 	//Show the item details
@@ -76,8 +80,25 @@ function showItemDetails() {
 			.querySelector(".itemInfoContainer")
 			.insertBefore(
 				descriptionElement,
-				document.querySelector(".itemInfoContainer .tags")
+				document.querySelector(".itemInfoContainer .propertiesContainer")
 			);
+	}
+	switch (itemDetails.type) {
+		case "image":
+			createDetailProperty("image", "Image");
+			break;
+		case "video":
+			createDetailProperty("film", "Video");
+			break;
+		case "audio":
+			createDetailProperty("headset", "Audio");
+			break;
+		case "text":
+			createDetailProperty("file-document", "Text");
+			break;
+		case "date":
+			createDetailProperty("calendar-dates", "Date");
+			break;
 	}
 	if (itemDetails.author) {
 		if (itemDetails.author.match(/\[([^\][]+)]/g)) {
@@ -89,7 +110,7 @@ function showItemDetails() {
 						itemDetails.author.match(/\[([^\][]+)]/g)[0].length - 1
 					)
 			createDetailProperty(
-				"Author",
+				"user",
 				author,
 				function (e) {
 					contextMenu.present({
@@ -122,52 +143,56 @@ function showItemDetails() {
 				}
 			);
 		} else {
-			createDetailProperty("Author", itemDetails.author);
+			createDetailProperty("user", itemDetails.author);
 		}
 	}
 	if (itemDetails.timestamp && itemDetails.type !== "date") {
 		var dateObject = new Date(itemDetails.timestamp.replace(" ", "T"));
 
-		var timestampValue = "";
+		var dateValue;
 		switch (metadata.precision) {
 			case "year":
-				timestampValue = dateObject.toLocaleDateString("en-US", {
+				dateValue = dateObject.toLocaleDateString("en-US", {
 					year: "numeric",
 				});
 				break;
 			case "month":
-				timestampValue = dateObject.toLocaleDateString("en-US", {
+				dateValue = dateObject.toLocaleDateString("en-US", {
 					year: "numeric",
 					month: "long",
 				});
 				break;
 			case "day":
-				timestampValue = dateObject.toLocaleDateString("en-US", {
+			case "hour":
+			case "minute":
+				dateValue = dateObject.toLocaleDateString("en-US", {
 					year: "numeric",
 					month: "long",
 					day: "numeric",
 				});
 				break;
+		}
+
+		var timeValue;
+		switch (metadata.precision) {
 			case "hour":
-				timestampValue = dateObject.toLocaleTimeString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
+				timeValue = dateObject.toLocaleTimeString("en-US", {
 					hour: "numeric",
 				});
 				break;
 			case "minute":
-				timestampValue = dateObject.toLocaleTimeString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
+				timeValue = dateObject.toLocaleTimeString("en-US", {
 					hour: "numeric",
 					minute: "numeric",
 				});
 				break;
 		}
 
-		createDetailProperty("Timestamp", timestampValue);
+
+		createDetailProperty("calendar-today", dateValue);
+		if (timeValue) {
+			createDetailProperty("time", timeValue);
+		}
 	}
 	if (itemDetails.tags) {
 		var tags = itemDetails.tags.split(",");
@@ -210,22 +235,37 @@ function showItemDetails() {
 			versionElement.classList.remove("hidden");
 		}
 
-		function createContentPropertyElement(value) {
-			var element = document.createElement("p");
-			element.textContent = value;
-			document.querySelector(".metadata .content").appendChild(element);
+		function createContentPropertyElement(icon, name, value) {
+			var containerElement = document.createElement("div");
+			var iconElement = document.createElement("i");
+			var valueElement = document.createElement("p");
+
+			containerElement.title = name;
+			iconElement.classList.add("gg-" + icon);
+			valueElement.textContent = value;
+
+			containerElement.appendChild(iconElement);
+			containerElement.appendChild(valueElement);
+			document.querySelector(".metadata .content").appendChild(containerElement);
 		}
 		if (metadata.focalLength) {
-			createContentPropertyElement(metadata.focalLength + "mm");
+			createContentPropertyElement("edit-black-point", "Focal Length", metadata.focalLength + "mm");
 		}
 		if (metadata.fNumber) {
-			createContentPropertyElement("ƒ" + metadata.fNumber);
+			createContentPropertyElement("edit-exposure", "F-Number", "ƒ" + metadata.fNumber);
 		}
 		if (metadata.exposureTime) {
-			createContentPropertyElement(metadata.exposureTime);
+			createContentPropertyElement("timelapse", "Exposure Time", metadata.exposureTime);
 		}
 		if (metadata.colorSpace) {
-			createContentPropertyElement(metadata.colorSpace);
+			createContentPropertyElement("color-picker", "Color Space", metadata.colorSpace);
+		}
+		if (metadata.flash) {
+			if (metadata.flash.indexOf("did fire") !== -1) {
+				createContentPropertyElement("bulb", "Flash", "Flash");
+			} else {
+				createContentPropertyElement("bulb", "Flash", "No Flash");
+			}
 		}
 
 		document.querySelector(".metadata").classList.remove("hidden");
@@ -642,15 +682,18 @@ function checkAutohide() {
 
 var closeButton = document.querySelector(".closeButton");
 var mousemoveTimeout = null;
+var closeButtonTransitioning = false;
 
 function mousemove() {
 	if (mousemoveTimeout) {
 		clearTimeout(mousemoveTimeout);
 	}
-	closeButton.classList.remove("hidden");
-	mousemoveTimeout = setTimeout(function () {
-		document.querySelector(".closeButton").classList.add("hidden");
-	}, 2000);
+	if (!closeButtonTransitioning) {
+		closeButton.classList.remove("hidden");
+		mousemoveTimeout = setTimeout(function () {
+			document.querySelector(".closeButton").classList.add("hidden");
+		}, 2000);
+	}
 }
 
 function autohideCloseButton(enable) {
@@ -668,6 +711,24 @@ function autohideCloseButton(enable) {
 		}
 	}
 }
+
+// If a cursor is detected, switch to the desktop close button
+function addHasCursorClass() {
+	document.body.removeEventListener("mousemove", addHasCursorClass);
+	closeButtonTransitioning = true;
+	hasCursor = true;
+
+	var closeButton = document.querySelector(".closeButton");
+	closeButton.classList.add("hidden");
+	setTimeout(function () {
+		document.querySelector("body").classList.add("hasCursor");
+		requestAnimationFrame(function () {
+			closeButton.classList.remove("hidden");
+			closeButtonTransitioning = false;
+		});
+	}, 200);
+}
+document.body.addEventListener("mousemove", addHasCursorClass);
 
 function closeItemViewer() {
 	if (audioPlayer.player) {

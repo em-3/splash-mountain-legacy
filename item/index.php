@@ -38,7 +38,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
 </head>
 
-<body ontouchstart class>
+<body ontouchstart class="mobile">
 
     <?php
     // If the embedded parameter isn't set, include the global header
@@ -50,6 +50,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <main>
         <div class="closeButton" onclick="closeItemViewer()">
             <i class="gg-close"></i>
+            <p>Close</p>
         </div>
         <div class="contentContainer">
             <div class="loadingScreen">
@@ -79,6 +80,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                 <h2 class="park"></h2>
             </div>
             <h1 class="name"></h1>
+            <div class="propertiesContainer"></div>
             <div class="tags hidden">
                 <p class="label">Tags:</p>
             </div>
@@ -108,8 +110,6 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                 </button>
             </div>
         </div>
-
-        <p class="closeMessage">Tap anywhere to show close button.</p>
     </main>
 
     <script src="/js/global.js"></script>
