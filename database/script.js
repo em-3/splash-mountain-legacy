@@ -167,7 +167,6 @@ function addFilter(filterObject, selectedOption) {
 			) {
 				filterSelectOption.setAttribute("selected", true);
 				defaultHasBeenSelected = true;
-				defaultHasBeenSelected = true;
 			} else if (defaultHasBeenSelected == false) {
 				filterSelectOption.setAttribute("selected", true);
 				defaultHasBeenSelected = true;
@@ -267,9 +266,11 @@ var databaseBrowser = {
 			var filterID = currentFilter.classList[1];
 
 			var parameterName;
+			var valueCase;
 			for (var j = 0; j < filters.length; j++) {
 				if (filters[j].id === filterID) {
 					parameterName = filters[j].parameterName;
+					valueCase = filters[j].valueCase;
 				}
 			}
 
@@ -284,9 +285,14 @@ var databaseBrowser = {
 			}
 			if (filterValue != "") {
 				if (parameterName) {
-					PHPParams += character + parameterName + "=" + filterValue;
+					PHPParams += character + parameterName + "=";
 				} else {
-					PHPParams += character + filterID + "=" + filterValue;
+					PHPParams += character + filterID + "=";
+				}
+				if (valueCase === "lower") {
+					PHPParams += filterValue.toLowerCase();
+				} else {
+					PHPParams += filterValue;
 				}
 				character = "&";
 			}

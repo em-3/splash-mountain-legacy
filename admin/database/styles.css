@@ -101,6 +101,13 @@ main {
   justify-content: center;
 }
 
+.filterBar .filters .filter .value {
+  font-size: 10pt;
+  font-weight: bold;
+  color: var(--primary-text-color);
+  margin: 0 0 0 5pt;
+}
+
 .filterBar .filters .filter select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -131,7 +138,7 @@ main {
   border-radius: 3pt;
   font-weight: bold;
   height: 15pt;
-  padding: 2pt;
+  padding: 2pt 0;
   margin-left: 5pt;
   cursor: pointer;
   display: flex;

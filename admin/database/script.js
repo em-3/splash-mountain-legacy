@@ -12,6 +12,11 @@ var filters = [
 		max: 1,
 	},
 	{
+		id: "author",
+		label: "Author",
+		hidden: true,
+	},
+	{
 		id: "visibility",
 		label: "Visibility",
 		values: ["Public", "Private"],
@@ -21,7 +26,31 @@ var filters = [
 	{
 		id: "scene",
 		label: "Scene",
-		values: ["In the Park", "Critter Country", "Frontierland", "Briar Patch Store", "Attraction", "Exterior", "Queue", "Loading Zone", "Lift A", "Briar Patch", "Lift B", "HDYD Exterior", "HDYD Interior", "EGALP Pre-Bees", "EGALP Bees", "EGALP LP", "Final Lift", "ZDDD Exterior", "ZDDD Showboat", "ZDDD Homecoming", "ZDDD Unload", "Photos", "Exit"],
+		values: [
+			"In the Park",
+			"Critter Country",
+			"Frontierland",
+			"Briar Patch Store",
+			"Attraction",
+			"Exterior",
+			"Queue",
+			"Loading Zone",
+			"Lift A",
+			"Briar Patch",
+			"Lift B",
+			"HDYD Exterior",
+			"HDYD Interior",
+			"EGALP Pre-Bees",
+			"EGALP Bees",
+			"EGALP LP",
+			"Final Lift",
+			"ZDDD Exterior",
+			"ZDDD Showboat",
+			"ZDDD Homecoming",
+			"ZDDD Unload",
+			"Photos",
+			"Exit",
+		],
 		max: 1,
 	},
 ];
@@ -30,6 +59,10 @@ function createFilterOptions() {
 	//Loop through each filter and create an option element for for it.
 	for (var i = 0; i < filters.length; i++) {
 		var currentFilter = filters[i];
+
+		if (currentFilter.hidden) {
+			continue;
+		}
 
 		var filterElement = document.createElement("div");
 		filterElement.classList.add("filter");
@@ -46,7 +79,9 @@ function createFilterOptions() {
 		filterName.textContent = currentFilter.label;
 
 		filterElement.appendChild(filterName);
-		document.querySelector(".filterSelect .availableFilters").appendChild(filterElement);
+		document
+			.querySelector(".filterSelect .availableFilters")
+			.appendChild(filterElement);
 	}
 }
 
@@ -59,7 +94,9 @@ function showFilterSelect() {
 	document.querySelector(".controls").classList.add("hidden");
 	document.querySelector(".filterSelect").classList.remove("hidden");
 	setTimeout(function () {
-		document.querySelector(".controls").style.setProperty("display", "none", "important");
+		document
+			.querySelector(".controls")
+			.style.setProperty("display", "none", "important");
 	}, 200);
 }
 
@@ -101,20 +138,27 @@ function addFilter(filterObject, selectedOption) {
 	filterName.classList.add("name");
 	filterName.textContent = filterObject.label + ":";
 
-	var filterSelect = document.createElement("select");
-	filterSelect.setAttribute("name", filterObject.id);
-	filterSelect.addEventListener("change", function () {
-		updateDisabledFilters(filterObject.id);
-		databaseBrowser.refreshResults();
-	});
+	if (!filterObject.hidden) {
+		var filterSelect = document.createElement("select");
+		filterSelect.setAttribute("name", filterObject.id);
+		filterSelect.addEventListener("change", function () {
+			updateDisabledFilters(filterObject.id);
+			databaseBrowser.refreshResults();
+		});
 
 	//Get current values of identical filters
 	var currentlyUsedValues = [];
-	var currentlyUsedFilters = document.querySelectorAll(".filterBar .filter." + filterObject.id);
+		var currentlyUsedFilters = document.querySelectorAll(
+			".filterBar .filter." + filterObject.id
+		);
 	for (var i = 0; i < currentlyUsedFilters.length; i++) {
 		var currentlyUsedFilter = currentlyUsedFilters[i];
-		var currentlyUsedFilterSelect = currentlyUsedFilter.querySelector("select");
-		var currentlyUsedFilterValue = currentlyUsedFilterSelect.options[currentlyUsedFilterSelect.selectedIndex].value;
+			var currentlyUsedFilterSelect =
+				currentlyUsedFilter.querySelector("select");
+			var currentlyUsedFilterValue =
+				currentlyUsedFilterSelect.options[
+					currentlyUsedFilterSelect.selectedIndex
+				].value;
 		currentlyUsedValues.push(currentlyUsedFilterValue);
 	}
 
@@ -125,39 +169,61 @@ function addFilter(filterObject, selectedOption) {
 		filterSelectOption.textContent = filterObject.values[j];
 		if (currentlyUsedValues.includes(filterObject.values[j])) {
 			filterSelectOption.disabled = true;
-		} else if (selectedOption && selectedOption === filterObject.values[j] && !currentlyUsedValues.includes(selectedOption)) {
+			} else if (
+				selectedOption &&
+				selectedOption === filterObject.values[j] &&
+				!currentlyUsedValues.includes(selectedOption)
+			) {
 			filterSelectOption.setAttribute("selected", true);
+				defaultHasBeenSelected = true;
 		} else if (defaultHasBeenSelected == false) {
 			filterSelectOption.setAttribute("selected", true);
 			defaultHasBeenSelected = true;
 		}
 		filterSelect.appendChild(filterSelectOption);
 	}
+	} else {
+		var filterValueDisplay = document.createElement("p");
+		filterValueDisplay.classList.add("value");
+		filterValueDisplay.textContent = selectedOption;
+	}
 
 	var removeButton = document.createElement("div");
 	removeButton.classList.add("removeButton");
 	removeButton.innerHTML = "<i class='gg-close'></i>";
 	removeButton.addEventListener("click", function () {
-		document.querySelector(".availableFilters .filter." + filterObject.id).classList.remove("disabled");
+		if (!filterObject.hidden) {
+			document.querySelector(".availableFilters .filter." + filterObject.id)
+				.classList.remove("disabled");
+		}
 		filterElement.parentElement.removeChild(filterElement);
 		databaseBrowser.refreshResults();
 	});
 
 	filterElement.appendChild(filterName);
-	filterElement.appendChild(filterSelect);
+	if (!filterObject.hidden) {
+		filterElement.appendChild(filterSelect)
+	} else {
+		filterElement.appendChild(filterValueDisplay);
+	}
 	filterElement.appendChild(removeButton);
 	document.querySelector(".filterBar .filters").appendChild(filterElement);
 
-	var filterCount = document.querySelectorAll(".filterBar .filter." + filterObject.id).length;
+	var filterCount = document.querySelectorAll(
+		".filterBar .filter." + filterObject.id
+	).length;
 	if (filterObject.max === filterCount) {
-		document.querySelector(".availableFilters .filter." + filterObject.id).classList.add("disabled");
+		document
+			.querySelector(".availableFilters .filter." + filterObject.id)
+			.classList.add("disabled");
 	}
 
-	updateDisabledFilters(filterObject.id);
+	if (!filterObject.hidden) updateDisabledFilters(filterObject.id);
 	databaseBrowser.refreshResults();
 }
 
 var databaseBrowser = {
+	abortController: null,
 	searchRange: {
 		min: 1,
 		max: 21,
@@ -170,9 +236,15 @@ var databaseBrowser = {
 				clearTimeout(this.timeoutID);
 			}
 
-			document.querySelector(".databaseBrowser .loadingContainer").classList.remove("hidden");
-			document.querySelector(".databaseBrowser .resultsContainer").classList.add("hidden");
-			document.querySelector(".databaseBrowser .errorMessageContainer").classList.add("hidden");
+			document
+				.querySelector(".databaseBrowser .loadingContainer")
+				.classList.remove("hidden");
+			document
+				.querySelector(".databaseBrowser .resultsContainer")
+				.classList.add("hidden");
+			document
+				.querySelector(".databaseBrowser .errorMessageContainer")
+				.classList.add("hidden");
 
 			//Wait a second before updating the search results
 			this.timeoutID = setTimeout(databaseBrowser.refreshResults, 1000);
@@ -182,6 +254,10 @@ var databaseBrowser = {
 		},
 	},
 	refreshResults: function (preservePreviousResults) {
+		if (databaseBrowser.abortController) {
+			databaseBrowser.abortController.abort();
+		}
+
 		var PHPParams = "";
 		var character = "?";
 
@@ -191,7 +267,9 @@ var databaseBrowser = {
 			character = "&";
 		}
 
-		var activeFilters = document.querySelectorAll(".filterBar .filters .filter");
+		var activeFilters = document.querySelectorAll(
+			".filterBar .filters .filter"
+		);
 		for (var i = 0; i < activeFilters.length; i++) {
 			var currentFilter = activeFilters[i];
 			var filterID = currentFilter.classList[1];
@@ -205,9 +283,15 @@ var databaseBrowser = {
 				}
 			}
 
-			//Get the selected option for this filter's select element.
-			var filterElement = currentFilter.querySelector("select");
-			var filterValue = filterElement.options[filterElement.selectedIndex].value;
+			//If the filter isn't a hidden filter, get the selected value
+			if (!currentFilter.querySelector(".value")) {
+				//Get the selected option for this filter's select element.
+				var filterElement = currentFilter.querySelector("select");
+				var filterValue =
+					filterElement.options[filterElement.selectedIndex].value;
+			} else {
+				var filterValue = currentFilter.querySelector(".value").textContent;
+			}
 			if (filterValue != "") {
 				if (parameterName) {
 					PHPParams += character + parameterName + "=";
@@ -230,7 +314,8 @@ var databaseBrowser = {
 		}
 
 		var sortByElement = document.querySelector("#sortBy");
-		var sortByValue = sortByElement.options[sortByElement.selectedIndex].value;
+		var sortByValue =
+			sortByElement.options[sortByElement.selectedIndex].value;
 		PHPParams += character + "sort_by=" + sortByValue;
 		character = "&";
 
@@ -240,14 +325,38 @@ var databaseBrowser = {
 		}
 
 		//Fetch new results
-		fetch("/api/search/" + PHPParams + character + "min=" + databaseBrowser.searchRange.min + "&max=" + databaseBrowser.searchRange.max)
+		databaseBrowser.abortController = new AbortController();
+		fetch(
+			"/api/search/" +
+				PHPParams +
+				character +
+				"min=" +
+				databaseBrowser.searchRange.min +
+				"&max=" +
+				databaseBrowser.searchRange.max,
+				 {
+					signal: databaseBrowser.abortController.signal,
+				 }
+		)
 			.then((response) => response.json())
 			.then(
 				(data) => {
 					if (!preservePreviousResults) {
 						//Clear the current results from .resultsContainer
-						while (document.querySelector(".databaseBrowser .resultsContainer").firstChild) {
-							document.querySelector(".databaseBrowser .resultsContainer").removeChild(document.querySelector(".databaseBrowser .resultsContainer").firstChild);
+						while (
+							document.querySelector(
+								".databaseBrowser .resultsContainer"
+							).firstChild
+						) {
+							document
+								.querySelector(
+									".databaseBrowser .resultsContainer"
+								)
+								.removeChild(
+									document.querySelector(
+										".databaseBrowser .resultsContainer"
+									).firstChild
+								);
 						}
 					}
 					if (!preservePreviousResults && data.length === 0) {
@@ -262,12 +371,20 @@ var databaseBrowser = {
 						`;
 						document.querySelector(".databaseBrowser .resultsContainer").appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
-						var loadMoreButton = document.querySelector(".databaseBrowser .loadMoreButton");
-						loadMoreButton.parentElement.removeChild(loadMoreButton);
+						var loadMoreButton = document.querySelector(
+							".databaseBrowser .loadMoreButton"
+						);
+						loadMoreButton.parentElement.removeChild(
+							loadMoreButton
+						);
 					} else {
 						if (preservePreviousResults) {
-							var loadMoreButton = document.querySelector(".databaseBrowser .loadMoreButton");
-							loadMoreButton.parentElement.removeChild(loadMoreButton);
+							var loadMoreButton = document.querySelector(
+								".databaseBrowser .loadMoreButton"
+							);
+							loadMoreButton.parentElement.removeChild(
+								loadMoreButton
+							);
 						}
 
 						for (var i = 0; i < data.length; i++) {
@@ -285,28 +402,43 @@ var databaseBrowser = {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail";
+								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
 							} else if (currentItemData.type === "video") {
 								var pictureElement = null;
 								var imgElement = document.createElement("img");
 								imgElement.className = "image";
-								imgElement.src = "https://img.youtube.com/vi/" + currentItemData.video_id + "/mqdefault.jpg";
+								imgElement.src =
+									"https://img.youtube.com/vi/" +
+									currentItemData.video_id +
+									"/mqdefault.jpg";
 							} else {
-								var pictureElement = document.createElement("picture");
+								var pictureElement =
+									document.createElement("picture");
 								pictureElement.className = "image";
 
-								var sourceElement = document.createElement("source");
-								sourceElement.srcset = "/images/icons/types/" + currentItemData.type + "-white.png";
-								sourceElement.setAttribute("media", "(prefers-color-scheme: dark)");
+								var sourceElement =
+									document.createElement("source");
+								sourceElement.srcset =
+									"/images/icons/types/" +
+									currentItemData.type +
+									"-white.png";
+								sourceElement.setAttribute(
+									"media",
+									"(prefers-color-scheme: dark)"
+								);
 
 								var imgElement = document.createElement("img");
-								imgElement.src = "/images/icons/types/" + currentItemData.type + "-black.png";
+								imgElement.src =
+									"/images/icons/types/" +
+									currentItemData.type +
+									"-black.png";
 
 								pictureElement.appendChild(sourceElement);
 								pictureElement.appendChild(imgElement);
 							}
 
-							var rightSideContainer = document.createElement("div");
+							var rightSideContainer =
+								document.createElement("div");
 							rightSideContainer.className = "right";
 
 							var sceneElement = document.createElement("p");
@@ -317,7 +449,8 @@ var databaseBrowser = {
 							nameElement.className = "name";
 							nameElement.textContent = currentItemData.name;
 
-							var infoContainerElement = document.createElement("div");
+							var infoContainerElement =
+								document.createElement("div");
 							infoContainerElement.className = "infoContainer";
 
 							var parkElement = document.createElement("p");
@@ -333,13 +466,19 @@ var databaseBrowser = {
 							if (currentItemData.author) {
 								var authorElement = document.createElement("p");
 								authorElement.className = "author";
-								authorElement.textContent = currentItemData.author.replace(/\[([^\][]+)]/g, "");
+								authorElement.textContent =
+									currentItemData.author.replace(
+										/\[([^\][]+)]/g,
+										""
+									);
 								infoContainerElement.appendChild(authorElement);
 							}
 
 							rightSideContainer.appendChild(sceneElement);
 							rightSideContainer.appendChild(nameElement);
-							rightSideContainer.appendChild(infoContainerElement);
+							rightSideContainer.appendChild(
+								infoContainerElement
+							);
 
 							if (pictureElement) {
 								resultElement.appendChild(pictureElement);
@@ -347,33 +486,68 @@ var databaseBrowser = {
 								resultElement.appendChild(imgElement);
 							}
 							resultElement.appendChild(rightSideContainer);
-							document.querySelector(".databaseBrowser .resultsContainer").appendChild(resultElement);
+							document
+								.querySelector(
+									".databaseBrowser .resultsContainer"
+								)
+								.appendChild(resultElement);
 						}
 
-						if (data.length === databaseBrowser.searchRange.max - databaseBrowser.searchRange.min) {
-							var loadMoreButton = document.createElement("button");
+						if (
+							data.length ===
+							databaseBrowser.searchRange.max - databaseBrowser.searchRange.min
+						) {
+							var loadMoreButton =
+								document.createElement("button");
 							loadMoreButton.className = "loadMoreButton";
 							loadMoreButton.textContent = "Load More";
-							loadMoreButton.addEventListener("click", function () {
+							loadMoreButton.addEventListener(
+								"click",
+								function () {
 								databaseBrowser.loadMoreResults();
-							});
-							document.querySelector(".databaseBrowser .resultsContainer").appendChild(loadMoreButton);
+								}
+							);
+							document
+								.querySelector(
+									".databaseBrowser .resultsContainer"
+								)
+								.appendChild(loadMoreButton);
 						}
 					}
 
 					//Hide the loading screen and show the results container
-					document.querySelector(".databaseBrowser .loadingContainer").classList.add("hidden");
-					document.querySelector(".databaseBrowser .resultsContainer").classList.remove("hidden");
-					document.querySelector(".databaseBrowser .errorMessageContainer").classList.add("hidden");
+					document
+						.querySelector(".databaseBrowser .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".databaseBrowser .resultsContainer")
+						.classList.remove("hidden");
+					document
+						.querySelector(
+							".databaseBrowser .errorMessageContainer"
+						)
+						.classList.add("hidden");
 				},
 				(error) => {
-					document.querySelector(".databaseBrowser .errorMessageContainer .title").textContent = "Something Went Wrong";
-					document.querySelector(".databaseBrowser .errorMessageContainer .subtitle").textContent = "Failed to load database items.";
+					document.querySelector(
+						".databaseBrowser .errorMessageContainer .title"
+					).textContent = "Something Went Wrong";
+					document.querySelector(
+						".databaseBrowser .errorMessageContainer .subtitle"
+					).textContent = "Failed to load database items.";
 
 					//Hide the loading screen and show the error message container
-					document.querySelector(".databaseBrowser .loadingContainer").classList.add("hidden");
-					document.querySelector(".databaseBrowser .resultsContainer").classList.add("hidden");
-					document.querySelector(".databaseBrowser .errorMessageContainer").classList.remove("hidden");
+					document
+						.querySelector(".databaseBrowser .loadingContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(".databaseBrowser .resultsContainer")
+						.classList.add("hidden");
+					document
+						.querySelector(
+							".databaseBrowser .errorMessageContainer"
+						)
+						.classList.remove("hidden");
 				}
 			);
 	},
@@ -400,3 +574,16 @@ fetch("/api/tags/")
 		filters.push(tagFilterOption);
 		createFilterOptions();
 	});
+
+//Check the URL for a query and/or filters
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has("query")) {
+	document.querySelector(
+		".databaseBrowser .searchField input"
+	).value = urlParams.get("query");
+}
+for (var i = 0; i < filters.length; i++) {
+	if (urlParams.has(filters[i].id)) {
+		addFilter(filters[i], urlParams.get(filters[i].id));
+	}
+}
