@@ -21,7 +21,7 @@ main {
 
 .description {
   margin: 10pt 0 15pt 0;
-  color: black;
+  color: var(--primary-text-color);
 }
 
 .link {

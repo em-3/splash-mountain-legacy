@@ -28,6 +28,10 @@
     --primary-text-color: #ffffff;
     --secondary-text-color: #aaaaaa;
     --shadow-color: #000000;
+    --main-gradient: linear-gradient(to bottom right,
+        var(--color-2) 0%,
+        rgb(85, 144, 165) 50%,
+        var(--color-3) 100%);
   }
 }
 

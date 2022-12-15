@@ -57,6 +57,12 @@ section.hero {
   min-height: 200pt;
 }
 
+@media (prefers-color-scheme: dark) {
+  section.hero {
+    color: black;
+  }
+}
+
 section.hero .textContainer {
   max-width: 700pt;
   margin: auto;
@@ -70,7 +76,7 @@ section.creators {
   padding: 20pt 0 20pt 0;
 }
 
-section.creators > h2 {
+section.creators>h2 {
   margin-left: 20pt;
 }
 
