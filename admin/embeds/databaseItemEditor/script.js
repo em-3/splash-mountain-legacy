@@ -497,6 +497,74 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Visibility
+	properties.push({
+		name: "Visibility",
+		propertyName: "hidden",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("selectContainer");
+			container.classList.add("visibility");
+			
+			var select = document.createElement("select");
+			select.name = "visibility";
+			select.id = "visibility";
+
+			var public = document.createElement("option");
+			public.textContent = "Public";
+			public.value = "public";
+			select.appendChild(public);
+
+			var unlisted = document.createElement("option");
+			unlisted.textContent = "Unlisted";
+			unlisted.value = "unlisted";
+			select.appendChild(unlisted);
+
+
+			if (mode === "editor") {
+				switch (itemDetails.hidden) {
+					case 0:
+						select.value = "public";
+						break;
+					case 1:
+						select.value = "unlisted";
+						break;
+				}
+			}
+
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+
+			container.appendChild(select);
+			container.appendChild(icon);
+			return container;
+		},
+		valueGetter: function () {
+			var value = document.querySelector("#visibility").value;
+			if (value) {
+				switch (value) {
+					case "public":
+						return {
+							include: false,
+							fail: false,
+						};
+						break;
+					case "unlisted":
+						return {
+							include: true,
+							value: 1,
+						};
+						break;
+				}
+			} else {
+				return {
+					include: false,
+					fail: true,
+				};
+			}
+		},
+	});
 	//Tags
 	properties.push({
 		name: "Tags",

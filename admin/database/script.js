@@ -397,6 +397,9 @@ var databaseBrowser = {
 									showItemDetails(id);
 								};
 							})(currentItemData.id);
+							if (currentItemData.hidden === "1") {
+								resultElement.classList.add("unlisted");
+							}
 
 							if (currentItemData.type === "image") {
 								var pictureElement = null;

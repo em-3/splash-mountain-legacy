@@ -151,6 +151,10 @@ body {
   cursor: pointer;
 }
 
+.listItem.unlisted {
+  background: var(--page-background-color);
+}
+
 .listItem img {
   width: 50pt;
   margin: 10pt 10pt 10pt 5pt;
