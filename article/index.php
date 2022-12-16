@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../scripts/init.php";
+require_once __DIR__ . "/../scripts/global.php";
 require_once __DIR__ . "/../scripts/viewer_meta.php";
 
 ?>

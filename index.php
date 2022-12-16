@@ -1,3 +1,8 @@
+<?php
+
+require_once __DIR__ . "/scripts/global.php";
+
+?>
 <!DOCTYPE HTML>
 <html>
 
