@@ -143,7 +143,32 @@ function showItemDetails() {
 				}
 			);
 		} else {
-			createDetailProperty("user", itemDetails.author);
+			createDetailProperty(
+				"user",
+				itemDetails.author,
+				function (e) {
+					contextMenu.present({
+						x: e.clientX,
+						y: e.clientY,
+						items: [
+							{
+								icon: "profile",
+								label: "See All Items",
+								callback: function () {
+									if (embedded) {
+										window.top.postMessage(
+											"navigateTo/database/?author=" + itemDetails.author,
+											"*"
+										);
+									} else {
+										window.location.href = "/database/?author=" + itemDetails.author;
+									}
+								}
+							}
+						]
+					});
+				}
+			);
 		}
 	}
 	if (itemDetails.timestamp && itemDetails.type !== "date") {
