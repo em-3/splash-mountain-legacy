@@ -99,7 +99,7 @@ var contentFieldConstructors = {
 
 		var thumbnail = document.createElement("img");
 		thumbnail.classList.add("thumbnail");
-		thumbnail.src = "/resources/" + content + "/thumbnail.jpg";
+		thumbnail.src = "/resources/" + content.image + "/thumbnail.jpg";
 		container.appendChild(thumbnail);
 
 		var image = document.createElement("img");
@@ -111,7 +111,7 @@ var contentFieldConstructors = {
 				image.classList.remove("hidden");
 			};
 		})(thumbnail, image);
-		image.src = "/resources/" + content + "/main.jpg";
+		image.src = "/resources/" + content.image + "/main.jpg";
 		container.appendChild(image);
 
 		return container;
