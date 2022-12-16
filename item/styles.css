@@ -1,35 +1,85 @@
 main {
+  --header-height: 0pt;
+
   width: 100%;
   height: 100%;
+  margin-top: var(--header-height);
 }
 
-header {
-  width: 100%;
-  height: 40pt;
+/* Mobile Close Button */
+.closeButton {
+  position: fixed;
+  left: 50%;
+  bottom: 20pt;
+  transform: translate(-50%, 0);
+  background: var(--page-background-color);
+  box-shadow: 0 0 5pt var(--shadow-color);
+  border-radius: 15pt;
+  width: auto;
+  height: 30pt;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 20pt;
-  background: var(--content-background-color);
-  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-header picture {
-  display: flex;
   cursor: pointer;
+  padding: 5pt 10pt;
+  z-index: 5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-header.hidden {
+.closeButton.hidden {
   display: flex !important;
-  transform: translateY(100%);
+  pointer-events: none;
+  cursor: default;
   opacity: 0;
+  transform: translate(-50%, 100%);
+}
+
+.closeButton p {
+  display: block;
+  margin: 0 0 0 2pt;
+}
+
+.itemInfoContainer {
+  padding-bottom: 70pt !important;
+}
+
+/* Narrow Desktop Close Button */
+.hasCursor .closeButton {
+  top: 15pt;
+  left: 15pt;
+  bottom: auto;
+  transform: none;
+  border-radius: 50%;
+  width: 22.5pt;
+  height: 22.5pt;
+  padding: 0;
+  z-index: 1;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.hasCursor .closeButton:hover {
+  background: var(--content-background-color);
+}
+
+.hasCursor .closeButton.hidden {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+.hasCursor .closeButton p {
+  display: none;
+}
+
+.hasCursor .itemInfoContainer {
+  padding-bottom: 0 !important;
 }
 
 .contentContainer {
   width: 100%;
 }
 
-.contentContainer > * {
+.contentContainer>* {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -37,11 +87,11 @@ header.hidden {
 }
 
 .loadingScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorScreen {
-  height: calc(100vh - 40pt);
+  height: calc(100vh - var(--header-height));
 }
 
 .errorMessageContainer {
@@ -61,7 +111,7 @@ header.hidden {
 .contentContainer .contentDisplay {
   width: 100%;
   height: auto;
-  max-height: calc(100vh - 40pt);
+  max-height: calc(100vh - var(--header-height));
   background: var(--content-background-color);
   overflow: hidden;
   transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -73,17 +123,18 @@ header.hidden {
   transform: translateY(100pt);
 }
 
+.contentContainer .contentDisplay h1,
 .contentContainer .contentDisplay h2 {
   padding: 0 20pt;
 }
 
-.contentContainer .contentDisplay > img {
+.contentContainer .contentDisplay>img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer {
+.contentDisplay .thumbnail~.loadingContainer {
   position: absolute;
   bottom: 10pt;
   left: 50%;
@@ -99,18 +150,18 @@ header.hidden {
   cursor: none;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer:hover {
+.contentDisplay .thumbnail~.loadingContainer:hover {
   opacity: 0;
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer .loadingAnimationContainer {
+.contentDisplay .thumbnail~.loadingContainer .loadingAnimationContainer {
   position: absolute;
   left: -5pt;
   top: calc(50% + 1pt);
   transform: translate(0, -50%) scale(0.5);
 }
 
-.contentDisplay .thumbnail ~ .loadingContainer p {
+.contentDisplay .thumbnail~.loadingContainer p {
   margin: 0 0 0 35pt;
 }
 
@@ -244,18 +295,66 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin: 5pt 0 10pt 0;
 }
 
-.itemInfoContainer p.property {
-  margin: 0 0 5pt 0;
+.itemInfoContainer .propertiesContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.propertiesContainer div.property {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5pt;
+  margin: 0 0 10pt 0;
+}
+
+.propertiesContainer div.property .iconContainer {
+  width: 20pt;
+  height: 20pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.propertiesContainer div.property p {
+  margin: 0;
+}
+
+.propertiesContainer div.property p.button {
+  background: var(--secondary-content-background-color);
+  color: var(--primary-text-color);
+  padding: 2pt 5pt;
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.itemInfoContainer .tags {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5pt;
+  background: var(--content-background-color);
+  border-radius: 5pt;
+  padding: 5pt;
+  margin: 10pt 0 10pt 0;
+}
+
+.itemInfoContainer .tags .label {
+  margin: 0;
   font-weight: bold;
 }
 
-.itemInfoContainer p.property a {
+.itemInfoContainer .tags .tag {
+  margin: 0;
+  padding: 2pt 5pt;
+  border-radius: 2.5pt;
+  background: var(--page-background-color);
   color: var(--primary-text-color);
-  text-decoration: underline;
+  cursor: pointer;
 }
 
-.itemInfoContainer p span {
-  font-weight: normal;
+.itemInfoContainer .tags .tag:hover {
+  text-decoration: underline;
 }
 
 .itemInfoContainer .metadata {
@@ -300,19 +399,29 @@ input[type="range"]::-webkit-slider-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5pt;
 }
 
-.itemInfoContainer .metadata .content p {
+.itemInfoContainer .metadata .content div {
   border: 2pt solid var(--secondary-content-background-color);
   padding: 5pt;
   border-radius: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.itemInfoContainer .metadata .content p {
+  margin-left: 5pt;
 }
 
 .buttonContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15pt;
+  gap: 10pt;
 }
 
 .buttonContainer button {
@@ -327,6 +436,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 10pt 0;
   cursor: pointer;
   margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
   transition: 0.1s ease background;
 }
 
@@ -334,27 +445,43 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--page-background-color);
 }
 
+.buttonContainer button span {
+  margin-left: 5pt;
+}
+
 @media only screen and (min-width: 900px) {
   main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 40pt calc(100vh - 40pt);
+    grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
   }
 
   main header {
     grid-column: 1 / 3;
   }
 
+  .contentContainer {
+    height: calc(100vh - var(--header-height));
+  }
+
   .contentContainer .contentDisplay {
     height: 100%;
   }
+
+  .itemInfoContainer .propertiesContainer {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 560px) {
   .buttonContainer {
-    height: 45pt;
+    flex-direction: column;
+    gap: 5pt;
+    margin-top: 10pt;
   }
+
   .buttonContainer button {
-    height: 100%;
+    width: 100%;
+    margin: 0;
   }
 }

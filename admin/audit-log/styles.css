@@ -1,0 +1,114 @@
+main section.auditLog {
+  min-height: calc(100vh - 55pt);
+}
+
+main {
+  overflow: auto;
+}
+
+.auditLog .loadingContainer,
+.auditLog .resultsContainer,
+.auditLog .errorMessageContainer {
+  min-height: calc(100vh - 55pt);
+}
+
+.auditLog .loadingContainer,
+.auditLog .errorMessageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auditLog .errorMessageContainer {
+  flex-direction: column;
+}
+
+.auditLog .errorMessageContainer .title {
+  margin: 0 0 10pt 0;
+}
+
+.auditLog .errorMessageContainer .subtitle {
+  margin: 0;
+}
+
+.auditLog .resultsContainer {
+  max-width: 700pt;
+  margin: auto;
+  padding: 0 10pt 10pt 10pt;
+  display: grid;
+  gap: 5pt;
+  grid-template-columns: min-content min-content auto auto auto auto;
+  grid-template-rows: 40pt;
+  grid-auto-rows: min-content;
+}
+
+.auditLog .resultsContainer .header {
+  display: contents;
+  text-align: center;
+}
+
+.auditLog .resultsContainer .header div {
+  padding: 5pt;
+  transition: background 0.1s ease;
+}
+
+.auditLog .resultsContainer .header div.filtered {
+  background: var(--content-background-color);
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.auditLog .resultsContainer .header div p {
+  font-weight: bold;
+  margin: 0 0 2pt 0;
+}
+
+.auditLog .resultsContainer .logRow {
+  display: contents;
+  background: var(--content-background-color);
+  border-radius: 5pt;
+}
+
+.auditLog .resultsContainer .logRow>* {
+  padding: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auditLog .resultsContainer .logRow button {
+  margin: 5pt;
+  padding: 0 5pt;
+  border: none;
+  background: var(--content-background-color);
+  font: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  border-radius: 5pt;
+  cursor: pointer;
+}
+
+.auditLog .resultsContainer .logRow button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auditLog .resultsContainer .logRow>*:not(:last-child) {
+  cursor: pointer;
+}
+
+.auditLog .resultsContainer .logRow .userInfoContainer img {
+  width: 25pt;
+  height: 25pt;
+  border-radius: 50%;
+  margin-right: 5pt;
+}
+
+.auditLog .resultsContainer .loadMoreButton {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  cursor: pointer;
+  border: none;
+  font: inherit;
+  font-weight: bold;
+}

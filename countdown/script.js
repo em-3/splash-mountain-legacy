@@ -10,7 +10,7 @@ function updateCountdown() {
 	currentTimestamp = new Date();
 	var difference = launchTimestamp.getTime() - currentTimestamp.getTime();
 
-	//If the launch timestamp is in the past, redirect to index.html.
+	//If the launch timestamp is in the past, redirect to index.
 	if (difference <= 0) {
 		window.location.href = "/";
 	} else {

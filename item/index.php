@@ -1,3 +1,10 @@
+<?php
+
+require_once __DIR__ . "/../scripts/init.php";
+require_once __DIR__ . "/../scripts/global.php";
+require_once __DIR__ . "/../scripts/viewer_meta.php";
+
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -5,6 +12,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+
+    <?php output_meta_tags("/item/", "item_index", "name", "description", "image"); ?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,15 +39,20 @@
 
 </head>
 
-<body ontouchstart class>
+<body ontouchstart class="mobile">
+
+    <?php
+    // If the embedded parameter isn't set, include the global header
+    if (!isset($_GET["embedded"])) {
+        include '../global/header/index.html';
+    }
+    ?>
 
     <main>
-        <header class="hidden">
-            <picture onclick="closeItemViewer()">
-                <source srcset="/images/icons/arrow-white.svg" media="(prefers-color-scheme: dark)">
-                <img src="/images/icons/arrow-black.svg" width="auto" height="30pt">
-            </picture>
-        </header>
+        <div class="closeButton" onclick="closeItemViewer()">
+            <i class="gg-close"></i>
+            <p>Close</p>
+        </div>
         <div class="contentContainer">
             <div class="loadingScreen">
                 <div class="loadingAnimationContainer">
@@ -63,14 +77,14 @@
         </div>
         <div class="itemInfoContainer hidden">
             <div class="parkContainer">
-                <picture>
-                    <source srcset="/images/icons/location-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="/images/icons/location-black.svg" width="auto" height="20pt">
-                </picture>
-                <h2 class="park" onclick="displayItemID()"></h2>
+                <i class="gg-pin"></i>
+                <h2 class="park"></h2>
             </div>
             <h1 class="name"></h1>
-
+            <div class="propertiesContainer"></div>
+            <div class="tags hidden">
+                <p class="label">Tags:</p>
+            </div>
             <div class="metadata hidden">
                 <div class="header">
                     <div class="device">
@@ -83,8 +97,18 @@
             </div>
 
             <div class="buttonContainer">
-                <button class="share" onclick="share()">Share</button>
-                <button class="openInAdminConsole hidden" onclick="openInAdminConsole()">Edit in Admin Console</button>
+                <button class="share" onclick="share(event)">
+                    <i class="gg-export" style="transform: translate(1px, 3px) scale(0.8)"></i>
+                    <span>Share</span>
+                </button>
+                <button class="editItem hidden" onclick="editItem()">
+                    <i class="gg-edit-exposure"></i>
+                    <span>Edit Item</span>
+                </button>
+                <button class="copyID hidden" onclick="copyItemID()">
+                    <i class="gg-copy"></i>
+                    <span>Copy ID</span>
+                </button>
             </div>
         </div>
     </main>

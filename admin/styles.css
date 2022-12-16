@@ -1,0 +1,198 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20pt;
+}
+
+section {
+  width: 80vw;
+  max-width: 500pt;
+}
+
+section.header {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  padding: 20pt;
+  margin-bottom: 15pt;
+}
+
+section.header .text {
+  width: 100%;
+}
+
+div.profileInformation {
+  margin-top: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+div.profileInformation img {
+  width: 25pt;
+  height: 25pt;
+  border-radius: 50%;
+  margin-right: 10pt;
+}
+
+div.profileInformation div.text h3 {
+  font-size: 13pt;
+  margin: 0;
+}
+
+div.profileInformation div.text p {
+  margin: 0;
+  font-size: 11pt;
+}
+
+div.actions {
+  margin-top: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10pt;
+}
+
+div.actions button {
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  border-radius: 5pt;
+  border: none;
+  padding: 5pt;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.actions button .icon {
+  margin-right: 5pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+.pageLinks a {
+  text-decoration: none;
+}
+
+.pageLink {
+  background: var(--content-background-color);
+  border-radius: 10pt;
+  padding: 15pt;
+  margin-bottom: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pageLink:hover {
+  background: var(--content-background-color) !important;
+  color: var(--primary-text-color) !important;
+}
+
+.pageLink.databaseBrowser {
+  background: var(--color-1);
+  color: black;
+}
+
+.pageLink.newsList {
+  background: var(--color-2);
+  color: white;
+}
+
+.pageLink.auditLog {
+  background: #36AA8D;
+  color: white;
+}
+
+.pageLink div.icon {
+  background: white;
+  width: 40pt;
+  height: 40pt;
+  border-radius: 10pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageLink div.icon i {
+  --ggs: 1.2;
+  color: black;
+}
+
+.pageLink.auditLog div.icon i {
+  --ggs: 1.5;
+}
+
+.pageLink .text {
+  margin-left: 15pt;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.pageLink .text h2 {
+  font-size: 15pt;
+  margin: 0 0 5pt 0;
+}
+
+.pageLink .text p {
+  margin: 0;
+}
+
+.pageLink i.gg-chevron-right {
+  --ggs: 1.2;
+  margin-left: auto;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--shadow-color);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.2s ease;
+}
+
+.overlay.active {
+  opacity: 0.5;
+  pointer-events: auto;
+}
+
+.editorContainer {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 60pt);
+  height: calc(100% - 60pt);
+  max-width: 800pt;
+  max-height: 600pt;
+  background: var(--page-background-color);
+  border-radius: 10pt;
+  z-index: 10;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.editorContainer.hidden {
+  display: block !important;
+  opacity: 0;
+  transform: translate(-50%, 50vh);
+}
+
+.editorContainer iframe {
+  width: 100%;
+  height: 100%;
+}

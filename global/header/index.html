@@ -1,0 +1,27 @@
+<header class="globalHeader">
+    <picture class="logo" onclick="window.location.href = '/'">
+        <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
+        <img src="/images/logo-black.png">
+    </picture>
+
+    <div class="linksContainer">
+        <div class="links">
+            <a class="home" href="/">Home</a>
+            <a class="database" href="/database">Database</a>
+            <a class="news" href="/news">News</a>
+            <a class="about" href="/about">About</a>
+            <a class="admin hidden" href="/admin">Admin</a>
+            <button class="search" onclick="searchBar.onfocus();">
+                <i class="gg-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="searchBox">
+        <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()" onfocus="searchBar.onfocus()"
+            onblur="searchBar.onblur()">
+        <div class="clearButton" title="Close Search" onclick="searchBar.close()">
+            <i class="gg-close"></i>
+        </div>
+    </div>
+</header>

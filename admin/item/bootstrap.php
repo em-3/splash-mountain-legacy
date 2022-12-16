@@ -3,8 +3,6 @@
 require_once __DIR__ . "/../scripts/init_admin.php";
 require_once __DIR__ . "/../scripts/endpoint_utils.php";
 
-use SplmlFoundation\SplashMountainLegacyBackend\ItemEntry;
-
 check_request("GET");
 
 try {

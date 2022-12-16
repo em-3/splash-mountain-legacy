@@ -6,6 +6,9 @@ if (mode === "editor") {
 	var id = params.get("id");
 }
 
+var unsavedChanges = false;
+
+var itemDetails = undefined;
 var properties = [];
 
 //Fetch the item details and content
@@ -21,6 +24,7 @@ if (mode === "editor" && id) {
 
 function showItemDetails(itemDetails) {
 	if (mode === "editor") {
+		window.itemDetails = itemDetails;
 		var type = itemDetails.type;
 		var metadata = JSON.parse(itemDetails.metadata);
 	}
@@ -33,10 +37,9 @@ function showItemDetails(itemDetails) {
 			constructor: function () {
 				var container = document.createElement("div");
 				container.classList.add("propertyContainer");
+				container.classList.add("selectContainer");
 				container.classList.add("type");
-				var label = document.createElement("label");
-				label.for = "type";
-				label.textContent = "Type";
+				
 				var select = document.createElement("select");
 				select.name = "type";
 				select.id = "type";
@@ -45,7 +48,8 @@ function showItemDetails(itemDetails) {
 				for (var i = 0; i < options.length; i++) {
 					var currentOption = options[i];
 					var optionElement = document.createElement("option");
-					optionElement.textContent = currentOption[0].toUpperCase() + currentOption.slice(1);
+					optionElement.textContent =
+						currentOption[0].toUpperCase() + currentOption.slice(1);
 					optionElement.value = currentOption;
 					select.appendChild(optionElement);
 				}
@@ -56,7 +60,9 @@ function showItemDetails(itemDetails) {
 
 					var image = document.querySelector(".image");
 					var videoID = document.querySelector(".videoID");
-					var cameraInfoContainer = document.querySelector(".cameraInfoContainer");
+					var cameraInfoContainer = document.querySelector(
+						".cameraInfoContainer"
+					);
 					var samplingRate = document.querySelector(".samplingRate");
 
 					image.classList.add("hidden");
@@ -78,8 +84,11 @@ function showItemDetails(itemDetails) {
 					}
 				};
 
-				container.appendChild(label);
+				var icon = document.createElement("i");
+				icon.classList.add("gg-chevron-down");
+
 				container.appendChild(select);
+				container.appendChild(icon);
 				return container;
 			},
 			valueGetter: function () {
@@ -110,9 +119,6 @@ function showItemDetails(itemDetails) {
 			if (mode === "editor") {
 				container.classList.add("hidden");
 			}
-			var label = document.createElement("label");
-			label.for = "image";
-			label.textContent = "Image File";
 			var input = document.createElement("input");
 			input.type = "file";
 			input.name = "image";
@@ -125,47 +131,72 @@ function showItemDetails(itemDetails) {
 						if (timecode) {
 							var dateTimeSplit = timecode.split(/\D/);
 							var dateTimeSplit = timecode.split(/\D/);
-							var date = dateTimeSplit[0] + "-" + dateTimeSplit[1] + "-" + dateTimeSplit[2];
-							var time = dateTimeSplit[3] + ":" + dateTimeSplit[4];
+							var date =
+								dateTimeSplit[0] +
+								"-" +
+								dateTimeSplit[1] +
+								"-" +
+								dateTimeSplit[2];
+							var time =
+								dateTimeSplit[3] + ":" + dateTimeSplit[4];
 							document.querySelector("#date").value = date;
 							document.querySelector("#time").value = time;
 						}
-						document.querySelector("#make").value = EXIF.getTag(this, "Make") || "";
-						document.querySelector("#model").value = EXIF.getTag(this, "Model") || "";
-						document.querySelector("#focalLength").value = EXIF.getTag(this, "FocalLength") || "";
-						document.querySelector("#softwareVersion").value = EXIF.getTag(this, "Software") || "";
+						document.querySelector("#make").value =
+							EXIF.getTag(this, "Make") || "";
+						document.querySelector("#model").value =
+							EXIF.getTag(this, "Model") || "";
+						document.querySelector("#focalLength").value =
+							EXIF.getTag(this, "FocalLength") || "";
+						document.querySelector("#softwareVersion").value =
+							EXIF.getTag(this, "Software") || "";
 						var exposureTime = EXIF.getTag(this, "ExposureTime");
 						if (exposureTime) {
-							document.querySelector("#exposureTime").value = exposureTime.numerator + "/" + exposureTime.denominator;
+							document.querySelector("#exposureTime").value =
+								exposureTime.numerator +
+								"/" +
+								exposureTime.denominator;
 						}
-						document.querySelector("#fNumber").value = EXIF.getTag(this, "FNumber") || "";
-						document.querySelector("#flash").value = EXIF.getTag(this, "Flash") || "";
+						document.querySelector("#fNumber").value =
+							EXIF.getTag(this, "FNumber") || "";
+						document.querySelector("#flash").value =
+							EXIF.getTag(this, "Flash") || "";
 
 						var colorSpace = EXIF.getTag(this, "ColorSpace");
 						if (colorSpace) {
 							switch (colorSpace) {
 								case 1:
-									document.querySelector("#colorSpace").value = "sRGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "sRGB";
 									break;
 								case 2:
-									document.querySelector("#colorSpace").value = "Adobe RGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Adobe RGB";
 									break;
 								case 3:
-									document.querySelector("#colorSpace").value = "Wide Gamut RGB";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Wide Gamut RGB";
 									break;
 								case 4:
-									document.querySelector("#colorSpace").value = "ICC Profile";
+									document.querySelector(
+										"#colorSpace"
+									).value = "ICC Profile";
 									break;
 								case 65535:
-									document.querySelector("#colorSpace").value = "Uncalibrated";
+									document.querySelector(
+										"#colorSpace"
+									).value = "Uncalibrated";
 									break;
 							}
 						}
-						document.querySelector("#samplingRate").value = EXIF.getTag(this, "SamplingRate") || "";
+						document.querySelector("#samplingRate").value =
+							EXIF.getTag(this, "SamplingRate") || "";
 					});
 				}
 			};
-			container.appendChild(label);
 			container.appendChild(input);
 			return container;
 		},
@@ -180,7 +211,11 @@ function showItemDetails(itemDetails) {
 					fail: false,
 				};
 			} else {
-				if (!document.querySelector(".image").classList.contains("hidden")) {
+				if (
+					!document
+						.querySelector(".image")
+						.classList.contains("hidden")
+				) {
 					if (file) {
 						return {
 							include: true,
@@ -209,18 +244,15 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 			container.classList.add("videoID");
-			var label = document.createElement("label");
-			label.for = "videoID";
-			label.textContent = "YouTube Video ID";
 			var input = document.createElement("input");
 			input.name = "videoID";
 			input.id = "videoID";
+			input.placeholder = "YouTube Video ID";
 			if (mode === "editor" && (type === "video" || type === "audio")) {
 				input.value = itemDetails.video_id;
 			} else {
 				container.classList.add("hidden");
 			}
-			container.appendChild(label);
 			container.appendChild(input);
 			return container;
 		},
@@ -246,7 +278,11 @@ function showItemDetails(itemDetails) {
 					};
 				}
 			} else {
-				if (!document.querySelector(".videoID").classList.contains("hidden")) {
+				if (
+					!document
+						.querySelector(".videoID")
+						.classList.contains("hidden")
+				) {
 					if (value) {
 						return {
 							include: true,
@@ -275,10 +311,9 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
+			container.classList.add("selectContainer");
 			container.classList.add("park");
-			var label = document.createElement("label");
-			label.for = "park";
-			label.textContent = "Park";
+			
 			var select = document.createElement("select");
 			select.name = "park";
 			select.id = "park";
@@ -300,8 +335,11 @@ function showItemDetails(itemDetails) {
 				select.value = itemDetails.park.toLowerCase();
 			}
 
-			container.appendChild(label);
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+
 			container.appendChild(select);
+			container.appendChild(icon);
 			return container;
 		},
 		valueGetter: function () {
@@ -326,10 +364,9 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
+			container.classList.add("selectContainer");
 			container.classList.add("scene");
-			var label = document.createElement("label");
-			label.for = "scene";
-			label.textContent = "Scene";
+			
 			var select = document.createElement("select");
 			select.name = "scene";
 			select.id = "scene";
@@ -370,8 +407,11 @@ function showItemDetails(itemDetails) {
 				select.value = itemDetails.scene;
 			}
 
-			container.appendChild(label);
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+
 			container.appendChild(select);
+			container.appendChild(icon);
 			return container;
 		},
 		valueGetter: function () {
@@ -397,16 +437,13 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 			container.classList.add("name");
-			var label = document.createElement("label");
-			label.for = "name";
-			label.textContent = "Name";
 			var input = document.createElement("input");
 			input.name = "name";
 			input.id = "name";
+			input.placeholder = "Name";
 			if (mode === "editor") {
 				input.value = itemDetails.name;
 			}
-			container.appendChild(label);
 			container.appendChild(input);
 			return container;
 		},
@@ -433,16 +470,15 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 			container.classList.add("description");
-			var label = document.createElement("label");
-			label.for = "description";
-			label.textContent = "Description";
+
 			var input = document.createElement("textarea");
 			input.name = "description";
 			input.id = "description";
+			input.placeholder = "Description";
 			if (mode === "editor") {
 				input.value = itemDetails.description;
 			}
-			container.appendChild(label);
+
 			container.appendChild(input);
 			return container;
 		},
@@ -461,6 +497,168 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Visibility
+	properties.push({
+		name: "Visibility",
+		propertyName: "hidden",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("selectContainer");
+			container.classList.add("visibility");
+			
+			var select = document.createElement("select");
+			select.name = "visibility";
+			select.id = "visibility";
+
+			var public = document.createElement("option");
+			public.textContent = "Public";
+			public.value = "public";
+			select.appendChild(public);
+
+			var unlisted = document.createElement("option");
+			unlisted.textContent = "Unlisted";
+			unlisted.value = "unlisted";
+			select.appendChild(unlisted);
+
+
+			if (mode === "editor") {
+				switch (itemDetails.hidden) {
+					case 0:
+						select.value = "public";
+						break;
+					case 1:
+						select.value = "unlisted";
+						break;
+				}
+			}
+
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
+
+			container.appendChild(select);
+			container.appendChild(icon);
+			return container;
+		},
+		valueGetter: function () {
+			var value = document.querySelector("#visibility").value;
+			if (value) {
+				switch (value) {
+					case "public":
+						return {
+							include: false,
+							fail: false,
+						};
+						break;
+					case "unlisted":
+						return {
+							include: true,
+							value: 1,
+						};
+						break;
+				}
+			} else {
+				return {
+					include: false,
+					fail: true,
+				};
+			}
+		},
+	});
+	//Tags
+	properties.push({
+		name: "Tags",
+		propertyName: "tags",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("tags");
+			var label = document.createElement("label");
+			label.for = "tags";
+			label.textContent = "Tags";
+
+			var inputContainer = document.createElement("div");
+			inputContainer.classList.add("inputContainer");
+
+			var input = document.createElement("input");
+			input.name = "tags";
+			input.id = "tags";
+			input.placeholder = "Enter a comma-separated list of tags.";
+			input.oninput = function () {
+				var value = input.value;
+				var tags = value.split(",");
+				for (var o = 0; o < select.options.length; o++) {
+					select.options[o].disabled = false;
+				}
+				for (var i = 0; i < tags.length; i++) {
+					var tag = tags[i].trim();
+					for (var o = 0; o < select.options.length; o++) {
+						if (select.options[o].value === tag) {
+							select.options[o].disabled = true;
+						}
+					}
+				}
+			};
+			inputContainer.appendChild(input);
+
+			var select = document.createElement("select");
+			select.name = "tagSuggestions";
+			select.id = "tagSuggestions";
+			select.onchange = function () {
+				if (select.selectedIndex == 0) return;
+				var selectedOption = select.options[select.selectedIndex];
+				if (input.value.length === 0) {
+					input.value = selectedOption.value;
+				} else if (input.value.charAt(input.value.length - 1) === ",") {
+					input.value += selectedOption.value;
+				} else {
+					input.value += "," + selectedOption.value;
+				}
+				selectedOption.disabled = true;
+				select.selectedIndex = 0;
+			};
+
+			var defaultOption = document.createElement("option");
+			defaultOption.textContent = "Choose a Tag";
+			defaultOption.value = "none";
+			select.appendChild(defaultOption);
+
+			(async function () {
+				var tagList = await fetch("/api/tags/");
+				tagList = await tagList.json();
+				for (var i = 0; i < tagList.length; i++) {
+					var option = document.createElement("option");
+					option.textContent = tagList[i];
+					option.value = tagList[i];
+					select.appendChild(option);
+				}
+				if (mode === "editor") {
+					input.value = itemDetails.tags;
+					input.oninput();
+				}
+			})();
+
+			inputContainer.appendChild(select);
+
+			container.appendChild(label);
+			container.appendChild(inputContainer);
+			return container;
+		},
+		valueGetter: function () {
+			var values = document.querySelector("#tags").value;
+			if (values) {
+				return {
+					include: true,
+					value: values,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
 	//Author
 	properties.push({
 		name: "Author",
@@ -469,30 +667,33 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 
-			var nameLabel = document.createElement("label");
-			nameLabel.for = "authorName";
-			nameLabel.textContent = "Author Name";
 			var nameInput = document.createElement("input");
 			nameInput.name = "authorName";
 			nameInput.id = "authorName";
+			nameInput.placeholder = "Author Name";
 			//Remove anything between square brackets from author name
 			if (mode === "editor" && itemDetails.author) {
 				nameInput.value = itemDetails.author.replace(/\[.*\]/, "");
 			}
-			container.appendChild(nameLabel);
 			container.appendChild(nameInput);
 
-			var linkLabel = document.createElement("label");
-			linkLabel.for = "authorLink";
-			linkLabel.textContent = "Author Link";
 			var linkInput = document.createElement("input");
 			linkInput.name = "authorLink";
 			linkInput.id = "authorLink";
+			linkInput.placeholder = "Author Link";
 			//Get the portion of the author link between square brackets
-			if (mode === "editor" && itemDetails.author && itemDetails.author.indexOf("[") >= 0) {
-				linkInput.value = itemDetails.author.match(/\[(.*)\]/)[0].substr(1, itemDetails.author.match(/\[(.*)\]/)[0].length - 2);
+			if (
+				mode === "editor" &&
+				itemDetails.author &&
+				itemDetails.author.indexOf("[") >= 0
+			) {
+				linkInput.value = itemDetails.author
+					.match(/\[(.*)\]/)[0]
+					.substr(
+						1,
+						itemDetails.author.match(/\[(.*)\]/)[0].length - 2
+					);
 			}
-			container.appendChild(linkLabel);
 			container.appendChild(linkInput);
 
 			return container;
@@ -551,7 +752,11 @@ function showItemDetails(itemDetails) {
 			timeInput.type = "time";
 			timeInput.name = "time";
 			timeInput.id = "time";
-			if (mode === "editor" && itemDetails.timestamp && itemDetails.timestamp.indexOf(" ") !== -1) {
+			if (
+				mode === "editor" &&
+				itemDetails.timestamp &&
+				itemDetails.timestamp.indexOf(" ") !== -1
+			) {
 				timeInput.value = itemDetails.timestamp.split(" ")[1];
 			}
 			timestampContainer.appendChild(timeInput);
@@ -567,13 +772,18 @@ function showItemDetails(itemDetails) {
 			for (var i = 0; i < precisionOptions.length; i++) {
 				var option = document.createElement("option");
 				option.value = precisionOptions[i];
-				option.textContent = precisionOptions[i][0].toUpperCase() + precisionOptions[i].slice(1);
+				option.textContent =
+					precisionOptions[i][0].toUpperCase() +
+					precisionOptions[i].slice(1);
 				precisionSelect.appendChild(option);
 			}
 			if (mode === "editor" && metadata.precision) {
 				precisionSelect.value = metadata.precision;
 			}
+			var icon = document.createElement("i");
+			icon.classList.add("gg-chevron-down");
 			timestampContainer.appendChild(precisionSelect);
+			timestampContainer.appendChild(icon);
 
 			container.appendChild(timestampContainer);
 
@@ -582,28 +792,20 @@ function showItemDetails(itemDetails) {
 			hardwareInfoContainer.classList.add("propertyContainer");
 
 			//Make
-			var makeLabel = document.createElement("label");
-			makeLabel.for = "make";
-			makeLabel.textContent = "Recording Device Make";
-			hardwareInfoContainer.appendChild(makeLabel);
-
 			var makeInput = document.createElement("input");
 			makeInput.name = "make";
 			makeInput.id = "make";
+			makeInput.placeholder = "Recording Device Make";
 			if (mode === "editor" && metadata.make) {
 				makeInput.value = metadata.make;
 			}
 			hardwareInfoContainer.appendChild(makeInput);
 
 			//Model
-			var modelLabel = document.createElement("label");
-			modelLabel.for = "model";
-			modelLabel.textContent = "Recording Device Model";
-			hardwareInfoContainer.appendChild(modelLabel);
-
 			var modelInput = document.createElement("input");
 			modelInput.name = "model";
 			modelInput.id = "model";
+			modelInput.placeholder = "Recording Device Model";
 			if (mode === "editor" && metadata.model) {
 				modelInput.value = metadata.model;
 			}
@@ -617,90 +819,61 @@ function showItemDetails(itemDetails) {
 			cameraInfoContainer.classList.add("cameraInfoContainer");
 
 			//Focal Length
-			var focalLengthLabel = document.createElement("label");
-			focalLengthLabel.for = "focalLength";
-			focalLengthLabel.textContent = "Focal Length";
-			cameraInfoContainer.appendChild(focalLengthLabel);
-
 			var focalLengthInput = document.createElement("input");
 			focalLengthInput.name = "focalLength";
 			focalLengthInput.id = "focalLength";
-			focalLengthInput.placeholder = "20.1";
+			focalLengthInput.placeholder = "Focal Length (20.1)";
 			if (mode === "editor" && metadata.focalLength) {
 				focalLengthInput.value = metadata.focalLength;
 			}
 			cameraInfoContainer.appendChild(focalLengthInput);
 
 			//Software Version
-			var softwareVersionLabel = document.createElement("label");
-			softwareVersionLabel.for = "softwareVersion";
-			softwareVersionLabel.textContent = "Software Version";
-			cameraInfoContainer.appendChild(softwareVersionLabel);
-
 			var softwareVersionInput = document.createElement("input");
 			softwareVersionInput.name = "softwareVersion";
 			softwareVersionInput.id = "softwareVersion";
-			softwareVersionInput.placeholder = "15.0";
+			softwareVersionInput.placeholder = "Software Version (15.0)";
 			if (mode === "editor" && metadata.software) {
 				softwareVersionInput.value = metadata.software;
 			}
 			cameraInfoContainer.appendChild(softwareVersionInput);
 
 			//Exposure Time
-			var exposureTimeLabel = document.createElement("label");
-			exposureTimeLabel.for = "exposureTime";
-			exposureTimeLabel.textContent = "Exposure Time";
-			cameraInfoContainer.appendChild(exposureTimeLabel);
-
 			var exposureTimeInput = document.createElement("input");
 			exposureTimeInput.name = "exposureTime";
 			exposureTimeInput.id = "exposureTime";
-			exposureTimeInput.placeholder = "1/50";
+			exposureTimeInput.placeholder = "Exposure Time (1/50)";
 			if (mode === "editor" && metadata.exposureTime) {
 				exposureTimeInput.value = metadata.exposureTime;
 			}
 			cameraInfoContainer.appendChild(exposureTimeInput);
 
 			//F-number
-			var fNumberLabel = document.createElement("label");
-			fNumberLabel.for = "fNumber";
-			fNumberLabel.textContent = "F-number";
-			cameraInfoContainer.appendChild(fNumberLabel);
-
 			var fNumberInput = document.createElement("input");
 			fNumberInput.name = "fNumber";
 			fNumberInput.id = "fNumber";
-			fNumberInput.placeholder = "4.0";
+			fNumberInput.placeholder = "F-number (4.0)";
 			if (mode === "editor" && metadata.fNumber) {
 				fNumberInput.value = metadata.fNumber;
 			}
 			cameraInfoContainer.appendChild(fNumberInput);
 
 			//Flash
-			var flashLabel = document.createElement("label");
-			flashLabel.for = "flash";
-			flashLabel.textContent = "Flash";
-			cameraInfoContainer.appendChild(flashLabel);
-
 			var flashInput = document.createElement("input");
 			flashInput.name = "flash";
 			flashInput.id = "flash";
-			flashInput.placeholder = "Flash did not fire, compulsory flash mode";
+			flashInput.placeholder =
+				"Flash (Flash did not fire, compulsory flash mode)";
 			if (mode === "editor" && metadata.flash) {
 				flashInput.value = metadata.flash;
 			}
 			cameraInfoContainer.appendChild(flashInput);
 
 			//Color Space
-			var colorSpaceLabel = document.createElement("label");
-			colorSpaceLabel.for = "colorSpace";
-			colorSpaceLabel.textContent = "Color Space";
-			cameraInfoContainer.appendChild(colorSpaceLabel);
-
 			var colorSpaceInput = document.createElement("input");
 			colorSpaceInput.name = "colorSpace";
 			colorSpaceInput.id = "colorSpace";
-			colorSpaceInput.placeholder = "sRGB";
+			colorSpaceInput.placeholder = "Color Space (sRGB)";
 			if (mode === "editor" && metadata.colorSpace) {
 				colorSpaceInput.value = metadata.colorSpace;
 			}
@@ -717,21 +890,18 @@ function showItemDetails(itemDetails) {
 			samplingRateContainer.classList.add("propertyContainer");
 			samplingRateContainer.classList.add("samplingRate");
 
-			var samplingRateLabel = document.createElement("label");
-			samplingRateLabel.for = "samplingRate";
-			samplingRateLabel.textContent = "Microphone Sampling Rate";
-			samplingRateContainer.appendChild(samplingRateLabel);
-
 			var samplingRateInput = document.createElement("input");
 			samplingRateInput.name = "samplingRate";
 			samplingRateInput.id = "samplingRate";
-			samplingRateInput.placeholder = "196.33 kbit/s";
+			samplingRateInput.placeholder = "Sampling Rate (196.33 kbit/s)";
 			if (mode === "editor" && metadata.samplingRate) {
 				samplingRateInput.value = metadata.samplingRate;
 			}
 			samplingRateContainer.appendChild(samplingRateInput);
 
-			if (!(mode === "editor" && (type === "video" || type === "audio"))) {
+			if (
+				!(mode === "editor" && (type === "video" || type === "audio"))
+			) {
 				samplingRateContainer.classList.add("hidden");
 			}
 			container.appendChild(samplingRateContainer);
@@ -741,11 +911,13 @@ function showItemDetails(itemDetails) {
 		valueGetter: function () {
 			var updatedMetadata = {};
 			var elements = {};
-			elements.timestampPrecision = document.getElementById("timestampPrecision");
+			elements.timestampPrecision =
+				document.getElementById("timestampPrecision");
 			elements.make = document.getElementById("make");
 			elements.model = document.getElementById("model");
 			elements.focalLength = document.getElementById("focalLength");
-			elements.softwareVersion = document.getElementById("softwareVersion");
+			elements.softwareVersion =
+				document.getElementById("softwareVersion");
 			elements.exposureTime = document.getElementById("exposureTime");
 			elements.fNumber = document.getElementById("fNumber");
 			elements.flash = document.getElementById("flash");
@@ -762,7 +934,11 @@ function showItemDetails(itemDetails) {
 				updatedMetadata.model = elements.model.value;
 			}
 
-			if (!document.querySelector(".cameraInfoContainer").classList.contains("hidden")) {
+			if (
+				!document
+					.querySelector(".cameraInfoContainer")
+					.classList.contains("hidden")
+			) {
 				if (elements.focalLength.value) {
 					updatedMetadata.focalLength = elements.focalLength.value;
 				}
@@ -783,7 +959,10 @@ function showItemDetails(itemDetails) {
 				}
 			}
 
-			if (!elements.samplingRate.classList.contains("hidden") && elements.samplingRate.value) {
+			if (
+				!elements.samplingRate.classList.contains("hidden") &&
+				elements.samplingRate.value
+			) {
 				updatedMetadata.samplingRate = elements.samplingRate.value;
 			}
 
@@ -794,10 +973,13 @@ function showItemDetails(itemDetails) {
 		},
 	});
 
-	//Show the item details
+	//Show the item property fields
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
-		document.querySelector(".editor .properties").appendChild(currentProperty.constructor());
+		var currentPropertyElement = currentProperty.constructor();
+		document
+			.querySelector(".editor .properties")
+			.appendChild(currentPropertyElement);
 	}
 
 	if (mode === "editor") {
@@ -810,18 +992,53 @@ function showItemDetails(itemDetails) {
 			case "video":
 			case "audio":
 				thumbnailElement = document.querySelector(".thumbnail iframe");
-				thumbnailElement.src = "https://www.youtube.com/embed/" + itemDetails.video_id;
+				thumbnailElement.src =
+					"https://www.youtube.com/embed/" + itemDetails.video_id;
 				break;
 		}
 		if (thumbnailElement) {
 			thumbnailElement.classList.remove("hidden");
 		}
 
-		document.querySelector(".itemID").textContent = id;
+		document.querySelector(".itemInfo .itemID").textContent = id;
 		document.querySelector(".itemType").textContent = type;
 		document.querySelector(".itemName").textContent = itemDetails.name;
 
-		document.querySelector(".actions.existingItem").classList.remove("hidden");
+		var itemIDElement = document.querySelector(".itemID");
+		document.querySelector(".itemID span").textContent = id;
+		itemIDElement.onclick = function(e) {
+			contextMenu.present({
+				x: e.clientX,
+				y: e.clientY,
+				items: [
+					{
+						label: "Copy ID",
+						icon: "copy",
+						callback: function() {
+							navigator.clipboard.writeText(id);
+							notification.addToQueue(
+								"progress",
+								"copy",
+								"Copied",
+								"Item ID copied to clipboard"
+							)
+						}
+					},
+					{
+						label: "Open Item",
+						icon: "external",
+						callback: function() {
+							window.open("/item/" + id);
+						}
+					}
+				]
+			})
+		}
+		itemIDElement.classList.remove("hidden");
+
+		document
+			.querySelector(".actions.existingItem")
+			.classList.remove("hidden");
 	} else {
 		document.querySelector(".itemInfo").classList.add("hidden");
 		document.querySelector(".actions.newItem").classList.remove("hidden");
@@ -833,9 +1050,24 @@ function showItemDetails(itemDetails) {
 	});
 }
 
+function updateProgressStatus(title, subtitle, message, actions) {
+	if (typeof title === "string") { document.querySelector(".statusContainer .title").textContent = title; }
+	if (typeof subtitle === "string") { document.querySelector(".statusContainer .subtitle").textContent = subtitle; }
+	if (typeof message === "string") { document.querySelector(".statusContainer .message").textContent = message; }
+	if (typeof actions === "string") { document.querySelector(".statusContainer .actions." + actions).classList.remove("hidden"); }
+}
+
 async function uploadItem() {
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Uploading",
+		"We're uploading your item.",
+		"Compiling item properties..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		document.querySelector("#package").checked = true;
+	});
 
 	var formData = new FormData();
 
@@ -843,11 +1075,19 @@ async function uploadItem() {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
 		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -860,6 +1100,12 @@ async function uploadItem() {
 	} else if (date) {
 		formData.append("timestamp", date);
 	}
+
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Generating item ID..."
+	)
 
 	var itemID;
 	fetch("/admin/item/bootstrap.php")
@@ -871,6 +1117,13 @@ async function uploadItem() {
 		})
 		.then(() => {
 			formData.append("id", itemID);
+
+			updateProgressStatus(
+				undefined,
+				undefined,
+				"Uploading item..."
+			)
+
 			fetch("/admin/item/create.php", {
 				method: "POST",
 				body: formData,
@@ -878,23 +1131,32 @@ async function uploadItem() {
 				.then((response) => response.json())
 				.then((result) => {
 					if (result.status === "success") {
-						document.querySelector(".responseContainer .title").textContent = "Done.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Your item has been added to the database.";
-						document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+						updateProgressStatus(
+							"Uploaded",
+							"The item has been uploaded successfully.",
+							"Item ID: " + result.id,
+							"success"
+						)
+						unsavedChanges = false;
 					} else {
-						document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-						document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-						document.querySelector(".responseContainer .message").textContent = result.error;
+						updateProgressStatus(
+							"Upload Failed",
+							"Something went wrong while uploading your item.",
+							result.error,
+							"uploadFailure"
+						)
 					}
-
-					document.querySelector(".progressContainer").classList.add("hidden");
-					document.querySelector(".responseContainer").classList.remove("hidden");
 				});
 		});
 }
 
 async function updateItem() {
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Updating",
+		"We're uploading your changes.",
+		"Compiling item properties..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
 
 	var formData = new FormData();
@@ -904,12 +1166,20 @@ async function updateItem() {
 	for (var i = 0; i < properties.length; i++) {
 		var currentProperty = properties[i];
 		var currentPropertyValue = currentProperty.valueGetter();
-		if (currentPropertyValue.include) {
-			formData.append(currentProperty.propertyName, currentPropertyValue.value);
+		if (currentPropertyValue.include && (currentPropertyValue.value !== itemDetails[currentProperty.propertyName])) {
+			formData.append(
+				currentProperty.propertyName,
+				currentPropertyValue.value
+			);
 		} else if (currentPropertyValue.fail) {
-			document.querySelector(".editor .errorMessage").classList.remove("hidden");
-			document.querySelector(".editor .errorMessage").textContent = "Please fill out all required fields.";
-			document.querySelector(".progressContainer").classList.add("hidden");
+			document
+				.querySelector(".editor .errorMessage")
+				.classList.remove("hidden");
+			document.querySelector(".editor .errorMessage").textContent =
+				"Please fill out all required fields.";
+			document
+				.querySelector(".progressContainer")
+				.classList.add("hidden");
 			document.querySelector(".editor").classList.remove("hidden");
 			return;
 		}
@@ -917,11 +1187,21 @@ async function updateItem() {
 
 	var date = document.querySelector(".editor #date").value;
 	var time = document.querySelector(".editor #time").value;
+	var timestamp = undefined;
 	if (date && time) {
-		formData.append("timestamp", date + " " + time);
+		timestamp = date + " " + time;
 	} else if (date) {
-		formData.append("timestamp", date);
+		timestamp = date;
 	}
+	if (timestamp && (timestamp !== itemDetails.timestamp)) {
+		formData.append("timestamp", timestamp);
+	}
+
+	updateProgressStatus(
+		undefined,
+		undefined,
+		"Uploading item changes..."
+	)
 
 	var response = await fetch("/admin/item/modify.php", {
 		method: "POST",
@@ -930,26 +1210,63 @@ async function updateItem() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The item has been updated.";
-		document.querySelector(".responseContainer .message").textContent = "Item ID: " + result.id;
+		updateProgressStatus(
+			"Updated",
+			"The item has been updated successfully.",
+			"Item ID: " + result.id,
+			"success"
+		)
+		unsavedChanges = false;
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		updateProgressStatus(
+			"Update Failed",
+			"Something went wrong while uploading your changes.",
+			result.error,
+			"updateFailure"
+		)
 	}
-
-	document.querySelector(".progressContainer").classList.add("hidden");
-	document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 async function deleteItem() {
-	if (!confirm("Are you sure you'd like to delete this item?")) {
+	var confirm = await dialog.confirm(
+		"Delete Item",
+		"Are you sure you want to delete this item? This action cannot be undone.",
+		{
+			cancellable: true,
+			buttons: [
+				{
+					text: "Delete",
+					type: "destructive",
+				},
+			],
+		}
+	);
+	if (confirm !== 0) {
 		return;
 	}
 
 	document.querySelector(".editor").classList.add("hidden");
+	updateProgressStatus(
+		"Deleting",
+		"We're deleting your item.",
+		"Requesting item deletion..."
+	)
 	document.querySelector(".progressContainer").classList.remove("hidden");
+	requestAnimationFrame(() => {
+		var packageContainer = document.querySelector(".package_animation");
+		var checkbox = document.querySelector("#package");
+
+		packageContainer.classList.add("noTransition");
+		requestAnimationFrame(() => {
+			checkbox.checked = true;
+			requestAnimationFrame(() => {
+				packageContainer.classList.remove("noTransition");
+				requestAnimationFrame(() => {
+					checkbox.checked = false;
+				});
+			});
+		});
+	});
 
 	var formData = new FormData();
 
@@ -962,17 +1279,20 @@ async function deleteItem() {
 	let result = await response.json();
 
 	if (result.status === "success") {
-		document.querySelector(".responseContainer .title").textContent = "Done.";
-		document.querySelector(".responseContainer .subtitle").textContent = "The item has been removed from the database.";
-		document.querySelector(".responseContainer .message").textContent = "";
+		updateProgressStatus(
+			"Deleted",
+			"The item has been successfully deleted.",
+			"",
+			"success"
+		)
 	} else {
-		document.querySelector(".responseContainer .title").textContent = "Congratulations, you broke something.";
-		document.querySelector(".responseContainer .subtitle").textContent = "Good going.";
-		document.querySelector(".responseContainer .message").textContent = result.error;
+		updateProgressStatus(
+			"Deletion Failed",
+			"Something went wrong while trying to delete the item.",
+			result.error,
+			"deleteFailure"
+		)
 	}
-
-	document.querySelector(".progressContainer").classList.add("hidden");
-	document.querySelector(".responseContainer").classList.remove("hidden");
 }
 
 function showErrorScreen() {
@@ -981,6 +1301,35 @@ function showErrorScreen() {
 	document.querySelector(".errorContainer").classList.remove("hidden");
 }
 
-function closeEditor() {
-	window.top.postMessage("closeItemEditor", "*");
+//Listen for any change events
+document.addEventListener("change", function (event) {
+	unsavedChanges = true;
+});
+
+async function closeEditor() {
+	if (unsavedChanges) {
+		var confirm = await dialog.confirm(
+			"Close Editor",
+			"Are you sure you want to close the editor? You'll lose any unsaved changes.",
+			{
+				cancellable: true,
+				buttons: [
+					{
+						text: "Close",
+						type: "active",
+					},
+				],
+			}
+		);
+		if (confirm !== 0) {
+			return;
+		}
+	}
+
+	if (params.get("fromViewer") === "true") {
+		window.history.back();
+		return false;
+	} else {
+		window.top.postMessage("closeEditor", "*");
+	}
 }

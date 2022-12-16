@@ -22,8 +22,8 @@ if(!check_authentication() || !check_clearance(0)) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/admin/admin-global.css">
+    <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
     <meta name="keywords"
@@ -43,39 +43,7 @@ if(!check_authentication() || !check_clearance(0)) {
 
 <body ontouchstart class>
 
-    <header>
-        <picture class="logo" onclick="window.location.href = '/'">
-            <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
-            <img src="/images/logo-black.png">
-        </picture>
-
-        <div class="linksContainer">
-            <div class="links">
-                <a href="/">Home</a>
-                <a href="/database">Database</a>
-                <a href="/news">News</a>
-                <a href="/about">About</a>
-                <a class="admin current" href="/admin">Admin</a>
-                <button class="search" onclick="searchBar.onfocus();">
-                    <picture>
-                        <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                    </picture>
-                </button>
-            </div>
-        </div>
-
-        <div class="searchBox">
-            <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
-                onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
-            <div class="clearButton" onclick="searchBar.close()">
-                <picture>
-                    <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
-                    <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
-                </picture>
-            </div>
-        </div>
-    </header>
+    <?php include '../global/header/index.html'; ?>
 
     <div class="searchResultsContainer">
         <div class="loadingContainer hidden">
@@ -94,67 +62,65 @@ if(!check_authentication() || !check_clearance(0)) {
     </div>
 
     <main>
-        <section>
-            <div class="toolbar">
+        <section class="header">
+            <div class="text">
                 <h1>Admin Console</h1>
-                <div class="buttons">
-                    <a href="/logout.php" class="logout">Logout</a>
+                <div class="profileInformation">
+                    <img src="/images/authors/splashmountainlegacystaff.jpg" alt="" class="profilePicture">
+                    <div class="text">
+                        <h3 class="name">Loading...</h3>
+                        <p class="authorizationLevel">Fetching user profile.</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="create" onclick="">
+                        <div class="icon"><i class="gg-math-plus"></i></div>
+                        <span>Create</span>
+                    </button>
+                    <button class="logout" onclick="logout()">
+                        <div class="icon"><i class="gg-log-out"></i></div>
+                        <span>Logout</span>
+                    </button>
                 </div>
             </div>
-            <div class="content">
-                <div class="tabContainer">
-                    <div class="tab database selected" onclick="selectTab('database')">Database Items</div>
-                    <div class="tab news" onclick="selectTab('news')">News Articles</div>
+        </section>
+        <section class="pageLinks">
+            <a href="/admin/database">
+                <div class="pageLink databaseBrowser">
+                    <div class="icon">
+                        <i class="gg-database"></i>
+                    </div>
+                    <div class="text">
+                        <h2>Database Browser</h2>
+                        <p>Upload, edit, and delete items.</p>
+                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-                <div class="list database">
-                    <div class="toolbar">
-                        <div class="filters">
-                            <div class="searchField">
-                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()" onchange="databaseList.searchBar.onchange()">
-                            </div>
-                            <div class="optionMenus"></div>
-                        </div>
-                        <div class="addItemButton" onclick="showNewItemEditor()"><span>+</span> New Item</div>
+            </a>
+            <a href="/admin/newsList">
+                <div class="pageLink newsList">
+                    <div class="icon">
+                        <i class="gg-file-document"></i>
                     </div>
-                    <div class="loadingContainer">
-                        <div class="loadingAnimationEllipsis">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                    <div class="text">
+                        <h2>News List</h2>
+                        <p>Create, edit, and delete news articles.</p>
                     </div>
-                    <div class="resultsContainer hidden"></div>
-                    <div class="errorMessageContainer hidden">
-                        <h2 class="title"></h2>
-                        <p class="subtitle"></p>
-                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-                <div class="list news hidden">
-                    <div class="toolbar">
-                        <div class="filters">
-                            <div class="searchField">
-                                <input type="text" placeholder="Filter" oninput="databaseList.searchBar.oninput()"
-                                    onchange="databaseList.searchBar.onchange()">
-                            </div>
-                        </div>
-                        <div class="addItemButton" onclick="showNewArticleEditor()"><span>+</span> New Article</div>
+            </a>
+            <a href="/admin/audit-log">
+                <div class="pageLink auditLog">
+                    <div class="icon">
+                        <i class="gg-play-list-search"></i>
                     </div>
-                    <div class="loadingContainer">
-                        <div class="loadingAnimationEllipsis">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                    <div class="text">
+                        <h2>Audit Log</h2>
+                        <p>View a history of database changes.</p>
                     </div>
-                    <div class="resultsContainer hidden"></div>
-                    <div class="errorMessageContainer hidden">
-                        <h2 class="title"></h2>
-                        <p class="subtitle"></p>
-                    </div>
+                    <i class="gg-chevron-right"></i>
                 </div>
-            </div>
+            </a>
         </section>
     </main>
 
@@ -168,44 +134,7 @@ if(!check_authentication() || !check_clearance(0)) {
         <iframe src="" frameborder="0"></iframe>
     </div>
 
-    <footer>
-        <div class="left">
-            <div class="logoContainer">
-                <img class="logo" src="/images/logo-white.png" onclick="window.location.href = '/'">
-                <div class="links">
-                    <a class="link email" href="mailto:splashmountainlegacy@gmail.com" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/email-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/email-black.png" alt="Email" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/email-white.png" alt="Email" width="22px" height="auto" class="hover">
-                    </a>
-                    <a class="link youtube" href="https://www.youtube.com/channel/UCmh3ksrwPB-NRcfMjGUbYFw" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/youtube-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/youtube-black.png" alt="Youtube" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/youtube-white.png" alt="Youtube" width="22px" height="auto" class="hover">
-                    </a>
-                    <a class="link discord" href="https://discord.gg/GwThxWbQMG" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/discord-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/discord-black.png" alt="Youtube" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/discord-white.png" alt="Discord" width="22px" height="auto" class="hover">
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="credits">
-                <h3>Created By</h3>
-                <a href="https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA" target="_BLANK">91J Sound</a>
-                <a>EM_3</a>
-                <a href="https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A" target="_BLANK">MickeyWaffleCo.</a>
-            </div>
-        </div>
-    </footer>
+    <?php include '../global/footer/index.html'; ?>
 
     <div class="itemDetailsContainer hidden">
         <iframe src="" frameborder="0"></iframe>
@@ -216,7 +145,7 @@ if(!check_authentication() || !check_clearance(0)) {
     <script src="/js/global.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/search.js"></script>
-    <script src="index.js"></script>
+    <script src="script.js"></script>
 
 </body>
 

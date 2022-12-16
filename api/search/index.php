@@ -25,15 +25,29 @@ if(isset($_GET["query"])) {
         //Format the query and add it to the parameters
         $params["query"] = "%" . $query . "%";
 
-        //Search for the query in name, author, and description fields
-        $stmt .= " WHERE (`name` LIKE :query OR `author` LIKE :query OR `description` LIKE :query OR `scene` LIKE :query";
+        //Search for the query in name, scene, and description fields
+        $stmt .= " WHERE (";
+
+        $matches = ["name", "description", "scene"];
+
+        if(isset($_GET["match"])) {
+            $matches = is_array($_GET["match"]) ? $_GET["match"] : explode(",", $_GET["match"]);
+        }
+
+        for($i = 0; $i < count($matches); $i++) {
+            if($i > 0) {
+                $stmt .= " OR ";
+            }
+
+            $stmt .= "`" . $matches[$i] . "` LIKE :query";
+        }
 
         //Only search for the query in the tags field if the user has not specified tags as a search parameter
         if(!$tag_mode) {
             $stmt .= " OR (";
 
             //Add each word to the tags query
-            $words = explode(",", $query);
+            $words = explode(" ", $query);
             for($i = 0; $i < count($words); $i++) {
                 if($i > 0) {
                     $stmt .= " AND ";
@@ -77,6 +91,26 @@ if(!$id_only) {
         }
     }
 
+    //If the user has specified the author parameter, match the author name
+    if(isset($_GET["author"])) {
+        //If there is more than one parameter, add an AND
+        if(count($params) > 0 && $first) {
+            $stmt .= " AND (";
+            $first = false;
+        }else if(count($params) > 0) {
+            $stmt .= " AND ";
+        }else {
+            $stmt .= " WHERE (";
+            $first = false;
+        }
+
+        //Set the author's name
+        $params["author"] = $_GET["author"];
+        
+        //Add the author name to the statement
+        $stmt .= "`author` LIKE CONCAT(:author, '%')";
+    }
+
     //If the user has specified tags as a search parameter, add the tags to the statement
     if($tag_mode) {
         //If there is more than one parameter, add an AND
@@ -91,35 +125,54 @@ if(!$id_only) {
         }
 
         //Add each tag to the statement
-        $tags = is_array($_GET["tags"]) ? $_GET["tags"] : [$_GET["tags"]];
-        for($i = 0; $i < count($tags); $i++) {
-            if($i != 0) {
-                $stmt .= " AND ";
+        $tags = is_array($_GET["tags"]) ? $_GET["tags"] : explode(",", $_GET["tags"]);
+        
+        if($tags[0] === "UNTAGGED") {
+            $stmt .= "(`tags` IS NULL)";
+            $first = false;
+            $untaggedMode = true;
+        }else {
+            for($i = 0; $i < count($tags); $i++) {
+                if($i != 0) {
+                    $stmt .= " AND ";
+                }
+
+                //Add the tag to the statement
+                $stmt .= "`tags` LIKE :tag" . $i;
+                
+                //Add the tag to the parameters
+                $params["tag" . $i] = "%" . $tags[$i] . "%";
             }
-
-            //Add the tag to the statement
-            $stmt .= "`tags` LIKE :tag" . $i;
-            
-            //Add the tag to the parameters
-            $params["tag" . $i] = "%" . $tags[$i] . "%";
         }
-
-        $stmt .= ")";
     }
     
     if(count($params) > 0 && $first) {
         $stmt .= " AND (";
         $first = false;
-    }else if(count($params) > 0) {
+    }else if(count($params) > 0 || $untaggedMode === true) {
         $stmt .= " AND ";
     }else {
         $stmt .= " WHERE (";
     }
 
-    $stmt .= "(`hidden` = 0";
+    //Check if the visibility parameter is set
+    if(isset($_GET["visibility"]) && in_array($_GET["visibility"], ["private", "all"]) && check_authentication() && check_clearance(0)) {
+        //If the visibility is set to all show public items
+        if($_GET["visibility"] == "all") {
+            $stmt .= "(`hidden` = 0";
+        }
 
-    if(isset($_GET["show_hidden"]) && $_GET["show_hidden"] == "true" && check_authentication()) {
-        $stmt .= " OR `hidden` = 1";
+        //If the visibility is set to all add an OR clause
+        if($_GET["visibility"] == "all") {
+            $stmt .= " OR ";
+        }else {
+            $stmt .= "(";
+        }
+
+        $stmt .= "`hidden` = 1";
+    }else {
+        //Otherwise show only public items
+        $stmt .= "(`hidden` = 0";
     }
 
     $stmt .= ")) ORDER BY ";

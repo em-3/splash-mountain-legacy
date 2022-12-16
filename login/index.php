@@ -2,7 +2,8 @@
 
 require_once __DIR__ . "/../scripts/init.php";
 
-use Wohali\OAuth2\Client\Provider\Discord;
+use SplmlFoundation\SplashMountainLegacyBackend\Discord;
+use Wohali\OAuth2\Client\Provider\Discord as Provider;
 
 //Redirect the user if they're already logged in
 if(check_authentication()) {
@@ -16,7 +17,7 @@ $user;
 //Regenerate the session ID to prevent session fixation attacks
 session_regenerate_id();
 
-$provider = new Discord([
+$provider = new Provider([
     "clientId" => $_ENV["DISCORD_CLIENT_ID"],
     "clientSecret" => $_ENV["DISCORD_CLIENT_SECRET"],
     "redirectUri" => $_ENV["DISCORD_REDIRECT_URI_PREFIX"] . "/login/index.php"
@@ -46,17 +47,13 @@ if(isset($_GET["code"])) {
         $_SESSION["token"] = $token->getToken();
     
         try {
-            $user = $provider->getResourceOwner($token);
+            $discord = new Discord($_SESSION["token"], $database, "discord_users");
 
-            //Get the user's data from the database
-            $stmt = $database->prepare("SELECT `clearance` FROM discord_users WHERE `id` = ?");
-            $stmt->execute([$user->getId()]);
+            $user = $discord->getUserDetails();
 
-            //Check if the user exists
-            if($stmt->rowCount() == 1) {
-                //Store their clearance level and ID
-                $_SESSION["id"] = $user->getId();
-                $_SESSION["clearance"] = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]["clearance"];
+            if(isset($user["clearance"])) {
+                $_SESSION["id"] = $user["id"];
+                $_SESSION["clearance"] = $user["clearance"];
             }
         }catch(Exception $e) {
             $error = "An exception occurred: " . $e->getMessage();
@@ -79,7 +76,6 @@ if(isset($_GET["code"])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="styles.css">
 
     <meta name="description" content="Splash Mountain images, videos, audio, and more.">
@@ -100,39 +96,7 @@ if(isset($_GET["code"])) {
 
 <body ontouchstart class>
 
-    <header>
-        <picture class="logo" onclick="window.location.href = '/'">
-            <source srcset="/images/logo-white.png" media="(prefers-color-scheme: dark)">
-            <img src="/images/logo-black.png">
-        </picture>
-
-        <!-- <div class="linksContainer">
-                <div class="links">
-                    <a href="/">Home</a>
-                    <a href="/database">Database</a>
-                    <a href="/news">News</a>
-                    <a href="/about">About</a>
-                    <a class="admin current" href="/admin">Admin</a>
-                    <button class="search" onclick="searchBar.onfocus();">
-                        <picture>
-                            <source srcset="/images/icons/search-white.svg" media="(prefers-color-scheme: dark)">
-                            <img src="/images/icons/search-black.svg" alt="Search" width="22px" height="22px">
-                        </picture>
-                    </button>
-                </div>
-            </div>
-        
-            <div class="searchBox">
-                <input type="text" class="searchField" placeholder="Search" oninput="searchBar.updateSearchResults()"
-                    onfocus="searchBar.onfocus()" onblur="searchBar.onblur()">
-                <div class="clearButton" onclick="searchBar.close()">
-                    <picture>
-                        <source srcset="/images/icons/close-white.svg" media="(prefers-color-scheme: dark)">
-                        <img src="/images/icons/close-black.svg" alt="Close Search" width="14px" height="14px">
-                    </picture>
-                </div>
-            </div> -->
-    </header>
+    <?php include '../global/header/index.html'; ?>
 
     <div class="searchResultsContainer">
         <div class="loadingContainer hidden">
@@ -167,8 +131,8 @@ if(isset($_GET["code"])) {
         <?php }else { ?>
         <!-- Authentication succeeded -->
         <section class="welcomeContainer">
-            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user->getID() . "/" . $user->getAvatarHash(); ?>">
-            <h1 class="name"><?php echo $user->getUsername() . "#" . $user->getDiscriminator(); ?></h1>
+            <img class="profilePicture" src="https://cdn.discordapp.com/avatars/<?php echo $user["id"] . "/" . $user["avatar_hash"]; ?>">
+            <h1 class="name"><?php echo $user["username"] . "#" . $user["discriminator"]; ?></h1>
             <h3 class="authLevel">
                 <?php
                     if(!isset($_SESSION["clearance"])) {
@@ -182,7 +146,7 @@ if(isset($_GET["code"])) {
             </h3>
             <?php if(check_authentication()) { ?>
             <!-- User is allowed access -->
-            <button class="continueButton" onclick="window.location.href='/'">Continue</button>
+            <button class="continueButton" onclick="window.location.href='/admin'">Continue</button>
             <?php }else { ?>
             <!-- User is not allowed access -->
             <p class="authLevelWarning">Sorry, you don't have access to the site yet.</p>
@@ -191,44 +155,7 @@ if(isset($_GET["code"])) {
         <?php } ?>
     </main>
 
-    <footer>
-        <div class="left">
-            <div class="logoContainer">
-                <img class="logo" src="/images/logo-white.png" onclick="window.location.href = '/'">
-                <div class="links">
-                    <a class="link email" href="mailto:splashmountainlegacy@gmail.com" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/email-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/email-black.png" alt="Email" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/email-white.png" alt="Email" width="22px" height="auto" class="hover">
-                    </a>
-                    <a class="link youtube" href="https://www.youtube.com/channel/UCmh3ksrwPB-NRcfMjGUbYFw" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/youtube-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/youtube-black.png" alt="Youtube" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/youtube-white.png" alt="Youtube" width="22px" height="auto" class="hover">
-                    </a>
-                    <a class="link discord" href="https://discord.gg/GwThxWbQMG" target="_BLANK">
-                        <picture class="regular">
-                            <source srcset="/images/footer/discord-white.png" media="(prefers-color-scheme: dark)">
-                            <img src="/images/footer/discord-black.png" alt="Youtube" width="22px" height="auto">
-                        </picture>
-                        <img src="/images/footer/discord-white.png" alt="Discord" width="22px" height="auto" class="hover">
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="credits">
-                <h3>Created By</h3>
-                <a href="https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA" target="_BLANK">91J Sound</a>
-                <a>EM_3</a>
-                <a href="https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A" target="_BLANK">MickeyWaffleCo.</a>
-            </div>
-        </div>
-    </footer>
+    <?php include '../global/footer/index.html'; ?>
 
     <div class="itemDetailsContainer hidden">
         <iframe src="" frameborder="0"></iframe>

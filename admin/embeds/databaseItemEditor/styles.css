@@ -3,21 +3,37 @@ main {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 40pt;
 }
 
 header {
-  background: var(--content-background-color);
-  width: 100%;
-  height: 35pt;
-  padding-left: 20pt;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40pt;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 0 20pt;
+  background: var(--content-background-color);
+  z-index: 2;
 }
 
-header picture {
+header i {
+  --ggs: 1.5;
   cursor: pointer;
+}
+
+header .itemID {
+  cursor: pointer;
+  margin: 0;
+}
+
+header .itemID span {
+  font-weight: bold;
 }
 
 section {
@@ -25,7 +41,7 @@ section {
 }
 
 .editor {
-  width: 100%;
+  max-width: 500pt;
   height: 100%;
   padding: 20pt;
 }
@@ -75,35 +91,83 @@ section {
 }
 
 .editor .itemEditor .properties .propertyContainer {
-  margin: 0 20pt 20pt 20pt;
+  margin: 5pt 0;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.propertyContainer .label {
+  margin-right: 5pt;
+}
+
+.propertyContainer .inputContainer {
+  width: 100%;
+  display: flex;
+}
+
+.propertyContainer .inputContainer input {
+  flex-grow: 1;
+}
+
+.propertyContainer .inputContainer select {
+  width: 95pt;
+}
+
+.propertyContainer select~i {
+  position: absolute;
+  bottom: 14pt;
+  right: 10pt;
+  transform: translateY(50%);
+  pointer-events: none;
 }
 
 .propertyContainer select {
   appearance: none;
   font: inherit;
-  padding: 5pt;
-  border-radius: 5pt;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
   cursor: pointer;
 }
 
-.propertyContainer select:focus {
+.propertyContainer input,
+.propertyContainer textarea,
+.propertyContainer select {
+  width: 100%;
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
+  border: none;
+  border-radius: 5pt;
+  padding: 5pt;
+  font: inherit;
+  transition: all 0.2s ease;
+}
+
+.propertyContainer *:focus {
   outline: none;
 }
 
-.propertyContainer input,
-.propertyContainer textarea {
-  border-radius: 5pt;
-  background: var(--content-background-color);
-  color: var(--primary-text-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  padding: 5pt;
-  font: inherit;
-  transition: border 0.1s ease;
+.propertyContainer input:hover,
+.propertyContainer input:focus,
+.propertyContainer textarea:hover,
+.propertyContainer textarea:focus,
+.propertyContainer select {
+  background: var(--content-background-color) !important;
+}
+
+.properties #name,
+.properties #description {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 0;
+}
+
+.properties #name {
+  font-size: 25pt;
+  font-weight: bold;
+}
+
+.properties #description {
+  font-size: 15pt;
+  font-style: italic;
 }
 
 .propertyContainer textarea {
@@ -111,40 +175,65 @@ section {
   min-height: 100pt;
 }
 
-.propertyContainer input:focus,
-.propertyContainer textarea:focus {
-  border-color: var(--primary-text-color);
-  outline: none;
-}
-
-.editor .itemEditor .actions {
+.editor .actions,
+.statusContainer .actions {
   display: flex;
   justify-content: space-between;
 }
 
-.editor .itemEditor .actions div {
+.editor .actions div,
+.statusContainer .actions div {
   display: flex;
 }
 
-.editor .itemEditor .actions button {
+.editor .actions button,
+.statusContainer .actions button {
   background: var(--content-background-color);
-  border: 2pt solid var(--secondary-content-background-color);
-  border-radius: 5pt;
-  padding: 2pt 5pt;
   color: var(--primary-text-color);
-  font: inherit;
-  transition: border-color 0.1s ease;
+  border: none;
+  border-radius: 5pt;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 10pt;
+  padding: 10pt 15pt;
   cursor: pointer;
+  margin-bottom: 5pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
-.editor .itemEditor .actions button:hover {
-  border-color: var(--primary-text-color) !important;
+.editor .actions button:hover,
+.statusContainer .actions button:hover {
+  background: var(--page-background-color);
+  color: var(--primary-text-color);
 }
 
-.editor .itemEditor .actions .danger button {
-  background: #ff6f66;
-  border-color: #ff5449;
+.editor .actions .danger button,
+.statusContainer .actions .danger button {
+  background: var(--destructive-color);
   color: white;
+}
+
+.editor .actions .danger button:hover,
+.statusContainer .actions .danger button:hover {
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+}
+
+.editor .actions button .icon,
+.statusContainer .actions button .icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor .actions button span,
+.statusContainer .actions button span {
+  margin-left: 2pt;
 }
 
 .centered {
@@ -154,6 +243,56 @@ section {
   align-items: center;
 }
 
-.indeterminate .loadingAnimationEllipses {
-  transform: scale(0.7);
+.progressContainer {
+  height: calc(100% - 55pt);
+}
+
+.package_animation {
+  height: 70%;
+}
+
+.noTransition * {
+  transition: none !important;
+  animation: none !important;
+}
+
+.statusContainer {
+  height: 30%;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.statusContainer h1,
+.statusContainer h3,
+.statusContainer p {
+  margin: 0;
+}
+
+.statusContainer h1 {
+  font-size: 30pt;
+}
+
+.statusContainer h3 {
+  font-size: 15pt;
+}
+
+.statusContainer p {
+  margin: 5pt 0;
+}
+
+.statusContainer .actions {
+  position: absolute;
+  bottom: 20pt;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.statusContainer .actions.hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  display: flex !important;
 }
