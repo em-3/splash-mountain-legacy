@@ -36,7 +36,7 @@ function output_meta_tags($base_url, $table_name, $title_field, $description_fie
 
     if(!is_null($results[$image_field])) {
         $image = $results[$image_field];
-        $image_url = "https://splashmountainlegacy.com/resources/$image/thumbnail";
+        $image_url = "https://splashmountainlegacy.com/resources/$image/thumbnail.jpg";
 
         echo "<meta name=\"og:image\" content=\"$image_url\">";
     }
