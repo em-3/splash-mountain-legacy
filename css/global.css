@@ -687,6 +687,8 @@ main {
 }
 
 .dialog .message {
+  max-height: 200pt;
+  overflow-y: scroll;
   margin: 0 0 10pt 0;
   white-space: pre-line;
   word-break: break-all;
