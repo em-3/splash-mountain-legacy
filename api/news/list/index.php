@@ -65,10 +65,27 @@ foreach($articles as &$article) {
             if(is_string($item)) {
                 //Store the string on the main article object
                 $article["content_preview"] = $item;
-                break;
             }else if(is_object($item) && isset($item->type) && $item->type == "paragraph") {
                 //Store the paragraph on the main article object
                 $article["content_preview"] = $item->content;
+            }
+            if(isset($article["content_preview"])) {
+                //Filter out Markdown formatting
+                //Bold
+                $article["content_preview"] = preg_replace("/\*\*(.*?)\*\*/", "$1", $article["content_preview"]);
+                //Italics
+                $article["content_preview"] = preg_replace("/\*(.*?)\*/", "$1", $article["content_preview"]);
+                //Strikethrough
+                $article["content_preview"] = preg_replace("/~~(.*?)~~/", "$1", $article["content_preview"]);
+                //Underline
+                $article["content_preview"] = preg_replace("/__(.*?)__/", "$1", $article["content_preview"]);
+                //Superscript
+                $article["content_preview"] = preg_replace("/\^\^(.*?)\^\^/", "$1", $article["content_preview"]);
+                //Subscript
+                $article["content_preview"] = preg_replace("/,,(.*?),,/", "$1", $article["content_preview"]);
+                //Links
+                $article["content_preview"] = preg_replace("/\[(.*?)\]\((.*?)\)/", "$1", $article["content_preview"]);
+                
                 break;
             }
         }
