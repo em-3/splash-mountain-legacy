@@ -69,10 +69,10 @@ async function logout() {
 			},
 		],
 	});
-	if (confirm !== 0) {
+	if (confirm.index !== 0) {
 		return;
 	}
-
+	
 	window.location.href = "/logout.php";
 }
 

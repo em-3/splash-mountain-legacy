@@ -49,17 +49,90 @@ var dialog = {
 		dialogElement.classList.add("hidden");
 		dialogElement.innerHTML = `
             <h1 class="title">${title}</h1>
-            <p class="message" lang="en">${message}</p>
+            <p class="message">${message}</p>
         `;
 
-		if (type === "prompt") {
-			var input = document.createElement("input");
-			input.type = "text";
-			if (options.placeholder) {
-				input.placeholder = options.placeholder;
+		if (type === "list") {
+			var listContainer = document.createElement("div");
+			listContainer.className = "listContainer";
+
+			var searchBar = document.createElement("input");
+			searchBar.type = "text";
+			searchBar.placeholder = "Filter...";
+			searchBar.className = "searchBar";
+			searchBar.oninput = function () {
+				var items = listContainer.querySelectorAll(".item");
+				for (var i = 0; i < items.length; i++) {
+					if (
+						items[i].children[0].textContent.toLowerCase().includes(searchBar.value.toLowerCase()) ||
+						(
+							items[i].children[1] &&
+							items[i].children[1].textContent.toLowerCase().includes(searchBar.value.toLowerCase())
+						)
+					) {
+						items[i].classList.remove("hidden");
+					} else {
+						items[i].classList.add("hidden");
+					}
+				}
+			};
+			listContainer.appendChild(searchBar);
+
+			var list = document.createElement("div");
+			list.className = "list";
+			listContainer.appendChild(list);
+
+			for (var i = 0; i < options.content.length; i++) {
+				(function (i) {
+					var item = document.createElement("div");
+					item.className = "item";
+					item.addEventListener("click", function () {
+						dialog.callbacks.dismiss();
+						resolve({
+							type: "listSelection",
+							index: i,
+						});
+					});
+
+					var label = document.createElement("p");
+					label.className = "label";
+					label.textContent = options.content[i].label;
+					item.appendChild(label);
+
+					if (options.content[i].sublabel) {
+						var sublabel = document.createElement("p");
+						sublabel.className = "sublabel";
+						sublabel.textContent = options.content[i].sublabel;
+						item.appendChild(sublabel);
+					}
+
+					list.appendChild(item);
+				})(i);
 			}
-			input.className = "input";
-			dialogElement.appendChild(input);
+
+			dialogElement.appendChild(listContainer);
+		}
+
+		if (type === "prompt") {
+			if (options.placeholders) {
+				//Create multiple inputs
+				for (var i = 0; i < options.placeholders.length; i++) {
+					var input = document.createElement("input");
+					input.type = "text";
+					input.placeholder = options.placeholders[i];
+					input.className = "input";
+					dialogElement.appendChild(input);
+				}
+			} else {
+				//Create a single input
+				var input = document.createElement("input");
+				input.type = "text";
+				if (options.placeholder) {
+					input.placeholder = options.placeholder;
+				}
+				input.className = "input";
+				dialogElement.appendChild(input);
+			}
 		}
 
 		var buttonContainer = document.createElement("div");
@@ -87,12 +160,19 @@ var dialog = {
 				);
 				break;
 			case "confirm":
+			case "list":
+				if (!options.buttons || options.buttons.length === 0) {
+					break;
+				}
 				for (var i = 0; i < options.buttons.length; i++) {
 					(function (i) {
 						buttonContainer.appendChild(
 							dialog.createButton(options.buttons[i].text, options.buttons[i].type, function () {
 								dialog.callbacks.dismiss();
-								resolve(i);
+								resolve({
+									type: "buttonSelection",
+									index: i,
+								});
 							})
 						);
 					})(i);
@@ -102,7 +182,15 @@ var dialog = {
 				buttonContainer.appendChild(
 					dialog.createButton("Done", "active", function () {
 						dialog.callbacks.dismiss();
-						resolve(input.value);
+						var inputs = document.querySelectorAll(".dialog .input");
+						var values = [];
+						for (var i = 0; i < inputs.length; i++) {
+							values.push(inputs[i].value);
+						}
+						resolve({
+							type: "input",
+							values: values,
+						});
 					})
 				);
 				break;
@@ -111,6 +199,11 @@ var dialog = {
 		document.body.insertBefore(dialogElement, document.querySelector(".overlay"));
 		requestAnimationFrame(function () {
 			document.querySelector(".dialog").classList.remove("hidden");
+			if (input) {
+				input.focus();
+			} else if (searchBar) {
+				searchBar.focus();
+			}
 		});
 	},
 
@@ -137,6 +230,16 @@ var dialog = {
 	},
 	alert: function (title, message, options) {
 		return this.addToQueue("alert", title, message, options);
+	},
+	list: function (title, message, content, options) {
+		if (options) {
+			options.content = content;
+		} else {
+			options = {
+				content: content,
+			};
+		}
+		return this.addToQueue("list", title, message, options);
 	},
 	createButton: function (text, type, callback) {
 		var button = document.createElement("button");

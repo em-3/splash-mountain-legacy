@@ -1042,7 +1042,7 @@ async function deleteArticle() {
 			],
 		}
 	);
-	if (confirm !== 0) {
+	if (confirm.index !== 0) {
 		return;
 	}
 
@@ -1122,7 +1122,7 @@ async function closeEditor() {
 				],
 			}
 		);
-		if (confirm !== 0) {
+		if (confirm.index !== 0) {
 			return;
 		}
 	}

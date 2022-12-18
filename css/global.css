@@ -698,6 +698,31 @@ main {
   hyphens: auto;
 }
 
+.dialog .listContainer {
+  margin-bottom: 10pt;
+}
+
+.dialog .list {
+  max-height: 200pt;
+  overflow-y: scroll;
+}
+
+.dialog .list .item {
+  background: var(--page-background-color);
+  padding: 10pt;
+  margin: 0 0 5pt 0;
+  border-radius: 10pt;
+  cursor: pointer;
+}
+
+.dialog .list .item p {
+  margin: 0;
+}
+
+.dialog .list .item p.label {
+  font-weight: bold;
+}
+
 .dialog .buttonContainer {
   display: flex;
   align-items: center;
