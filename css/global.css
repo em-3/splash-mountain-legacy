@@ -713,6 +713,12 @@ main {
   margin: 0 0 5pt 0;
   border-radius: 10pt;
   cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.dialog .list .item.selected {
+  background: var(--color-2);
+  color: white;
 }
 
 .dialog .list .item p {

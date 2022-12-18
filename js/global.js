@@ -85,14 +85,23 @@ var dialog = {
 			for (var i = 0; i < options.content.length; i++) {
 				(function (i) {
 					var item = document.createElement("div");
-					item.className = "item";
-					item.addEventListener("click", function () {
-						dialog.callbacks.dismiss();
-						resolve({
-							type: "listSelection",
-							index: i,
+					item.classList.add("item");
+					if (options.preselectedIndexes && options.preselectedIndexes.includes(i)) {
+						item.classList.add("selected");
+					}
+					if (options.allowMultiple) {
+						item.addEventListener("click", function () {
+							item.classList.toggle("selected");
 						});
-					});
+					} else {
+						item.addEventListener("click", function () {
+							dialog.callbacks.dismiss();
+							resolve({
+								type: "listSelection",
+								index: i,
+							});
+						});
+					}
 
 					var label = document.createElement("p");
 					label.className = "label";
@@ -176,6 +185,22 @@ var dialog = {
 							})
 						);
 					})(i);
+				}
+				if (type === "list" && options.allowMultiple) {
+					buttonContainer.appendChild(
+						dialog.createButton("Done", "active", function () {
+							dialog.callbacks.dismiss();
+							var selectedItems = document.querySelectorAll(".dialog .item.selected");
+							var indexes = [];
+							for (var i = 0; i < selectedItems.length; i++) {
+								indexes.push(Array.prototype.indexOf.call(selectedItems[i].parentNode.children, selectedItems[i]));
+							}
+							resolve({
+								type: "listSelection",
+								indexes: indexes,
+							});
+						})
+					);
 				}
 				break;
 			case "prompt":
