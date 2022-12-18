@@ -97,21 +97,36 @@ section {
   position: relative;
 }
 
-.propertyContainer .label {
-  margin-right: 5pt;
-}
-
-.propertyContainer .inputContainer {
-  width: 100%;
+.editor .itemEditor .properties .propertyContainer.row {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10pt 0;
 }
 
-.propertyContainer .inputContainer input {
-  flex-grow: 1;
+.editor .itemEditor .properties .propertyContainer.row button {
+  margin: 0 0 0 10pt;
+  background: var(--content-background-color);
+  color: var(--primary-text-color);
+  border: none;
+  border-radius: 5pt;
+  padding: 5pt;
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.propertyContainer .inputContainer select {
-  width: 95pt;
+.propertyContainer label {
+  font-weight: bold;
+}
+
+.propertyContainer .textContainer p {
+  margin: 0;
+}
+
+.propertyContainer .textContainer p:first-child {
+  font-weight: bold;
+  margin: 0 0 5pt 0;
 }
 
 .propertyContainer select~i {

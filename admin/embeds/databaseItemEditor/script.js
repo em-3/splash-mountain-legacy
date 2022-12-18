@@ -572,56 +572,133 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
-			container.classList.add("tags");
-			var label = document.createElement("label");
-			label.for = "tags";
-			label.textContent = "Tags";
+			container.classList.add("row");
 
-			var inputContainer = document.createElement("div");
-			inputContainer.classList.add("inputContainer");
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
 
-			var input = document.createElement("input");
-			input.name = "tags";
-			input.id = "tags";
-			input.placeholder = "Enter a comma-separated list of tags.";
-			input.oninput = function () {
-				var value = input.value;
-				var tags = value.split(",");
-				for (var o = 0; o < select.options.length; o++) {
-					select.options[o].disabled = false;
-				}
-				for (var i = 0; i < tags.length; i++) {
-					var tag = tags[i].trim();
-					for (var o = 0; o < select.options.length; o++) {
-						if (select.options[o].value === tag) {
-							select.options[o].disabled = true;
+			var tagLabel = document.createElement("p");
+			tagLabel.textContent = "Tags";
+			textContainer.appendChild(tagLabel);
+
+			var tagList = document.createElement("p");
+			tagList.classList.add("tagList");
+			tagList.id = "tagList";
+			if (
+				mode === "editor" &&
+				itemDetails.tags &&
+				itemDetails.tags.length > 0
+			) {
+				tagList.textContent = itemDetails.tags;
+			} else {
+				tagList.textContent = "No Tags";
+			}
+			textContainer.appendChild(tagList);
+
+			container.appendChild(textContainer);
+
+			var selectTagsButton = document.createElement("button");
+			selectTagsButton.classList.add("selectButton");
+			selectTagsButton.textContent = "Select Tags";
+			selectTagsButton.onclick = function () {
+				fetch("/api/tags")
+					.then(response => response.json())
+					.then(tags => {
+						// Merge tags from the tagList and the tags from the server
+						var tagList = document.querySelector("#tagList");
+						var tagListTags = tagList.textContent.split(", ");
+						if (tagListTags.length === 1 && tagListTags[0] === "No Tags") {
+							tagListTags = [];
+						} else {
+							tagListTags = tagListTags.filter(tag => {
+								return tag !== "";
+							});
 						}
-					}
-				}
-			};
-			inputContainer.appendChild(input);
+						tags = tags.concat(tagListTags);
+						tags = tags.filter((tag, index) => {
+							return tags.indexOf(tag) === index;
+						});
 
-			var select = document.createElement("select");
-			select.name = "tagSuggestions";
-			select.id = "tagSuggestions";
-			select.onchange = function () {
-				if (select.selectedIndex == 0) return;
-				var selectedOption = select.options[select.selectedIndex];
-				if (input.value.length === 0) {
-					input.value = selectedOption.value;
-				} else if (input.value.charAt(input.value.length - 1) === ",") {
-					input.value += selectedOption.value;
-				} else {
-					input.value += "," + selectedOption.value;
-				}
-				selectedOption.disabled = true;
-				select.selectedIndex = 0;
-			};
+						// Sort tags alphabetically
+						tags.sort((a, b) => {
+							if (a.toLowerCase() < b.toLowerCase()) {
+								return -1;
+							} else if (a.toLowerCase() > b.toLowerCase()) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
 
-			var defaultOption = document.createElement("option");
-			defaultOption.textContent = "Choose a Tag";
-			defaultOption.value = "none";
-			select.appendChild(defaultOption);
+						dialog.list(
+							"Choose Tags",
+							"Select from preexisting tags or add a new one",
+							tags.map(tag => {
+								return {label: tag};
+							}),
+							{
+								buttons: [
+									{
+										text: "Add New",
+										type: "active"
+									}
+								],
+								cancellable: true,
+								allowMultiple: true,
+								preselectedIndexes: tags.map(tag => {
+									if (tagList.textContent.includes(tag)) {
+										return tags.indexOf(tag);
+									} else {
+										return -1;
+									}
+								})
+							}
+						).then(response => {
+							if (!response) {
+								return;
+							}
+							switch (response.type) {
+								case "listSelection":
+									//User selected tags
+									var selectedTags = response.indexes.map(index => {
+										return tags[index];
+									});
+									tagList.textContent = selectedTags.join(", ");
+									break;
+								case "buttonSelection":
+									//User clicked the "Add New" button
+									dialog.prompt("Add New Tag", "Enter a name for the tag.", {
+										placeholder: "Tag Name",
+										cancellable: true
+									}).then(response => {
+										if (!response) {
+											return;
+										}
+										switch (response.type) {
+											case "input":
+												//User entered a name
+												var tag = response.values[0];
+												if (tag.length > 0) {
+													//Add the tag to the list
+													if (tagList.textContent.indexOf(tag) === -1) {
+														if (tagList.textContent === "No Tags") {
+															tagList.textContent = tag;
+														} else {
+															tagList.textContent += ", " + tag;
+														}
+													}
+												}
+												break;
+										}
+									});
+									break;
+							}
+						});
+					});
+			};
+			container.appendChild(selectTagsButton);
+
+			return container;
 
 			(async function () {
 				var tagList = await fetch("/api/tags/");
@@ -637,12 +714,6 @@ function showItemDetails(itemDetails) {
 					input.oninput();
 				}
 			})();
-
-			inputContainer.appendChild(select);
-
-			container.appendChild(label);
-			container.appendChild(inputContainer);
-			return container;
 		},
 		valueGetter: function () {
 			var values = document.querySelector("#tags").value;
@@ -666,47 +737,130 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
+			container.classList.add("row");
 
-			var nameInput = document.createElement("input");
-			nameInput.name = "authorName";
-			nameInput.id = "authorName";
-			nameInput.placeholder = "Author Name";
-			//Remove anything between square brackets from author name
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
+
+			var authorName = document.createElement("p");
+			authorName.classList.add("authorName");
+			authorName.id = "authorName";
 			if (mode === "editor" && itemDetails.author) {
-				nameInput.value = itemDetails.author.replace(/\[.*\]/, "");
+				//Remove anything between square brackets from author name
+				authorName.textContent = itemDetails.author.replace(/\[.*\]/, "");
+			} else {
+				authorName.textContent = "Select Author";
 			}
-			container.appendChild(nameInput);
+			textContainer.appendChild(authorName);
 
-			var linkInput = document.createElement("input");
-			linkInput.name = "authorLink";
-			linkInput.id = "authorLink";
-			linkInput.placeholder = "Author Link";
-			//Get the portion of the author link between square brackets
+			var authorLink = document.createElement("p");
+			authorLink.classList.add("authorLink");
+			authorLink.id = "authorLink";
 			if (
 				mode === "editor" &&
 				itemDetails.author &&
 				itemDetails.author.indexOf("[") >= 0
 			) {
-				linkInput.value = itemDetails.author
-					.match(/\[(.*)\]/)[0]
-					.substr(
-						1,
-						itemDetails.author.match(/\[(.*)\]/)[0].length - 2
-					);
+				//Get the portion of the author link between square brackets
+				authorLink.textContent = itemDetails.author.substring(
+					itemDetails.author.indexOf("[") + 1,
+					itemDetails.author.indexOf("]")
+				);
+			} else {
+				authorLink.textContent = "No Link";
 			}
-			container.appendChild(linkInput);
+			textContainer.appendChild(authorLink);
+
+			container.appendChild(textContainer);
+
+			var selectAuthorButton = document.createElement("button");
+			selectAuthorButton.classList.add("selectButton");
+			selectAuthorButton.textContent = "Select Author";
+			selectAuthorButton.onclick = function () {
+				fetch("/api/authors")
+					.then(response => response.json())
+					.then(authors => {
+						dialog.list(
+							"Choose an Author",
+							"Select a preexisting author or add a new one.",
+							authors.map(author => {
+								if (author.indexOf("[") !== -1) {
+									return {
+										label: author.substring(0, author.indexOf("[")),
+										sublabel: author.substring(author.indexOf("[") + 1, author.indexOf("]"))
+									}
+								} else {
+									return {
+										label: author
+									}
+								}
+							}),
+							{
+								buttons: [
+									{
+										text: "Add New",
+										type: "active"
+									}
+								],
+								cancellable: true
+							}
+						).then(response => {
+							if (!response) {
+								return;
+							}
+							switch (response.type) {
+								case "listSelection":
+									//User selected an author
+									if (authors[response.index].indexOf("[") !== -1) {
+										authorName.textContent = authors[response.index].substring(0, authors[response.index].indexOf("["));
+										authorLink.textContent = authors[response.index].substring(
+											authors[response.index].indexOf("[") + 1,
+											authors[response.index].indexOf("]")
+										);
+									} else {
+										authorName.textContent = authors[response.index];
+										authorLink.textContent = "No Link";
+									}
+									break;
+								case "buttonSelection":
+									//User clicked the "Add New" button
+									dialog.prompt("Add New Author", "Enter the author's name and a link if provided.", {
+										placeholders: ["Author Name", "Author Link"],
+										cancellable: true
+									}).then(response => {
+										if (!response) {
+											return;
+										}
+										switch (response.type) {
+											case "input":
+												//User entered a name
+												authorName.textContent = response.values[0];
+												if (response.values[1]) {
+													authorLink.textContent = response.values[1];
+												} else {
+													authorLink.textContent = "No Link";
+												}
+												break;
+										}
+									});
+									break;
+							}
+						});
+					});
+			};
+			container.appendChild(selectAuthorButton);
 
 			return container;
 		},
 		valueGetter: function () {
 			var nameValue = document.querySelector("#authorName").value;
 			var linkValue = document.querySelector("#authorLink").value;
-			if (nameValue && linkValue) {
+			if (nameValue && linkValue && nameValue != "Select Author" && linkValue !== "No Link") {
 				return {
 					include: true,
 					value: nameValue + "[" + linkValue + "]",
 				};
-			} else if (nameValue) {
+			} else if (nameValue && nameValue != "Select Author") {
 				return {
 					include: true,
 					value: nameValue,
