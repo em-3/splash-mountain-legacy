@@ -199,8 +199,10 @@ var dialog = {
 		document.body.insertBefore(dialogElement, document.querySelector(".overlay"));
 		requestAnimationFrame(function () {
 			document.querySelector(".dialog").classList.remove("hidden");
-			if (input) {
-				input.focus();
+
+			var inputs = document.querySelectorAll(".dialog input");
+			if (inputs.length > 0) {
+				inputs[0].focus();
 			} else if (searchBar) {
 				searchBar.focus();
 			}
