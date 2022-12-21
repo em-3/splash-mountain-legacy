@@ -130,13 +130,13 @@ main {
 
 .articleContent .header {
     margin: 15pt 0 5pt 0;
-    font-size: clamp(20pt, 5vw, 35pt);
+    font-size: 20pt;
     font-weight: bold;
 }
 
 .articleContent .subheader {
     margin: 5pt 0;
-    font-size: clamp(15pt, 3vw, 20pt);
+    font-size: 15pt;
     font-style: italic;
 }
 
