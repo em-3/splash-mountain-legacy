@@ -301,6 +301,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .propertiesContainer div.property {
+  min-width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -326,6 +327,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding: 2pt 5pt;
   border-radius: 5pt;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .itemInfoContainer .tags {

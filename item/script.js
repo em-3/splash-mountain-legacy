@@ -15,7 +15,6 @@ var timeOutHasExpired = false;
 //If the user is authenticated, show the admin buttons
 if (localStorage.getItem("adminAccess") === "true") {
 	document.querySelector(".buttonContainer .editItem").classList.remove("hidden");
-	document.querySelector(".buttonContainer .copyID").classList.remove("hidden");
 }
 
 //Fetch the item details and content
@@ -219,6 +218,106 @@ function showItemDetails() {
 			createDetailProperty("time", timeValue);
 		}
 	}
+
+	//If admin, display item ID and other IDs
+	if (localStorage.getItem("adminAccess") === "true") {
+		//Item ID
+		createDetailProperty("key", itemDetails.id, function (e) {
+			contextMenu.present({
+				x: e.clientX,
+				y: e.clientY,
+				items: [
+					{
+						icon: "copy",
+						label: "Copy Item ID",
+						callback: function () {
+							navigator.clipboard.writeText(itemDetails.id);
+							notification.addToQueue("progress", "copy", "Copied", "Item ID copied to clipboard.");
+						}
+					}
+				]
+			});
+		});
+
+		if (itemDetails.type === "image") {
+			//Resource ID
+			createDetailProperty("image", itemDetails.image, function (e) {
+				contextMenu.present({
+					x: e.clientX,
+					y: e.clientY,
+					items: [
+						{
+							icon: "copy",
+							label: "Copy Resource ID",
+							callback: function () {
+								navigator.clipboard.writeText(itemDetails.image);
+								notification.addToQueue("progress", "copy", "Copied", "Resource ID copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Thumbnail URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://splashmountainlegacy.com/resources/" + itemDetails.image + "/thumbnail.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Thumbnail URL copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Full Image URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://splashmountainlegacy.com/resources/" + itemDetails.image + "/main.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Full Image URL copied to clipboard.");
+							}
+						}
+					]
+				});
+			});
+		} else if (itemDetails.type === "video" || itemDetails.type === "audio") {
+			//YouTube ID
+			createDetailProperty("film", itemDetails.video_id, function (e) {
+				contextMenu.present({
+					x: e.clientX,
+					y: e.clientY,
+					items: [
+						{
+							icon: "copy",
+							label: "Copy YouTube ID",
+							callback: function () {
+								navigator.clipboard.writeText(itemDetails.video_id);
+								notification.addToQueue("progress", "copy", "Copied", "YouTube ID copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy YouTube URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://www.youtube.com/watch?v=" + itemDetails.video_id
+								);
+								notification.addToQueue("progress", "copy", "Copied", "YouTube URL copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Thumbnail URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://img.youtube.com/vi/" + itemDetails.video_id + "/hqdefault.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Thumbnail URL copied to clipboard.");
+							}
+						}
+					]
+				});
+			});
+		}
+	}
+
 	if (itemDetails.tags) {
 		var tags = itemDetails.tags.split(",");
 		for (var i = 0; i < tags.length; i++) {
@@ -549,11 +648,6 @@ function editItem() {
 	window.location.href =
 		"/admin/embeds/databaseItemEditor/?mode=editor&fromViewer=true&id=" +
 		loadedItemDetails.id;
-}
-
-function copyItemID() {
-	navigator.clipboard.writeText(loadedItemDetails.id);
-	notification.addToQueue("progress", "copy", "Copied", "Item ID copied to clipboard.")
 }
 
 var audioPlayer = {

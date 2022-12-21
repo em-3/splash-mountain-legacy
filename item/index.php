@@ -105,10 +105,6 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                     <i class="gg-edit-exposure"></i>
                     <span>Edit Item</span>
                 </button>
-                <button class="copyID hidden" onclick="copyItemID()">
-                    <i class="gg-copy"></i>
-                    <span>Copy ID</span>
-                </button>
             </div>
         </div>
     </main>
