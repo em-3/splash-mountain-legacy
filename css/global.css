@@ -52,6 +52,10 @@
   margin-top: -5pt;
 }
 
+.gg-tag {
+  margin-left: -2.75pt;
+}
+
 .hidden {
   display: none !important;
 }

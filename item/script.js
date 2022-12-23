@@ -326,24 +326,38 @@ function showItemDetails() {
 			tagElement.classList.add("tag");
 			tagElement.textContent = tag;
 			(function (tag) {
-				tagElement.onclick = function () {
-					if (embedded) {
-						window.top.postMessage(
-							"navigateTo/database/?tag=" + tag,
-							"*"
-						);
-					} else {
-						window.location.href = "/database/?tag=" + tag;
-					}
+				tagElement.onclick = function (e) {
+					contextMenu.present({
+						x: e.clientX,
+						y: e.clientY,
+						items: [
+							{
+								icon: "tag",
+								label: "See All Items",
+								callback: function () {
+									if (embedded) {
+										window.top.postMessage(
+											"navigateTo/database/?tag=" + tag,
+											"*"
+										);
+									} else {
+										window.location.href = "/database/?tag=" + tag;
+									}
+								}
+							}
+						]
+					});
 				};
 			})(tag);
 			document
 				.querySelector(".itemInfoContainer .tags")
 				.appendChild(tagElement);
 		}
-		// document
-		// 	.querySelector(".itemInfoContainer .tags")
-		// 	.classList.remove("hidden");
+		if (localStorage.getItem("adminAccess") === "true") {
+			document
+				.querySelector(".itemInfoContainer .tags")
+				.classList.remove("hidden");
+		}
 	}
 	if (metadata && metadata.make && metadata.model) {
 		document.querySelector(".metadata .header .make").textContent =

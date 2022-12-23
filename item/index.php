@@ -83,7 +83,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             <h1 class="name"></h1>
             <div class="propertiesContainer"></div>
             <div class="tags hidden">
-                <p class="label">Tags:</p>
+                <div class="iconContainer"><i class="gg-tag"></i></div>
             </div>
             <div class="metadata hidden">
                 <div class="header">
