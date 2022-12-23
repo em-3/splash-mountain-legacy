@@ -76,9 +76,15 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             <div class="contentDisplay hidden invisible"></div>
         </div>
         <div class="itemInfoContainer hidden">
-            <div class="parkContainer">
-                <i class="gg-pin"></i>
-                <h2 class="park"></h2>
+            <div class="locationContainer">
+                <div class="parkContainer">
+                    <i class="gg-pin"></i>
+                    <h2 class="park"></h2>
+                </div>
+                <div class="sceneContainer">
+                    <i class="gg-pin-alt"></i>
+                    <h2 class="scene"></h2>
+                </div>
             </div>
             <h1 class="name"></h1>
             <div class="propertiesContainer"></div>

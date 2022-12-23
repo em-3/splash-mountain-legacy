@@ -68,8 +68,8 @@ function showItemDetails() {
 	}
 
 	//Show the item details
-	document.querySelector(".park").textContent =
-		itemDetails.park + " • " + itemDetails.scene;
+	document.querySelector(".park").textContent = itemDetails.park;
+	document.querySelector(".scene").textContent = itemDetails.scene;
 	document.querySelector(".name").textContent = itemDetails.name;
 	if (itemDetails.type !== "text") {
 		var descriptionElement = document.createElement("p");

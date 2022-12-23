@@ -72,7 +72,7 @@ main {
 }
 
 .hasCursor .itemInfoContainer {
-  padding-bottom: 0 !important;
+  padding-bottom: 20pt !important;
 }
 
 .contentContainer {
@@ -275,16 +275,23 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: translateY(100pt);
 }
 
-.parkContainer {
+.locationContainer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   cursor: default;
+  gap: 20pt;
 }
 
-.park {
-  margin: 0 0 0 5pt;
-  transform: translate(0, -2pt);
+.locationContainer div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5pt;
+}
+
+.locationContainer div h2 {
+  margin: 0;
 }
 
 .name {
