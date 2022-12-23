@@ -158,9 +158,16 @@ main {
     margin: 2pt 0;
 }
 
-.articleContent .imageContainer * {
+.articleContent .imageContainer img {
     width: 100%;
     border-radius: 10pt;
+}
+
+.articleContent .imageContainer .caption {
+    margin: 5pt 0 0 0;
+    font-size: 11pt;
+    text-align: center;
+    font-style: italic;
 }
 
 .articleContent .quote {
