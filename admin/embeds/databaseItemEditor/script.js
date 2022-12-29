@@ -29,8 +29,8 @@ function showItemDetails(itemDetails) {
 		var metadata = JSON.parse(itemDetails.metadata);
 	}
 
+	//Type
 	if (mode === "newItem") {
-		//Type
 		properties.push({
 			name: "Type",
 			propertyName: "type",
@@ -60,6 +60,7 @@ function showItemDetails(itemDetails) {
 
 					var image = document.querySelector(".image");
 					var videoID = document.querySelector(".videoID");
+					var visibleContent = document.querySelector(".visibleContent");
 					var cameraInfoContainer = document.querySelector(
 						".cameraInfoContainer"
 					);
@@ -67,15 +68,18 @@ function showItemDetails(itemDetails) {
 
 					image.classList.add("hidden");
 					videoID.classList.add("hidden");
+					visibleContent.classList.add("hidden");
 					cameraInfoContainer.classList.add("hidden");
 					samplingRate.classList.add("hidden");
 
 					switch (newType) {
 						case "image":
 							image.classList.remove("hidden");
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 							break;
 						case "video":
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 						case "audio":
 							videoID.classList.remove("hidden");
@@ -497,6 +501,41 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Visible Content
+	properties.push({
+		name: "Visible Content",
+		propertyName: "visible_content",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("visibleContent");
+
+			var input = document.createElement("textarea");
+			input.name = "visibleContent";
+			input.id = "visibleContent";
+			input.placeholder = "Text Visible in Media";
+			if (mode === "editor") {
+				input.value = itemDetails.visible_content;
+			}
+
+			container.appendChild(input);
+			return container;
+		},
+		valueGetter: function () {
+			var value = document.querySelector("#visibleContent").value;
+			if (value) {
+				return {
+					include: true,
+					value: value,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
 	//Visibility
 	properties.push({
 		name: "Visibility",
@@ -716,11 +755,11 @@ function showItemDetails(itemDetails) {
 			})();
 		},
 		valueGetter: function () {
-			var values = document.querySelector("#tags").value;
-			if (values) {
+			var tags = document.querySelector("#tags");
+			if (tags && tags.value !== "No Tags") {
 				return {
 					include: true,
-					value: values,
+					value: tags.value,
 				};
 			} else {
 				return {
