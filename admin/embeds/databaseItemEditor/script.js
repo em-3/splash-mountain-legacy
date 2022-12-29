@@ -738,21 +738,6 @@ function showItemDetails(itemDetails) {
 			container.appendChild(selectTagsButton);
 
 			return container;
-
-			(async function () {
-				var tagList = await fetch("/api/tags/");
-				tagList = await tagList.json();
-				for (var i = 0; i < tagList.length; i++) {
-					var option = document.createElement("option");
-					option.textContent = tagList[i];
-					option.value = tagList[i];
-					select.appendChild(option);
-				}
-				if (mode === "editor") {
-					input.value = itemDetails.tags;
-					input.oninput();
-				}
-			})();
 		},
 		valueGetter: function () {
 			var tags = document.querySelector("#tags");
@@ -760,6 +745,120 @@ function showItemDetails(itemDetails) {
 				return {
 					include: true,
 					value: tags.value,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
+	//Linked Items
+	properties.push({
+		name: "Linked Items",
+		propertyName: "linked_items",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("linkedItems");
+			container.classList.add("listRow");
+
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
+
+			var label = document.createElement("p");
+			label.textContent = "Linked Items";
+			textContainer.appendChild(label);
+
+			var linkedItemCount = document.createElement("p");
+			linkedItemCount.classList.add("linkedItemCount");
+			linkedItemCount.id = "linkedItemCount";
+			if (
+				mode === "editor" &&
+				itemDetails.linked_items &&
+				itemDetails.linked_items.length > 0
+			) {
+				linkedItemCount.textContent = itemDetails.linked_items.length;
+			} else {
+				linkedItemCount.textContent = "No Linked Items";
+			}
+			textContainer.appendChild(linkedItemCount);
+
+			container.appendChild(textContainer);
+
+			var list = document.createElement("div");
+			list.classList.add("list");
+			list.id = "linkedItemsList";
+
+			window.linkedItems = {
+				items: [],
+				list: document.querySelector("#linkedItemsList"),
+				add: function(itemDetails) {
+					var item = new Item(itemDetails);
+					this.items.push(item);
+					// Make item.element draggable and reorderable in list
+					item.element.draggable = true;
+					item.element.addEventListener("dragstart", function(event) {
+						event.dataTransfer.setData("text/plain", item.id);
+					});
+					item.element.addEventListener("dragover", function(event) {
+						event.preventDefault();
+					});
+					item.element.addEventListener("drop", function(event) {
+						event.preventDefault();
+						var id = event.dataTransfer.getData("text/plain");
+						var draggedItem = window.linkedItems.items.find(item => item.id === id);
+						if (draggedItem) {
+							var draggedItemIndex = window.linkedItems.items.indexOf(draggedItem);
+							var thisItemIndex = window.linkedItems.items.indexOf(item);
+							if (draggedItemIndex > -1) {
+								window.linkedItems.items.splice(draggedItemIndex, 1);
+								window.linkedItems.items.splice(thisItemIndex, 0, draggedItem);
+							}
+							window.linkedItems.rebuildList();
+						}
+					});
+					window.linkedItems.rebuildList();
+				},
+				rebuildList: function() {
+					while (this.list.firstChild) {
+						this.list.removeChild(this.list.lastChild);
+					}
+					this.items.forEach(item => {
+						this.list.appendChild(item.element);
+					});
+				},
+				getValue: function () {
+					var value = [];
+					this.items.forEach(item => {
+						value.push(item.id);
+					});
+					return value;
+				},
+			}
+			if (mode === "editor" && itemDetails.linked_items) {
+				itemDetails.linked_items.forEach(linkedItem => {
+					linkedItems.add(linkedItem);
+				});
+			}
+
+			var addLinkedItemsButton = document.createElement("button");
+			addLinkedItemsButton.classList.add("addLinkedItemsButton");
+			addLinkedItemsButton.textContent = "Add Linked Items";
+			addLinkedItemsButton.onclick = function () {
+			};
+			list.appendChild(addLinkedItemsButton);
+
+			container.appendChild(list);
+			return container;
+		},
+		valueGetter: function () {
+			var value = linkedItems.getValue();
+			if (value && value.length > 0) {
+				return {
+					include: true,
+					value: value,
 				};
 			} else {
 				return {
