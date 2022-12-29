@@ -182,51 +182,98 @@ main {
 
 .audioControls {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 10pt;
   background: var(--content-background-color);
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  font-family: "Roboto Mono", monospace;
 }
 
-.audioControls .pausePlayButton {
+.hasCursor .contentDisplay:has(.audioControls) {
+  padding-top: 35pt;
+}
+
+.audioControls .info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10pt;
+}
+
+.audioControls .info .left,
+.audioControls .info .right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5pt;
+}
+
+.audioControls button {
   background: var(--page-background-color);
+  color: var(--primary-text-color);
   border: none;
   border-radius: 50%;
   width: 30pt;
   height: 30pt;
   cursor: pointer;
-}
-
-.audioControls .pausePlayButton picture {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  transition: background 0.2s ease;
 }
 
-.audioControls .pausePlayButton.playing picture.play {
-  display: none;
+.audioControls button:not(.playStateButton) {
+  transform: scale(0.8);
 }
 
-.audioControls .pausePlayButton:not(.playing) picture.pause {
-  display: none;
+.audioControls button:hover {
+  background: var(--secondary-content-background-color);
+}
+
+.audioControls button.active {
+  background: var(--color-1);
+  color: black;
+}
+
+.audioControls button.active .gg-repeat {
+  box-shadow: -2px -2px 0 0,
+    2px 2px 0 0 black;
+}
+
+.audioControls .playStateButton .loadingContainer {
+  transform: scale(0.3);
 }
 
 .audioControls .progressBar {
   height: 10pt;
-  width: calc(100% - 40pt);
-  margin: 30px 0;
+  margin: 10px 0 0 0;
   border-radius: 10pt;
   position: relative;
   background: var(--page-background-color);
 }
 
-.audioControls .progressBar .progressBarFill {
+.audioControls .progressBar .barWrapper {
+  position: relative;
+  width: 100%;
+  height: 10pt;
+  border-radius: 10pt;
+  overflow: hidden;
+}
+
+.audioControls .progressBar .barWrapper * {
   border-radius: 10pt 0 0 10pt;
   height: 100%;
-  background: var(--shadow-color);
   width: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.audioControls .progressBar .progress {
+  background: var(--color-1);
+}
+
+.audioControls .progressBar .buffered {
+  background: var(--secondary-content-background-color);
 }
 
 .audioControls .progressBar .progressBarInput {
@@ -243,7 +290,7 @@ main {
   height: 30px;
   width: 10px;
   border-radius: 3px;
-  background: var(--shadow-color);
+  background: var(--secondary-text-color);
   cursor: pointer;
   border-radius: 30px;
   margin-left: -3px;
@@ -443,6 +490,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
   main header {
     grid-column: 1 / 3;
+  }
+
+  .hasCursor .contentDisplay:has(.audioControls) {
+    padding-top: 0;
   }
 
   .contentContainer {
