@@ -1,4 +1,4 @@
-/* Font */
+/* Icons */
 @import url("https://css.gg/css");
 
 /* Component Styles */
@@ -844,6 +844,10 @@ main {
     top: unset;
     bottom: 5pt;
     transform: translate(-50%, 0);
+  }
+
+  header.globalHeader~main {
+    --header-height: 100pt;
   }
 
   .searchResultsContainer {
