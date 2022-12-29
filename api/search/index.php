@@ -105,10 +105,10 @@ if(!$id_only) {
         }
 
         //Set the author's name
-        $params["author"] = $_GET["author"];
+        $params["author"] = "%" . $_GET["author"] . "%";
         
         //Add the author name to the statement
-        $stmt .= "`author` LIKE CONCAT(:author, '%')";
+        $stmt .= "`author` LIKE :author";
     }
 
     //If the user has specified tags as a search parameter, add the tags to the statement

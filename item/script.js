@@ -15,7 +15,6 @@ var timeOutHasExpired = false;
 //If the user is authenticated, show the admin buttons
 if (localStorage.getItem("adminAccess") === "true") {
 	document.querySelector(".buttonContainer .editItem").classList.remove("hidden");
-	document.querySelector(".buttonContainer .copyID").classList.remove("hidden");
 }
 
 //Fetch the item details and content
@@ -69,8 +68,8 @@ function showItemDetails() {
 	}
 
 	//Show the item details
-	document.querySelector(".park").textContent =
-		itemDetails.park + " • " + itemDetails.scene;
+	document.querySelector(".park").textContent = itemDetails.park;
+	document.querySelector(".scene").textContent = itemDetails.scene;
 	document.querySelector(".name").textContent = itemDetails.name;
 	if (itemDetails.type !== "text") {
 		var descriptionElement = document.createElement("p");
@@ -219,6 +218,106 @@ function showItemDetails() {
 			createDetailProperty("time", timeValue);
 		}
 	}
+
+	//If admin, display item ID and other IDs
+	if (localStorage.getItem("adminAccess") === "true") {
+		//Item ID
+		createDetailProperty("key", itemDetails.id, function (e) {
+			contextMenu.present({
+				x: e.clientX,
+				y: e.clientY,
+				items: [
+					{
+						icon: "copy",
+						label: "Copy Item ID",
+						callback: function () {
+							navigator.clipboard.writeText(itemDetails.id);
+							notification.addToQueue("progress", "copy", "Copied", "Item ID copied to clipboard.");
+						}
+					}
+				]
+			});
+		});
+
+		if (itemDetails.type === "image") {
+			//Resource ID
+			createDetailProperty("image", itemDetails.image, function (e) {
+				contextMenu.present({
+					x: e.clientX,
+					y: e.clientY,
+					items: [
+						{
+							icon: "copy",
+							label: "Copy Resource ID",
+							callback: function () {
+								navigator.clipboard.writeText(itemDetails.image);
+								notification.addToQueue("progress", "copy", "Copied", "Resource ID copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Thumbnail URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://splashmountainlegacy.com/resources/" + itemDetails.image + "/thumbnail.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Thumbnail URL copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Full Image URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://splashmountainlegacy.com/resources/" + itemDetails.image + "/main.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Full Image URL copied to clipboard.");
+							}
+						}
+					]
+				});
+			});
+		} else if (itemDetails.type === "video" || itemDetails.type === "audio") {
+			//YouTube ID
+			createDetailProperty("film", itemDetails.video_id, function (e) {
+				contextMenu.present({
+					x: e.clientX,
+					y: e.clientY,
+					items: [
+						{
+							icon: "copy",
+							label: "Copy YouTube ID",
+							callback: function () {
+								navigator.clipboard.writeText(itemDetails.video_id);
+								notification.addToQueue("progress", "copy", "Copied", "YouTube ID copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy YouTube URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://www.youtube.com/watch?v=" + itemDetails.video_id
+								);
+								notification.addToQueue("progress", "copy", "Copied", "YouTube URL copied to clipboard.");
+							}
+						},
+						{
+							icon: "copy",
+							label: "Copy Thumbnail URL",
+							callback: function () {
+								navigator.clipboard.writeText(
+									"https://img.youtube.com/vi/" + itemDetails.video_id + "/hqdefault.jpg"
+								);
+								notification.addToQueue("progress", "copy", "Copied", "Thumbnail URL copied to clipboard.");
+							}
+						}
+					]
+				});
+			});
+		}
+	}
+
 	if (itemDetails.tags) {
 		var tags = itemDetails.tags.split(",");
 		for (var i = 0; i < tags.length; i++) {
@@ -227,24 +326,38 @@ function showItemDetails() {
 			tagElement.classList.add("tag");
 			tagElement.textContent = tag;
 			(function (tag) {
-				tagElement.onclick = function () {
-					if (embedded) {
-						window.top.postMessage(
-							"navigateTo/database/?tag=" + tag,
-							"*"
-						);
-					} else {
-						window.location.href = "/database/?tag=" + tag;
-					}
+				tagElement.onclick = function (e) {
+					contextMenu.present({
+						x: e.clientX,
+						y: e.clientY,
+						items: [
+							{
+								icon: "tag",
+								label: "See All Items",
+								callback: function () {
+									if (embedded) {
+										window.top.postMessage(
+											"navigateTo/database/?tag=" + tag,
+											"*"
+										);
+									} else {
+										window.location.href = "/database/?tag=" + tag;
+									}
+								}
+							}
+						]
+					});
 				};
 			})(tag);
 			document
 				.querySelector(".itemInfoContainer .tags")
 				.appendChild(tagElement);
 		}
-		// document
-		// 	.querySelector(".itemInfoContainer .tags")
-		// 	.classList.remove("hidden");
+		if (localStorage.getItem("adminAccess") === "true") {
+			document
+				.querySelector(".itemInfoContainer .tags")
+				.classList.remove("hidden");
+		}
 	}
 	if (metadata && metadata.make && metadata.model) {
 		document.querySelector(".metadata .header .make").textContent =
@@ -387,19 +500,37 @@ function showItemContent(itemDetails) {
 		case "audio":
 			document.querySelector(".contentDisplay").innerHTML = `
                 <div class="audioControls">
-                    <button class="pausePlayButton" onclick="audioPlayer.isPlaying ? audioPlayer.pause() : audioPlayer.play()">
-                        <picture class="play">
-                            <source srcset="/images/icons/play-white.svg" media="(prefers-color-scheme: dark)">
-                            <img src="/images/icons/play-black.svg" alt="Play" width="auto" height="20pt" style="margin-left: 2.5pt">
-                        </picture>
-                        <picture class="pause">
-                            <source srcset="/images/icons/pause-white.svg" media="(prefers-color-scheme: dark)">
-                            <img src="/images/icons/pause-black.svg" alt="Pause" width="auto" height="20pt">
-                        </picture>
-                    </button>
+                    <div class="info">
+						<div class="left">
+							<button class="playStateButton" onclick="audioPlayer.changePlayState()">
+								<i class="play gg-play-button hidden"></i>
+								<i class="pause gg-play-pause hidden"></i>
+								<i class="replay gg-undo hidden"></i>
+								<div class="buffering loadingContainer">
+									<div class="loadingAnimationEllipsis">
+										<div></div>
+										<div></div>
+										<div></div>
+										<div></div>
+									</div>
+								</div>
+							</button>
+							<button class="repeatButton" onclick="audioPlayer.changeRepeatMode()">
+								<i class="gg-repeat"></i>
+							</button>
+						</div>
+						<div class="right">
+							<p class="time">
+								<span class="currentTime">0:00</span> / <span class="duration">0:00</span>
+							</p>
+						</div>
+					</div>
                     <div class="progressBar">
-                        <div class="progressBarFill"></div>
-                        <input type="range" class="progressBarInput" value="0" oninput="audioPlayer.oninput()" onchange="audioPlayer.onchange(this.value)">
+                        <div class="barWrapper">
+							<div class="buffered"></div>
+							<div class="progress"></div>
+						</div>
+                        <input type="range" class="progressBarInput" value="0" oninput="audioPlayer.oninput(this.value)" onchange="audioPlayer.onchange(this.value)">
                     </div>
                 </div>
             `;
@@ -551,16 +682,24 @@ function editItem() {
 		loadedItemDetails.id;
 }
 
-function copyItemID() {
-	navigator.clipboard.writeText(loadedItemDetails.id);
-	notification.addToQueue("progress", "copy", "Copied", "Item ID copied to clipboard.")
-}
-
 var audioPlayer = {
 	player: undefined,
 	refreshInterval: undefined,
-	get isPlaying() {
-		return this.player.getPlayerState() == 1;
+	loop: false,
+
+	get playingState() {
+		switch (this.player.getPlayerState()) {
+			case YT.PlayerState.PLAYING:
+				return "playing";
+			case YT.PlayerState.PAUSED:
+				return "paused";
+			case YT.PlayerState.BUFFERING:
+				return "buffering";
+			case YT.PlayerState.CUED:
+				return "cued";
+			case YT.PlayerState.ENDED:
+				return "ended";
+		}
 	},
 	get length() {
 		return this.player.getDuration();
@@ -568,47 +707,118 @@ var audioPlayer = {
 	get currentTime() {
 		return this.player.getCurrentTime();
 	},
+	get bufferedFraction() {
+		return this.player.getVideoLoadedFraction();
+	},
 
-	updatePlayPauseButton: function () {
-		if (audioPlayer.isPlaying) {
-			document.querySelector(".pausePlayButton").classList.add("playing");
+	formatTime: function (time) {
+		var minutes = Math.floor(time / 60);
+		var seconds = Math.floor(time - minutes * 60);
+		if (seconds < 10) {
+			seconds = "0" + seconds;
+		}
+		return minutes + ":" + seconds;
+	},
+
+	changePlayState: function () {
+		if (this.playingState === "playing") {
+			this.player.pauseVideo();
 		} else {
-			document
-				.querySelector(".pausePlayButton")
-				.classList.remove("playing");
+			this.player.playVideo();
 		}
 	},
-	updateProgressBar: function () {
-		document.querySelector(".progressBarFill").style.width =
-			(audioPlayer.currentTime / audioPlayer.length) * 100 + "%";
-		document.querySelector(".progressBarInput").value =
-			audioPlayer.currentTime;
+	changeRepeatMode: function () {
+		this.loop = !this.loop;
+		this.elements.repeatButton.classList.toggle("active");
 	},
 
-	oninput: function () {
+	updatePlayStateButton: function () {
+		audioPlayer.elements.playStateButton.play.classList.add("hidden");
+		audioPlayer.elements.playStateButton.pause.classList.add("hidden");
+		audioPlayer.elements.playStateButton.buffering.classList.add("hidden");
+		audioPlayer.elements.playStateButton.replay.classList.add("hidden");
+
+		if (audioPlayer.playingState === "playing") {
+			audioPlayer.elements.playStateButton.pause.classList.remove("hidden");
+		} else if (audioPlayer.playingState === "paused") {
+			audioPlayer.elements.playStateButton.play.classList.remove("hidden");
+		} else if (audioPlayer.playingState === "ended") {
+			audioPlayer.elements.playStateButton.replay.classList.remove("hidden");
+		} else {
+			audioPlayer.elements.playStateButton.buffering.classList.remove("hidden");
+		}
+	},
+	updateProgressBar: function (value) {
+		audioPlayer.elements.time.current.textContent = audioPlayer.formatTime((value ? value : audioPlayer.currentTime));
+		if (value) {
+			document.querySelector(".progress").style.width =
+				(value / audioPlayer.length) * 100 + "%";
+		} else {
+			document.querySelector(".progress").style.width =
+				(audioPlayer.currentTime / audioPlayer.length) * 100 + "%";
+		}
+		document.querySelector(".buffered").style.width =
+			audioPlayer.bufferedFraction * 100 + "%";
+		if (!value) {
+			document.querySelector(".progressBarInput").value =
+				audioPlayer.currentTime;
+		}
+	},
+
+	oninput: function (value) {
 		if (audioPlayer.refreshInterval) {
 			clearInterval(audioPlayer.refreshInterval);
 			audioPlayer.refreshInterval = undefined;
 		}
+		audioPlayer.updateProgressBar(value);
 	},
 	onchange: function (value) {
 		audioPlayer.player.seekTo(value, true);
 		audioPlayer.updateProgressBar();
-		if (audioPlayer.isPlaying) {
+		if (audioPlayer.playingState === "playing" || audioPlayer.playingState === "buffering") {
 			audioPlayer.refreshInterval = setInterval(
 				audioPlayer.updateProgressBar,
-				500
+				100
 			);
+		}
+	},
+	onPlayerReady: function (event) {
+		document.querySelector(".audioControls input").min = audioPlayer.currentTime;
+		document.querySelector(".audioControls input").max = audioPlayer.length;
+		event.target.playVideo();
+		audioPlayer.elements.time.duration.textContent = audioPlayer.formatTime(audioPlayer.length);
+	},
+	onPlayerStateChange: function (event) {
+		audioPlayer.updatePlayStateButton();
+		audioPlayer.updateProgressBar();
+		if (audioPlayer.playingState === "playing" || audioPlayer.playingState === "buffering") {
+			if (audioPlayer.refreshInterval) {
+				clearInterval(audioPlayer.refreshInterval);
+				audioPlayer.refreshInterval = undefined;
+			}
+			audioPlayer.refreshInterval = setInterval(
+				audioPlayer.updateProgressBar,
+				100
+			);
+		} else if (audioPlayer.playingState === "ended") {
+			if (audioPlayer.loop === true) {
+				audioPlayer.player.seekTo(0, true);
+				audioPlayer.player.playVideo();
+			} else {
+				clearInterval(audioPlayer.refreshInterval);
+				audioPlayer.refreshInterval = undefined;
+			}
+		} else {
+			clearInterval(audioPlayer.refreshInterval);
+			audioPlayer.refreshInterval = undefined;
 		}
 	},
 
 	play: function () {
 		this.player.playVideo();
-		this.isPlaying = true;
 	},
 	pause: function () {
 		this.player.pauseVideo();
-		this.isPlaying = false;
 	},
 	skipTo: function (value, allowSeekAhead) {
 		this.player.seekTo(value, allowSeekAhead);
@@ -618,6 +828,20 @@ var audioPlayer = {
 
 //YouTube Embed
 function onYouTubeIframeAPIReady() {
+	audioPlayer.elements = {
+		playStateButton: {
+			element: document.querySelector(".playStateButton"),
+			play: document.querySelector(".playStateButton .play"),
+			pause: document.querySelector(".playStateButton .pause"),
+			buffering: document.querySelector(".playStateButton .buffering"),
+			replay: document.querySelector(".playStateButton .replay"),
+		},
+		repeatButton: document.querySelector(".repeatButton"),
+		time: {
+			current: document.querySelector(".currentTime"),
+			duration: document.querySelector(".duration"),
+		}
+	}
 	audioPlayer.player = new YT.Player("player", {
 		height: "" + (document.documentElement.clientWidth * 9) / 16,
 		width: "" + document.documentElement.clientWidth,
@@ -627,31 +851,12 @@ function onYouTubeIframeAPIReady() {
 			vq: "tiny",
 		},
 		events: {
-			onReady: onPlayerReady,
-			onStateChange: onPlayerStateChange,
+			onReady: audioPlayer.onPlayerReady,
+			onStateChange: audioPlayer.onPlayerStateChange,
 		},
 	});
 	document.querySelector(".loadingScreen").classList.add("hidden");
 	document.querySelector(".contentDisplay").classList.remove("hidden");
-}
-
-function onPlayerReady(event) {
-	document.querySelector(".audioControls input").min =
-		audioPlayer.currentTime;
-	document.querySelector(".audioControls input").max = audioPlayer.length;
-	event.target.playVideo();
-}
-function onPlayerStateChange(event) {
-	audioPlayer.updatePlayPauseButton();
-	audioPlayer.updateProgressBar();
-	if (audioPlayer.isPlaying) {
-		audioPlayer.refreshInterval = setInterval(
-			audioPlayer.updateProgressBar,
-			500
-		);
-	} else {
-		clearInterval(audioPlayer.refreshInterval);
-	}
 }
 
 function showErrorScreen() {

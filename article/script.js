@@ -114,6 +114,11 @@ var contentFieldConstructors = {
 		image.src = "/resources/" + content.image + "/main.jpg";
 		container.appendChild(image);
 
+		var caption = document.createElement("p");
+		caption.classList.add("caption");
+		caption.textContent = content.caption;
+		container.appendChild(caption);
+
 		return container;
 	},
 	quote: function (content) {

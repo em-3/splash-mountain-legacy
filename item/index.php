@@ -18,6 +18,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="../styles.css">
 
@@ -76,14 +77,20 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             <div class="contentDisplay hidden invisible"></div>
         </div>
         <div class="itemInfoContainer hidden">
-            <div class="parkContainer">
-                <i class="gg-pin"></i>
-                <h2 class="park"></h2>
+            <div class="locationContainer">
+                <div class="parkContainer">
+                    <i class="gg-pin"></i>
+                    <h2 class="park"></h2>
+                </div>
+                <div class="sceneContainer">
+                    <i class="gg-pin-alt"></i>
+                    <h2 class="scene"></h2>
+                </div>
             </div>
             <h1 class="name"></h1>
             <div class="propertiesContainer"></div>
             <div class="tags hidden">
-                <p class="label">Tags:</p>
+                <div class="iconContainer"><i class="gg-tag"></i></div>
             </div>
             <div class="metadata hidden">
                 <div class="header">
@@ -104,10 +111,6 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                 <button class="editItem hidden" onclick="editItem()">
                     <i class="gg-edit-exposure"></i>
                     <span>Edit Item</span>
-                </button>
-                <button class="copyID hidden" onclick="copyItemID()">
-                    <i class="gg-copy"></i>
-                    <span>Copy ID</span>
                 </button>
             </div>
         </div>

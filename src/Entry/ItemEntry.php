@@ -39,11 +39,11 @@ class ItemEntry extends Entry {
     }
 
     public static function getOptionalFields() {
-        return ["author", "video_id", "image", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
+        return ["author", "visible_content", "video_id", "image", "source", "scene", "metadata", "tags", "linked_items", "timestamp", "hidden"];
     }
 
     public static function getModifiableFields() {
-        return ["name", "park", "description", "author", "video_id", "image", "source", "scene", "metadata", "tags", "timestamp", "hidden"];
+        return ["name", "park", "description", "author", "visible_content", "video_id", "image", "source", "scene", "metadata", "tags", "linked_items", "timestamp", "hidden"];
     }
 
 }

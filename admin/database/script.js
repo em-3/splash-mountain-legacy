@@ -389,111 +389,12 @@ var databaseBrowser = {
 
 						for (var i = 0; i < data.length; i++) {
 							var currentItemData = data[i];
-
-							var resultElement = document.createElement("div");
-							resultElement.className = "listItem";
-							(function (id) {
-								resultElement.onclick = function () {
-									showItemDetails(id);
-								};
-							})(currentItemData.id);
-							if (currentItemData.hidden === "1") {
-								resultElement.classList.add("unlisted");
-							}
-
-							if (currentItemData.type === "image") {
-								var pictureElement = null;
-								var imgElement = document.createElement("img");
-								imgElement.className = "image";
-								imgElement.src = "/resources/" + currentItemData.image + "/thumbnail.jpg";
-							} else if (currentItemData.type === "video") {
-								var pictureElement = null;
-								var imgElement = document.createElement("img");
-								imgElement.className = "image";
-								imgElement.src =
-									"https://img.youtube.com/vi/" +
-									currentItemData.video_id +
-									"/mqdefault.jpg";
-							} else {
-								var pictureElement =
-									document.createElement("picture");
-								pictureElement.className = "image";
-
-								var sourceElement =
-									document.createElement("source");
-								sourceElement.srcset =
-									"/images/icons/types/" +
-									currentItemData.type +
-									"-white.png";
-								sourceElement.setAttribute(
-									"media",
-									"(prefers-color-scheme: dark)"
-								);
-
-								var imgElement = document.createElement("img");
-								imgElement.src =
-									"/images/icons/types/" +
-									currentItemData.type +
-									"-black.png";
-
-								pictureElement.appendChild(sourceElement);
-								pictureElement.appendChild(imgElement);
-							}
-
-							var rightSideContainer =
-								document.createElement("div");
-							rightSideContainer.className = "right";
-
-							var sceneElement = document.createElement("p");
-							sceneElement.className = "scene";
-							sceneElement.textContent = currentItemData.scene;
-
-							var nameElement = document.createElement("h3");
-							nameElement.className = "name";
-							nameElement.textContent = currentItemData.name;
-
-							var infoContainerElement =
-								document.createElement("div");
-							infoContainerElement.className = "infoContainer";
-
-							var parkElement = document.createElement("p");
-							parkElement.className = "park";
-							parkElement.textContent = currentItemData.park;
-							infoContainerElement.appendChild(parkElement);
-
-							var typeElement = document.createElement("p");
-							typeElement.className = "type";
-							typeElement.textContent = currentItemData.type;
-							infoContainerElement.appendChild(typeElement);
-
-							if (currentItemData.author) {
-								var authorElement = document.createElement("p");
-								authorElement.className = "author";
-								authorElement.textContent =
-									currentItemData.author.replace(
-										/\[([^\][]+)]/g,
-										""
-									);
-								infoContainerElement.appendChild(authorElement);
-							}
-
-							rightSideContainer.appendChild(sceneElement);
-							rightSideContainer.appendChild(nameElement);
-							rightSideContainer.appendChild(
-								infoContainerElement
-							);
-
-							if (pictureElement) {
-								resultElement.appendChild(pictureElement);
-							} else if (imgElement) {
-								resultElement.appendChild(imgElement);
-							}
-							resultElement.appendChild(rightSideContainer);
+							var item = new Item(currentItemData);
 							document
 								.querySelector(
 									".databaseBrowser .resultsContainer"
 								)
-								.appendChild(resultElement);
+								.appendChild(item.element);
 						}
 
 						if (
