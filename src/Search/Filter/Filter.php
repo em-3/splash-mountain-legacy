@@ -26,6 +26,10 @@ abstract class Filter {
     }
 
     protected function validateGivenData($given_data) {
+        if(count($this->getAllowedValues()) == 0) {
+            return;
+        }
+
         $match = false;
         foreach($this->getAllowedValues() as $value) {
             if($given_data == $value) {

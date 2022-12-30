@@ -2,7 +2,6 @@
 
 namespace SplmlFoundation\SplashMountainLegacyBackend\Search\Filter;
 
-use Exception;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SQLSnippet;
 
 class ExactFilter extends Filter {

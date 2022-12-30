@@ -60,7 +60,12 @@ class SearchEngine {
 
         $sql .= " FROM " . $this->table_name;
 
-        if(count($search_parameters) > 0) {
+        //Build a list of field names
+        $field_names = array_map(function($filter) {
+            return $filter->getFieldName();
+        }, $this->filters);
+
+        if(count($search_parameters) > 0 && empty(array_diff($field_names, array_keys($search_parameters)))) {
             $sql .= " WHERE ";
 
             $data_bindings = array();
@@ -75,7 +80,7 @@ class SearchEngine {
     
                 //Request the query from each filter
                 $snippet = $filter->generateQuery($search_parameters[$filter->getFieldName()]);
-    
+
                 //Add the data bindings to the global array
                 $data_bindings = array_merge($data_bindings, $snippet->getDataBindings());
     
