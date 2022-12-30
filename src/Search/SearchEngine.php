@@ -60,7 +60,7 @@ class SearchEngine {
 
         $sql .= " FROM " . $this->table_name;
 
-        if(count($this->filters) > 0) {
+        if(count($search_parameters) > 0) {
             $sql .= " WHERE ";
 
             $data_bindings = array();
