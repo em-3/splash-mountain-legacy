@@ -4,7 +4,7 @@ require_once __DIR__ . "/../../scripts/init.php";
 
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SearchEngine;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
-use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactInternalNameFilter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\InternalNameDecorator;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\TagsFilter;
 
@@ -13,8 +13,8 @@ $engine = new SearchEngine($database, "item_index", ["id", "name", "type", "park
 //Check if the user provided a query
 if(isset($_GET["query"])) {
     //Check if the query is an ID
-    if(preg_match("/^[A-Za-z0-9_\/]{11}$/", $_GET["query"])) {
-        $engine->addFilter(new ExactInternalNameFilter("query", "id"));
+    if(preg_match("/^[A-Za-z0-9_\/\-]{11}$/", $_GET["query"])) {
+        $engine->addFilter(new InternalNameDecorator(new ExactFilter("query"), "id"));
 
         //Search immediately, since ID searches don't use any other filters
         search();
@@ -33,7 +33,7 @@ $engine->addFilter(new ExactFilter("scene", ["In the Park", "Critter Country", "
 $engine->addFilter(new TagsFilter("tags"));
 
 //Filter hidden results unless the user is authorized
-// $engine->addFilter(new ExactFieldDecorator(new AuthorizationFilter("visibility", 0), "hidden"));
+// $engine->addFilter(new AuthorizationFilter("visibility", 0));
 
 //Dynamically set the sorting algorithm using the sort_by parameter
 // $engine->setSorter(new SortSelector("sort_by"));

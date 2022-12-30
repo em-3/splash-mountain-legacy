@@ -65,7 +65,7 @@ class SearchEngine {
             return $filter->getFieldName();
         }, $this->filters);
 
-        if(count($search_parameters) > 0 && !empty(array_diff($field_names, array_keys($search_parameters)))) {
+        if(count($search_parameters) > 0 && empty(array_diff(array_keys($search_parameters), $field_names))) {
             $sql .= " WHERE ";
 
             $data_bindings = array();
