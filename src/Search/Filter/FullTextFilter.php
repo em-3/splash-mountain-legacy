@@ -5,7 +5,7 @@ namespace SplmlFoundation\SplashMountainLegacyBackend\Search\Filter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SQLSnippet;
 
 /**
- * Internal class that performs a full text search of the data on
+ * Internal class that performs a full text search of provided data
  */
 class FullTextFilter extends Filter {
 

@@ -6,6 +6,7 @@ use SplmlFoundation\SplashMountainLegacyBackend\Search\SearchEngine;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactInternalNameFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\TagsFilter;
 
 $engine = new SearchEngine($database, "item_index", ["id", "name", "type", "park", "author", "description", "image", "video_id", "scene", "hidden"]);
 
@@ -29,7 +30,7 @@ $engine->addFilter(new ExactFilter("type", ["image", "video", "audio", "text", "
 $engine->addFilter(new ExactFilter("scene", ["In the Park", "Critter Country", "Frontierland", "Briar Patch Store", "Attraction",  "Exterior", "Queue", "Loading Zone", "Lift A", "Briar Patch", "Lift B", "HDYD Exterior", "HDYD Interior", "EGALP Pre-Bees", "EGALP Bees", "EGALP LP", "Final Lift", "ZDDD Exterior", "ZDDD Showboat", "ZDDD Homecoming", "ZDDD Unload", "Photos", "Exit"]));
 
 //Filter by tags, if present
-// $engine->addFilter(new TagsFilter("tags"));
+$engine->addFilter(new TagsFilter("tags"));
 
 //Filter hidden results unless the user is authorized
 // $engine->addFilter(new ExactFieldDecorator(new AuthorizationFilter("visibility", 0), "hidden"));

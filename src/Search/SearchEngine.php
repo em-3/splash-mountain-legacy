@@ -96,8 +96,6 @@ class SearchEngine {
             }
         }
 
-        echo $sql;
-
         //Execute the query
         $statement = $this->database->prepare($sql);
         $statement->execute($data_bindings);
