@@ -65,35 +65,54 @@ class SearchEngine {
             return $filter->getFieldName();
         }, $this->filters);
 
-        if(count($search_parameters) > 0 && empty(array_diff(array_keys($search_parameters), $field_names))) {
-            $sql .= " WHERE ";
+        $data_bindings = array();
 
-            $data_bindings = array();
+        $first = true;
 
-            $first = true;
-    
-            foreach($this->filters as $filter) {
-                //Check if the filter is present in the search data
-                if(!array_key_exists($filter->getFieldName(), $search_parameters)) {
+        foreach($this->filters as $filter) {
+            //Check if the filter is present in the search data
+            if(!array_key_exists($filter->getFieldName(), $search_parameters)) {
+                //If it is not, run the default hook
+                $snippet = $filter->defaultQuery();
+
+                if(!$snippet) {
                     continue;
                 }
-    
-                //Request the query from each filter
-                $snippet = $filter->generateQuery($search_parameters[$filter->getFieldName()]);
-
-                //Add the data bindings to the global array
-                $data_bindings = array_merge($data_bindings, $snippet->getDataBindings());
-
+                    
                 //Add an AND if this is not the first value
                 if(!$first) {
                     $sql .= " AND ";
                 }else {
+                    $sql .= " WHERE ";
                     $first = false;
                 }
-    
-                //Concatenate the snippet to the query
-                $sql .= "(" . $snippet->getSQLString() . ")";
+
+                //Concatenate the snippet onto the query
+                $sql .= "($snippet)";
+
+                continue;
             }
+
+            //Request the query from each filter
+            $snippet = $filter->generateQuery($search_parameters[$filter->getFieldName()]);
+
+            if(!$snippet) {
+                continue;
+            }
+
+            //Add an AND if this is not the first value
+            if(!$first) {
+                $sql .= " AND ";
+            }else {
+                $sql .= " WHERE ";
+                $first = false;
+            }
+
+            //Add the data bindings to the global array
+            $data_bindings = array_merge($data_bindings, $snippet->getDataBindings());
+
+            //Concatenate the snippet to the query
+            $sql .= "(" . $snippet->getSQLString() . ")";
         }
 
         //Execute the query

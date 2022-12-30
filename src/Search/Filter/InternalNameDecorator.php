@@ -18,11 +18,27 @@ class InternalNameDecorator extends Filter {
         parent::__construct($this->filter->getFieldName(), $this->filter->getAllowedValues());
     }
 
+    public function defaultQuery() {
+        //Generate the filter's SQL statement
+        $snippet = $this->filter->defaultQuery();
+
+        //If the statement returned false, mirror that
+        if(!$snippet) {
+            return false;
+        }
+
+        //Replace field_name with internal_name at all occurrences in the SQL
+        return str_replace($this->getFieldName(), $this->internal_name, $snippet);
+    }
+
     public function generateQuery($given_data) {
         //Generate the filter's SQL statement
         $snippet = $this->filter->generateQuery($given_data);
 
-        var_dump($snippet);
+        //If the statement returned false, mirror that
+        if(!$snippet) {
+            return false;
+        }
 
         //Replace field_name with internal_name at all occurrences in the SQL
         $sql = str_replace($this->getFieldName(), $this->internal_name, $snippet->getSQLString());

@@ -21,6 +21,17 @@ abstract class Filter {
         return $this->field_name;
     }
 
+    /**
+     * Generates the SQL query for this filter if the filter is not specified in the request
+     * 
+     * Unlike generateQuery, this function is not provided with data
+     * 
+     * @return string|false The SQL query snippet for this filter, or false if no SQL was generated
+     */
+    public function defaultQuery() {
+        return false;
+    }
+
     protected function getAllowedValues() {
         return $this->allowed_values;
     }
@@ -47,7 +58,7 @@ abstract class Filter {
      * Generates the SQL query for this filter
      * 
      * @param string $given_data Data provided by the engine specifying the operating mode of this filter
-     * @return SQLSnippet The SQL query snippet for this filter
+     * @return SQLSnippet|false The SQL query snippet for this filter, or false if no SQL was generated
      */
     public abstract function generateQuery($given_data);
 
