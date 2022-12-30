@@ -33,7 +33,10 @@ abstract class Filter {
             }
         }
 
-        return $match;
+        //Throw an exception if the data doesn't match
+        if(!$match) {
+            throw new \Exception("Given data for exact filter (" . $this->getFieldName() . ") did not match any allowed values! Data: " . $given_data);
+        }
     }
 
     /**
