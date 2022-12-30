@@ -5,6 +5,7 @@ require_once __DIR__ . "/../../scripts/init.php";
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SearchEngine;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactInternalNameFilter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
 
 $engine = new SearchEngine($database, "item_index", ["id", "name", "type", "park", "author", "description", "image", "video_id", "scene", "hidden"]);
 
@@ -18,7 +19,7 @@ if(isset($_GET["query"])) {
         search();
     }else {
         //Otherwise, search using a dynamically selected algorithm
-        // $engine->addFilter(new SearchFilter("query"));
+        $engine->addFilter(new SearchFilter("query", ["name", "description", "visible_content", "tags"]));
     }
 }
 

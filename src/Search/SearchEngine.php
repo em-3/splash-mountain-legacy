@@ -65,7 +65,7 @@ class SearchEngine {
             return $filter->getFieldName();
         }, $this->filters);
 
-        if(count($search_parameters) > 0 && empty(array_diff($field_names, array_keys($search_parameters)))) {
+        if(count($search_parameters) > 0 && !empty(array_diff($field_names, array_keys($search_parameters)))) {
             $sql .= " WHERE ";
 
             $data_bindings = array();
@@ -83,7 +83,7 @@ class SearchEngine {
 
                 //Add the data bindings to the global array
                 $data_bindings = array_merge($data_bindings, $snippet->getDataBindings());
-    
+
                 //Add an AND if this is not the first value
                 if(!$first) {
                     $sql .= " AND ";
@@ -95,6 +95,8 @@ class SearchEngine {
                 $sql .= "(" . $snippet->getSQLString() . ")";
             }
         }
+
+        echo $sql;
 
         //Execute the query
         $statement = $this->database->prepare($sql);
