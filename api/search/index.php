@@ -2,6 +2,7 @@
 
 require_once __DIR__ . "/../../scripts/init.php";
 
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\AuthorizationFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SearchEngine;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\InternalNameDecorator;
@@ -33,7 +34,7 @@ $engine->addFilter(new ExactFilter("scene", ["In the Park", "Critter Country", "
 $engine->addFilter(new TagsFilter("tags"));
 
 //Filter hidden results unless the user is authorized
-// $engine->addFilter(new AuthorizationFilter("visibility", 0));
+$engine->addFilter(new InternalNameDecorator(new AuthorizationFilter("visibility", 0), "hidden"));
 
 //Dynamically set the sorting algorithm using the sort_by parameter
 // $engine->setSorter(new SortSelector("sort_by"));
