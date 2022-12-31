@@ -4,6 +4,7 @@ namespace SplmlFoundation\SplashMountainLegacyBackend\Search;
 
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\Filter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\Sorter;
+use UnexpectedValueException;
 
 class SearchEngine {
 
@@ -18,6 +19,10 @@ class SearchEngine {
     private $filters;
     /** @var Sorter $sorter */
     private $sorter;
+    /** @var int $min */
+    private $min;
+    /** @var int $max */
+    private $max;
 
     public function __construct($database, $table_name, $requested_fields) {
         $this->database = $database;
@@ -42,6 +47,23 @@ class SearchEngine {
      */
     public function setSorter($sorter) {
         $this->sorter = $sorter;
+    }
+
+    /**
+     * Sets the minimum and maximum indexes with which to limit the results.
+     * 
+     * Example: Given a result set of 25 items, a min of 5 and a max of 10 would return the results ordered 5-10
+     * 
+     * @param int $min The lower bound of items to return
+     * @param int $max The upper bound of items to return
+     */
+    public function setMinMax($min, $max) {
+        if($min > $max) {
+            throw new UnexpectedValueException("Minimum bound is greater than maximum bound!");
+        }
+
+        $this->min = $min;
+        $this->max = $max;
     }
 
     /**
@@ -72,6 +94,7 @@ class SearchEngine {
 
         $first = true;
 
+        //Filter logic
         foreach($this->filters as $filter) {
             //Check if the filter is present in the search data
             if(!array_key_exists($filter->getFieldName(), $search_parameters)) {
@@ -118,6 +141,7 @@ class SearchEngine {
             $sql .= "(" . $snippet->getSQLString() . ")";
         }
 
+        //Sorter logic
         if(isset($this->sorter)) {
             $sql .= " ORDER BY ";
 
@@ -141,9 +165,25 @@ class SearchEngine {
             }
         }
 
+        if(isset($this->min)) {
+            $sql .= " LIMIT :__internal_min, :__internal_max";
+
+            $data_bindings["__internal_min"] = $this->min;
+            $data_bindings["__internal_max"] = $this->max;
+        }
+
         //Execute the query
         $statement = $this->database->prepare($sql);
-        $statement->execute($data_bindings);
+
+        foreach($data_bindings as $binding_name=>$value) {
+            if(is_numeric($value)) {
+                $statement->bindValue($binding_name, $value, \PDO::PARAM_INT);
+            }else {
+                $statement->bindValue($binding_name, $value, \PDO::PARAM_STR);
+            }
+        }
+
+        $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }

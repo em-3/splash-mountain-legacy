@@ -8,6 +8,8 @@ use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\InternalNameDecorator;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\TagsFilter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\FieldSorter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\SceneSorter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\SortSelector;
 
 $engine = new SearchEngine($database, "item_index", ["id", "name", "type", "park", "author", "description", "image", "video_id", "scene", "hidden"]);
@@ -40,6 +42,21 @@ $engine->addFilter(new InternalNameDecorator(new AuthorizationFilter("visibility
 //Dynamically set the sorting algorithm using the sort_by parameter
 $nameSorter = new FieldSorter("name", "ASC");
 $engine->setSorter(new SortSelector("sort_by", ["name" => $nameSorter, "newest_first" => new FieldSorter("date_added", "DESC"), "oldest_first" => new FieldSorter("date_added", "ASC"), "scene" => new SceneSorter("scene", $nameSorter)], $nameSorter));
+
+if(isset($_GET["max"])) {
+    $min = 0;
+    $max = intval($_GET["max"]);
+
+    if(isset($_GET["min"])) {
+        //If there's a minimum value specified, then add it to the parameters and calculate the difference between the min and max values
+        $min = intval($_GET["min"]);
+
+        $min =  $min - 1;
+        $max = $max - $min;
+    }
+
+    $engine->setMinMax($min, $max);
+}
 
 search();
 
