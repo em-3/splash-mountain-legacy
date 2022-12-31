@@ -8,6 +8,7 @@ use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\InternalNameDecorator;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\TagsFilter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\SortSelector;
 
 $engine = new SearchEngine($database, "item_index", ["id", "name", "type", "park", "author", "description", "image", "video_id", "scene", "hidden"]);
 
@@ -37,7 +38,8 @@ $engine->addFilter(new TagsFilter("tags"));
 $engine->addFilter(new InternalNameDecorator(new AuthorizationFilter("visibility", 0), "hidden"));
 
 //Dynamically set the sorting algorithm using the sort_by parameter
-// $engine->setSorter(new SortSelector("sort_by"));
+$nameSorter = new FieldSorter("name", "ASC");
+$engine->setSorter(new SortSelector("sort_by", ["name" => $nameSorter, "newest_first" => new FieldSorter("date_added", "DESC"), "oldest_first" => new FieldSorter("date_added", "ASC"), "scene" => new SceneSorter("scene", $nameSorter)], $nameSorter));
 
 search();
 

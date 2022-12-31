@@ -2,6 +2,9 @@
 
 namespace SplmlFoundation\SplashMountainLegacyBackend\Search;
 
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\Filter;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\Sorter;
+
 class SearchEngine {
 
     /** @var \PDO $database */
@@ -113,6 +116,29 @@ class SearchEngine {
 
             //Concatenate the snippet to the query
             $sql .= "(" . $snippet->getSQLString() . ")";
+        }
+
+        if(isset($this->sorter)) {
+            $sql .= " ORDER BY ";
+
+            //If the sorter's specified query is not defined, then execute its default behavior
+            if(!array_key_exists($this->sorter->getFieldName(), $search_parameters)) {
+                $snippet = $this->sorter->defaultQuery();
+
+                if($snippet != false) {
+                    $sql .= $snippet;
+                }
+            }else {
+                //Request that the sorter generate the query
+                $snippet = $this->sorter->generateQuery($search_parameters[$this->sorter->getFieldName()]);
+
+                if($snippet != false) {
+                    $sql .= $snippet->getSQLString();
+
+                    //Add the data bindings to the global array
+                    $data_bindings = array_merge($data_bindings, $snippet->getDataBindings());
+                }
+            }
         }
 
         //Execute the query
