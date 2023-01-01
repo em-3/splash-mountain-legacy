@@ -2,6 +2,7 @@
 @import url("https://css.gg/css");
 
 /* Component Styles */
+@import url("/css/components/DatabaseBrowser.css");
 @import url("/css/components/Item.css");
 
 :root {

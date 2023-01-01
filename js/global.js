@@ -3,6 +3,533 @@ function wait(milliseconds) {
 }
 
 // Components
+function DatabaseBrowser(options) {
+	this.element = document.createElement("div");
+	this.element.classList.add("databaseBrowser");
+	this.element.innerHTML = `
+		<div class="searchControls">
+			<div class="controls">
+				<div class="searchField">
+					<input type="text" placeholder="Filter">
+				</div>
+				<div class="filterBar">
+					<div class="filters"></div>
+					<div class="addFilter">
+						<i class="gg-math-plus"></i>
+					</div>
+				</div>
+				<div class="sortByContainer">
+					<p>Sort By:</p>
+					<select name="sortBy" class="sortBy" id="sortBy">
+						<option value="name" selected>Name</option>
+						<option value="scene">Scene</option>
+						<option value="newest_first">Date Added (Newest First)</option>
+						<option value="oldest_first">Date Added (Oldest First)</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="filterSelect hidden">
+				<div class="closeButton">
+					<i class="gg-close"></i>
+				</div>
+				<div class="availableFilters"></div>
+			</div>
+
+		</div>
+		<div class="loadingContainer">
+			<div class="loadingAnimationEllipsis">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<div class="resultsContainer hidden"></div>
+		<div class="errorMessageContainer hidden">
+			<h2 class="title"></h2>
+			<p class="subtitle"></p>
+		</div>
+	`;
+	
+	this.filters = [
+		{
+			id: "park",
+			label: "Park",
+			values: ["WDW", "DL", "TDL"],
+			max: 1,
+		},
+		{
+			id: "type",
+			label: "Type",
+			values: ["image", "video", "audio", "text", "date"],
+			max: 1,
+		},
+		{
+			id: "author",
+			label: "Author",
+			hidden: true,
+		},
+		{
+			id: "scene",
+			label: "Scene",
+			values: [
+				"In the Park",
+				"Critter Country",
+				"Frontierland",
+				"Briar Patch Store",
+				"Attraction",
+				"Exterior",
+				"Queue",
+				"Loading Zone",
+				"Lift A",
+				"Briar Patch",
+				"Lift B",
+				"HDYD Exterior",
+				"HDYD Interior",
+				"EGALP Pre-Bees",
+				"EGALP Bees",
+				"EGALP LP",
+				"Final Lift",
+				"ZDDD Exterior",
+				"ZDDD Showboat",
+				"ZDDD Homecoming",
+				"ZDDD Unload",
+				"Photos",
+				"Exit",
+			],
+			max: 1,
+		},
+	];
+	this.abortController = null;
+	this.searchRange = {
+		min: 1,
+		max: 21,
+	};
+
+	this.createFilterOptions = function () {
+		//Loop through each filter and create an option element for for it.
+		for (var i = 0; i < this.filters.length; i++) {
+			var currentFilter = this.filters[i];
+
+			if (currentFilter.hidden) {
+				continue;
+			}
+
+			var filterElement = document.createElement("div");
+			filterElement.classList.add("filter");
+			filterElement.classList.add(currentFilter.id);
+			(function (thisParam, filterObject) {
+				filterElement.onclick = function () {
+					this.addFilter(filterObject);
+					this.hideFilterSelect();
+				}.bind(thisParam);
+			})(this, currentFilter);
+
+			var filterName = document.createElement("p");
+			filterName.classList.add("name");
+			filterName.textContent = currentFilter.label;
+
+			filterElement.appendChild(filterName);
+			this.element
+				.querySelector(".filterSelect .availableFilters")
+				.appendChild(filterElement);
+		}
+	}
+
+	this.showFilterSelect = function () {
+		var element = this.element;
+		element.querySelector(".searchControls").scrollTo({
+			top: 0,
+			left: 0,
+			behavior: "smooth",
+		});
+		element.querySelector(".controls").classList.add("hidden");
+		element.querySelector(".filterSelect").classList.remove("hidden");
+		setTimeout(function () {
+			element
+				.querySelector(".controls")
+				.style.setProperty("display", "none", "important");
+		}, 200);
+	}
+	this.element.querySelector(".addFilter").onclick = this.showFilterSelect.bind(this);
+
+	this.hideFilterSelect = function () {
+		this.element.querySelector(".controls").style.display = null;
+		this.element.querySelector(".controls").classList.remove("hidden");
+		this.element.querySelector(".filterSelect").classList.add("hidden");
+	}
+	this.element.querySelector(".filterSelect .closeButton").onclick = this.hideFilterSelect.bind(this);
+
+	this.updateDisabledFilters = function (id) {
+		//Get current values of identical filters
+		var values = [];
+		var filters = this.element.querySelectorAll(".filterBar .filter." + id);
+		for (var i = 0; i < filters.length; i++) {
+			var select = filters[i].querySelector("select");
+			var value = select.options[select.selectedIndex].value;
+			values.push(value);
+		}
+		for (var i = 0; i < filters.length; i++) {
+			var options = filters[i].querySelector("select").options;
+			for (var j = 0; j < options.length; j++) {
+				var option = options[j];
+				if (values.includes(option.value)) {
+					option.disabled = true;
+				} else {
+					option.disabled = false;
+				}
+			}
+		}
+	}
+
+	this.addFilter = function (filterObject, selectedOption) {
+		var thisInstance = this;
+
+		var filterElement = document.createElement("div");
+		filterElement.classList.add("filter");
+		filterElement.classList.add(filterObject.id);
+
+		var filterName = document.createElement("p");
+		filterName.classList.add("name");
+		filterName.textContent = filterObject.label + ":";
+
+		if (!filterObject.hidden) {
+			var filterSelect = document.createElement("select");
+			filterSelect.setAttribute("name", filterObject.id);
+			filterSelect.addEventListener("change", function () {
+				thisInstance.updateDisabledFilters(filterObject.id);
+				thisInstance.refreshResults();
+			});
+			//Get current values of identical filters
+			var currentlyUsedValues = [];
+			var currentlyUsedFilters = document.querySelectorAll(
+				".filterBar .filter." + filterObject.id
+			);
+			for (var i = 0; i < currentlyUsedFilters.length; i++) {
+				var currentlyUsedFilter = currentlyUsedFilters[i];
+				var currentlyUsedFilterSelect =
+					currentlyUsedFilter.querySelector("select");
+				var currentlyUsedFilterValue =
+					currentlyUsedFilterSelect.options[
+						currentlyUsedFilterSelect.selectedIndex
+					].value;
+				currentlyUsedValues.push(currentlyUsedFilterValue);
+			}
+			var defaultHasBeenSelected = false;
+			for (var j = 0; j < filterObject.values.length; j++) {
+				var filterSelectOption = document.createElement("option");
+				filterSelectOption.value = filterObject.values[j];
+				filterSelectOption.textContent = filterObject.values[j];
+				if (currentlyUsedValues.includes(filterObject.values[j])) {
+					filterSelectOption.disabled = true;
+				} else if (
+					selectedOption &&
+					selectedOption === filterObject.values[j] &&
+					!currentlyUsedValues.includes(selectedOption)
+				) {
+					filterSelectOption.setAttribute("selected", true);
+					defaultHasBeenSelected = true;
+				} else if (defaultHasBeenSelected == false) {
+					filterSelectOption.setAttribute("selected", true);
+					defaultHasBeenSelected = true;
+				}
+				filterSelect.appendChild(filterSelectOption);
+			}
+		} else {
+			var filterValueDisplay = document.createElement("p");
+			filterValueDisplay.classList.add("value");
+			filterValueDisplay.textContent = selectedOption;
+		}
+
+		var removeButton = document.createElement("div");
+		removeButton.classList.add("removeButton");
+		removeButton.innerHTML = "<i class='gg-close'></i>";
+		removeButton.addEventListener("click", function () {
+			if (!filterObject.hidden) {
+				thisInstance.element.querySelector(".availableFilters .filter." + filterObject.id)
+					.classList.remove("disabled");
+			}
+			filterElement.parentElement.removeChild(filterElement);
+			thisInstance.refreshResults();
+		});
+
+		filterElement.appendChild(filterName);
+		if (!filterObject.hidden) {
+			filterElement.appendChild(filterSelect)
+		} else {
+			filterElement.appendChild(filterValueDisplay);
+		}
+		filterElement.appendChild(removeButton);
+		this.element.querySelector(".filterBar .filters").appendChild(filterElement);
+
+		var filterCount = this.element.querySelectorAll(
+			".filterBar .filter." + filterObject.id
+		).length;
+		if (filterObject.max === filterCount) {
+			this.element
+				.querySelector(".availableFilters .filter." + filterObject.id)
+				.classList.add("disabled");
+		}
+
+		if (!filterObject.hidden) this.updateDisabledFilters(filterObject.id);
+		this.refreshResults();
+	}
+
+	this.searchBar = {
+		timeoutID: null,
+		oninput: function () {
+			if (this.searchBar.timeoutID) {
+				clearTimeout(this.searchBar.timeoutID);
+			}
+
+			this.element
+				.querySelector(".databaseBrowser .loadingContainer")
+				.classList.remove("hidden");
+			this.element
+				.querySelector(".databaseBrowser .resultsContainer")
+				.classList.add("hidden");
+			this.element
+				.querySelector(".databaseBrowser .errorMessageContainer")
+				.classList.add("hidden");
+
+			//Wait a second before updating the search results
+			this.timeoutID = setTimeout(this.refreshResults.bind(this), 1000);
+		},
+		onchange: function () {
+			this.refreshResults();
+		},
+	};
+	this.element.querySelector(".searchField input").oninput = this.searchBar.oninput.bind(this);
+	this.element.querySelector(".searchField input").onchange = this.searchBar.onchange.bind(this);
+
+	this.refreshResults = function (preservePreviousResults) {
+		if (this.abortController) {
+			this.abortController.abort();
+		}
+
+		var PHPParams = "";
+		var character = "?";
+
+		var searchInput = this.element.querySelector(".searchField input");
+		if (searchInput.value.length > 0) {
+			PHPParams += character + "query=" + searchInput.value;
+			character = "&";
+		}
+
+		var activeFilters = this.element.querySelectorAll(
+			".filterBar .filters .filter"
+		);
+		for (var i = 0; i < activeFilters.length; i++) {
+			var currentFilter = activeFilters[i];
+			var filterID = currentFilter.classList[1];
+
+			var parameterName;
+			var valueCase;
+			for (var j = 0; j < this.filters.length; j++) {
+				if (this.filters[j].id === filterID) {
+					parameterName = this.filters[j].parameterName;
+					valueCase = this.filters[j].valueCase;
+				}
+			}
+
+			//If the filter isn't a hidden filter, get the selected value
+			if (!currentFilter.querySelector(".value")) {
+				//Get the selected option for this filter's select element.
+				var filterElement = currentFilter.querySelector("select");
+				var filterValue =
+					filterElement.options[filterElement.selectedIndex].value;
+			} else {
+				var filterValue = currentFilter.querySelector(".value").textContent;
+			}
+			if (filterValue != "") {
+				if (parameterName) {
+					PHPParams += character + parameterName + "=";
+				} else {
+					PHPParams += character + filterID + "=";
+				}
+				if (valueCase === "lower") {
+					PHPParams += filterValue.toLowerCase();
+				} else {
+					PHPParams += filterValue;
+				}
+				character = "&";
+			}
+		}
+
+		var sortByElement = this.element.querySelector("#sortBy");
+		var sortByValue =
+			sortByElement.options[sortByElement.selectedIndex].value;
+		PHPParams += character + "sort_by=" + sortByValue;
+		character = "&";
+
+		if (!preservePreviousResults) {
+			this.searchRange.min = 1;
+			this.searchRange.max = 21;
+		}
+
+		//Fetch new results
+		this.abortController = new AbortController();
+		fetch(
+			"/api/search/" +
+				PHPParams +
+				character +
+				"min=" +
+				this.searchRange.min +
+				"&max=" +
+				this.searchRange.max,
+				{
+					signal: this.abortController.signal,
+				}
+		)
+			.then((response) => response.json())
+			.then(
+				(data) => {
+					if (!preservePreviousResults) {
+						//Clear the current results from .resultsContainer
+						while (
+							this.element.querySelector(".resultsContainer").firstChild
+						) {
+							this.element.querySelector(".resultsContainer")
+								.removeChild(
+									this.element.querySelector(".resultsContainer").firstChild
+								);
+						}
+					}
+					if (!preservePreviousResults && data.length === 0) {
+						var noResults = document.createElement("div");
+						noResults.className = "noResults";
+						noResults.innerHTML = `
+							<div class="iconContainer">
+								<i class="gg-bee"></i>
+							</div>
+							<h2>There's Nothing In Here But Bees!</h2>
+							<p>We couldn't find any results.</p>
+						`;
+						this.element(".resultsContainer").appendChild(noResults);
+					} else if (preservePreviousResults && data.length === 0) {
+						var loadMoreButton = this.element.querySelector(
+							".loadMoreButton"
+						);
+						loadMoreButton.parentElement.removeChild(
+							loadMoreButton
+						);
+					} else {
+						if (preservePreviousResults) {
+							var loadMoreButton = this.element.querySelector(
+								".loadMoreButton"
+							);
+							loadMoreButton.parentElement.removeChild(
+								loadMoreButton
+							);
+						}
+
+						for (var i = 0; i < data.length; i++) {
+							var currentItemData = data[i];
+							var item = new Item(currentItemData);
+							this.element
+								.querySelector(
+									".resultsContainer"
+								)
+								.appendChild(item.element);
+						}
+
+						if (
+							data.length ===
+							this.searchRange.max - this.searchRange.min
+						) {
+							var loadMoreButton =
+								document.createElement("button");
+							loadMoreButton.className = "loadMoreButton";
+							loadMoreButton.textContent = "Load More";
+							loadMoreButton.addEventListener(
+								"click",
+								function () {
+									this.loadMoreResults();
+								}
+							);
+							this.element
+								.querySelector(
+									".resultsContainer"
+								)
+								.appendChild(loadMoreButton);
+						}
+					}
+
+					//Hide the loading screen and show the results container
+					this.element
+						.querySelector(".loadingContainer")
+						.classList.add("hidden");
+					this.element
+						.querySelector(".resultsContainer")
+						.classList.remove("hidden");
+					this.element
+						.querySelector(
+							".errorMessageContainer"
+						)
+						.classList.add("hidden");
+				},
+				(error) => {
+					this.element.querySelector(
+						".errorMessageContainer .title"
+					).textContent = "Something Went Wrong";
+					this.element.querySelector(
+						".errorMessageContainer .subtitle"
+					).textContent = "Failed to load database items.";
+
+					//Hide the loading screen and show the error message container
+					this.element
+						.querySelector(".loadingContainer")
+						.classList.add("hidden");
+					this.element
+						.querySelector(".resultsContainer")
+						.classList.add("hidden");
+					this.element
+						.querySelector(
+							".errorMessageContainer"
+						)
+						.classList.remove("hidden");
+				}
+			);
+	};
+	this.element.querySelector(".sortBy").onchange = this.refreshResults.bind(this, false);
+	
+	this.loadMoreResults = function () {
+		this.searchRange.min += 20;
+		this.searchRange.max += 20;
+		this.refreshResults(true);
+	},
+
+	this.refreshResults();
+
+	//Load available tags
+	/*
+	fetch("/api/tags/")
+		.then((request) => request.json())
+		.then((data) => {
+			var tagFilterOption = {};
+			tagFilterOption.id = "tags";
+			tagFilterOption.parameterName = "tags[]";
+			tagFilterOption.label = "Tag";
+			tagFilterOption.values = data;
+			tagFilterOption.max = data.length;
+			filters.push(tagFilterOption);
+			//Load in filter options
+			createFilterOptions();
+			//Check URL parameters to determine whether to add a tag filter
+			var url = new URL(window.location.href);
+			var params = url.searchParams;
+			var tag = params.get("tag");
+			if (tag) {
+				this.addFilter(tagFilterOption, tag);
+				this.refreshResults();
+			}
+		});
+		*/
+
+	this.createFilterOptions();
+}
+
 function Item(item, options) {
 	// For each item property, create a property on the item object
 	for (var key in item) {
