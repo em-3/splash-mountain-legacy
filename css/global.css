@@ -741,11 +741,12 @@ main {
   position: fixed;
   width: calc(100vw - 20pt);
   max-width: 150pt;
+  max-height: min(250pt, 60vh);
   padding: 5pt;
   border-radius: 10pt;
   box-shadow: 0 0 20px var(--shadow-color);
   z-index: 8;
-  overflow: hidden;
+  overflow: auto;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 

@@ -6,36 +6,27 @@ function wait(milliseconds) {
 function DatabaseBrowser(options) {
 	this.element = document.createElement("div");
 	this.element.classList.add("databaseBrowser");
-	this.element.innerHTML = `
+	this.element.innerHTML = /*html*/`
 		<div class="searchControls">
-			<div class="controls">
-				<div class="searchField">
-					<input type="text" placeholder="Filter">
-				</div>
-				<div class="filterBar">
-					<div class="filters"></div>
-					<div class="addFilter">
-						<i class="gg-math-plus"></i>
-					</div>
-				</div>
-				<div class="sortByContainer">
-					<p>Sort By:</p>
-					<select name="sortBy" class="sortBy" id="sortBy">
-						<option value="name" selected>Name</option>
-						<option value="scene">Scene</option>
-						<option value="newest_first">Date Added (Newest First)</option>
-						<option value="oldest_first">Date Added (Oldest First)</option>
-					</select>
-				</div>
+			<div class="searchField">
+				<input type="text" placeholder="Search">
 			</div>
 
-			<div class="filterSelect hidden">
-				<div class="closeButton">
-					<i class="gg-close"></i>
-				</div>
-				<div class="availableFilters"></div>
-			</div>
+			<button class="match">
+				<i class="gg-search-found"></i>
+				<span>Match</span>
+			</button>
 
+			<button class="sortBy">
+				<i class="gg-sort-az"></i>
+				<span>Sort By</span>
+			</button>
+
+			<button class="addFilter">
+				<i class="gg-math-plus"></i>
+				<span>Add Filter</span>
+			</button>
+			<div class="filters"></div>
 		</div>
 		<div class="loadingContainer">
 			<div class="loadingAnimationEllipsis">
@@ -55,23 +46,27 @@ function DatabaseBrowser(options) {
 	this.filters = [
 		{
 			id: "park",
+			icon: "pin",
 			label: "Park",
 			values: ["WDW", "DL", "TDL"],
 			max: 1,
 		},
 		{
 			id: "type",
+			icon: "attachment",
 			label: "Type",
 			values: ["image", "video", "audio", "text", "date"],
 			max: 1,
 		},
 		{
 			id: "author",
+			icon: "user",
 			label: "Author",
 			hidden: true,
 		},
 		{
 			id: "scene",
+			icon: "pin-alt",
 			label: "Scene",
 			values: [
 				"In the Park",
@@ -101,70 +96,55 @@ function DatabaseBrowser(options) {
 			max: 1,
 		},
 	];
+	this.match = ["name", "description", "visible_content"];
+	this.sortBy = "name";
 	this.abortController = null;
 	this.searchRange = {
 		min: 1,
 		max: 21,
 	};
 
-	this.createFilterOptions = function () {
-		//Loop through each filter and create an option element for for it.
-		for (var i = 0; i < this.filters.length; i++) {
-			var currentFilter = this.filters[i];
-
-			if (currentFilter.hidden) {
-				continue;
-			}
-
-			var filterElement = document.createElement("div");
-			filterElement.classList.add("filter");
-			filterElement.classList.add(currentFilter.id);
-			(function (thisParam, filterObject) {
-				filterElement.onclick = function () {
-					this.addFilter(filterObject);
-					this.hideFilterSelect();
-				}.bind(thisParam);
-			})(this, currentFilter);
-
-			var filterName = document.createElement("p");
-			filterName.classList.add("name");
-			filterName.textContent = currentFilter.label;
-
-			filterElement.appendChild(filterName);
-			this.element
-				.querySelector(".filterSelect .availableFilters")
-				.appendChild(filterElement);
-		}
-	}
-
-	this.showFilterSelect = function () {
-		var element = this.element;
-		element.querySelector(".searchControls").scrollTo({
-			top: 0,
-			left: 0,
-			behavior: "smooth",
+	this.presentFilterSelect = function (e) {
+		var items = this.filters.filter((filter) => !filter.hidden);
+		items = items.map((filter) => {
+			return {
+				label: filter.label,
+				icon: filter.icon,
+				disabled: filter.disabled,
+				callback: () => {
+					this.presentFilterValueSelect({
+						clientX: e.clientX,
+						clientY: e.clientY,
+					}, filter);
+				},
+			};
 		});
-		element.querySelector(".controls").classList.add("hidden");
-		element.querySelector(".filterSelect").classList.remove("hidden");
-		setTimeout(function () {
-			element
-				.querySelector(".controls")
-				.style.setProperty("display", "none", "important");
-		}, 200);
-	}
-	this.element.querySelector(".addFilter").onclick = this.showFilterSelect.bind(this);
-
-	this.hideFilterSelect = function () {
-		this.element.querySelector(".controls").style.display = null;
-		this.element.querySelector(".controls").classList.remove("hidden");
-		this.element.querySelector(".filterSelect").classList.add("hidden");
-	}
-	this.element.querySelector(".filterSelect .closeButton").onclick = this.hideFilterSelect.bind(this);
+		contextMenu.present({
+			x: e.clientX,
+			y: e.clientY,
+			items: items,
+		});
+	};
+	this.presentFilterValueSelect = function (e, filterObject) {
+		contextMenu.present({
+			x: e.clientX,
+			y: e.clientY,
+			items: filterObject.values.map((value) => {
+				return {
+					label: value,
+					callback: () => {
+						this.addFilter(filterObject, value);
+					},
+				};
+			}),
+		})
+	};
+	this.element.querySelector(".addFilter").onclick = this.presentFilterSelect.bind(this);
 
 	this.updateDisabledFilters = function (id) {
 		//Get current values of identical filters
 		var values = [];
-		var filters = this.element.querySelectorAll(".filterBar .filter." + id);
+		var filters = this.element.querySelectorAll(".filter." + id);
 		for (var i = 0; i < filters.length; i++) {
 			var select = filters[i].querySelector("select");
 			var value = select.options[select.selectedIndex].value;
@@ -204,7 +184,7 @@ function DatabaseBrowser(options) {
 			//Get current values of identical filters
 			var currentlyUsedValues = [];
 			var currentlyUsedFilters = document.querySelectorAll(
-				".filterBar .filter." + filterObject.id
+				".filter." + filterObject.id
 			);
 			for (var i = 0; i < currentlyUsedFilters.length; i++) {
 				var currentlyUsedFilter = currentlyUsedFilters[i];
@@ -246,10 +226,7 @@ function DatabaseBrowser(options) {
 		removeButton.classList.add("removeButton");
 		removeButton.innerHTML = "<i class='gg-close'></i>";
 		removeButton.addEventListener("click", function () {
-			if (!filterObject.hidden) {
-				thisInstance.element.querySelector(".availableFilters .filter." + filterObject.id)
-					.classList.remove("disabled");
-			}
+			filterObject.disabled = false;
 			filterElement.parentElement.removeChild(filterElement);
 			thisInstance.refreshResults();
 		});
@@ -261,20 +238,84 @@ function DatabaseBrowser(options) {
 			filterElement.appendChild(filterValueDisplay);
 		}
 		filterElement.appendChild(removeButton);
-		this.element.querySelector(".filterBar .filters").appendChild(filterElement);
+		this.element.querySelector(".filters").appendChild(filterElement);
 
 		var filterCount = this.element.querySelectorAll(
-			".filterBar .filter." + filterObject.id
+			".filters .filter." + filterObject.id
 		).length;
-		if (filterObject.max === filterCount) {
-			this.element
-				.querySelector(".availableFilters .filter." + filterObject.id)
-				.classList.add("disabled");
-		}
+		filterObject.disabled = filterObject.max === filterCount;
 
 		if (!filterObject.hidden) this.updateDisabledFilters(filterObject.id);
 		this.refreshResults();
 	}
+
+	this.showMatchSelection = function () {
+		var options = ["name", "description", "visible_content"];
+		dialog.list(
+			"Match",
+			"Choose which item properties to search in.",
+			options.map((option) => {
+				return {
+					label: option,
+				};
+			}),
+			{
+				cancellable: true,
+				allowMultiple: true,
+				preselectedIndexes: this.match.map((option) => {
+					return options.indexOf(option);
+				}),
+			}
+		).then((response) => {
+			if (response.type === "listSelection") {
+				this.match = [];
+				for (var i = 0; i < response.indexes.length; i++) {
+					this.match.push(options[response.indexes[i]]);
+				}
+				this.refreshResults();
+			}
+		});
+	};
+	this.element.querySelector(".match").addEventListener("click", this.showMatchSelection.bind(this));
+
+	this.showSortBySelection = function () {
+		dialog.list(
+			"Sort By",
+			"Choose how to sort the results.",
+			[
+				"Name",
+				"Scene",
+				"Date Added (Newest First)",
+				"Date Added (Oldest First)",
+			].map((option) => {
+				return {
+					label: option,
+				};
+			}),
+			{
+				cancellable: true,
+			}
+		).then((response) => {
+			if (response.type === "listSelection") {
+				switch (response.index) {
+					case 0:
+						this.sortBy = "name";
+						break;
+					case 1:
+						this.sortBy = "scene";
+						break;
+					case 2:
+						this.sortBy = "newest_first";
+						break;
+					case 3:
+						this.sortBy = "oldest_first";
+						break;
+				}
+				this.refreshResults();
+			}
+		});
+	}
+	this.element.querySelector(".sortBy").onclick = this.showSortBySelection.bind(this);
 
 	this.searchBar = {
 		timeoutID: null,
@@ -318,7 +359,7 @@ function DatabaseBrowser(options) {
 		}
 
 		var activeFilters = this.element.querySelectorAll(
-			".filterBar .filters .filter"
+			".filters .filter"
 		);
 		for (var i = 0; i < activeFilters.length; i++) {
 			var currentFilter = activeFilters[i];
@@ -357,10 +398,8 @@ function DatabaseBrowser(options) {
 			}
 		}
 
-		var sortByElement = this.element.querySelector("#sortBy");
-		var sortByValue =
-			sortByElement.options[sortByElement.selectedIndex].value;
-		PHPParams += character + "sort_by=" + sortByValue;
+		PHPParams += character + "match=" + this.match.join(",");
+		PHPParams += character + "sort_by=" + this.sortBy;
 		character = "&";
 
 		if (!preservePreviousResults) {
@@ -406,7 +445,7 @@ function DatabaseBrowser(options) {
 							<h2>There's Nothing In Here But Bees!</h2>
 							<p>We couldn't find any results.</p>
 						`;
-						this.element(".resultsContainer").appendChild(noResults);
+						this.element.querySelector(".resultsContainer").appendChild(noResults);
 					} else if (preservePreviousResults && data.length === 0) {
 						var loadMoreButton = this.element.querySelector(
 							".loadMoreButton"
@@ -492,7 +531,6 @@ function DatabaseBrowser(options) {
 				}
 			);
 	};
-	this.element.querySelector(".sortBy").onchange = this.refreshResults.bind(this, false);
 	
 	this.loadMoreResults = function () {
 		this.searchRange.min += 20;
@@ -526,8 +564,6 @@ function DatabaseBrowser(options) {
 			}
 		});
 		*/
-
-	this.createFilterOptions();
 }
 
 function Item(item, options) {
@@ -807,21 +843,20 @@ var dialog = {
 				break;
 			case "confirm":
 			case "list":
-				if (!options.buttons || options.buttons.length === 0) {
-					break;
-				}
-				for (var i = 0; i < options.buttons.length; i++) {
-					(function (i) {
-						buttonContainer.appendChild(
-							dialog.createButton(options.buttons[i].text, options.buttons[i].type, function () {
-								dialog.callbacks.dismiss();
-								resolve({
-									type: "buttonSelection",
-									index: i,
-								});
-							})
-						);
-					})(i);
+				if (options.buttons && options.buttons.length > 0) {
+					for (var i = 0; i < options.buttons.length; i++) {
+						(function (i) {
+							buttonContainer.appendChild(
+								dialog.createButton(options.buttons[i].text, options.buttons[i].type, function () {
+									dialog.callbacks.dismiss();
+									resolve({
+										type: "buttonSelection",
+										index: i,
+									});
+								})
+							);
+						})(i);
+					}
 				}
 				if (type === "list" && options.allowMultiple) {
 					buttonContainer.appendChild(
@@ -1005,20 +1040,23 @@ var contextMenu = {
 			}
 			if (items[i].disabled) {
 				button.classList.add("disabled");
+			} else {
+				(function (i) {
+					button.addEventListener("click", function (e) {
+						items[i].callback(e);
+						contextMenu.callbacks.dismiss();
+					});
+				})(i);
 			}
-			(function (i) {
-				button.addEventListener("click", function () {
-					items[i].callback();
-					contextMenu.callbacks.dismiss();
-				});
-			})(i);
-
-			var iconContainer = document.createElement("div");
-			iconContainer.classList.add("icon");
-			var icon = document.createElement("i");
-			icon.classList.add("gg-" + items[i].icon);
-			iconContainer.appendChild(icon);
-			button.appendChild(iconContainer);
+			
+			if (items[i].icon) {
+				var iconContainer = document.createElement("div");
+				iconContainer.classList.add("icon");
+				var icon = document.createElement("i");
+				icon.classList.add("gg-" + items[i].icon);
+				iconContainer.appendChild(icon);
+				button.appendChild(iconContainer);
+			}
 
 			var textContainer = document.createElement("p");
 			textContainer.textContent = items[i].label;
