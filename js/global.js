@@ -126,18 +126,37 @@ function DatabaseBrowser(options) {
 		});
 	};
 	this.presentFilterValueSelect = function (e, filterObject) {
-		contextMenu.present({
-			x: e.clientX,
-			y: e.clientY,
-			items: filterObject.values.map((value) => {
-				return {
-					label: value,
-					callback: () => {
-						this.addFilter(filterObject, value);
-					},
-				};
-			}),
-		})
+		if (filterObject.values.length > 10) {
+			dialog.list(
+				"Select " + filterObject.label,
+				"Select a " + filterObject.label.toLowerCase() + " to filter by.",
+				filterObject.values.map((value) => {
+					return {
+						label: value
+					};
+				}),
+				{
+					cancellable: true,
+				}
+			).then((response) => {
+				if (response.type === "listSelection") {
+					this.addFilter(filterObject, filterObject.values[response.index]);
+				}
+			});
+		} else {
+			contextMenu.present({
+				x: e.clientX,
+				y: e.clientY,
+				items: filterObject.values.map((value) => {
+					return {
+						label: value,
+						callback: () => {
+							this.addFilter(filterObject, value);
+						},
+					};
+				}),
+			})
+		}
 	};
 	this.element.querySelector(".addFilter").onclick = this.presentFilterSelect.bind(this);
 
@@ -541,29 +560,18 @@ function DatabaseBrowser(options) {
 	this.refreshResults();
 
 	//Load available tags
-	/*
 	fetch("/api/tags/")
 		.then((request) => request.json())
 		.then((data) => {
 			var tagFilterOption = {};
 			tagFilterOption.id = "tags";
 			tagFilterOption.parameterName = "tags[]";
+			tagFilterOption.icon = "tag";
 			tagFilterOption.label = "Tag";
 			tagFilterOption.values = data;
 			tagFilterOption.max = data.length;
-			filters.push(tagFilterOption);
-			//Load in filter options
-			createFilterOptions();
-			//Check URL parameters to determine whether to add a tag filter
-			var url = new URL(window.location.href);
-			var params = url.searchParams;
-			var tag = params.get("tag");
-			if (tag) {
-				this.addFilter(tagFilterOption, tag);
-				this.refreshResults();
-			}
+			this.filters.push(tagFilterOption);
 		});
-		*/
 }
 
 function Item(item, options) {
