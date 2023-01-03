@@ -743,11 +743,11 @@ function showItemDetails(itemDetails) {
 			return container;
 		},
 		valueGetter: function () {
-			var tags = document.querySelector("#tags");
-			if (tags && tags.value !== "No Tags") {
+			var tags = document.querySelector("#tagList");
+			if (tags && tags.textContent !== "No Tags") {
 				return {
 					include: true,
-					value: tags.value,
+					value: tags.textContent,
 				};
 			} else {
 				return {
@@ -994,8 +994,8 @@ function showItemDetails(itemDetails) {
 			return container;
 		},
 		valueGetter: function () {
-			var nameValue = document.querySelector("#authorName").value;
-			var linkValue = document.querySelector("#authorLink").value;
+			var nameValue = document.querySelector("#authorName").textContent;
+			var linkValue = document.querySelector("#authorLink").textContent;
 			if (nameValue && linkValue && nameValue != "Select Author" && linkValue !== "No Link") {
 				return {
 					include: true,
