@@ -521,14 +521,34 @@ function DatabaseBrowser(options) {
 	fetch("/api/tags/")
 		.then((request) => request.json())
 		.then((data) => {
-			var tagFilterOption = {};
-			tagFilterOption.id = "tags";
-			tagFilterOption.parameterName = "tags[]";
-			tagFilterOption.icon = "tag";
-			tagFilterOption.label = "Tag";
-			tagFilterOption.values = data;
-			tagFilterOption.max = data.length;
-			this.filters.push(tagFilterOption);
+			this.filters.push({
+				id: "tags",
+				parameterName: "tags[]",
+				icon: "tag",
+				label: "Tag",
+				values: data,
+				max: data.length,
+			});
+		});
+
+	//Load available authors
+	fetch("/api/authors/")
+		.then((request) => request.json())
+		.then((data) => {
+			this.filters.push({
+				id: "author",
+				parameterName: "author",
+				icon: "user",
+				label: "Author",
+				values: data.map((author) => {
+					// Check author for [link.com] and remove it
+					var authorLinkIndex = author.indexOf("[");
+					if (authorLinkIndex !== -1) {
+						return author.substring(0, authorLinkIndex) + " (" + author.substring(authorLinkIndex + 1, author.length - 1) + ")";
+					}
+				}),
+				max: 1,
+			});
 		});
 }
 
