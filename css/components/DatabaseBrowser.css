@@ -57,6 +57,7 @@
     height: 20pt;
     border: none;
     border-radius: 5pt;
+    margin: 0;
     padding: 0 10pt;
     font: inherit;
     cursor: pointer;
@@ -71,48 +72,40 @@
 
 .databaseBrowser .filters {
     display: flex;
+    flex-wrap: wrap;
+    gap: 5pt;
+}
+
+.databaseBrowser .filters:empty {
+    display: none;
 }
 
 .databaseBrowser .filters .filter {
+    height: 20pt;
     background: var(--page-background-color);
     border-radius: 5pt;
     height: 20pt;
-    padding: 1pt 3pt 1pt 8pt;
-    margin-right: 10pt;
+    padding: 0 5pt;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 5pt;
+}
+
+.databaseBrowser .filters .filter .iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.8);
+    width: 18pt;
 }
 
 .databaseBrowser .filters .filter .value {
     font-size: 10pt;
     font-weight: bold;
     color: var(--primary-text-color);
-    margin: 0 0 0 5pt;
-}
-
-.databaseBrowser .filters .filter select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    margin: 0;
     cursor: pointer;
-    background: var(--page-background-color);
-    border: none;
-    border-radius: 0;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 10pt;
-    padding: 0;
-    width: 40pt;
-    height: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-left: 5pt;
-    color: var(--primary-text-color);
-}
-
-.databaseBrowser .filters .filter select:focus {
-    outline: none;
 }
 
 .databaseBrowser .filters .filter .removeButton {

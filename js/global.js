@@ -126,11 +126,25 @@ function DatabaseBrowser(options) {
 		});
 	};
 	this.presentFilterValueSelect = function (e, filterObject) {
+		var currentlyUsedFilters = this.element.querySelectorAll(
+			".filter." + filterObject.id
+		);
+		var currentlyUsedValues = [];
+		var defaultHasBeenSelected = false;
+		
+		// Get current values of identical filters
+		for (var i = 0; i < currentlyUsedFilters.length; i++) {
+			var currentlyUsedFilterValue = currentlyUsedFilters[i].querySelector(".value").textContent;
+			currentlyUsedValues.push(currentlyUsedFilterValue);
+		}
+
 		if (filterObject.values.length > 10) {
 			dialog.list(
 				"Select " + filterObject.label,
 				"Select a " + filterObject.label.toLowerCase() + " to filter by.",
-				filterObject.values.map((value) => {
+				filterObject.values.filter(
+					(value) => !currentlyUsedValues.includes(value)
+				).map((value) => {
 					return {
 						label: value
 					};
@@ -148,10 +162,15 @@ function DatabaseBrowser(options) {
 				x: e.clientX,
 				y: e.clientY,
 				items: filterObject.values.map((value) => {
+					var disabled = false;
+					if (currentlyUsedValues.includes(value)) {
+						disabled = true;
+					}
 					return {
 						label: value,
+						disabled: disabled,
 						callback: () => {
-							this.addFilter(filterObject, value);
+							this.addFilter(filterObject, value)
 						},
 					};
 				}),
@@ -160,28 +179,6 @@ function DatabaseBrowser(options) {
 	};
 	this.element.querySelector(".addFilter").onclick = this.presentFilterSelect.bind(this);
 
-	this.updateDisabledFilters = function (id) {
-		//Get current values of identical filters
-		var values = [];
-		var filters = this.element.querySelectorAll(".filter." + id);
-		for (var i = 0; i < filters.length; i++) {
-			var select = filters[i].querySelector("select");
-			var value = select.options[select.selectedIndex].value;
-			values.push(value);
-		}
-		for (var i = 0; i < filters.length; i++) {
-			var options = filters[i].querySelector("select").options;
-			for (var j = 0; j < options.length; j++) {
-				var option = options[j];
-				if (values.includes(option.value)) {
-					option.disabled = true;
-				} else {
-					option.disabled = false;
-				}
-			}
-		}
-	}
-
 	this.addFilter = function (filterObject, selectedOption) {
 		var thisInstance = this;
 
@@ -189,57 +186,22 @@ function DatabaseBrowser(options) {
 		filterElement.classList.add("filter");
 		filterElement.classList.add(filterObject.id);
 
+		var filterIcon = document.createElement("div");
+		filterIcon.classList.add("iconContainer");
+		filterIcon.innerHTML = `
+			<i class="gg-${filterObject.icon}"></i>
+		`;
+
 		var filterName = document.createElement("p");
 		filterName.classList.add("name");
 		filterName.textContent = filterObject.label + ":";
 
-		if (!filterObject.hidden) {
-			var filterSelect = document.createElement("select");
-			filterSelect.setAttribute("name", filterObject.id);
-			filterSelect.addEventListener("change", function () {
-				thisInstance.updateDisabledFilters(filterObject.id);
-				thisInstance.refreshResults();
-			});
-			//Get current values of identical filters
-			var currentlyUsedValues = [];
-			var currentlyUsedFilters = document.querySelectorAll(
-				".filter." + filterObject.id
-			);
-			for (var i = 0; i < currentlyUsedFilters.length; i++) {
-				var currentlyUsedFilter = currentlyUsedFilters[i];
-				var currentlyUsedFilterSelect =
-					currentlyUsedFilter.querySelector("select");
-				var currentlyUsedFilterValue =
-					currentlyUsedFilterSelect.options[
-						currentlyUsedFilterSelect.selectedIndex
-					].value;
-				currentlyUsedValues.push(currentlyUsedFilterValue);
-			}
-			var defaultHasBeenSelected = false;
-			for (var j = 0; j < filterObject.values.length; j++) {
-				var filterSelectOption = document.createElement("option");
-				filterSelectOption.value = filterObject.values[j];
-				filterSelectOption.textContent = filterObject.values[j];
-				if (currentlyUsedValues.includes(filterObject.values[j])) {
-					filterSelectOption.disabled = true;
-				} else if (
-					selectedOption &&
-					selectedOption === filterObject.values[j] &&
-					!currentlyUsedValues.includes(selectedOption)
-				) {
-					filterSelectOption.setAttribute("selected", true);
-					defaultHasBeenSelected = true;
-				} else if (defaultHasBeenSelected == false) {
-					filterSelectOption.setAttribute("selected", true);
-					defaultHasBeenSelected = true;
-				}
-				filterSelect.appendChild(filterSelectOption);
-			}
-		} else {
-			var filterValueDisplay = document.createElement("p");
-			filterValueDisplay.classList.add("value");
-			filterValueDisplay.textContent = selectedOption;
-		}
+		var filterValueElement = document.createElement("p");
+		filterValueElement.classList.add("value");
+		filterValueElement.textContent = selectedOption;
+		filterValueElement.onclick = function (e) {
+			thisInstance.presentFilterValueSelect(e, filterObject);
+		};
 
 		var removeButton = document.createElement("div");
 		removeButton.classList.add("removeButton");
@@ -250,12 +212,9 @@ function DatabaseBrowser(options) {
 			thisInstance.refreshResults();
 		});
 
+		filterElement.appendChild(filterIcon);
 		filterElement.appendChild(filterName);
-		if (!filterObject.hidden) {
-			filterElement.appendChild(filterSelect)
-		} else {
-			filterElement.appendChild(filterValueDisplay);
-		}
+		filterElement.appendChild(filterValueElement);
 		filterElement.appendChild(removeButton);
 		this.element.querySelector(".filters").appendChild(filterElement);
 
@@ -264,7 +223,6 @@ function DatabaseBrowser(options) {
 		).length;
 		filterObject.disabled = filterObject.max === filterCount;
 
-		if (!filterObject.hidden) this.updateDisabledFilters(filterObject.id);
 		this.refreshResults();
 	}
 
