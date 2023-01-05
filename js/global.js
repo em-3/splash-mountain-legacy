@@ -191,10 +191,15 @@ function DatabaseBrowser(options) {
 		filterIcon.innerHTML = `
 			<i class="gg-${filterObject.icon}"></i>
 		`;
-
-		var filterName = document.createElement("p");
-		filterName.classList.add("name");
-		filterName.textContent = filterObject.label + ":";
+		filterIcon.title = filterObject.label;
+		filterIcon.onclick = function (e) {
+			notification.addToQueue(
+				"passive",
+				filterObject.icon,
+				filterObject.label,
+				"Filter by " + filterObject.label.toLowerCase()
+			)
+		};
 
 		var filterValueElement = document.createElement("p");
 		filterValueElement.classList.add("value");
@@ -213,7 +218,6 @@ function DatabaseBrowser(options) {
 		});
 
 		filterElement.appendChild(filterIcon);
-		filterElement.appendChild(filterName);
 		filterElement.appendChild(filterValueElement);
 		filterElement.appendChild(removeButton);
 		this.element.querySelector(".filters").appendChild(filterElement);
