@@ -45,29 +45,26 @@ function DatabaseBrowser(options) {
 	
 	this.filters = [
 		{
-			id: "park",
-			icon: "pin",
-			label: "Park",
-			values: ["WDW", "DL", "TDL"],
-			max: 1,
-		},
-		{
 			id: "type",
 			icon: "attachment",
 			label: "Type",
+			type: "list",
 			values: ["image", "video", "audio", "text", "date"],
 			max: 1,
 		},
 		{
-			id: "author",
-			icon: "user",
-			label: "Author",
-			hidden: true,
+			id: "park",
+			icon: "pin",
+			label: "Park",
+			type: "list",
+			values: ["WDW", "DL", "TDL"],
+			max: 1,
 		},
 		{
 			id: "scene",
 			icon: "pin-alt",
 			label: "Scene",
+			type: "list",
 			values: [
 				"In the Park",
 				"Critter Country",
@@ -95,6 +92,52 @@ function DatabaseBrowser(options) {
 			],
 			max: 1,
 		},
+		{
+			id: "dateRange",
+			icon: "calendar",
+			label: "Date Range",
+			type: "dateRange",
+			values: [
+				{
+					label: "Start Date",
+					parameterName: "startDate",
+					required: true,
+					// Set the default value to July 17, 1989
+					defaultValue: new Date("1989-07-17").toISOString().substring(0, 10),
+					formatValue: function (value) {
+						
+					}
+				},
+				{
+					label: "End Date",
+					parameterName: "endDate",
+					required: true,
+					// Set the default value to today
+					defaultValue: new Date().toISOString().substring(0, 10),
+					formatValue: function (value) {
+						
+					}
+				}
+			],
+			getStringFromValues: function (values) {
+				// Each value is the .value of a date input element
+				// Convert each value to a string in the format M/D/YY, with time zone in UTC
+				var startDate = new Date(values[0]);
+				var endDate = new Date(values[1]);
+				var startDateString = startDate.toLocaleDateString("en-US", { timeZone: "UTC" });
+				var endDateString = endDate.toLocaleDateString("en-US", { timeZone: "UTC" });
+				return startDateString + " - " + endDateString;
+			},
+			getValuesFromString: function (string) {
+				var values = string.split(" - ");
+				var startDate = new Date(values[0]);
+				var endDate = new Date(values[1]);
+				var startDateString = startDate.toISOString().substring(0, 10);
+				var endDateString = endDate.toISOString().substring(0, 10);
+				return [startDateString, endDateString];
+			},
+			max: 1,
+		}
 	];
 	this.match = ["name", "description", "visible_content"];
 	this.sortBy = "name";
@@ -125,12 +168,11 @@ function DatabaseBrowser(options) {
 			items: items,
 		});
 	};
-	this.presentFilterValueSelect = function (e, filterObject) {
+	this.presentFilterValueSelect = function (e, filterObject, filterElement) {
 		var currentlyUsedFilters = this.element.querySelectorAll(
 			".filter." + filterObject.id
 		);
 		var currentlyUsedValues = [];
-		var defaultHasBeenSelected = false;
 		
 		// Get current values of identical filters
 		for (var i = 0; i < currentlyUsedFilters.length; i++) {
@@ -138,42 +180,79 @@ function DatabaseBrowser(options) {
 			currentlyUsedValues.push(currentlyUsedFilterValue);
 		}
 
-		if (filterObject.values.length > 10) {
-			dialog.list(
-				"Select " + filterObject.label,
-				"Select a " + filterObject.label.toLowerCase() + " to filter by.",
-				filterObject.values.filter(
-					(value) => !currentlyUsedValues.includes(value)
-				).map((value) => {
-					return {
-						label: value
-					};
-				}),
+		if (filterObject.type === "list") {
+			if (filterObject.values.length > 10) {
+				dialog.list(
+					"Select " + filterObject.label,
+					"Select a " + filterObject.label.toLowerCase() + " to filter by.",
+					filterObject.values.filter(
+						(value) => !currentlyUsedValues.includes(value)
+					).map((value) => {
+						return {
+							label: value
+						};
+					}),
+					{
+						cancellable: true,
+					}
+				).then((response) => {
+					if (response.type === "listSelection") {
+						if (filterElement) {
+							filterElement.querySelector(".value").textContent = filterObject.values[response.index];
+						} else {
+							this.addFilter(filterObject, filterObject.values[response.index]);
+						}
+					}
+				});
+			} else {
+				contextMenu.present({
+					x: e.clientX,
+					y: e.clientY,
+					items: filterObject.values.map((value) => {
+						var disabled = false;
+						if (currentlyUsedValues.includes(value)) {
+							disabled = true;
+						}
+						return {
+							label: value,
+							disabled: disabled,
+							callback: () => {
+								if (filterElement) {
+									filterElement.querySelector(".value").textContent = value;
+								} else {
+									this.addFilter(filterObject, value);
+								}
+							},
+						};
+					}),
+				})
+			}
+		} else if (filterObject.type === "dateRange") {
+			if (filterElement) {
+				var valuesFromString = filterObject.getValuesFromString(filterElement.querySelector(".value").textContent);
+			}
+			dialog.prompt(
+				"Select Date Range",
+				"Select dates in order to filter by " + filterObject.label.toLowerCase() + ".",
 				{
+					fields: filterObject.values.map((value, index) => {
+						return {
+							type: "date",
+							label: value.label,
+							defaultValue: (valuesFromString ? valuesFromString[index] : value.defaultValue),
+							required: value.required,
+						};
+					}),
 					cancellable: true,
 				}
 			).then((response) => {
-				if (response.type === "listSelection") {
-					this.addFilter(filterObject, filterObject.values[response.index]);
-				}
-			});
-		} else {
-			contextMenu.present({
-				x: e.clientX,
-				y: e.clientY,
-				items: filterObject.values.map((value) => {
-					var disabled = false;
-					if (currentlyUsedValues.includes(value)) {
-						disabled = true;
+				if (response.type === "input") {
+					if (filterElement) {
+						filterElement.querySelector(".value").textContent = filterObject.getStringFromValues(response.values);
+					} else {
+						this.addFilter(filterObject, filterObject.getStringFromValues(response.values));
 					}
-					return {
-						label: value,
-						disabled: disabled,
-						callback: () => {
-							this.addFilter(filterObject, value)
-						},
-					};
-				}),
+				}
 			})
 		}
 	};
@@ -205,7 +284,7 @@ function DatabaseBrowser(options) {
 		filterValueElement.classList.add("value");
 		filterValueElement.textContent = selectedOption;
 		filterValueElement.onclick = function (e) {
-			thisInstance.presentFilterValueSelect(e, filterObject);
+			thisInstance.presentFilterValueSelect(e, filterObject, filterElement);
 		};
 
 		var removeButton = document.createElement("div");
@@ -356,14 +435,7 @@ function DatabaseBrowser(options) {
 			}
 
 			//If the filter isn't a hidden filter, get the selected value
-			if (!currentFilter.querySelector(".value")) {
-				//Get the selected option for this filter's select element.
-				var filterElement = currentFilter.querySelector("select");
-				var filterValue =
-					filterElement.options[filterElement.selectedIndex].value;
-			} else {
-				var filterValue = currentFilter.querySelector(".value").textContent;
-			}
+			var filterValue = currentFilter.querySelector(".value").textContent;
 			if (filterValue != "") {
 				if (parameterName) {
 					PHPParams += character + parameterName + "=";
@@ -530,6 +602,7 @@ function DatabaseBrowser(options) {
 				parameterName: "tags[]",
 				icon: "tag",
 				label: "Tag",
+				type: "list",
 				values: data,
 				max: data.length,
 			});
@@ -544,6 +617,7 @@ function DatabaseBrowser(options) {
 				parameterName: "author",
 				icon: "user",
 				label: "Author",
+				type: "list",
 				values: data.map((author) => {
 					// Check author for [link.com] and remove it
 					var authorLinkIndex = author.indexOf("[");
@@ -795,6 +869,34 @@ var dialog = {
 					input.className = "input";
 					dialogElement.appendChild(input);
 				}
+			} else if (options.fields) {
+				for (var i = 0; i < options.fields.length; i++) {
+					switch (options.fields[i].type) {
+						case "text":
+							var input = document.createElement("input");
+							input.type = "text";
+							input.placeholder = options.fields[i].placeholder;
+							input.className = "input";
+							dialogElement.appendChild(input);
+							break;
+						case "textarea":
+							var input = document.createElement("textarea");
+							input.placeholder = options.fields[i].placeholder;
+							input.className = "input";
+							dialogElement.appendChild(input);
+							break;
+						case "date":
+							var input = document.createElement("input");
+							input.type = "date";
+							input.placeholder = options.fields[i].placeholder;
+							if (options.fields[i].defaultValue) {
+								input.value = options.fields[i].defaultValue;
+							}
+							input.className = "input";
+							dialogElement.appendChild(input);
+							break;
+					}
+				}
 			} else {
 				//Create a single input
 				var input = document.createElement("input");
@@ -869,7 +971,7 @@ var dialog = {
 				buttonContainer.appendChild(
 					dialog.createButton("Done", "active", function () {
 						dialog.callbacks.dismiss();
-						var inputs = document.querySelectorAll(".dialog .input");
+						var inputs = document.querySelectorAll(".dialog .input, .dialog textarea");
 						var values = [];
 						for (var i = 0; i < inputs.length; i++) {
 							values.push(inputs[i].value);
