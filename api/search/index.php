@@ -6,6 +6,7 @@ use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\AuthorizationFilte
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SearchEngine;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\ExactFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\InternalNameDecorator;
+use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\LikeFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\SearchFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Filter\TagsFilter;
 use SplmlFoundation\SplashMountainLegacyBackend\Search\Sorter\FieldSorter;
@@ -59,6 +60,9 @@ $engine->addFilter(new ExactFilter("scene", ["In the Park", "Critter Country", "
 
 //Filter by tags, if present
 $engine->addFilter(new TagsFilter("tags"));
+
+//Filter by author, if present
+$engine->addFilter(new LikeFilter("author", ["author"]));
 
 //Filter hidden results unless the user is authorized
 $engine->addFilter(new InternalNameDecorator(new AuthorizationFilter("visibility", 0), "hidden"));
