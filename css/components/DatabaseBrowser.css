@@ -74,6 +74,13 @@
     display: contents;
 }
 
+.databaseBrowser .filters::after {
+    /* Add an invisible after element to prevent filters
+       on the last wrapped line from growing */
+    content: "";
+    flex-grow: 99999999999;
+}
+
 .databaseBrowser .filters:empty {
     display: none;
 }
@@ -88,6 +95,7 @@
     align-items: center;
     justify-content: center;
     gap: 5pt;
+    flex-grow: 1;
 }
 
 .databaseBrowser .filters .filter .iconContainer {
@@ -113,7 +121,7 @@
     font-weight: bold;
     height: 15pt;
     padding: 2pt 0;
-    margin-left: 5pt;
+    margin-left: auto;
     cursor: pointer;
     display: flex;
     align-items: center;
