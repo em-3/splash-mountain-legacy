@@ -326,13 +326,14 @@ function DatabaseBrowser(options) {
 	}
 
 	this.showMatchSelection = function () {
-		var options = ["name", "description", "visible_content"];
+		var labels = ["Name", "Description", "Visible Content", "Tags"];
+		var options = ["name", "description", "visible_content", "tags"];
 		dialog.list(
 			"Match",
 			"Choose which item properties to search in.",
-			options.map((option) => {
+			labels.map((label) => {
 				return {
-					label: option,
+					label: label,
 				};
 			}),
 			{
