@@ -24,7 +24,31 @@ if(isset($_GET["query"])) {
         search();
     }else {
         //Otherwise, search using a dynamically selected algorithm
-        $engine->addFilter(new SearchFilter("query", ["name", "description", "visible_content", "tags"]));
+        $allowedMatches = ["name", "description", "visible_content", "tags"];
+        $matches = $allowedMatches;
+
+        //Check if the user has defined a custom list of fields to search
+        if(isset($_GET["match"])) {
+            //If the values are in array form, use them directly, otherwise explode using commas
+            $matches = is_array($_GET["match"]) ? $_GET["match"] : explode(",", $_GET["match"]);
+        }
+
+        //Validate and remove any matches that are not on the list of allowed matches
+        foreach($matches as $index=>$match) {
+            if(!in_array($match, $allowedMatches, true)) {
+                unset($matches[$index]);
+            }
+        }
+
+        //Reindex the array
+        $matches = array_values($matches);
+
+        //Fallback to default matching if no matches are left
+        if(count($matches) == 0) {
+            $matches = $allowedMatches;
+        }
+
+        $engine->addFilter(new SearchFilter("query", $matches));
     }
 }
 
