@@ -92,6 +92,8 @@ function DatabaseBrowser(options) {
 			],
 			max: 1,
 		},
+		undefined,
+		undefined,
 		{
 			id: "dateRange",
 			icon: "calendar",
@@ -137,7 +139,17 @@ function DatabaseBrowser(options) {
 				return [startDateString, endDateString];
 			},
 			max: 1,
-		}
+		},
+		{
+			adminAccess: true,
+			id: "visibility",
+			icon: "eye",
+			label: "Visibility",
+			type: "list",
+			values: ["All", "Public", "Unlisted"],
+			parameterValues: ["all", "public", "private"],
+			max: 1,
+		},
 	];
 	this.match = ["name", "description", "visible_content"];
 	this.sortBy = "name";
@@ -148,7 +160,8 @@ function DatabaseBrowser(options) {
 	};
 
 	this.presentFilterSelect = function (e) {
-		var items = this.filters.filter((filter) => !filter.hidden);
+		var adminAccess = localStorage.getItem("adminAccess") === "true";
+		var items = this.filters.filter((filter) => !filter.hidden && (!filter.adminAccess || adminAccess));
 		items = items.map((filter) => {
 			return {
 				label: filter.label,
@@ -199,6 +212,7 @@ function DatabaseBrowser(options) {
 					if (response.type === "listSelection") {
 						if (filterElement) {
 							filterElement.querySelector(".value").textContent = filterObject.values[response.index];
+							this.refreshResults();
 						} else {
 							this.addFilter(filterObject, filterObject.values[response.index]);
 						}
@@ -219,6 +233,7 @@ function DatabaseBrowser(options) {
 							callback: () => {
 								if (filterElement) {
 									filterElement.querySelector(".value").textContent = value;
+							this.refreshResults();
 								} else {
 									this.addFilter(filterObject, value);
 								}
@@ -249,6 +264,7 @@ function DatabaseBrowser(options) {
 				if (response.type === "input") {
 					if (filterElement) {
 						filterElement.querySelector(".value").textContent = filterObject.getStringFromValues(response.values);
+						this.refreshResults();
 					} else {
 						this.addFilter(filterObject, filterObject.getStringFromValues(response.values));
 					}
@@ -425,30 +441,31 @@ function DatabaseBrowser(options) {
 			var currentFilter = activeFilters[i];
 			var filterID = currentFilter.classList[1];
 
-			var parameterName;
-			var valueCase;
-			for (var j = 0; j < this.filters.length; j++) {
-				if (this.filters[j].id === filterID) {
-					parameterName = this.filters[j].parameterName;
-					valueCase = this.filters[j].valueCase;
-				}
-			}
+			var filterObject = this.filters.find((filter) => {
+				return filter.id === filterID;
+			});
 
 			//If the filter isn't a hidden filter, get the selected value
 			var filterValue = currentFilter.querySelector(".value").textContent;
-			if (filterValue != "") {
-				if (parameterName) {
-					PHPParams += character + parameterName + "=";
-				} else {
-					PHPParams += character + filterID + "=";
-				}
-				if (valueCase === "lower") {
-					PHPParams += filterValue.toLowerCase();
-				} else {
-					PHPParams += filterValue;
-				}
-				character = "&";
+			if (filterValue === "") {
+				continue;
 			}
+
+			if (filterObject.parameterValues) {
+				filterValue = filterObject.parameterValues[filterObject.values.indexOf(filterValue)];
+			}
+
+			if (filterObject.parameterName) {
+				PHPParams += character + filterObject.parameterName + "=";
+			} else {
+				PHPParams += character + filterObject.id + "=";
+			}
+			if (filterObject.valueCase === "lower") {
+				PHPParams += filterValue.toLowerCase();
+			} else {
+				PHPParams += filterValue;
+			}
+			character = "&";
 		}
 
 		PHPParams += character + "match=" + this.match.join(",");
@@ -597,7 +614,7 @@ function DatabaseBrowser(options) {
 	fetch("/api/tags/")
 		.then((request) => request.json())
 		.then((data) => {
-			this.filters.push({
+			this.filters[3] = {
 				id: "tags",
 				parameterName: "tags[]",
 				icon: "tag",
@@ -605,14 +622,14 @@ function DatabaseBrowser(options) {
 				type: "list",
 				values: data,
 				max: data.length,
-			});
+			};
 		});
 
 	//Load available authors
 	fetch("/api/authors/")
 		.then((request) => request.json())
 		.then((data) => {
-			this.filters.push({
+			this.filters[4] = {
 				id: "author",
 				parameterName: "author",
 				icon: "user",
@@ -626,7 +643,7 @@ function DatabaseBrowser(options) {
 					}
 				}),
 				max: 1,
-			});
+			};
 		});
 }
 
