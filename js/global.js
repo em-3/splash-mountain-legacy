@@ -326,6 +326,7 @@ function DatabaseBrowser(options) {
 	}
 
 	this.showMatchSelection = function () {
+		var defaultMatch = ["name", "description", "visible_content"];
 		var labels = ["Name", "Description", "Visible Content", "Tags"];
 		var options = ["name", "description", "visible_content", "tags"];
 		dialog.list(
@@ -349,6 +350,11 @@ function DatabaseBrowser(options) {
 				for (var i = 0; i < response.indexes.length; i++) {
 					this.match.push(options[response.indexes[i]]);
 				}
+				if (this.match !== defaultMatch) {
+					this.element.querySelector(".match").classList.add("active");
+				} else {
+					this.element.querySelector(".match").classList.remove("active");
+				}
 				this.refreshResults();
 			}
 		});
@@ -356,37 +362,38 @@ function DatabaseBrowser(options) {
 	this.element.querySelector(".match").addEventListener("click", this.showMatchSelection.bind(this));
 
 	this.showSortBySelection = function () {
+		var defaultSortBy = "name";
+		var labels = [
+			"Name",
+			"Scene",
+			"Date Added (Newest First)",
+			"Date Added (Oldest First)",
+		];
+		var values = [
+			"name",
+			"scene",
+			"newest_first",
+			"oldest_first",
+		]
 		dialog.list(
 			"Sort By",
 			"Choose how to sort the results.",
-			[
-				"Name",
-				"Scene",
-				"Date Added (Newest First)",
-				"Date Added (Oldest First)",
-			].map((option) => {
+			labels.map((label) => {
 				return {
-					label: option,
+					label: label,
 				};
 			}),
 			{
 				cancellable: true,
+				preselectedIndexes: [values.indexOf(this.sortBy)],
 			}
 		).then((response) => {
 			if (response.type === "listSelection") {
-				switch (response.index) {
-					case 0:
-						this.sortBy = "name";
-						break;
-					case 1:
-						this.sortBy = "scene";
-						break;
-					case 2:
-						this.sortBy = "newest_first";
-						break;
-					case 3:
-						this.sortBy = "oldest_first";
-						break;
+				this.sortBy = values[response.index];
+				if (this.sortBy !== defaultSortBy) {
+					this.element.querySelector(".sortBy").classList.add("active");
+				} else {
+					this.element.querySelector(".sortBy").classList.remove("active");
 				}
 				this.refreshResults();
 			}
@@ -470,8 +477,8 @@ function DatabaseBrowser(options) {
 		}
 
 		PHPParams += character + "match=" + this.match.join(",");
-		PHPParams += character + "sort_by=" + this.sortBy;
 		character = "&";
+		PHPParams += character + "sort_by=" + this.sortBy;
 
 		if (!preservePreviousResults) {
 			this.searchRange.min = 1;

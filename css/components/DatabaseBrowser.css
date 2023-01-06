@@ -68,6 +68,12 @@
     align-items: center;
     justify-content: center;
     gap: 5pt;
+    transition: all 0.2s ease;
+}
+
+.databaseBrowser .searchControls button.active {
+    background: var(--color-2);
+    color: white;
 }
 
 .databaseBrowser .filters {
