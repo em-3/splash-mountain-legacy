@@ -71,9 +71,7 @@
 }
 
 .databaseBrowser .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5pt;
+    display: contents;
 }
 
 .databaseBrowser .filters:empty {
