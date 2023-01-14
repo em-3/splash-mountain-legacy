@@ -762,10 +762,12 @@ function showItemDetails(itemDetails) {
 		name: "Linked Items",
 		propertyName: "linked_items",
 		constructor: function () {
+			var wrapper = document.createElement("div");
+
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
+			container.classList.add("row");
 			container.classList.add("linkedItems");
-			container.classList.add("listRow");
 
 			var textContainer = document.createElement("div");
 			textContainer.classList.add("textContainer");
@@ -777,18 +779,40 @@ function showItemDetails(itemDetails) {
 			var linkedItemCount = document.createElement("p");
 			linkedItemCount.classList.add("linkedItemCount");
 			linkedItemCount.id = "linkedItemCount";
-			if (
-				mode === "editor" &&
-				itemDetails.linked_items &&
-				itemDetails.linked_items.length > 0
-			) {
-				linkedItemCount.textContent = itemDetails.linked_items.length;
-			} else {
-				linkedItemCount.textContent = "No Linked Items";
-			}
+			linkedItemCount.textContent = "No Linked Items";
 			textContainer.appendChild(linkedItemCount);
 
 			container.appendChild(textContainer);
+
+			var linkedItemsButton = document.createElement("button");
+			linkedItemsButton.classList.add("linkedItemsButton");
+			linkedItemsButton.textContent = "Select Linked Items";
+			linkedItemsButton.onclick = function () {
+				dialog.prompt(
+					"Linked Items",
+					"Select the items you want to link to this item.",
+					{
+						fields: [{
+							type: "item",
+							preselectedItems: window.linkedItems.items.map(item => item.id),
+						}],
+					}
+				).then(function (result) {
+					if (result && result.type == "input") {
+						var linkedItems = result.values[0];
+						linkedItems.forEach((linkedItem, index) => {
+							fetch("/api/item/" + linkedItem)
+							.then(response => response.json())
+							.then(itemDetails => {
+								window.linkedItems.add(itemDetails, index);
+							});
+						});
+					}
+				});
+			};
+			container.appendChild(linkedItemsButton);
+
+			wrapper.appendChild(container);
 
 			var list = document.createElement("div");
 			list.classList.add("list");
@@ -796,10 +820,10 @@ function showItemDetails(itemDetails) {
 
 			window.linkedItems = {
 				items: [],
-				list: document.querySelector("#linkedItemsList"),
-				add: function(itemDetails) {
+				list: list,
+				add: function(itemDetails, index) {
 					var item = new Item(itemDetails);
-					this.items.push(item);
+					this.items[index] = item;
 					// Make item.element draggable and reorderable in list
 					item.element.draggable = true;
 					item.element.addEventListener("dragstart", function(event) {
@@ -826,11 +850,12 @@ function showItemDetails(itemDetails) {
 				},
 				rebuildList: function() {
 					while (this.list.firstChild) {
-						this.list.removeChild(this.list.lastChild);
+						this.list.removeChild(this.list.firstChild);
 					}
 					this.items.forEach(item => {
 						this.list.appendChild(item.element);
 					});
+					linkedItemCount.textContent = (this.items.length > 0) ? this.items.length + " Linked Items" : "No Linked Items";
 				},
 				getValue: function () {
 					var value = [];
@@ -841,20 +866,17 @@ function showItemDetails(itemDetails) {
 				},
 			}
 			if (mode === "editor" && itemDetails.linked_items) {
-				itemDetails.linked_items.forEach(linkedItem => {
-					linkedItems.add(linkedItem);
+				itemDetails.linked_items.split(",").forEach((linkedItem, index) => {
+					fetch("/api/item/" + linkedItem)
+						.then(response => response.json())
+						.then(itemDetails => {
+							window.linkedItems.add(itemDetails, index);
+						});
 				});
 			}
 
-			var addLinkedItemsButton = document.createElement("button");
-			addLinkedItemsButton.classList.add("addLinkedItemsButton");
-			addLinkedItemsButton.textContent = "Add Linked Items";
-			addLinkedItemsButton.onclick = function () {
-			};
-			list.appendChild(addLinkedItemsButton);
-
-			container.appendChild(list);
-			return container;
+			wrapper.appendChild(list);
+			return wrapper;
 		},
 		valueGetter: function () {
 			var value = linkedItems.getValue();

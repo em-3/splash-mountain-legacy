@@ -999,6 +999,7 @@ var dialog = {
 						case "item":
 							var databaseBrowser = new DatabaseBrowser({
 								select: true,
+								preselectedItems: options.fields[i].preselectedItems,
 							});
 							dialogElement.classList.add("expanded");
 							(function (browser) {

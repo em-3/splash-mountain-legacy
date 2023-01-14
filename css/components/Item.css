@@ -1,4 +1,5 @@
 .itemCard {
+    height: 100pt;
     background: var(--content-background-color);
     padding: 5pt;
     border-radius: 10pt;
@@ -67,6 +68,7 @@
     justify-content: flex-start;
     margin-top: 2.5pt;
     white-space: nowrap;
+    padding-right: 10pt;
 }
 
 .itemCard .right .infoContainer * {
