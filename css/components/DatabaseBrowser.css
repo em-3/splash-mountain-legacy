@@ -1,5 +1,6 @@
 .databaseBrowser {
     padding: 10pt;
+    overflow: auto;
 }
 
 .databaseBrowser .searchControls {
@@ -198,13 +199,13 @@
     font-weight: bold;
 }
 
-@media only screen and (max-width: 960px) {
+@media (max-width: 960px) {
     .databaseBrowser .resultsContainer {
         grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
     }
 }
 
-@media only screen and (max-width: 670px) {
+@media (max-width: 670px) {
     .databaseBrowser .resultsContainer {
         grid-template-columns: 100%;
     }

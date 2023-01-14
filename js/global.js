@@ -159,6 +159,20 @@ function DatabaseBrowser(options) {
 		max: 21,
 	};
 
+	this.selectedItems = [];
+	if (options?.preselectedItems) {
+		this.selectedItems = options.preselectedItems;
+	}
+	this.selectItem = function (item) {
+		if (this.selectedItems.includes(item.id)) {
+			this.selectedItems.splice(this.selectedItems.indexOf(item.id), 1);
+			item.element.classList.remove("selected");
+		} else {
+			this.selectedItems.push(item.id);
+			item.element.classList.add("selected");
+		}
+	};
+
 	this.presentFilterSelect = function (e) {
 		var adminAccess = localStorage.getItem("adminAccess") === "true";
 		var items = this.filters.filter((filter) => !filter.hidden && (!filter.adminAccess || adminAccess));
@@ -207,6 +221,7 @@ function DatabaseBrowser(options) {
 					}),
 					{
 						cancellable: true,
+						immediate: true,
 					}
 				).then((response) => {
 					if (response.type === "listSelection") {
@@ -339,6 +354,7 @@ function DatabaseBrowser(options) {
 			}),
 			{
 				cancellable: true,
+				immediate: true,
 				allowMultiple: true,
 				preselectedIndexes: this.match.map((option) => {
 					return options.indexOf(option);
@@ -385,6 +401,7 @@ function DatabaseBrowser(options) {
 			}),
 			{
 				cancellable: true,
+				immediate: true,
 				preselectedIndexes: [values.indexOf(this.sortBy)],
 			}
 		).then((response) => {
@@ -403,7 +420,7 @@ function DatabaseBrowser(options) {
 
 	this.searchBar = {
 		timeoutID: null,
-		oninput: function () {
+		oninput: function (e) {
 			if (this.searchBar.timeoutID) {
 				clearTimeout(this.searchBar.timeoutID);
 			}
@@ -420,9 +437,12 @@ function DatabaseBrowser(options) {
 
 			//Wait a second before updating the search results
 			this.timeoutID = setTimeout(this.refreshResults.bind(this), 1000);
+
+			e.stopPropagation();
 		},
-		onchange: function () {
+		onchange: function (e) {
 			this.refreshResults();
+			e.stopPropagation();
 		},
 	};
 	this.element.querySelector(".searchField input").oninput = this.searchBar.oninput.bind(this);
@@ -544,6 +564,18 @@ function DatabaseBrowser(options) {
 						for (var i = 0; i < data.length; i++) {
 							var currentItemData = data[i];
 							var item = new Item(currentItemData);
+							if (options?.select === true) {
+								(function (item) {
+									item.element.onclick = (e) => {
+										this.selectItem(item);
+										e.preventDefault();
+										e.stopPropagation();
+									};
+								}.bind(this))(item)
+								if (this.selectedItems.includes(item.id)) {
+									item.element.classList.add("selected");
+								}
+							}
 							this.element
 								.querySelector(
 									".resultsContainer"
@@ -771,7 +803,30 @@ var dialog = {
 		return new Promise(function (resolve, reject) {
 			dialog.queue.push([type, title, message, options, resolve, reject]);
 
-			if (!dialog.isRendering) {
+			// If options.immediate is true, hide the current dialog and show the new one
+			if (options.immediate) {
+				document.querySelector(".dialog").classList.add("hidden");
+				dialog.render(
+					type,
+					title,
+					message,
+					options,
+					function (value) {
+						//Run the dialog's resolve function
+						resolve(value);
+						//Show the previous dialog again
+						dialog.queue.pop();
+						document.querySelector(".dialog").classList.remove("hidden");
+					},
+					function (value) {
+						//Run the dialog's reject function
+						reject(value);
+						//Show the previous dialog again
+						dialog.queue.pop();
+						document.querySelector(".dialog").classList.remove("hidden");
+					}
+				);
+			} else if (!dialog.isRendering) {
 				dialog.renderLoop();
 				return;
 			}
@@ -857,7 +912,7 @@ var dialog = {
 						});
 					} else {
 						item.addEventListener("click", function () {
-							dialog.callbacks.dismiss();
+							dialog.callbacks.dismiss(dialogElement);
 							resolve({
 								type: "listSelection",
 								index: i,
@@ -885,6 +940,7 @@ var dialog = {
 		}
 
 		if (type === "prompt") {
+			var fieldValueGetters = [];
 			if (options.placeholders) {
 				//Create multiple inputs
 				for (var i = 0; i < options.placeholders.length; i++) {
@@ -892,6 +948,11 @@ var dialog = {
 					input.type = "text";
 					input.placeholder = options.placeholders[i];
 					input.className = "input";
+					(function (input) {
+						fieldValueGetters.push(function () {
+							return input.value;
+						});
+					})(input);
 					dialogElement.appendChild(input);
 				}
 			} else if (options.fields) {
@@ -902,12 +963,22 @@ var dialog = {
 							input.type = "text";
 							input.placeholder = options.fields[i].placeholder;
 							input.className = "input";
+							(function (input) {
+								fieldValueGetters.push(function () {
+									return input.value;
+								});
+							})(input);
 							dialogElement.appendChild(input);
 							break;
 						case "textarea":
 							var input = document.createElement("textarea");
 							input.placeholder = options.fields[i].placeholder;
 							input.className = "input";
+							(function (input) {
+								fieldValueGetters.push(function () {
+									return input.value;
+								});
+							})(input);
 							dialogElement.appendChild(input);
 							break;
 						case "date":
@@ -918,7 +989,24 @@ var dialog = {
 								input.value = options.fields[i].defaultValue;
 							}
 							input.className = "input";
+							(function (input) {
+								fieldValueGetters.push(function () {
+									return input.value;
+								});
+							})(input);
 							dialogElement.appendChild(input);
+							break;
+						case "item":
+							var databaseBrowser = new DatabaseBrowser({
+								select: true,
+							});
+							dialogElement.classList.add("expanded");
+							(function (browser) {
+								fieldValueGetters.push(function () {
+									return browser.selectedItems;
+								});
+							})(databaseBrowser);
+							dialogElement.appendChild(databaseBrowser.element);
 							break;
 					}
 				}
@@ -942,7 +1030,7 @@ var dialog = {
 			if (options && options.cancellable) {
 				buttonContainer.appendChild(
 					dialog.createButton("Cancel", "passive", function () {
-						dialog.callbacks.dismiss();
+						dialog.callbacks.dismiss(dialogElement);
 						reject();
 					})
 				);
@@ -953,7 +1041,7 @@ var dialog = {
 			case "alert":
 				buttonContainer.appendChild(
 					dialog.createButton("Done", "primary", function () {
-						dialog.callbacks.dismiss();
+						dialog.callbacks.dismiss(dialogElement);
 						resolve();
 					})
 				);
@@ -965,7 +1053,7 @@ var dialog = {
 						(function (i) {
 							buttonContainer.appendChild(
 								dialog.createButton(options.buttons[i].text, options.buttons[i].type, function () {
-									dialog.callbacks.dismiss();
+									dialog.callbacks.dismiss(dialogElement);
 									resolve({
 										type: "buttonSelection",
 										index: i,
@@ -978,8 +1066,8 @@ var dialog = {
 				if (type === "list" && options.allowMultiple) {
 					buttonContainer.appendChild(
 						dialog.createButton("Done", "active", function () {
-							dialog.callbacks.dismiss();
-							var selectedItems = document.querySelectorAll(".dialog .item.selected");
+							dialog.callbacks.dismiss(dialogElement);
+							var selectedItems = dialogElement.querySelectorAll(".item.selected");
 							var indexes = [];
 							for (var i = 0; i < selectedItems.length; i++) {
 								indexes.push(Array.prototype.indexOf.call(selectedItems[i].parentNode.children, selectedItems[i]));
@@ -995,15 +1083,13 @@ var dialog = {
 			case "prompt":
 				buttonContainer.appendChild(
 					dialog.createButton("Done", "active", function () {
-						dialog.callbacks.dismiss();
-						var inputs = document.querySelectorAll(".dialog .input, .dialog textarea");
-						var values = [];
-						for (var i = 0; i < inputs.length; i++) {
-							values.push(inputs[i].value);
-						}
+						dialog.callbacks.dismiss(dialogElement);
+						fieldValueGetters = fieldValueGetters.map(function (getter) {
+							return getter();
+						});
 						resolve({
 							type: "input",
-							values: values,
+							values: fieldValueGetters,
 						});
 					})
 				);
@@ -1012,9 +1098,9 @@ var dialog = {
 
 		document.body.insertBefore(dialogElement, document.querySelector(".overlay"));
 		requestAnimationFrame(function () {
-			document.querySelector(".dialog").classList.remove("hidden");
+			dialogElement.classList.remove("hidden");
 
-			var inputs = document.querySelectorAll(".dialog input");
+			var inputs = dialogElement.querySelectorAll("input");
 			if (inputs.length > 0) {
 				inputs[0].focus();
 			} else if (searchBar) {
@@ -1024,14 +1110,13 @@ var dialog = {
 	},
 
 	callbacks: {
-		dismiss: function () {
+		dismiss: function (dialogElement) {
 			if (dialog.queue.length > 1) {
 				document.querySelector(".overlay").classList.add("show");
 			} else {
 				document.querySelector(".overlay").classList.remove("show");
 			}
 
-			var dialogElement = document.querySelector(".dialog");
 			dialogElement.classList.add("hidden");
 			setTimeout(function () {
 				dialogElement.parentElement.removeChild(dialogElement);

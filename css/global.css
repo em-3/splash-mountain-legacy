@@ -614,14 +614,20 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
+  width: calc(100vw - 20pt);
   max-width: 400pt;
+  max-height: calc(100vh - 20pt);
   padding: 20pt;
   border-radius: 10pt;
   box-shadow: 0 0 20px var(--shadow-color);
   z-index: 6;
-  overflow: hidden;
+  overflow: auto;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.dialog.expanded {
+  width: 95vw;
+  max-width: 700pt;
 }
 
 .dialog.hidden {
@@ -645,6 +651,23 @@ main {
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
+}
+
+.dialog .databaseBrowser {
+  --page-background-color: #eeeeee;
+  --content-background-color: #ffffff;
+  --secondary-content-background-color: #cccccc;
+  padding: 0;
+  margin-bottom: 10pt;
+  height: 350pt;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-background-color: #222222;
+    --content-background-color: #000000;
+    --secondary-content-background-color: #444444;
+  }
 }
 
 .dialog .listContainer {
@@ -834,8 +857,8 @@ main {
   transition: opacity 0.2s ease;
 }
 
-.itemDetailsContainer:not(.hidden)+.overlay,
-.dialog:not(.hidden)+.overlay,
+.itemDetailsContainer:not(.hidden)~.overlay,
+.dialog:not(.hidden)~.overlay,
 .overlay.show {
   opacity: 0.5;
   pointer-events: auto;

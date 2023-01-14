@@ -5,6 +5,12 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected {
+    background: var(--color-2);
+    color: white;
 }
 
 .itemCard.static {
@@ -38,6 +44,12 @@
     border-radius: 2pt;
     margin: 0 0 2.5pt 0;
     display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected .right .scene {
+    background: var(--color-1);
+    color: black;
 }
 
 .itemCard .right .name {
