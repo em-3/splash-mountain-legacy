@@ -905,34 +905,28 @@ function showItemDetails(itemDetails) {
 			var textContainer = document.createElement("div");
 			textContainer.classList.add("textContainer");
 
-			var authorName = document.createElement("p");
-			authorName.classList.add("authorName");
-			authorName.id = "authorName";
-			if (mode === "editor" && itemDetails.author) {
-				//Remove anything between square brackets from author name
-				authorName.textContent = itemDetails.author.replace(/\[.*\]/, "");
-			} else {
-				authorName.textContent = "Select Author";
-			}
-			textContainer.appendChild(authorName);
+			var label = document.createElement("p");
+			label.textContent = "Author";
+			textContainer.appendChild(label);
 
-			var authorLink = document.createElement("p");
-			authorLink.classList.add("authorLink");
-			authorLink.id = "authorLink";
+			var authorValue = document.createElement("p");
+			authorValue.classList.add("authorValue");
+			authorValue.id = "authorValue";
 			if (
 				mode === "editor" &&
 				itemDetails.author &&
-				itemDetails.author.indexOf("[") >= 0
+			itemDetails.author.indexOf("[") !== -1
 			) {
-				//Get the portion of the author link between square brackets
-				authorLink.textContent = itemDetails.author.substring(
-					itemDetails.author.indexOf("[") + 1,
-					itemDetails.author.indexOf("]")
-				);
+				authorValue.textContent = itemDetails.author.substring(
+					0,
+					itemDetails.author.indexOf("[")
+				) + " (" + itemDetails.author.substring(itemDetails.author.indexOf("[") + 1, itemDetails.author.indexOf("]")) + ")";
+			} else if (mode === "editor" && itemDetails.author) {
+				authorValue.textContent = itemDetails.author;
 			} else {
-				authorLink.textContent = "No Link";
+				authorValue.textContent = "None";
 			}
-			textContainer.appendChild(authorLink);
+			textContainer.appendChild(authorValue);
 
 			container.appendChild(textContainer);
 
@@ -975,14 +969,9 @@ function showItemDetails(itemDetails) {
 								case "listSelection":
 									//User selected an author
 									if (authors[response.index].indexOf("[") !== -1) {
-										authorName.textContent = authors[response.index].substring(0, authors[response.index].indexOf("["));
-										authorLink.textContent = authors[response.index].substring(
-											authors[response.index].indexOf("[") + 1,
-											authors[response.index].indexOf("]")
-										);
+										authorValue.textContent = authors[response.index].substring(0, authors[response.index].indexOf("[")) + " (" + authors[response.index].substring(authors[response.index].indexOf("[") + 1, authors[response.index].indexOf("]")) + ")";
 									} else {
-										authorName.textContent = authors[response.index];
-										authorLink.textContent = "No Link";
+										authorValue.textContent = authors[response.index];
 									}
 									break;
 								case "buttonSelection":
@@ -997,11 +986,10 @@ function showItemDetails(itemDetails) {
 										switch (response.type) {
 											case "input":
 												//User entered a name
-												authorName.textContent = response.values[0];
-												if (response.values[1]) {
-													authorLink.textContent = response.values[1];
+												if (response.inputs[1]) {
+													authorValue.textContent = response.inputs[0] + " (" + response.inputs[1] + ")";
 												} else {
-													authorLink.textContent = "No Link";
+													authorValue.textContent = response.inputs[0];
 												}
 												break;
 										}
@@ -1016,22 +1004,16 @@ function showItemDetails(itemDetails) {
 			return container;
 		},
 		valueGetter: function () {
-			var nameValue = document.querySelector("#authorName").textContent;
-			var linkValue = document.querySelector("#authorLink").textContent;
-			if (nameValue && linkValue && nameValue != "Select Author" && linkValue !== "No Link") {
+			var value = document.querySelector("#authorValue").textContent;
+			if (value !== "None") {
 				return {
 					include: true,
-					value: nameValue + "[" + linkValue + "]",
-				};
-			} else if (nameValue && nameValue != "Select Author") {
-				return {
-					include: true,
-					value: nameValue,
+					value: value.replaceAll("(", "[").replaceAll(")", "]")
 				};
 			} else {
 				return {
 					include: false,
-					fail: false,
+					fail: false
 				};
 			}
 		},
