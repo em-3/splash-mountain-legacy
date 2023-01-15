@@ -869,12 +869,8 @@ function showItemDetails(itemDetails) {
 				},
 			}
 			if (mode === "editor" && itemDetails.linked_items) {
-				itemDetails.linked_items.split(",").forEach((linkedItem, index) => {
-					fetch("/api/item/" + linkedItem)
-						.then(response => response.json())
-						.then(itemDetails => {
-							window.linkedItems.add(itemDetails, index);
-						});
+				itemDetails.linked_items.split(",").forEach((linkedItem) => {
+					window.linkedItems.add(linkedItem);
 				});
 			}
 
