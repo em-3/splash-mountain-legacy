@@ -802,6 +802,11 @@ function showItemDetails(itemDetails) {
 						var linkedItems = result.values[0];
 						window.linkedItems.items = [];
 						linkedItems.forEach(linkedItem => {
+							if (linkedItem === itemDetails.id) {
+								window.linkedItems.rebuildList();
+								notification.addToQueue("passive", "danger", "1 Linked Item Removed", "You cannot link an item to itself.");
+								return;
+							}
 							window.linkedItems.add(linkedItem);
 						});
 					}
