@@ -12,7 +12,7 @@ main {
   left: 50%;
   bottom: 20pt;
   transform: translate(-50%, 0);
-  background: var(--page-background-color);
+  background: var(--content-background-color);
   box-shadow: 0 0 5pt var(--shadow-color);
   border-radius: 15pt;
   width: auto;
@@ -44,35 +44,38 @@ main {
 }
 
 /* Narrow Desktop Close Button */
-.hasCursor .closeButton {
-  top: 15pt;
-  left: 15pt;
-  bottom: auto;
-  transform: none;
-  border-radius: 50%;
-  width: 22.5pt;
-  height: 22.5pt;
-  padding: 0;
-  z-index: 1;
-  transition: opacity 0.2s ease, background 0.2s ease;
-}
+@media (hover: hover) {
+  .closeButton {
+    top: 15pt;
+    left: 15pt;
+    bottom: auto;
+    transform: none;
+    border-radius: 50%;
+    width: 22.5pt;
+    height: 22.5pt;
+    padding: 0;
+    z-index: 1;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
 
-.hasCursor .closeButton:hover {
-  background: var(--content-background-color);
-}
+  .closeButton:hover {
+    background: var(--content-background-color);
+  }
 
-.hasCursor .closeButton.hidden {
-  opacity: 0;
-  pointer-events: none;
-  cursor: default;
-}
+  .closeButton.hidden {
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+    transform: none;
+  }
 
-.hasCursor .closeButton p {
-  display: none;
-}
+  .closeButton p {
+    display: none;
+  }
 
-.hasCursor .itemInfoContainer {
-  padding-bottom: 20pt !important;
+  .itemInfoContainer {
+    padding-bottom: 20pt !important;
+  }
 }
 
 .contentContainer {
@@ -188,8 +191,10 @@ main {
   font-family: "Roboto Mono", monospace;
 }
 
-.hasCursor .contentDisplay:has(.audioControls) {
-  padding-top: 35pt;
+@media (cursor: cursor) {
+  .contentDisplay:has(.audioControls) {
+    padding-top: 35pt;
+  }
 }
 
 .audioControls .info {
@@ -366,7 +371,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .propertiesContainer div.property .iconContainer,
 .tags .iconContainer {
-  width: 20pt;
+  min-width: 20pt;
   height: 20pt;
   display: flex;
   align-items: center;
@@ -492,8 +497,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
     grid-column: 1 / 3;
   }
 
-  .hasCursor .contentDisplay:has(.audioControls) {
-    padding-top: 0;
+  @media (cursor: cursor) {
+    .contentDisplay:has(.audioControls) {
+      padding-top: 0;
+    }
   }
 
   .contentContainer {

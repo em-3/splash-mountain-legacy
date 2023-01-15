@@ -912,53 +912,30 @@ function checkAutohide() {
 
 var closeButton = document.querySelector(".closeButton");
 var mousemoveTimeout = null;
-var closeButtonTransitioning = false;
 
 function mousemove() {
 	if (mousemoveTimeout) {
 		clearTimeout(mousemoveTimeout);
 	}
-	if (!closeButtonTransitioning) {
-		closeButton.classList.remove("hidden");
-		mousemoveTimeout = setTimeout(function () {
-			document.querySelector(".closeButton").classList.add("hidden");
-		}, 2000);
-	}
+	closeButton.classList.remove("hidden");
+	mousemoveTimeout = setTimeout(function () {
+		document.querySelector(".closeButton").classList.add("hidden");
+	}, 2000);
 }
 
 function autohideCloseButton(enable) {
 	if (enable) {
 		//Show the close button when the user moves the cursor
 		document.onmousemove = mousemove;
-		document.ontouchstart = mousemove;
 	} else {
 		//Always show the close button
 		document.onmousemove = null;
-		document.ontouchstart = null;
 		document.querySelector(".closeButton").classList.remove("hidden");
 		if (mousemoveTimeout) {
 			clearTimeout(mousemoveTimeout);
 		}
 	}
 }
-
-// If a cursor is detected, switch to the desktop close button
-function addHasCursorClass() {
-	document.body.removeEventListener("mousemove", addHasCursorClass);
-	closeButtonTransitioning = true;
-	hasCursor = true;
-
-	var closeButton = document.querySelector(".closeButton");
-	closeButton.classList.add("hidden");
-	setTimeout(function () {
-		document.querySelector("body").classList.add("hasCursor");
-		requestAnimationFrame(function () {
-			closeButton.classList.remove("hidden");
-			closeButtonTransitioning = false;
-		});
-	}, 200);
-}
-document.body.addEventListener("mousemove", addHasCursorClass);
 
 function closeItemViewer() {
 	if (audioPlayer.player) {
