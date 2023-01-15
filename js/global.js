@@ -444,9 +444,13 @@ function DatabaseBrowser(options) {
 			this.refreshResults();
 			e.stopPropagation();
 		},
+		onkeydown: function (e) {
+			e.stopPropagation();
+		},
 	};
 	this.element.querySelector(".searchField input").oninput = this.searchBar.oninput.bind(this);
 	this.element.querySelector(".searchField input").onchange = this.searchBar.onchange.bind(this);
+	this.element.querySelector(".searchField input").onkeydown = this.searchBar.onkeydown.bind(this);
 
 	this.refreshResults = function (preservePreviousResults) {
 		if (this.abortController) {
@@ -1129,6 +1133,23 @@ var dialog = {
 				);
 				break;
 		}
+
+		function keydownListener(e) {
+			switch (e.key) {
+				case "Enter":
+					buttonContainer.children[buttonContainer.children.length - 1].click();
+					break;
+				case "Escape":
+					if (type !== "alert") {
+						dialog.callbacks.dismiss(dialogElement);
+						reject();
+					}
+					break;
+			}
+			e.stopPropagation();
+			document.body.removeEventListener("keydown", keydownListener);
+		}
+		document.body.addEventListener("keydown", keydownListener);
 
 		document.body.insertBefore(dialogElement, document.querySelector(".overlay"));
 		requestAnimationFrame(function () {

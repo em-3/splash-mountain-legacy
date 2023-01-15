@@ -990,10 +990,10 @@ function showItemDetails(itemDetails) {
 										switch (response.type) {
 											case "input":
 												//User entered a name
-												if (response.inputs[1]) {
-													authorValue.textContent = response.inputs[0] + " (" + response.inputs[1] + ")";
+												if (response.values[1]) {
+													authorValue.textContent = response.values[0] + " (" + response.values[1] + ")";
 												} else {
-													authorValue.textContent = response.inputs[0];
+													authorValue.textContent = response.values[0];
 												}
 												break;
 										}
@@ -1012,7 +1012,7 @@ function showItemDetails(itemDetails) {
 			if (value !== "None") {
 				return {
 					include: true,
-					value: value.replaceAll("(", "[").replaceAll(")", "]")
+					value: value.replaceAll(" (", "[").replaceAll(")", "]")
 				};
 			} else {
 				return {
