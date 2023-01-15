@@ -716,7 +716,7 @@ function showItemDetails(itemDetails) {
 			})();
 		},
 		valueGetter: function () {
-			var values = document.querySelector("#tags").value;
+			var values = document.querySelector("#tagList").value;
 			if (values) {
 				return {
 					include: true,
