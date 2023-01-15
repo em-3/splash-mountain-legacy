@@ -688,74 +688,33 @@ function DatabaseBrowser(options) {
 }
 
 function Item(item, options) {
-	// For each item property, create a property on the item object
-	for (var key in item) {
-		this[key] = item[key];
-	}
-
 	// Create the element
 	this.element = document.createElement("div");
 	this.element.className = "itemCard";
-	if (options && options.static) {
-		this.element.classList.add("static");
-	} else {
-		(function (element, id) {
-			element.onclick = function () {
-				showItemDetails(id);
-			};
-		})(this.element, item.id);
-	}
 
-	if (item.type === "image") {
-		var pictureElement = null;
-		var imgElement = document.createElement("img");
-		imgElement.className = "image";
-		imgElement.src = "/resources/" + item.image + "/thumbnail.jpg";
-	} else if (item.type === "video") {
-		var pictureElement = null;
-		var imgElement = document.createElement("img");
-		imgElement.className = "image";
-		imgElement.src =
-			"https://img.youtube.com/vi/" +
-			item.video_id +
-			"/mqdefault.jpg";
-	} else {
-		var pictureElement =
-			document.createElement("picture");
-		pictureElement.className = "image";
-
-		var sourceElement =
-			document.createElement("source");
-		sourceElement.srcset =
-			"/images/icons/types/" +
-			item.type +
-			"-white.png";
-		sourceElement.setAttribute(
-			"media",
-			"(prefers-color-scheme: dark)"
-		);
-
-		var imgElement = document.createElement("img");
-		imgElement.src =
-			"/images/icons/types/" +
-			item.type +
-			"-black.png";
-
-		pictureElement.appendChild(sourceElement);
-		pictureElement.appendChild(imgElement);
-	}
+	var loadingContainer = document.createElement("div");
+	loadingContainer.className = "loadingContainer";
+	loadingContainer.innerHTML = `
+		<div class="loadingAnimationEllipsis">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	`;
+	this.element.appendChild(loadingContainer);
 
 	var rightSideContainer =
 		document.createElement("div");
 	rightSideContainer.className = "right";
+	this.element.appendChild(rightSideContainer);
 
 	var sceneElement = document.createElement("p");
 	sceneElement.className = "scene";
-	sceneElement.textContent = item.scene;
 
 	var nameElement = document.createElement("h3");
 	nameElement.className = "name";
-	nameElement.textContent = item.name;
+	nameElement.textContent = "Loading..."
 
 	var infoContainerElement =
 		document.createElement("div");
@@ -763,37 +722,111 @@ function Item(item, options) {
 
 	var parkElement = document.createElement("p");
 	parkElement.className = "park";
-	parkElement.textContent = item.park;
 	infoContainerElement.appendChild(parkElement);
 
 	var typeElement = document.createElement("p");
 	typeElement.className = "type";
-	typeElement.textContent = item.type;
 	infoContainerElement.appendChild(typeElement);
 
-	if (item.author) {
-		var authorElement = document.createElement("p");
-		authorElement.className = "author";
-		authorElement.textContent =
+	var authorElement = document.createElement("p");
+	authorElement.className = "author";
+	infoContainerElement.appendChild(authorElement);
+
+	rightSideContainer.appendChild(sceneElement);
+	rightSideContainer.appendChild(nameElement);
+	rightSideContainer.appendChild(infoContainerElement);
+
+	this.element.appendChild(rightSideContainer);
+
+	// If the item is a string, assume it is an id and fetch the item
+	if (typeof item === "string") {
+		fetch("/api/item/" + item)
+			.then((request) => request.json())
+			.then((data) => {
+				item = data;
+				populateCard.bind(this)();
+			});
+	} else {
+		populateCard.bind(this)();
+	}
+
+	function populateCard () {
+		// For each item property, create a property on the item object
+		for (var key in item) {
+			this[key] = item[key];
+		}
+
+		if (options && options.static) {
+			this.element.classList.add("static");
+		} else {
+			(function (element, id) {
+				element.onclick = function () {
+					showItemDetails(id);
+				};
+			})(this.element, item.id);
+		}
+
+		if (item.type === "image") {
+			var pictureElement = null;
+			var imgElement = document.createElement("img");
+			imgElement.className = "image";
+			imgElement.src = "/resources/" + item.image + "/thumbnail.jpg";
+		} else if (item.type === "video") {
+			var pictureElement = null;
+			var imgElement = document.createElement("img");
+			imgElement.className = "image";
+			imgElement.src =
+				"https://img.youtube.com/vi/" +
+				item.video_id +
+				"/mqdefault.jpg";
+		} else {
+			var pictureElement =
+				document.createElement("picture");
+			pictureElement.className = "image";
+
+			var sourceElement =
+				document.createElement("source");
+			sourceElement.srcset =
+				"/images/icons/types/" +
+				item.type +
+				"-white.png";
+			sourceElement.setAttribute(
+				"media",
+				"(prefers-color-scheme: dark)"
+			);
+
+			var imgElement = document.createElement("img");
+			imgElement.src =
+				"/images/icons/types/" +
+				item.type +
+				"-black.png";
+
+			pictureElement.appendChild(sourceElement);
+			pictureElement.appendChild(imgElement);
+		}
+
+		sceneElement.textContent = item.scene;
+		nameElement.textContent = item.name;
+		parkElement.textContent = item.park;
+		typeElement.textContent = item.type;
+		if (item.author) {
+			authorElement.textContent =
 			item.author.replace(
 				/\[([^\][]+)]/g,
 				""
 			);
-		infoContainerElement.appendChild(authorElement);
-	}
+		} else {
+			authorElement.classList.add("hidden");
+		}
 
-	rightSideContainer.appendChild(sceneElement);
-	rightSideContainer.appendChild(nameElement);
-	rightSideContainer.appendChild(
-		infoContainerElement
-	);
 
-	if (pictureElement) {
-		this.element.appendChild(pictureElement);
-	} else if (imgElement) {
-		this.element.appendChild(imgElement);
+		if (pictureElement) {
+			this.element.insertBefore(pictureElement, loadingContainer);
+		} else if (imgElement) {
+			this.element.insertBefore(imgElement, loadingContainer);
+		}
+		this.element.removeChild(loadingContainer);
 	}
-	this.element.appendChild(rightSideContainer);
 }
 
 var dialog = {

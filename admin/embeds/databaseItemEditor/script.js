@@ -800,12 +800,9 @@ function showItemDetails(itemDetails) {
 				).then(function (result) {
 					if (result && result.type == "input") {
 						var linkedItems = result.values[0];
-						linkedItems.forEach((linkedItem, index) => {
-							fetch("/api/item/" + linkedItem)
-							.then(response => response.json())
-							.then(itemDetails => {
-								window.linkedItems.add(itemDetails, index);
-							});
+						window.linkedItems.items = [];
+						linkedItems.forEach(linkedItem => {
+							window.linkedItems.add(linkedItem);
 						});
 					}
 				});
@@ -821,9 +818,9 @@ function showItemDetails(itemDetails) {
 			window.linkedItems = {
 				items: [],
 				list: list,
-				add: function(itemDetails, index) {
+				add: function(itemDetails) {
 					var item = new Item(itemDetails);
-					this.items[index] = item;
+					this.items.push(item);
 					// Make item.element draggable and reorderable in list
 					item.element.draggable = true;
 					item.element.addEventListener("dragstart", function(event) {
@@ -855,7 +852,13 @@ function showItemDetails(itemDetails) {
 					this.items.forEach(item => {
 						this.list.appendChild(item.element);
 					});
-					linkedItemCount.textContent = (this.items.length > 0) ? this.items.length + " Linked Items" : "No Linked Items";
+					if (this.items.length === 0) {
+						linkedItemCount.textContent = "No Linked Items";
+					} else if (this.items.length === 1) {
+						linkedItemCount.textContent = "1 Linked Item";
+					} else {
+						linkedItemCount.textContent = this.items.length + " Linked Items";
+					}
 				},
 				getValue: function () {
 					var value = [];

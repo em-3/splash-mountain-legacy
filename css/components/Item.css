@@ -22,6 +22,21 @@
     background: var(--page-background-color);
 }
 
+.itemCard .loadingContainer {
+    width: 50pt;
+    height: 50pt;
+    border-radius: 5pt;
+    background: var(--page-background-color);
+    margin: 10pt 10pt 10pt 5pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.itemCard .loadingContainer>div {
+    transform: scale(0.6) translateX(-3pt);
+}
+
 .itemCard img {
     width: 50pt;
     margin: 10pt 10pt 10pt 5pt;
