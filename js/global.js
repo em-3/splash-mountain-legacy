@@ -816,7 +816,7 @@ function Item(item, options) {
 				""
 			);
 		} else {
-			authorElement.classList.add("hidden");
+			authorElement.parentElement.removeChild(authorElement);
 		}
 
 
