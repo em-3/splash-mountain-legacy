@@ -23,7 +23,7 @@ if (id) {
 	setTimeout(function () {
 		timeOutHasExpired = true;
 		if (loadedItemDetails) {
-			showItemDetails();
+			displayItemDetails();
 		}
 	}, 1000);
 	fetch("/api/item/" + id)
@@ -36,11 +36,11 @@ if (id) {
 function checkTimeout(itemDetails) {
 	loadedItemDetails = itemDetails;
 	if (timeOutHasExpired) {
-		showItemDetails();
+		displayItemDetails();
 	}
 }
 
-function showItemDetails() {
+function displayItemDetails() {
 	var itemDetails = loadedItemDetails;
 	var metadata = JSON.parse(loadedItemDetails.metadata);
 
@@ -350,7 +350,7 @@ function showItemDetails() {
 				};
 			})(tag);
 			document
-				.querySelector(".itemInfoContainer .tags")
+				.querySelector(".itemInfoContainer .tags .tagsContainer")
 				.appendChild(tagElement);
 		}
 		if (localStorage.getItem("adminAccess") === "true") {
@@ -359,6 +359,22 @@ function showItemDetails() {
 				.classList.remove("hidden");
 		}
 	}
+
+	if (itemDetails.linked_items) {
+		var linkedItems = itemDetails.linked_items.split(",");
+		for (var i = 0; i < linkedItems.length; i++) {
+			var linkedItem = new Item(linkedItems[i]);
+			document
+				.querySelector(".itemInfoContainer .linkedItems .itemsContainer")
+				.appendChild(linkedItem.element);
+		}
+		if (localStorage.getItem("adminAccess") === "true") {
+			document
+				.querySelector(".itemInfoContainer .linkedItems")
+				.classList.remove("hidden");
+		}
+	}
+
 	if (metadata && metadata.make && metadata.model) {
 		document.querySelector(".metadata .header .make").textContent =
 			metadata.make;
