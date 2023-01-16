@@ -802,7 +802,8 @@ function showItemDetails(itemDetails) {
 						var linkedItems = result.values[0];
 						window.linkedItems.items = [];
 						linkedItems.forEach(linkedItem => {
-							if (linkedItem === itemDetails.id) {
+							// If in editor mode, don't allow the item to be linked to itself
+							if (mode === "editor" && linkedItem === itemDetails.id) {
 								window.linkedItems.rebuildList();
 								notification.addToQueue("passive", "danger", "1 Linked Item Removed", "You cannot link an item to itself.");
 								return;
@@ -824,7 +825,7 @@ function showItemDetails(itemDetails) {
 				items: [],
 				list: list,
 				add: function(itemDetails) {
-					var item = new Item(itemDetails);
+					var item = new Item(itemDetails, {static: true});
 					this.items.push(item);
 					// Make item.element draggable and reorderable in list
 					item.element.draggable = true;
