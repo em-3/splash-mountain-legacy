@@ -129,6 +129,15 @@ section {
   margin: 0 0 5pt 0;
 }
 
+#linkedItemsList {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10pt;
+  overflow-x: auto;
+  width: auto;
+}
+
 .propertyContainer select~i {
   position: absolute;
   bottom: 14pt;

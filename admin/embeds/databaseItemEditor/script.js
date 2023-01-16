@@ -29,8 +29,8 @@ function showItemDetails(itemDetails) {
 		var metadata = JSON.parse(itemDetails.metadata);
 	}
 
+	//Type
 	if (mode === "newItem") {
-		//Type
 		properties.push({
 			name: "Type",
 			propertyName: "type",
@@ -60,6 +60,7 @@ function showItemDetails(itemDetails) {
 
 					var image = document.querySelector(".image");
 					var videoID = document.querySelector(".videoID");
+					var visibleContent = document.querySelector(".visibleContent");
 					var cameraInfoContainer = document.querySelector(
 						".cameraInfoContainer"
 					);
@@ -67,15 +68,18 @@ function showItemDetails(itemDetails) {
 
 					image.classList.add("hidden");
 					videoID.classList.add("hidden");
+					visibleContent.classList.add("hidden");
 					cameraInfoContainer.classList.add("hidden");
 					samplingRate.classList.add("hidden");
 
 					switch (newType) {
 						case "image":
 							image.classList.remove("hidden");
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 							break;
 						case "video":
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 						case "audio":
 							videoID.classList.remove("hidden");
@@ -497,6 +501,44 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Visible Content
+	properties.push({
+		name: "Visible Content",
+		propertyName: "visible_content",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("visibleContent");
+			if (mode === "editor" && itemDetails.type !== "photo" && itemDetails.type !== "video") {
+				container.classList.add("hidden");
+			}
+
+			var input = document.createElement("textarea");
+			input.name = "visibleContent";
+			input.id = "visibleContent";
+			input.placeholder = "Text Visible in Media";
+			if (mode === "editor") {
+				input.value = itemDetails.visible_content;
+			}
+
+			container.appendChild(input);
+			return container;
+		},
+		valueGetter: function () {
+			var value = document.querySelector("#visibleContent").value;
+			if (value) {
+				return {
+					include: true,
+					value: value,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
 	//Visibility
 	properties.push({
 		name: "Visibility",
@@ -699,28 +741,154 @@ function showItemDetails(itemDetails) {
 			container.appendChild(selectTagsButton);
 
 			return container;
-
-			(async function () {
-				var tagList = await fetch("/api/tags/");
-				tagList = await tagList.json();
-				for (var i = 0; i < tagList.length; i++) {
-					var option = document.createElement("option");
-					option.textContent = tagList[i];
-					option.value = tagList[i];
-					select.appendChild(option);
-				}
-				if (mode === "editor") {
-					input.value = itemDetails.tags;
-					input.oninput();
-				}
-			})();
 		},
 		valueGetter: function () {
-			var values = document.querySelector("#tagList").value;
-			if (values) {
+			var tags = document.querySelector("#tagList");
+			if (tags && tags.textContent !== "No Tags") {
 				return {
 					include: true,
-					value: values,
+					value: tags.textContent,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
+	//Linked Items
+	properties.push({
+		name: "Linked Items",
+		propertyName: "linked_items",
+		constructor: function () {
+			var wrapper = document.createElement("div");
+
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("row");
+			container.classList.add("linkedItems");
+
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
+
+			var label = document.createElement("p");
+			label.textContent = "Linked Items";
+			textContainer.appendChild(label);
+
+			var linkedItemCount = document.createElement("p");
+			linkedItemCount.classList.add("linkedItemCount");
+			linkedItemCount.id = "linkedItemCount";
+			linkedItemCount.textContent = "No Linked Items";
+			textContainer.appendChild(linkedItemCount);
+
+			container.appendChild(textContainer);
+
+			var linkedItemsButton = document.createElement("button");
+			linkedItemsButton.classList.add("linkedItemsButton");
+			linkedItemsButton.textContent = "Select Linked Items";
+			linkedItemsButton.onclick = function () {
+				dialog.prompt(
+					"Linked Items",
+					"Select the items you want to link to this item.",
+					{
+						fields: [{
+							type: "item",
+							preselectedItems: window.linkedItems.items.map(item => item.id),
+						}],
+					}
+				).then(function (result) {
+					if (result && result.type == "input") {
+						var linkedItems = result.values[0];
+						window.linkedItems.items = [];
+						linkedItems.forEach(linkedItem => {
+							// If in editor mode, don't allow the item to be linked to itself
+							if (mode === "editor" && linkedItem === itemDetails.id) {
+								window.linkedItems.rebuildList();
+								notification.addToQueue("passive", "danger", "1 Linked Item Removed", "You cannot link an item to itself.");
+								return;
+							}
+							window.linkedItems.add(linkedItem);
+						});
+					}
+				});
+			};
+			container.appendChild(linkedItemsButton);
+
+			wrapper.appendChild(container);
+
+			var list = document.createElement("div");
+			list.classList.add("list");
+			list.id = "linkedItemsList";
+
+			window.linkedItems = {
+				items: [],
+				list: list,
+				add: function(itemDetails) {
+					var item = new Item(itemDetails, {static: true});
+					this.items.push(item);
+					// Make item.element draggable and reorderable in list
+					item.element.draggable = true;
+					item.element.addEventListener("dragstart", function(event) {
+						event.dataTransfer.setData("text/plain", item.id);
+					});
+					item.element.addEventListener("dragover", function(event) {
+						event.preventDefault();
+					});
+					item.element.addEventListener("drop", function(event) {
+						event.preventDefault();
+						var id = event.dataTransfer.getData("text/plain");
+						var draggedItem = window.linkedItems.items.find(item => item.id === id);
+						if (draggedItem) {
+							var draggedItemIndex = window.linkedItems.items.indexOf(draggedItem);
+							var thisItemIndex = window.linkedItems.items.indexOf(item);
+							if (draggedItemIndex > -1) {
+								window.linkedItems.items.splice(draggedItemIndex, 1);
+								window.linkedItems.items.splice(thisItemIndex, 0, draggedItem);
+							}
+							window.linkedItems.rebuildList();
+						}
+					});
+					window.linkedItems.rebuildList();
+				},
+				rebuildList: function() {
+					while (this.list.firstChild) {
+						this.list.removeChild(this.list.firstChild);
+					}
+					this.items.forEach(item => {
+						this.list.appendChild(item.element);
+					});
+					if (this.items.length === 0) {
+						linkedItemCount.textContent = "No Linked Items";
+					} else if (this.items.length === 1) {
+						linkedItemCount.textContent = "1 Linked Item";
+					} else {
+						linkedItemCount.textContent = this.items.length + " Linked Items";
+					}
+				},
+				getValue: function () {
+					var value = [];
+					this.items.forEach(item => {
+						value.push(item.id);
+					});
+					return value;
+				},
+			}
+			if (mode === "editor" && itemDetails.linked_items) {
+				itemDetails.linked_items.split(",").forEach((linkedItem) => {
+					window.linkedItems.add(linkedItem);
+				});
+			}
+
+			wrapper.appendChild(list);
+			return wrapper;
+		},
+		valueGetter: function () {
+			var value = linkedItems.getValue();
+			if (value && value.length > 0) {
+				return {
+					include: true,
+					value: value,
 				};
 			} else {
 				return {
@@ -742,34 +910,28 @@ function showItemDetails(itemDetails) {
 			var textContainer = document.createElement("div");
 			textContainer.classList.add("textContainer");
 
-			var authorName = document.createElement("p");
-			authorName.classList.add("authorName");
-			authorName.id = "authorName";
-			if (mode === "editor" && itemDetails.author) {
-				//Remove anything between square brackets from author name
-				authorName.textContent = itemDetails.author.replace(/\[.*\]/, "");
-			} else {
-				authorName.textContent = "Select Author";
-			}
-			textContainer.appendChild(authorName);
+			var label = document.createElement("p");
+			label.textContent = "Author";
+			textContainer.appendChild(label);
 
-			var authorLink = document.createElement("p");
-			authorLink.classList.add("authorLink");
-			authorLink.id = "authorLink";
+			var authorValue = document.createElement("p");
+			authorValue.classList.add("authorValue");
+			authorValue.id = "authorValue";
 			if (
 				mode === "editor" &&
 				itemDetails.author &&
-				itemDetails.author.indexOf("[") >= 0
+			itemDetails.author.indexOf("[") !== -1
 			) {
-				//Get the portion of the author link between square brackets
-				authorLink.textContent = itemDetails.author.substring(
-					itemDetails.author.indexOf("[") + 1,
-					itemDetails.author.indexOf("]")
-				);
+				authorValue.textContent = itemDetails.author.substring(
+					0,
+					itemDetails.author.indexOf("[")
+				) + " (" + itemDetails.author.substring(itemDetails.author.indexOf("[") + 1, itemDetails.author.indexOf("]")) + ")";
+			} else if (mode === "editor" && itemDetails.author) {
+				authorValue.textContent = itemDetails.author;
 			} else {
-				authorLink.textContent = "No Link";
+				authorValue.textContent = "None";
 			}
-			textContainer.appendChild(authorLink);
+			textContainer.appendChild(authorValue);
 
 			container.appendChild(textContainer);
 
@@ -812,14 +974,9 @@ function showItemDetails(itemDetails) {
 								case "listSelection":
 									//User selected an author
 									if (authors[response.index].indexOf("[") !== -1) {
-										authorName.textContent = authors[response.index].substring(0, authors[response.index].indexOf("["));
-										authorLink.textContent = authors[response.index].substring(
-											authors[response.index].indexOf("[") + 1,
-											authors[response.index].indexOf("]")
-										);
+										authorValue.textContent = authors[response.index].substring(0, authors[response.index].indexOf("[")) + " (" + authors[response.index].substring(authors[response.index].indexOf("[") + 1, authors[response.index].indexOf("]")) + ")";
 									} else {
-										authorName.textContent = authors[response.index];
-										authorLink.textContent = "No Link";
+										authorValue.textContent = authors[response.index];
 									}
 									break;
 								case "buttonSelection":
@@ -834,11 +991,10 @@ function showItemDetails(itemDetails) {
 										switch (response.type) {
 											case "input":
 												//User entered a name
-												authorName.textContent = response.values[0];
 												if (response.values[1]) {
-													authorLink.textContent = response.values[1];
+													authorValue.textContent = response.values[0] + " (" + response.values[1] + ")";
 												} else {
-													authorLink.textContent = "No Link";
+													authorValue.textContent = response.values[0];
 												}
 												break;
 										}
@@ -853,22 +1009,16 @@ function showItemDetails(itemDetails) {
 			return container;
 		},
 		valueGetter: function () {
-			var nameValue = document.querySelector("#authorName").value;
-			var linkValue = document.querySelector("#authorLink").value;
-			if (nameValue && linkValue && nameValue != "Select Author" && linkValue !== "No Link") {
+			var value = document.querySelector("#authorValue").textContent;
+			if (value !== "None") {
 				return {
 					include: true,
-					value: nameValue + "[" + linkValue + "]",
-				};
-			} else if (nameValue && nameValue != "Select Author") {
-				return {
-					include: true,
-					value: nameValue,
+					value: value.replaceAll(" (", "[").replaceAll(")", "]")
 				};
 			} else {
 				return {
 					include: false,
-					fail: false,
+					fail: false
 				};
 			}
 		},

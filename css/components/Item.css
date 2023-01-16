@@ -1,10 +1,17 @@
 .itemCard {
+    height: 100pt;
     background: var(--content-background-color);
     padding: 5pt;
     border-radius: 10pt;
     display: flex;
     align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected {
+    background: var(--color-2);
+    color: white;
 }
 
 .itemCard.static {
@@ -13,6 +20,21 @@
 
 .itemCard.unlisted {
     background: var(--page-background-color);
+}
+
+.itemCard .loadingContainer {
+    width: 50pt;
+    height: 50pt;
+    border-radius: 5pt;
+    background: var(--page-background-color);
+    margin: 10pt 10pt 10pt 5pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.itemCard .loadingContainer>div {
+    transform: scale(0.6) translateX(-3pt);
 }
 
 .itemCard img {
@@ -38,6 +60,12 @@
     border-radius: 2pt;
     margin: 0 0 2.5pt 0;
     display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected .right .scene {
+    background: var(--color-1);
+    color: black;
 }
 
 .itemCard .right .name {
@@ -55,6 +83,7 @@
     justify-content: flex-start;
     margin-top: 2.5pt;
     white-space: nowrap;
+    padding-right: 10pt;
 }
 
 .itemCard .right .infoContainer * {
