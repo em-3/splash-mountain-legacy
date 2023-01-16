@@ -1056,6 +1056,11 @@ var dialog = {
 					input.placeholder = options.placeholder;
 				}
 				input.className = "input";
+				(function (input) {
+					fieldValueGetters.push(function () {
+						return input.value;
+					});
+				})(input);
 				dialogElement.appendChild(input);
 			}
 		}
