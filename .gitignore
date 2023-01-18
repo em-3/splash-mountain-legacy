@@ -8,3 +8,4 @@
 .htaccess
 
 /docker/
+/test/
