@@ -279,7 +279,7 @@ function displayItemDetails() {
 			});
 		} else if (itemDetails.type === "video" || itemDetails.type === "audio") {
 			//YouTube ID
-			createDetailProperty("film", itemDetails.video_id, function (e) {
+			createDetailProperty("youtube", itemDetails.video_id, function (e) {
 				contextMenu.present({
 					x: e.clientX,
 					y: e.clientY,
