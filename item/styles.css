@@ -195,7 +195,7 @@ main {
   font-family: "Roboto Mono", monospace;
 }
 
-@media (cursor: cursor) {
+@media (hover: hover) {
   .contentDisplay:has(.audioControls) {
     padding-top: 35pt;
   }
@@ -545,7 +545,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     min-width: 0;
   }
 
-  @media (cursor: cursor) {
+  @media (hover: hover) {
     .contentDisplay:has(.audioControls) {
       padding-top: 0;
     }
