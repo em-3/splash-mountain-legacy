@@ -3,6 +3,7 @@ var url = new URL(window.location.href);
 var params = url.searchParams;
 var id = params.get("id");
 var embedded = params.get("embedded");
+var returnTo = params.get("returnTo");
 if (!id) {
 	//Extract the ID from the last part of the URL
 	var pieces = url.pathname.split("/");
@@ -957,7 +958,9 @@ function closeItemViewer() {
 	if (audioPlayer.player) {
 		audioPlayer.player.stopVideo();
 	}
-	if (embedded) {
+	if (embedded && returnTo) {
+		window.location.href = returnTo;
+	} else if (embedded) {
 		window.top.postMessage("closeDetails", "*");
 	} else {
 		window.location.href = "/";

@@ -1,28 +1,48 @@
+//Parse PHP parameters from the URL
+var url = new URL(window.location.href);
+var params = url.searchParams;
+var embedded = params.get("embedded");
+
 function showItemDetails(id) {
-	document.querySelector(".itemDetailsContainer iframe").src =
-		"/item/" + id + "/?embedded=true";
-	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
-	document.body.classList.add("noScroll");
+	if (embedded) {
+		window.location.href = "/item/" + id + "/?embedded=true&returnTo=" + encodeURIComponent(window.location.href);
+	} else {
+		document.querySelector(".itemDetailsContainer iframe").src = "/item/" + id + "/?embedded=true";
+		document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+		document.body.classList.add("noScroll");
+	}
 }
 
 function showDatabaseItemEditor(id) {
-	var iframe = document.querySelector(".itemDetailsContainer iframe");
+	var url;
 	if (id) {
-		iframe.src = "/admin/embeds/databaseItemEditor/?mode=editor&id=" + id;
+		url = "/admin/embeds/databaseItemEditor/?mode=editor&id=" + id;
 	} else {
-		iframe.src = "/admin/embeds/databaseItemEditor/?mode=newItem";
+		url = "/admin/embeds/databaseItemEditor/?mode=newItem";
 	}
-	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+	if (embedded) {
+		window.location.href = url;
+	} else {
+		var iframe = document.querySelector(".itemDetailsContainer iframe");
+		iframe.src = url;
+		document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+	}
 }
 
 function showArticleEditor(id) {
-	var iframe = document.querySelector(".itemDetailsContainer iframe");
+	var url;
 	if (id) {
-		iframe.src = "/admin/embeds/articleEditor/?mode=editor&id=" + id;
+		url = "/admin/embeds/articleEditor/?mode=editor&id=" + id;
 	} else {
-		iframe.src = "/admin/embeds/articleEditor/?mode=newArticle";
+		url = "/admin/embeds/articleEditor/?mode=newArticle";
 	}
-	document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+	if (embedded) {
+		window.location.href = url;
+	} else {
+		var iframe = document.querySelector(".itemDetailsContainer iframe");
+		iframe.src = url;
+		document.querySelector(".itemDetailsContainer").classList.remove("hidden");
+	}
 }
 
 function hideItemDetails() {
