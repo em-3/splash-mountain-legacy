@@ -1287,27 +1287,6 @@ function showItemDetails(itemDetails) {
 	}
 
 	if (mode === "editor") {
-		var thumbnailElement = undefined;
-		switch (type) {
-			case "image":
-				thumbnailElement = document.querySelector(".thumbnail img");
-				thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail.jpg";
-				break;
-			case "video":
-			case "audio":
-				thumbnailElement = document.querySelector(".thumbnail iframe");
-				thumbnailElement.src =
-					"https://www.youtube.com/embed/" + itemDetails.video_id;
-				break;
-		}
-		if (thumbnailElement) {
-			thumbnailElement.classList.remove("hidden");
-		}
-
-		document.querySelector(".itemInfo .itemID").textContent = id;
-		document.querySelector(".itemType").textContent = type;
-		document.querySelector(".itemName").textContent = itemDetails.name;
-
 		var itemIDElement = document.querySelector(".itemID");
 		document.querySelector(".itemID span").textContent = id;
 		itemIDElement.onclick = function(e) {
@@ -1339,12 +1318,10 @@ function showItemDetails(itemDetails) {
 			})
 		}
 		itemIDElement.classList.remove("hidden");
-
 		document
 			.querySelector(".actions.existingItem")
 			.classList.remove("hidden");
 	} else {
-		document.querySelector(".itemInfo").classList.add("hidden");
 		document.querySelector(".actions.newItem").classList.remove("hidden");
 	}
 

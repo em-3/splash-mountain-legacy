@@ -46,44 +46,6 @@ section {
   padding: 20pt;
 }
 
-.editor .itemInfo {
-  background: var(--content-background-color);
-  width: calc(100% - 20pt);
-  max-width: 800pt;
-  height: 200pt;
-  border-radius: 10pt;
-  padding: 15pt;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin: auto;
-}
-
-.editor .itemInfo .thumbnail img {
-  width: auto;
-  height: auto;
-  max-height: 150pt;
-  max-width: 260pt;
-  border-radius: 5pt;
-}
-
-.editor .itemInfo .thumbnail iframe {
-  height: 100%;
-  width: auto;
-}
-
-.editor .itemInfo .textContainer {
-  margin-left: 20pt;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.editor .itemInfo .textContainer * {
-  margin: 2.5pt 0 2.5pt 0;
-}
-
 .editor .itemEditor {
   max-width: 500pt;
   padding: 20pt;

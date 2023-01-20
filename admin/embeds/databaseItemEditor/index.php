@@ -56,18 +56,6 @@ if(!check_authentication() || !check_clearance(0)) {
             <h1>An unidentified error has occured.</h1>
         </section>
         <section class="editor hidden">
-            <div class="itemInfo">
-                <div class="thumbnail">
-                    <img src="" class="thumbnail hidden">
-                    <img src="" class="full hidden">
-                    <iframe src="" class="youtube hidden" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <div class="textContainer">
-                    <h3 class="itemType"></h3>
-                    <h1 class="itemName"></h1>
-                    <p>Item ID: <span class="itemID" style="font-weight: bold;"></span></p>
-                </div>
-            </div>
             <div class="itemEditor">
                 <div class="properties"></div>
                 <h2 class="errorMessage hidden"></h2>
