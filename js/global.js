@@ -567,7 +567,12 @@ function DatabaseBrowser(options) {
 
 						for (var i = 0; i < data.length; i++) {
 							var currentItemData = data[i];
-							var item = new ItemCard(currentItemData);
+							var item = new ItemCard(
+								currentItemData,
+								{
+									onclick: (options?.adminMode === true) ? "edit" : "open"
+								}
+							);
 							if (options?.select === true) {
 								(function (item) {
 									item.element.onclick = (e) => {
@@ -920,13 +925,19 @@ function ItemCard(item, options) {
 			this[key] = item[key];
 		}
 
-		if (options && options.static) {
+		if (options?.static) {
 			this.element.classList.add("static");
 		} else {
 			(function (element, id) {
-				element.onclick = function () {
-					showItemDetails(id);
-				};
+				if (options.onclick === "edit") {
+					element.onclick = function () {
+						showDatabaseItemEditor(id);
+					};
+				} else {
+					element.onclick = function () {
+						showItemDetails(id);
+					};
+				}
 			})(this.element, item.id);
 		}
 
@@ -997,7 +1008,7 @@ var dialog = {
 			dialog.queue.push([type, title, message, options, resolve, reject]);
 
 			// If options.immediate is true, hide the current dialog and show the new one
-			if (options.immediate) {
+			if (options.immediate && document.querySelector(".dialog")) {
 				document.querySelector(".dialog").classList.add("hidden");
 				dialog.render(
 					type,
