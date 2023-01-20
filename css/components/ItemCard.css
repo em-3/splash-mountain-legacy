@@ -1,0 +1,139 @@
+.itemCardNEW {
+    height: 100pt;
+    background: var(--content-background-color);
+    padding: 5pt;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.itemCardNEW.selected {
+    background: var(--color-2);
+    color: white;
+}
+
+.itemCardNEW.static {
+    cursor: default;
+}
+
+.itemCardNEW.unlisted {
+    background: var(--page-background-color);
+}
+
+.itemCardNEW .loadingContainer,
+.itemCardNEW .iconContainer {
+    width: 50pt;
+    min-width: 50pt;
+    height: 50pt;
+    border-radius: 5pt;
+    background: var(--page-background-color);
+    margin: 10pt 10pt 10pt 5pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --ggs: 1.5;
+}
+
+.itemCardNEW .loadingContainer>div {
+    transform: scale(0.6) translateX(-3pt);
+}
+
+.itemCardNEW .imageContainer {
+    position: relative;
+}
+
+.itemCardNEW .imageContainer i {
+    position: absolute;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: scale(1.5) translate(-50%, -50%);
+}
+
+.itemCardNEW .imageContainer i::before {
+    top: 8px;
+}
+
+.itemCardNEW img {
+    width: 50pt;
+    margin: 10pt 10pt 10pt 5pt;
+    background: var(--page-background-color);
+    border-radius: 5pt;
+}
+
+.itemCardNEW .right {
+    width: 100%;
+    overflow: hidden;
+}
+
+.itemCardNEW .locationContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15pt;
+}
+
+.itemCardNEW .locationContainer div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2pt;
+}
+
+.itemCardNEW .locationContainer div span {
+    margin: 0;
+}
+
+.itemCardNEW .locationContainer div:first-child i {
+    --ggs: 0.8;
+}
+
+.itemCardNEW .locationContainer div:last-child i {
+    transform: scale(0.9) translateX(-5pt);
+}
+
+.itemCardNEW .right .name {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.itemCardNEW .authorContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2.5pt;
+    gap: 5pt;
+}
+
+.itemCardNEW .authorContainer p {
+    margin: 0;
+}
+
+.itemCardNEW .right .infoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2.5pt;
+    white-space: nowrap;
+    padding-right: 10pt;
+}
+
+.itemCardNEW .right .infoContainer>* {
+    margin: 0;
+}
+
+.itemCardNEW .right .infoContainer>*:not(:last-child)::after {
+    content: "•";
+    margin: 0 5pt;
+}
+
+.itemCardNEW .right .infoContainer>*:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

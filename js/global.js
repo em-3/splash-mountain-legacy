@@ -567,7 +567,7 @@ function DatabaseBrowser(options) {
 
 						for (var i = 0; i < data.length; i++) {
 							var currentItemData = data[i];
-							var item = new Item(currentItemData);
+							var item = new ItemCard(currentItemData);
 							if (options?.select === true) {
 								(function (item) {
 									item.element.onclick = (e) => {
@@ -829,6 +829,162 @@ function Item(item, options) {
 		} else if (imgElement) {
 			this.element.insertBefore(imgElement, loadingContainer);
 		}
+		this.element.removeChild(loadingContainer);
+	}
+}
+
+function ItemCard(item, options) {
+	// Create the element
+	this.element = document.createElement("div");
+	this.element.className = "itemCardNEW";
+
+	var loadingContainer = document.createElement("div");
+	loadingContainer.className = "loadingContainer";
+	loadingContainer.innerHTML = `
+		<div class="loadingAnimationEllipsis">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	`;
+	this.element.appendChild(loadingContainer);
+
+	var rightSideContainer =
+		document.createElement("div");
+	rightSideContainer.className = "right";
+	this.element.appendChild(rightSideContainer);
+
+	var locationContaianer = document.createElement("div");
+	locationContaianer.classList.add("locationContainer");
+	locationContaianer.classList.add("hidden");
+	rightSideContainer.appendChild(locationContaianer);
+
+	var parkContainer = document.createElement("div");
+	locationContaianer.appendChild(parkContainer);
+
+	var parkIcon = document.createElement("i");
+	parkIcon.classList.add("gg-pin");
+	parkContainer.appendChild(parkIcon);
+
+	var parkValue = document.createElement("span");
+	parkValue.classList.add("park");
+	parkContainer.appendChild(parkValue);
+
+	var sceneContainer = document.createElement("div");
+	locationContaianer.appendChild(sceneContainer);
+
+	var sceneIcon = document.createElement("i");
+	sceneIcon.classList.add("gg-pin-alt");
+	sceneContainer.appendChild(sceneIcon);
+
+	var sceneValue = document.createElement("span");
+	sceneValue.classList.add("scene");
+	sceneContainer.appendChild(sceneValue);
+
+	var nameElement = document.createElement("h3");
+	nameElement.className = "name";
+	nameElement.textContent = "Loading...";
+	rightSideContainer.appendChild(nameElement);
+
+	var authorContainer = document.createElement("div");
+	authorContainer.classList.add("authorContainer");
+	authorContainer.classList.add("hidden");
+	rightSideContainer.appendChild(authorContainer);
+
+	var authorIcon = document.createElement("i");
+	authorIcon.classList.add("gg-user");
+	authorContainer.appendChild(authorIcon);
+
+	var authorValue = document.createElement("p");
+	authorValue.className = "author";
+	authorContainer.appendChild(authorValue);
+
+	this.element.appendChild(rightSideContainer);
+
+	// If the item is a string, assume it is an id and fetch the item
+	if (typeof item === "string") {
+		fetch("/api/item/" + item)
+			.then((request) => request.json())
+			.then((data) => {
+				item = data;
+				populateCard.bind(this)();
+			});
+	} else {
+		populateCard.bind(this)();
+	}
+
+	function populateCard () {
+		// For each item property, create a property on the item object
+		for (var key in item) {
+			this[key] = item[key];
+		}
+
+		if (options && options.static) {
+			this.element.classList.add("static");
+		} else {
+			(function (element, id) {
+				element.onclick = function () {
+					showItemDetails(id);
+				};
+			})(this.element, item.id);
+		}
+
+		var thumbnailElement;
+		if (item.type === "image") {
+			thumbnailElement = document.createElement("img");
+			thumbnailElement.className = "image";
+			thumbnailElement.src = "/resources/" + item.image + "/thumbnail.jpg";
+		} else if (item.type === "video") {
+			thumbnailElement = document.createElement("div");
+			thumbnailElement.classList.add("imageContainer");
+
+			var imgElement = document.createElement("img");
+			imgElement.className = "image";
+			imgElement.src =
+				"https://img.youtube.com/vi/" +
+				item.video_id +
+				"/mqdefault.jpg";
+			thumbnailElement.appendChild(imgElement);
+
+			var playIcon = document.createElement("i");
+			playIcon.classList.add("gg-play-button");
+			thumbnailElement.appendChild(playIcon);
+		} else {
+			thumbnailElement = document.createElement("div");
+			thumbnailElement.classList.add("iconContainer");
+			
+			var iconElement = document.createElement("i");
+			switch (item.type) {
+				case "audio":
+					iconElement.classList.add("gg-headset");
+					break;
+				case "date":
+					iconElement.classList.add("gg-calendar");
+					break;
+				case "text":
+					iconElement.classList.add("gg-file-document");
+					break;
+			}
+			thumbnailElement.appendChild(iconElement);
+		}
+		this.element.insertBefore(thumbnailElement, loadingContainer);
+
+		locationContaianer.classList.remove("hidden");
+		parkValue.textContent = item.park;
+		sceneValue.textContent = item.scene;
+		nameElement.textContent = item.name;
+		if (item.author) {
+			authorValue.textContent =
+			item.author.replace(
+				/\[([^\][]+)]/g,
+				""
+			);
+			authorContainer.classList.remove("hidden");
+		} else {
+			authorValue.parentElement.removeChild(authorValue);
+		}
+
 		this.element.removeChild(loadingContainer);
 	}
 }

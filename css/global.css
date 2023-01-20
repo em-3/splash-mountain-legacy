@@ -4,6 +4,7 @@
 /* Component Styles */
 @import url("/css/components/DatabaseBrowser.css");
 @import url("/css/components/Item.css");
+@import url("/css/components/ItemCard.css");
 
 :root {
   --page-background-color: #ffffff;
@@ -51,10 +52,6 @@
 
 .gg-bulb {
   margin-top: -5pt;
-}
-
-.gg-pin {
-  margin-top: -4pt;
 }
 
 .gg-pin::before {
