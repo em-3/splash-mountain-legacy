@@ -156,7 +156,7 @@ function DatabaseBrowser(options) {
 	this.abortController = null;
 	this.searchRange = {
 		min: 1,
-		max: 21,
+		max: 21, 	
 	};
 
 	this.selectedItems = [];
@@ -602,9 +602,7 @@ function DatabaseBrowser(options) {
 							loadMoreButton.textContent = "Load More";
 							loadMoreButton.addEventListener(
 								"click",
-								function () {
-									this.loadMoreResults();
-								}
+								this.loadMoreResults.bind(this)
 							);
 							this.element
 								.querySelector(
