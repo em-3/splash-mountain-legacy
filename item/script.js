@@ -966,3 +966,10 @@ function closeItemViewer() {
 		window.location.href = "/";
 	}
 }
+
+//Listen for requests from the parent window
+window.addEventListener("message", function (e) {
+	if (e.data === "close") {
+		closeItemViewer();
+	}
+});

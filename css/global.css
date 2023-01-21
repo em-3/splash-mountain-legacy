@@ -858,6 +858,7 @@ main {
 .dialog:not(.hidden)~.overlay,
 .overlay.show {
   opacity: 0.5;
+  cursor: pointer;
   pointer-events: auto;
   display: block !important;
 }

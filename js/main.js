@@ -45,6 +45,11 @@ function showArticleEditor(id) {
 	}
 }
 
+document.querySelector(".overlay").addEventListener("click", function () {
+	// Post a close message to the iframe asking it to close
+	document.querySelector(".itemDetailsContainer iframe").contentWindow.postMessage("close", "*");
+});
+
 function hideItemDetails() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
 	document.body.classList.remove("noScroll");

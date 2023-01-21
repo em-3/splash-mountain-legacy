@@ -1620,3 +1620,10 @@ async function closeEditor() {
 		window.top.postMessage("closeEditor", "*");
 	}
 }
+
+//Listen for requests from the parent window
+window.addEventListener("message", function (e) {
+	if (e.data === "close") {
+		closeEditor();
+	}
+});
