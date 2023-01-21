@@ -18,6 +18,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="../styles.css">
 
@@ -76,14 +77,31 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             <div class="contentDisplay hidden invisible"></div>
         </div>
         <div class="itemInfoContainer hidden">
-            <div class="parkContainer">
-                <i class="gg-pin"></i>
-                <h2 class="park"></h2>
+            <div class="locationContainer">
+                <div class="parkContainer">
+                    <i class="gg-pin"></i>
+                    <h2 class="park"></h2>
+                </div>
+                <div class="sceneContainer">
+                    <i class="gg-pin-alt"></i>
+                    <h2 class="scene"></h2>
+                </div>
             </div>
             <h1 class="name"></h1>
             <div class="propertiesContainer"></div>
             <div class="tags hidden">
-                <p class="label">Tags:</p>
+                <div class="labelContainer">
+                    <div class="iconContainer"><i class="gg-tag"></i></div>
+                    <p class="label">Tags</p>
+                </div>
+                <div class="tagsContainer"></div>
+            </div>
+            <div class="linkedItems hidden">
+                <div class="labelContainer">
+                    <div class="iconContainer"><i class="gg-link"></i></div>
+                    <p class="label">Linked Items</p>
+                </div>
+                <div class="itemsContainer"></div>
             </div>
             <div class="metadata hidden">
                 <div class="header">
@@ -105,15 +123,25 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
                     <i class="gg-edit-exposure"></i>
                     <span>Edit Item</span>
                 </button>
-                <button class="copyID hidden" onclick="copyItemID()">
-                    <i class="gg-copy"></i>
-                    <span>Copy ID</span>
-                </button>
             </div>
         </div>
     </main>
 
+    <?php
+    // If the embedded parameter isn't set, include the global footer
+    if (!isset($_GET["embedded"])) {
+        include '../global/footer/index.html';
+    }
+    ?>
+
+    <div class="itemDetailsContainer hidden">
+        <iframe src="" frameborder="0"></iframe>
+    </div>
+
+    <div class="overlay"></div>
+
     <script src="/js/global.js"></script>
+    <script src="/js/main.js"></script>
     <script src="../script.js"></script>
 
 </body>

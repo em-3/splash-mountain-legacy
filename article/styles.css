@@ -67,13 +67,13 @@ main {
 }
 
 .articleDisplay .articleHeader .title {
-    font-size: 35pt;
+    font-size: clamp(20pt, 5vw, 35pt);
     margin: 15pt 0 5pt 0;
     animation-delay: 0.5s;
 }
 
 .articleDisplay .articleHeader .subtitle {
-    font-size: 20pt;
+    font-size: clamp(15pt, 4vw, 20pt);
     margin: 0 0 10pt 0;
     animation-delay: 0.7s;
 }
@@ -158,9 +158,16 @@ main {
     margin: 2pt 0;
 }
 
-.articleContent .imageContainer * {
+.articleContent .imageContainer img {
     width: 100%;
     border-radius: 10pt;
+}
+
+.articleContent .imageContainer .caption {
+    margin: 5pt 0 0 0;
+    font-size: 11pt;
+    text-align: center;
+    font-style: italic;
 }
 
 .articleContent .quote {

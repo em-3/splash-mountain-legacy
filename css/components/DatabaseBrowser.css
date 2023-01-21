@@ -1,0 +1,213 @@
+.databaseBrowser {
+    padding: 10pt;
+    overflow: auto;
+}
+
+.databaseBrowser .searchControls {
+    margin-bottom: 10pt;
+    padding: 5pt;
+    background: var(--content-background-color);
+    border-radius: 10pt;
+    position: relative;
+    overflow: scroll;
+    transition: opacity 0.2s ease;
+
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 5pt;
+}
+
+.databaseBrowser .searchControls::-webkit-scrollbar {
+    display: none;
+}
+
+.databaseBrowser .searchControls {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.databaseBrowser .searchField {
+    width: 125pt;
+    flex-grow: 1;
+    max-width: 200pt;
+}
+
+.databaseBrowser .searchField input {
+    border: none;
+    height: 20pt;
+    background: var(--page-background-color);
+    color: var(--primary-text-color);
+    margin: 0;
+    padding: 5pt;
+    width: 100%;
+    font: inherit;
+    font-size: 10pt;
+    border-radius: 5pt;
+    transition: background 0.2s ease;
+}
+
+.databaseBrowser .searchField input:focus {
+    outline: none;
+    background: var(--content-background-color);
+}
+
+.databaseBrowser .searchControls button {
+    background: var(--page-background-color);
+    color: var(--primary-text-color);
+    height: 20pt;
+    border: none;
+    border-radius: 5pt;
+    margin: 0;
+    padding: 0 10pt;
+    font: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5pt;
+    transition: all 0.2s ease;
+}
+
+.databaseBrowser .searchControls button.active {
+    background: var(--color-2);
+    color: white;
+}
+
+.databaseBrowser .filters {
+    display: contents;
+}
+
+.databaseBrowser .filters::after {
+    /* Add an invisible after element to prevent filters
+       on the last wrapped line from growing */
+    content: "";
+    flex-grow: 99999999999;
+}
+
+.databaseBrowser .filters:empty {
+    display: none;
+}
+
+.databaseBrowser .filters .filter {
+    height: 20pt;
+    background: var(--page-background-color);
+    border-radius: 5pt;
+    height: 20pt;
+    padding: 0 5pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5pt;
+    flex-grow: 1;
+}
+
+.databaseBrowser .filters .filter .iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.8);
+    width: 18pt;
+}
+
+.databaseBrowser .filters .filter .value {
+    font-size: 10pt;
+    font-weight: bold;
+    color: var(--primary-text-color);
+    margin: 0;
+    cursor: pointer;
+}
+
+.databaseBrowser .filters .filter .removeButton {
+    background: var(--content-background-color);
+    border: none;
+    border-radius: 3pt;
+    font-weight: bold;
+    height: 15pt;
+    padding: 2pt 0;
+    margin-left: auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.databaseBrowser .loadingContainer,
+.databaseBrowser .resultsContainer,
+.databaseBrowser .errorMessageContainer {
+    height: 100%;
+}
+
+.databaseBrowser .loadingContainer,
+.databaseBrowser .errorMessageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.databaseBrowser .errorMessageContainer {
+    flex-direction: column;
+}
+
+.databaseBrowser .errorMessageContainer .title {
+    margin: 0 0 10pt 0;
+}
+
+.databaseBrowser .errorMessageContainer .subtitle {
+    margin: 0;
+}
+
+.databaseBrowser .resultsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, calc((100% - 20pt) / 3));
+    grid-auto-rows: 100pt;
+    gap: 10pt;
+}
+
+.databaseBrowser .resultsContainer .noResults {
+    grid-column: 1 / -1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.databaseBrowser .resultsContainer .noResults .iconContainer i {
+    margin: auto;
+    transform: rotate(45deg);
+}
+
+.databaseBrowser .resultsContainer .noResults h2 {
+    margin: 5pt 0 5pt 0;
+    font-size: 15pt;
+}
+
+.databaseBrowser .resultsContainer .noResults p {
+    margin: 0;
+}
+
+.databaseBrowser .resultsContainer .loadMoreButton {
+    background: var(--content-background-color);
+    border-radius: 10pt;
+    cursor: pointer;
+    border: none;
+    font: inherit;
+    font-weight: bold;
+}
+
+@media (max-width: 960px) {
+    .databaseBrowser .resultsContainer {
+        grid-template-columns: repeat(2, calc((100% - 10pt) / 2));
+    }
+}
+
+@media (max-width: 670px) {
+    .databaseBrowser .resultsContainer {
+        grid-template-columns: 100%;
+    }
+}

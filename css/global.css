@@ -1,4 +1,10 @@
+/* Icons */
 @import url("https://css.gg/css");
+
+/* Component Styles */
+@import url("/css/components/DatabaseBrowser.css");
+@import url("/css/components/Item.css");
+@import url("/css/components/ItemCard.css");
 
 :root {
   --page-background-color: #ffffff;
@@ -48,8 +54,17 @@
   margin-top: -5pt;
 }
 
-.gg-pin {
-  margin-top: -5pt;
+.gg-pin::before {
+  background: currentColor;
+  transform: scale(0.8);
+}
+
+.gg-pin-alt {
+  margin: 0 0 -6pt 0;
+}
+
+.gg-tag {
+  margin-left: -2.75pt;
 }
 
 .hidden {
@@ -140,75 +155,6 @@ body {
   100% {
     transform: translate(24px, 0);
   }
-}
-
-.listItem {
-  background: var(--content-background-color);
-  padding: 5pt;
-  border-radius: 10pt;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.listItem.unlisted {
-  background: var(--page-background-color);
-}
-
-.listItem img {
-  width: 50pt;
-  margin: 10pt 10pt 10pt 5pt;
-  background: var(--page-background-color);
-  border-radius: 5pt;
-}
-
-.listItem picture>img {
-  padding: 5pt;
-}
-
-.listItem .right {
-  width: 100%;
-  overflow: hidden;
-}
-
-.listItem .right .scene {
-  background: var(--secondary-content-background-color);
-  font-size: 11pt;
-  padding: 1pt 2pt;
-  border-radius: 2pt;
-  margin: 0 0 2.5pt 0;
-  display: inline-block;
-}
-
-.listItem .right .name {
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.listItem .right .infoContainer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: 2.5pt;
-  white-space: nowrap;
-}
-
-.listItem .right .infoContainer * {
-  margin: 0;
-}
-
-.listItem .right .infoContainer *:not(:last-child)::after {
-  content: "•";
-  margin: 0 5pt;
-}
-
-.listItem .right .infoContainer *:last-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 footer {
@@ -665,14 +611,20 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
+  width: calc(100vw - 20pt);
   max-width: 400pt;
+  max-height: calc(100vh - 20pt);
   padding: 20pt;
   border-radius: 10pt;
   box-shadow: 0 0 20px var(--shadow-color);
   z-index: 6;
-  overflow: hidden;
+  overflow: auto;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.dialog.expanded {
+  width: 95vw;
+  max-width: 700pt;
 }
 
 .dialog.hidden {
@@ -687,6 +639,8 @@ main {
 }
 
 .dialog .message {
+  max-height: 200pt;
+  overflow-y: scroll;
   margin: 0 0 10pt 0;
   white-space: pre-line;
   word-break: break-all;
@@ -694,6 +648,54 @@ main {
   -moz-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
+}
+
+.dialog .databaseBrowser {
+  --page-background-color: #eeeeee;
+  --content-background-color: #ffffff;
+  --secondary-content-background-color: #cccccc;
+  padding: 0;
+  margin-bottom: 10pt;
+  height: 350pt;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-background-color: #222222;
+    --content-background-color: #000000;
+    --secondary-content-background-color: #444444;
+  }
+}
+
+.dialog .listContainer {
+  margin-bottom: 10pt;
+}
+
+.dialog .list {
+  max-height: 200pt;
+  overflow-y: scroll;
+}
+
+.dialog .list .item {
+  background: var(--page-background-color);
+  padding: 10pt;
+  margin: 0 0 5pt 0;
+  border-radius: 10pt;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.dialog .list .item.selected {
+  background: var(--color-2);
+  color: white;
+}
+
+.dialog .list .item p {
+  margin: 0;
+}
+
+.dialog .list .item p.label {
+  font-weight: bold;
 }
 
 .dialog .buttonContainer {
@@ -758,11 +760,12 @@ main {
   position: fixed;
   width: calc(100vw - 20pt);
   max-width: 150pt;
+  max-height: min(250pt, 60vh);
   padding: 5pt;
   border-radius: 10pt;
   box-shadow: 0 0 20px var(--shadow-color);
   z-index: 8;
-  overflow: hidden;
+  overflow: auto;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
@@ -851,8 +854,8 @@ main {
   transition: opacity 0.2s ease;
 }
 
-.itemDetailsContainer:not(.hidden)+.overlay,
-.dialog:not(.hidden)+.overlay,
+.itemDetailsContainer:not(.hidden)~.overlay,
+.dialog:not(.hidden)~.overlay,
 .overlay.show {
   opacity: 0.5;
   pointer-events: auto;
@@ -893,6 +896,10 @@ main {
     top: unset;
     bottom: 5pt;
     transform: translate(-50%, 0);
+  }
+
+  header.globalHeader~main {
+    --header-height: 100pt;
   }
 
   .searchResultsContainer {

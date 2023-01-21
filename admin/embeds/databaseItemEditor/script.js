@@ -29,8 +29,8 @@ function showItemDetails(itemDetails) {
 		var metadata = JSON.parse(itemDetails.metadata);
 	}
 
+	//Type
 	if (mode === "newItem") {
-		//Type
 		properties.push({
 			name: "Type",
 			propertyName: "type",
@@ -60,6 +60,7 @@ function showItemDetails(itemDetails) {
 
 					var image = document.querySelector(".image");
 					var videoID = document.querySelector(".videoID");
+					var visibleContent = document.querySelector(".visibleContent");
 					var cameraInfoContainer = document.querySelector(
 						".cameraInfoContainer"
 					);
@@ -67,15 +68,18 @@ function showItemDetails(itemDetails) {
 
 					image.classList.add("hidden");
 					videoID.classList.add("hidden");
+					visibleContent.classList.add("hidden");
 					cameraInfoContainer.classList.add("hidden");
 					samplingRate.classList.add("hidden");
 
 					switch (newType) {
 						case "image":
 							image.classList.remove("hidden");
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 							break;
 						case "video":
+							visibleContent.classList.remove("hidden");
 							cameraInfoContainer.classList.remove("hidden");
 						case "audio":
 							videoID.classList.remove("hidden");
@@ -497,6 +501,44 @@ function showItemDetails(itemDetails) {
 			}
 		},
 	});
+	//Visible Content
+	properties.push({
+		name: "Visible Content",
+		propertyName: "visible_content",
+		constructor: function () {
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("visibleContent");
+			if (mode === "editor" && itemDetails.type !== "photo" && itemDetails.type !== "video") {
+				container.classList.add("hidden");
+			}
+
+			var input = document.createElement("textarea");
+			input.name = "visibleContent";
+			input.id = "visibleContent";
+			input.placeholder = "Text Visible in Media";
+			if (mode === "editor") {
+				input.value = itemDetails.visible_content;
+			}
+
+			container.appendChild(input);
+			return container;
+		},
+		valueGetter: function () {
+			var value = document.querySelector("#visibleContent").value;
+			if (value) {
+				return {
+					include: true,
+					value: value,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
 	//Visibility
 	properties.push({
 		name: "Visibility",
@@ -572,84 +614,281 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
-			container.classList.add("tags");
-			var label = document.createElement("label");
-			label.for = "tags";
-			label.textContent = "Tags";
+			container.classList.add("row");
 
-			var inputContainer = document.createElement("div");
-			inputContainer.classList.add("inputContainer");
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
 
-			var input = document.createElement("input");
-			input.name = "tags";
-			input.id = "tags";
-			input.placeholder = "Enter a comma-separated list of tags.";
-			input.oninput = function () {
-				var value = input.value;
-				var tags = value.split(",");
-				for (var o = 0; o < select.options.length; o++) {
-					select.options[o].disabled = false;
-				}
-				for (var i = 0; i < tags.length; i++) {
-					var tag = tags[i].trim();
-					for (var o = 0; o < select.options.length; o++) {
-						if (select.options[o].value === tag) {
-							select.options[o].disabled = true;
+			var tagLabel = document.createElement("p");
+			tagLabel.textContent = "Tags";
+			textContainer.appendChild(tagLabel);
+
+			var tagList = document.createElement("p");
+			tagList.classList.add("tagList");
+			tagList.id = "tagList";
+			if (
+				mode === "editor" &&
+				itemDetails.tags &&
+				itemDetails.tags.length > 0
+			) {
+				tagList.textContent = itemDetails.tags;
+			} else {
+				tagList.textContent = "No Tags";
+			}
+			textContainer.appendChild(tagList);
+
+			container.appendChild(textContainer);
+
+			var selectTagsButton = document.createElement("button");
+			selectTagsButton.classList.add("selectButton");
+			selectTagsButton.textContent = "Select Tags";
+			selectTagsButton.onclick = function () {
+				fetch("/api/tags")
+					.then(response => response.json())
+					.then(tags => {
+						// Merge tags from the tagList and the tags from the server
+						var tagList = document.querySelector("#tagList");
+						var tagListTags = tagList.textContent.split(", ");
+						if (tagListTags.length === 1 && tagListTags[0] === "No Tags") {
+							tagListTags = [];
+						} else {
+							tagListTags = tagListTags.filter(tag => {
+								return tag !== "";
+							});
 						}
-					}
-				}
+						tags = tags.concat(tagListTags);
+						tags = tags.filter((tag, index) => {
+							return tags.indexOf(tag) === index;
+						});
+
+						// Sort tags alphabetically
+						tags.sort((a, b) => {
+							if (a.toLowerCase() < b.toLowerCase()) {
+								return -1;
+							} else if (a.toLowerCase() > b.toLowerCase()) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+
+						dialog.list(
+							"Choose Tags",
+							"Select from preexisting tags or add a new one",
+							tags.map(tag => {
+								return {label: tag};
+							}),
+							{
+								buttons: [
+									{
+										text: "Add New",
+										type: "active"
+									}
+								],
+								cancellable: true,
+								allowMultiple: true,
+								preselectedIndexes: tags.map(tag => {
+									if (tagList.textContent.includes(tag)) {
+										return tags.indexOf(tag);
+									} else {
+										return -1;
+									}
+								})
+							}
+						).then(response => {
+							if (!response) {
+								return;
+							}
+							switch (response.type) {
+								case "listSelection":
+									//User selected tags
+									var selectedTags = response.indexes.map(index => {
+										return tags[index];
+									});
+									tagList.textContent = selectedTags.join(", ");
+									break;
+								case "buttonSelection":
+									//User clicked the "Add New" button
+									dialog.prompt("Add New Tag", "Enter a name for the tag.", {
+										placeholder: "Tag Name",
+										cancellable: true
+									}).then(response => {
+										if (!response) {
+											return;
+										}
+										switch (response.type) {
+											case "input":
+												//User entered a name
+												var tag = response.values[0];
+												if (tag.length > 0) {
+													//Add the tag to the list
+													if (tagList.textContent.indexOf(tag) === -1) {
+														if (tagList.textContent === "No Tags") {
+															tagList.textContent = tag;
+														} else {
+															tagList.textContent += ", " + tag;
+														}
+													}
+												}
+												break;
+										}
+									});
+									break;
+							}
+						});
+					});
 			};
-			inputContainer.appendChild(input);
+			container.appendChild(selectTagsButton);
 
-			var select = document.createElement("select");
-			select.name = "tagSuggestions";
-			select.id = "tagSuggestions";
-			select.onchange = function () {
-				if (select.selectedIndex == 0) return;
-				var selectedOption = select.options[select.selectedIndex];
-				if (input.value.length === 0) {
-					input.value = selectedOption.value;
-				} else if (input.value.charAt(input.value.length - 1) === ",") {
-					input.value += selectedOption.value;
-				} else {
-					input.value += "," + selectedOption.value;
-				}
-				selectedOption.disabled = true;
-				select.selectedIndex = 0;
-			};
-
-			var defaultOption = document.createElement("option");
-			defaultOption.textContent = "Choose a Tag";
-			defaultOption.value = "none";
-			select.appendChild(defaultOption);
-
-			(async function () {
-				var tagList = await fetch("/api/tags/");
-				tagList = await tagList.json();
-				for (var i = 0; i < tagList.length; i++) {
-					var option = document.createElement("option");
-					option.textContent = tagList[i];
-					option.value = tagList[i];
-					select.appendChild(option);
-				}
-				if (mode === "editor") {
-					input.value = itemDetails.tags;
-					input.oninput();
-				}
-			})();
-
-			inputContainer.appendChild(select);
-
-			container.appendChild(label);
-			container.appendChild(inputContainer);
 			return container;
 		},
 		valueGetter: function () {
-			var values = document.querySelector("#tags").value;
-			if (values) {
+			var tags = document.querySelector("#tagList");
+			if (tags && tags.textContent !== "No Tags") {
 				return {
 					include: true,
-					value: values,
+					value: tags.textContent,
+				};
+			} else {
+				return {
+					include: false,
+					fail: false,
+				};
+			}
+		},
+	});
+	//Linked Items
+	properties.push({
+		name: "Linked Items",
+		propertyName: "linked_items",
+		constructor: function () {
+			var wrapper = document.createElement("div");
+
+			var container = document.createElement("div");
+			container.classList.add("propertyContainer");
+			container.classList.add("row");
+			container.classList.add("linkedItems");
+
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
+
+			var label = document.createElement("p");
+			label.textContent = "Linked Items";
+			textContainer.appendChild(label);
+
+			var linkedItemCount = document.createElement("p");
+			linkedItemCount.classList.add("linkedItemCount");
+			linkedItemCount.id = "linkedItemCount";
+			linkedItemCount.textContent = "No Linked Items";
+			textContainer.appendChild(linkedItemCount);
+
+			container.appendChild(textContainer);
+
+			var linkedItemsButton = document.createElement("button");
+			linkedItemsButton.classList.add("linkedItemsButton");
+			linkedItemsButton.textContent = "Select Linked Items";
+			linkedItemsButton.onclick = function () {
+				dialog.prompt(
+					"Linked Items",
+					"Select the items you want to link to this item.",
+					{
+						fields: [{
+							type: "item",
+							preselectedItems: window.linkedItems.items.map(item => item.id),
+						}],
+					}
+				).then(function (result) {
+					if (result && result.type == "input") {
+						var linkedItems = result.values[0];
+						window.linkedItems.items = [];
+						linkedItems.forEach(linkedItem => {
+							// If in editor mode, don't allow the item to be linked to itself
+							if (mode === "editor" && linkedItem === itemDetails.id) {
+								window.linkedItems.rebuildList();
+								notification.addToQueue("passive", "danger", "1 Linked Item Removed", "You cannot link an item to itself.");
+								return;
+							}
+							window.linkedItems.add(linkedItem);
+						});
+					}
+				});
+			};
+			container.appendChild(linkedItemsButton);
+
+			wrapper.appendChild(container);
+
+			var list = document.createElement("div");
+			list.classList.add("list");
+			list.id = "linkedItemsList";
+
+			window.linkedItems = {
+				items: [],
+				list: list,
+				add: function(itemDetails) {
+					var item = new Item(itemDetails, {static: true});
+					this.items.push(item);
+					// Make item.element draggable and reorderable in list
+					item.element.draggable = true;
+					item.element.addEventListener("dragstart", function(event) {
+						event.dataTransfer.setData("text/plain", item.id);
+					});
+					item.element.addEventListener("dragover", function(event) {
+						event.preventDefault();
+					});
+					item.element.addEventListener("drop", function(event) {
+						event.preventDefault();
+						var id = event.dataTransfer.getData("text/plain");
+						var draggedItem = window.linkedItems.items.find(item => item.id === id);
+						if (draggedItem) {
+							var draggedItemIndex = window.linkedItems.items.indexOf(draggedItem);
+							var thisItemIndex = window.linkedItems.items.indexOf(item);
+							if (draggedItemIndex > -1) {
+								window.linkedItems.items.splice(draggedItemIndex, 1);
+								window.linkedItems.items.splice(thisItemIndex, 0, draggedItem);
+							}
+							window.linkedItems.rebuildList();
+						}
+					});
+					window.linkedItems.rebuildList();
+				},
+				rebuildList: function() {
+					while (this.list.firstChild) {
+						this.list.removeChild(this.list.firstChild);
+					}
+					this.items.forEach(item => {
+						this.list.appendChild(item.element);
+					});
+					if (this.items.length === 0) {
+						linkedItemCount.textContent = "No Linked Items";
+					} else if (this.items.length === 1) {
+						linkedItemCount.textContent = "1 Linked Item";
+					} else {
+						linkedItemCount.textContent = this.items.length + " Linked Items";
+					}
+				},
+				getValue: function () {
+					var value = [];
+					this.items.forEach(item => {
+						value.push(item.id);
+					});
+					return value;
+				},
+			}
+			if (mode === "editor" && itemDetails.linked_items) {
+				itemDetails.linked_items.split(",").forEach((linkedItem) => {
+					window.linkedItems.add(linkedItem);
+				});
+			}
+
+			wrapper.appendChild(list);
+			return wrapper;
+		},
+		valueGetter: function () {
+			var value = linkedItems.getValue();
+			if (value && value.length > 0) {
+				return {
+					include: true,
+					value: value,
 				};
 			} else {
 				return {
@@ -666,55 +905,120 @@ function showItemDetails(itemDetails) {
 		constructor: function () {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
+			container.classList.add("row");
 
-			var nameInput = document.createElement("input");
-			nameInput.name = "authorName";
-			nameInput.id = "authorName";
-			nameInput.placeholder = "Author Name";
-			//Remove anything between square brackets from author name
-			if (mode === "editor" && itemDetails.author) {
-				nameInput.value = itemDetails.author.replace(/\[.*\]/, "");
-			}
-			container.appendChild(nameInput);
+			var textContainer = document.createElement("div");
+			textContainer.classList.add("textContainer");
 
-			var linkInput = document.createElement("input");
-			linkInput.name = "authorLink";
-			linkInput.id = "authorLink";
-			linkInput.placeholder = "Author Link";
-			//Get the portion of the author link between square brackets
+			var label = document.createElement("p");
+			label.textContent = "Author";
+			textContainer.appendChild(label);
+
+			var authorValue = document.createElement("p");
+			authorValue.classList.add("authorValue");
+			authorValue.id = "authorValue";
 			if (
 				mode === "editor" &&
 				itemDetails.author &&
-				itemDetails.author.indexOf("[") >= 0
+			itemDetails.author.indexOf("[") !== -1
 			) {
-				linkInput.value = itemDetails.author
-					.match(/\[(.*)\]/)[0]
-					.substr(
-						1,
-						itemDetails.author.match(/\[(.*)\]/)[0].length - 2
-					);
+				authorValue.textContent = itemDetails.author.substring(
+					0,
+					itemDetails.author.indexOf("[")
+				) + " (" + itemDetails.author.substring(itemDetails.author.indexOf("[") + 1, itemDetails.author.indexOf("]")) + ")";
+			} else if (mode === "editor" && itemDetails.author) {
+				authorValue.textContent = itemDetails.author;
+			} else {
+				authorValue.textContent = "None";
 			}
-			container.appendChild(linkInput);
+			textContainer.appendChild(authorValue);
+
+			container.appendChild(textContainer);
+
+			var selectAuthorButton = document.createElement("button");
+			selectAuthorButton.classList.add("selectButton");
+			selectAuthorButton.textContent = "Select Author";
+			selectAuthorButton.onclick = function () {
+				fetch("/api/authors")
+					.then(response => response.json())
+					.then(authors => {
+						dialog.list(
+							"Choose an Author",
+							"Select a preexisting author or add a new one.",
+							authors.map(author => {
+								if (author.indexOf("[") !== -1) {
+									return {
+										label: author.substring(0, author.indexOf("[")),
+										sublabel: author.substring(author.indexOf("[") + 1, author.indexOf("]"))
+									}
+								} else {
+									return {
+										label: author
+									}
+								}
+							}),
+							{
+								buttons: [
+									{
+										text: "Add New",
+										type: "active"
+									}
+								],
+								cancellable: true
+							}
+						).then(response => {
+							if (!response) {
+								return;
+							}
+							switch (response.type) {
+								case "listSelection":
+									//User selected an author
+									if (authors[response.index].indexOf("[") !== -1) {
+										authorValue.textContent = authors[response.index].substring(0, authors[response.index].indexOf("[")) + " (" + authors[response.index].substring(authors[response.index].indexOf("[") + 1, authors[response.index].indexOf("]")) + ")";
+									} else {
+										authorValue.textContent = authors[response.index];
+									}
+									break;
+								case "buttonSelection":
+									//User clicked the "Add New" button
+									dialog.prompt("Add New Author", "Enter the author's name and a link if provided.", {
+										placeholders: ["Author Name", "Author Link"],
+										cancellable: true
+									}).then(response => {
+										if (!response) {
+											return;
+										}
+										switch (response.type) {
+											case "input":
+												//User entered a name
+												if (response.values[1]) {
+													authorValue.textContent = response.values[0] + " (" + response.values[1] + ")";
+												} else {
+													authorValue.textContent = response.values[0];
+												}
+												break;
+										}
+									});
+									break;
+							}
+						});
+					});
+			};
+			container.appendChild(selectAuthorButton);
 
 			return container;
 		},
 		valueGetter: function () {
-			var nameValue = document.querySelector("#authorName").value;
-			var linkValue = document.querySelector("#authorLink").value;
-			if (nameValue && linkValue) {
+			var value = document.querySelector("#authorValue").textContent;
+			if (value !== "None") {
 				return {
 					include: true,
-					value: nameValue + "[" + linkValue + "]",
-				};
-			} else if (nameValue) {
-				return {
-					include: true,
-					value: nameValue,
+					value: value.replaceAll(" (", "[").replaceAll(")", "]")
 				};
 			} else {
 				return {
 					include: false,
-					fail: false,
+					fail: false
 				};
 			}
 		},
@@ -983,27 +1287,6 @@ function showItemDetails(itemDetails) {
 	}
 
 	if (mode === "editor") {
-		var thumbnailElement = undefined;
-		switch (type) {
-			case "image":
-				thumbnailElement = document.querySelector(".thumbnail img");
-				thumbnailElement.src = "/resources/" + itemDetails.image + "/thumbnail.jpg";
-				break;
-			case "video":
-			case "audio":
-				thumbnailElement = document.querySelector(".thumbnail iframe");
-				thumbnailElement.src =
-					"https://www.youtube.com/embed/" + itemDetails.video_id;
-				break;
-		}
-		if (thumbnailElement) {
-			thumbnailElement.classList.remove("hidden");
-		}
-
-		document.querySelector(".itemInfo .itemID").textContent = id;
-		document.querySelector(".itemType").textContent = type;
-		document.querySelector(".itemName").textContent = itemDetails.name;
-
 		var itemIDElement = document.querySelector(".itemID");
 		document.querySelector(".itemID span").textContent = id;
 		itemIDElement.onclick = function(e) {
@@ -1035,12 +1318,10 @@ function showItemDetails(itemDetails) {
 			})
 		}
 		itemIDElement.classList.remove("hidden");
-
 		document
 			.querySelector(".actions.existingItem")
 			.classList.remove("hidden");
 	} else {
-		document.querySelector(".itemInfo").classList.add("hidden");
 		document.querySelector(".actions.newItem").classList.remove("hidden");
 	}
 
@@ -1241,7 +1522,7 @@ async function deleteItem() {
 			],
 		}
 	);
-	if (confirm !== 0) {
+	if (confirm.index !== 0) {
 		return;
 	}
 
@@ -1321,7 +1602,7 @@ async function closeEditor() {
 				],
 			}
 		);
-		if (confirm !== 0) {
+		if (confirm.index !== 0) {
 			return;
 		}
 	}

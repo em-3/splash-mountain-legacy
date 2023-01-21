@@ -85,52 +85,6 @@ if(!check_authentication() || !check_clearance(0)) {
                 <span>Create Item</span>
             </a>
         </section>
-        <section class="databaseBrowser">
-            <div class="searchControls">
-                <div class="controls">
-                    <div class="searchField">
-                        <input type="text" placeholder="Filter" oninput="databaseBrowser.searchBar.oninput()"
-                            onchange="databaseBrowser.searchBar.onchange()">
-                    </div>
-                    <div class="filterBar">
-                        <div class="filters"></div>
-                        <div class="addFilter" onclick="showFilterSelect()">
-                            <i class="gg-math-plus"></i>
-                        </div>
-                    </div>
-                    <div class="sortByContainer">
-                        <p>Sort By:</p>
-                        <select name="sortBy" class="sortBy" id="sortBy" onchange="databaseBrowser.refreshResults()">
-                            <option value="name" selected>Name</option>
-                            <option value="scene">Scene</option>
-                            <option value="newest_first">Date Added (Newest First)</option>
-                            <option value="oldest_first">Date Added (Oldest First)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="filterSelect hidden">
-                    <div class="closeButton" onclick="hideFilterSelect()">
-                        <i class="gg-close"></i>
-                    </div>
-                    <div class="availableFilters"></div>
-                </div>
-                
-            </div>
-            <div class="loadingContainer">
-                <div class="loadingAnimationEllipsis">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-            <div class="resultsContainer hidden"></div>
-            <div class="errorMessageContainer hidden">
-                <h2 class="title"></h2>
-                <p class="subtitle"></p>
-            </div>
-        </section>
     </main>
 
     <?php include '../../global/footer/index.html'; ?>

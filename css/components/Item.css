@@ -1,0 +1,101 @@
+.itemCard {
+    height: 100pt;
+    background: var(--content-background-color);
+    padding: 5pt;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected {
+    background: var(--color-2);
+    color: white;
+}
+
+.itemCard.static {
+    cursor: default;
+}
+
+.itemCard.unlisted {
+    background: var(--page-background-color);
+}
+
+.itemCard .loadingContainer {
+    width: 50pt;
+    height: 50pt;
+    border-radius: 5pt;
+    background: var(--page-background-color);
+    margin: 10pt 10pt 10pt 5pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.itemCard .loadingContainer>div {
+    transform: scale(0.6) translateX(-3pt);
+}
+
+.itemCard img {
+    width: 50pt;
+    margin: 10pt 10pt 10pt 5pt;
+    background: var(--page-background-color);
+    border-radius: 5pt;
+}
+
+.itemCard picture>img {
+    padding: 5pt;
+}
+
+.itemCard .right {
+    width: 100%;
+    overflow: hidden;
+}
+
+.itemCard .right .scene {
+    background: var(--secondary-content-background-color);
+    font-size: 11pt;
+    padding: 1pt 2pt;
+    border-radius: 2pt;
+    margin: 0 0 2.5pt 0;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.itemCard.selected .right .scene {
+    background: var(--color-1);
+    color: black;
+}
+
+.itemCard .right .name {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.itemCard .right .infoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 2.5pt;
+    white-space: nowrap;
+    padding-right: 10pt;
+}
+
+.itemCard .right .infoContainer * {
+    margin: 0;
+}
+
+.itemCard .right .infoContainer *:not(:last-child)::after {
+    content: "•";
+    margin: 0 5pt;
+}
+
+.itemCard .right .infoContainer *:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

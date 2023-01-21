@@ -133,7 +133,7 @@ var contentFieldConstructors = {
 				type: "image",
 				element: container,
 				getValue: function () {
-					if (mode === "editor") {
+					if (mode === "editor" && content) {
 						content.caption = captionField.value;
 						return content;
 					} else if (fileUploadElement.files.length > 0) {
@@ -961,7 +961,7 @@ async function updateArticle() {
 				//Upload the image file
 				var imageID = null;
 				var imageFormData = new FormData();
-				imageFormData.append("resource", image);
+				imageFormData.append("resource", image.file);
 				imageFormData.append("associated_id", id);
 				await fetch("/admin/resources/upload.php", {
 					method: "POST",
@@ -977,7 +977,10 @@ async function updateArticle() {
 					});
 				content.push({
 					type: "image",
-					content: imageID,
+					content: {
+						image: imageID,
+						caption: image.caption,
+					},
 				});
 
 				updateProgressStatus(
@@ -1039,7 +1042,7 @@ async function deleteArticle() {
 			],
 		}
 	);
-	if (confirm !== 0) {
+	if (confirm.index !== 0) {
 		return;
 	}
 
@@ -1119,7 +1122,7 @@ async function closeEditor() {
 				],
 			}
 		);
-		if (confirm !== 0) {
+		if (confirm.index !== 0) {
 			return;
 		}
 	}
