@@ -669,7 +669,7 @@ function DatabaseBrowser(options) {
 				icon: "tag",
 				label: "Tag",
 				type: "list",
-				values: data,
+				values: ["UNTAGGED"].concat(data),
 				max: data.length,
 			};
 		});
