@@ -631,7 +631,8 @@ function showItemDetails(itemDetails) {
 				itemDetails.tags &&
 				itemDetails.tags.length > 0
 			) {
-				tagList.textContent = itemDetails.tags;
+				// Replace commas with a comma and a space in itemDetails.tags
+				tagList.textContent = itemDetails.tags.replaceAll(",", ", ");
 			} else {
 				tagList.textContent = "No Tags";
 			}
@@ -688,7 +689,7 @@ function showItemDetails(itemDetails) {
 								cancellable: true,
 								allowMultiple: true,
 								preselectedIndexes: tags.map(tag => {
-									if (tagList.textContent.includes(tag)) {
+									if (tagListTags.indexOf(tag) !== -1) {
 										return tags.indexOf(tag);
 									} else {
 										return -1;
