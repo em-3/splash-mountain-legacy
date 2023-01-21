@@ -326,3 +326,17 @@ function updateCountdown() {
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+//Listen for the Konami code
+var konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "KeyB", "KeyA"];
+var konamiCodeIndex = 0;
+
+document.addEventListener("keydown", function (event) {
+	if (event.code === konamiCode[konamiCodeIndex]) {
+		if (++konamiCodeIndex === konamiCode.length) {
+			document.body.classList.toggle("konami");
+		}
+	} else {
+		konamiCodeIndex = 0;
+	}
+});

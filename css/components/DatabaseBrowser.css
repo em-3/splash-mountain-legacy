@@ -193,6 +193,7 @@
 
 .databaseBrowser .resultsContainer .loadMoreButton {
     background: var(--content-background-color);
+    color: var(--primary-text-color);
     border-radius: 10pt;
     cursor: pointer;
     border: none;
