@@ -509,7 +509,7 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 			container.classList.add("visibleContent");
-			if (mode === "editor" && (itemDetails.type !== "photo" || itemDetails.type !== "video")) {
+			if (mode === "editor" && itemDetails.type !== "image" && itemDetails.type !== "video") {
 				container.classList.add("hidden");
 			}
 
