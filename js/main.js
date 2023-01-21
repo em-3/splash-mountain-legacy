@@ -48,6 +48,9 @@ function showArticleEditor(id) {
 function hideItemDetails() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
 	document.body.classList.remove("noScroll");
+	for (browser in refreshableDatabaseBrowsers) {
+			refreshableDatabaseBrowsers[browser].refreshResults("refreshExisting");
+	}
 }
 
 //Listen for iframe requests

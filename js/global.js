@@ -3,6 +3,7 @@ function wait(milliseconds) {
 }
 
 // Components
+var refreshableDatabaseBrowsers = [];
 function DatabaseBrowser(options) {
 	this.element = document.createElement("div");
 	this.element.classList.add("databaseBrowser");
@@ -452,7 +453,7 @@ function DatabaseBrowser(options) {
 	this.element.querySelector(".searchField input").onchange = this.searchBar.onchange.bind(this);
 	this.element.querySelector(".searchField input").onkeydown = this.searchBar.onkeydown.bind(this);
 
-	this.refreshResults = function (preservePreviousResults) {
+	this.refreshResults = function (mode) {
 		if (this.abortController) {
 			this.abortController.abort();
 		}
@@ -504,9 +505,12 @@ function DatabaseBrowser(options) {
 		character = "&";
 		PHPParams += character + "sort_by=" + this.sortBy;
 
-		if (!preservePreviousResults) {
+		if (!mode) {
 			this.searchRange.min = 1;
 			this.searchRange.max = 21;
+		} else if (mode === "refreshExisting") {
+			var previousMin = this.searchRange.min;
+			this.searchRange.min = 1;
 		}
 
 		//Fetch new results
@@ -526,7 +530,14 @@ function DatabaseBrowser(options) {
 			.then((response) => response.json())
 			.then(
 				(data) => {
-					if (!preservePreviousResults) {
+					// Get current scroll position
+					if (mode === "refreshExisting") {
+						var scrollPosition = this.element.querySelector(
+							".resultsContainer"
+						).scrollTop;
+					}
+
+					if (mode !== "preservePreviousResults") {
 						//Clear the current results from .resultsContainer
 						while (
 							this.element.querySelector(".resultsContainer").firstChild
@@ -537,7 +548,7 @@ function DatabaseBrowser(options) {
 								);
 						}
 					}
-					if (!preservePreviousResults && data.length === 0) {
+					if (mode !== "preservePreviousResults" && data.length === 0) {
 						var noResults = document.createElement("div");
 						noResults.className = "noResults";
 						noResults.innerHTML = `
@@ -548,7 +559,7 @@ function DatabaseBrowser(options) {
 							<p>We couldn't find any results.</p>
 						`;
 						this.element.querySelector(".resultsContainer").appendChild(noResults);
-					} else if (preservePreviousResults && data.length === 0) {
+					} else if (mode === "preservePreviousResults" && data.length === 0) {
 						var loadMoreButton = this.element.querySelector(
 							".loadMoreButton"
 						);
@@ -556,7 +567,7 @@ function DatabaseBrowser(options) {
 							loadMoreButton
 						);
 					} else {
-						if (preservePreviousResults) {
+						if (mode === "preservePreviousResults") {
 							var loadMoreButton = this.element.querySelector(
 								".loadMoreButton"
 							);
@@ -596,8 +607,7 @@ function DatabaseBrowser(options) {
 							data.length ===
 							this.searchRange.max - this.searchRange.min
 						) {
-							var loadMoreButton =
-								document.createElement("button");
+							var loadMoreButton = document.createElement("button");
 							loadMoreButton.className = "loadMoreButton";
 							loadMoreButton.textContent = "Load More";
 							loadMoreButton.addEventListener(
@@ -610,6 +620,15 @@ function DatabaseBrowser(options) {
 								)
 								.appendChild(loadMoreButton);
 						}
+					}
+
+					// Restore scroll position
+					if (scrollPosition) {
+						this.element.querySelector(".resultsContainer").scrollTop = scrollPosition;
+					}
+
+					if (previousMin) {
+						this.searchRange.min = previousMin;
 					}
 
 					//Hide the loading screen and show the results container
@@ -647,15 +666,17 @@ function DatabaseBrowser(options) {
 						.classList.remove("hidden");
 				}
 			);
-	};
-	
+	}
+		
 	this.loadMoreResults = function () {
 		this.searchRange.min += 20;
 		this.searchRange.max += 20;
-		this.refreshResults(true);
-	},
+		this.refreshResults("preservePreviousResults");
+	}
 
 	this.refreshResults();
+
+	refreshableDatabaseBrowsers.push(this);
 
 	//Load available tags
 	fetch("/api/tags/")
