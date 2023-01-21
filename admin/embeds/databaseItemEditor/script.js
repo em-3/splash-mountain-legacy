@@ -747,7 +747,7 @@ function showItemDetails(itemDetails) {
 			if (tags && tags.textContent !== "No Tags") {
 				return {
 					include: true,
-					value: tags.textContent,
+					value: tags.textContent.replaceAll(", ", ","),
 				};
 			} else {
 				return {
