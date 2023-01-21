@@ -1,3 +1,43 @@
+body.konami {
+  --page-background-color: #BF7059;
+  --secondary-page-background-color: #D17F57;
+  --content-background-color: #BF7059;
+  --secondary-content-background-color: #D17F57;
+  --primary-text-color: white;
+  --secondary-text-color: #dddddd;
+  --shadow-color: #555555;
+
+  --color-1: #636a4b;
+}
+
+body.konami main section.featured {
+  background: linear-gradient(to bottom,
+      var(--color-1) 0%,
+      var(--page-background-color) 6%,
+      var(--secondary-page-background-color) 100%);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding-bottom: 20pt;
+}
+
+body.konami main section.waitTimes {
+  background-image: url("/images/konami/rock3.jpg");
+}
+
+body.konami main section:nth-child(3) {
+  background-image: url("/images/konami/rock4.jpg");
+}
+
+body.konami main section:nth-child(4) {
+  background-image: url("/images/konami/rock1.jpg");
+}
+
+body.konami main section.waitTimes .content>div,
+body.konami main section.featured .content .item {
+  border-top: 10px solid var(--color-1);
+}
+
 header.globalHeader {
   position: absolute;
   justify-content: center;
@@ -165,7 +205,7 @@ section.featured {
 }
 
 section.featured:last-child {
-  margin-bottom: 20pt;
+  padding-bottom: 20pt;
 }
 
 section.featured .header {
