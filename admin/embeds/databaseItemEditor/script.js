@@ -509,7 +509,7 @@ function showItemDetails(itemDetails) {
 			var container = document.createElement("div");
 			container.classList.add("propertyContainer");
 			container.classList.add("visibleContent");
-			if (mode === "editor" && itemDetails.type !== "photo" && itemDetails.type !== "video") {
+			if (mode === "editor" && (itemDetails.type !== "photo" || itemDetails.type !== "video")) {
 				container.classList.add("hidden");
 			}
 
@@ -658,6 +658,8 @@ function showItemDetails(itemDetails) {
 							});
 						}
 						tags = tags.concat(tagListTags);
+
+						// Remove duplicates
 						tags = tags.filter((tag, index) => {
 							return tags.indexOf(tag) === index;
 						});
