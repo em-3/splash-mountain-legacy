@@ -706,6 +706,9 @@ function showItemDetails(itemDetails) {
 										return tags[index];
 									});
 									tagList.textContent = selectedTags.join(", ");
+									if (tagList.textContent === "") {
+										tagList.textContent = "No Tags";
+									}
 									break;
 								case "buttonSelection":
 									//User clicked the "Add New" button
