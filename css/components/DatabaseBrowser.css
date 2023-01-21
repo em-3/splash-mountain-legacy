@@ -55,6 +55,7 @@
 
 .databaseBrowser .searchControls button {
     background: var(--page-background-color);
+    color: var(--primary-text-color);
     height: 20pt;
     border: none;
     border-radius: 5pt;
