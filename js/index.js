@@ -271,7 +271,7 @@ fetch("/api/news/list/?min=1&max=15")
 
 //Update the closing countdown timer
 var currentTimestamp;
-var launchTimestamp = new Date("2023-01-23T05:00:00Z");
+var launchTimestamp = new Date("2023-01-23T04:00:00Z");
 
 const countdownDOM = {
 	container: document.querySelector(".countdown"),
