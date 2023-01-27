@@ -118,9 +118,9 @@ require_once __DIR__ . "/scripts/global.php";
                         <p class="label">WDW</p>
                         <p class="currentTime"></p>
                     </div>
-                    <h1 class="time"></h1>
-                    <p class="status"></p>
-                    <p class="updatedTime"></p>
+                    <h1 class="time">Closed</h1>
+                    <p class="status">Permanently Closed</p>
+                    <p class="updatedTime">Last updated Jan 23, 2023</p>
                 </div>
                 <div class="tdl">
                     <div class="top">
