@@ -69,7 +69,7 @@ require_once __DIR__ . "/scripts/global.php";
             <div class="foreground">
                 <img src="images/logo-white.png" alt="Splash Mountain Legacy">
                 <div class="countdown">
-                    <p class="label">WDW Retheme Closure</p>
+                    <p class="label">DL Retheme Closure</p>
                     <div class="timer">
                         <div class="days">
                             <h1></h1>
