@@ -105,13 +105,13 @@ require_once __DIR__ . "/scripts/global.php";
             </div>
             <div class="content hidden">
                 <div class="dl">
-                    <div class="top">
+                <div class="top">
                         <p class="label">DL</p>
                         <p class="currentTime"></p>
                     </div>
-                    <h1 class="time"></h1>
-                    <p class="status"></p>
-                    <p class="updatedTime"></p>
+                    <h1 class="time">Closed</h1>
+                    <p class="status">Permanently Closed</p>
+                    <p class="updatedTime">Last updated May 30, 2023</p>
                 </div>
                 <div class="wdw">
                     <div class="top">

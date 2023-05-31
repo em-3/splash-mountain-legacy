@@ -86,7 +86,6 @@ updateTimeZoneTimes();
 setInterval(updateTimeZoneTimes, 1000);
 
 Promise.all([
-	fetchWaitTime("dl", "https://api.themeparks.wiki/v1/entity/343b216d-86b1-40c2-83cc-aa5f67b4804b/live"),
 	fetchWaitTime("tdl", "https://api.themeparks.wiki/v1/entity/dfe25d8e-e234-4020-a261-30c6825d0680/live")
 ]).then(() => {
 	document.querySelector(".waitTimes .content").classList.remove("hidden");
