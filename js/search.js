@@ -66,12 +66,12 @@ var searchBar = {
 					(results) => {
 						searchBar.clearSearchResults();
 
-						if (results.length === 0) {
+						if (results.search_results.length === 0) {
 							searchBar.clearSearchResults();
 							searchBar.showErrorMessageContainer("No Results Found", "We couldn't find any matching items in the database.");
 						} else {
-							for (var i = 0; i < results.length; i++) {
-								document.querySelector(".searchResultsContainer .resultsContainer").appendChild(new Item(results[i]).element);
+							for (var i = 0; i < results.search_results.length; i++) {
+								document.querySelector(".searchResultsContainer .resultsContainer").appendChild(new Item(results.search_results[i]).element);
 							}
 
 							searchBar.showResultsContainer();

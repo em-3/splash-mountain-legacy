@@ -104,7 +104,7 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 			var container = document.querySelector(
 				".databaseAdditions .content"
 			);
-			data.forEach((item) => {
+			data.search_results.forEach((item) => {
 				var currentItemElement = document.createElement("div");
 				currentItemElement.className = "item";
 				(function (id) {

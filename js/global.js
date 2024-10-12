@@ -548,7 +548,7 @@ function DatabaseBrowser(options) {
 								);
 						}
 					}
-					if (mode !== "preservePreviousResults" && data.length === 0) {
+					if (!preservePreviousResults && data.search_results.length === 0) {
 						var noResults = document.createElement("div");
 						noResults.className = "noResults";
 						noResults.innerHTML = `
@@ -559,7 +559,7 @@ function DatabaseBrowser(options) {
 							<p>We couldn't find any results.</p>
 						`;
 						this.element.querySelector(".resultsContainer").appendChild(noResults);
-					} else if (mode === "preservePreviousResults" && data.length === 0) {
+					} else if (preservePreviousResults && data.search_results.length === 0) {
 						var loadMoreButton = this.element.querySelector(
 							".loadMoreButton"
 						);
@@ -576,8 +576,8 @@ function DatabaseBrowser(options) {
 							);
 						}
 
-						for (var i = 0; i < data.length; i++) {
-							var currentItemData = data[i];
+						for (var i = 0; i < data.search_results.length; i++) {
+							var currentItemData = data.search_results[i];
 							var item = new ItemCard(
 								currentItemData,
 								{
@@ -604,7 +604,7 @@ function DatabaseBrowser(options) {
 						}
 
 						if (
-							data.length ===
+							data.search_results.length ===
 							this.searchRange.max - this.searchRange.min
 						) {
 							var loadMoreButton = document.createElement("button");

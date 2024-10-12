@@ -344,7 +344,7 @@ var databaseBrowser = {
 								);
 						}
 					}
-					if (!preservePreviousResults && data.length === 0) {
+					if (!preservePreviousResults && data.search_results.length === 0) {
 						var noResults = document.createElement("div");
 						noResults.className = "noResults";
 						noResults.innerHTML = `
@@ -355,7 +355,7 @@ var databaseBrowser = {
 							<p>We couldn't find any results.</p>
 						`;
 						document.querySelector(".databaseBrowser .resultsContainer").appendChild(noResults);
-					} else if (preservePreviousResults && data.length === 0) {
+					} else if (preservePreviousResults && data.search_results.length === 0) {
 						var loadMoreButton = document.querySelector(
 							".databaseBrowser .loadMoreButton"
 						);
@@ -372,8 +372,8 @@ var databaseBrowser = {
 							);
 						}
 
-						for (var i = 0; i < data.length; i++) {
-							var currentItemData = data[i];
+						for (var i = 0; i < data.search_results.length; i++) {
+							var currentItemData = data.search_results[i];
 							var item = new Item(currentItemData);
 							document
 								.querySelector(
@@ -383,7 +383,7 @@ var databaseBrowser = {
 						}
 
 						if (
-							data.length ===
+							data.search_results.length ===
 							databaseBrowser.searchRange.max - databaseBrowser.searchRange.min
 						) {
 							var loadMoreButton =
