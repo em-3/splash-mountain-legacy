@@ -37,6 +37,8 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <link rel="manifest" href="/site.webmanifest">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2f8ea9">
     <meta name="msapplication-TileColor" content="#2d89ef">
+    
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 
 </head>
 
