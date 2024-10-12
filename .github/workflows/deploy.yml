@@ -15,11 +15,11 @@ jobs:
     steps:
       #Checks out the repo to $GITHUB_WORKSPACE
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       #Deploys via FTP to production server
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: ftpupload.net
           username: epiz_29890181
