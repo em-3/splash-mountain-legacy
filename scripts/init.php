@@ -14,6 +14,7 @@ $database = new \PDO("mysql:host=" . $_ENV["DB_HOST"] . ";port=" . $_ENV["DB_POR
 $database->exec("SET time_zone = '+00:00';");
 
 if(filter_var($_ENV["DEBUG"], FILTER_VALIDATE_BOOLEAN)) {
+    ini_set("display_errors", 1);
     $database->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 }
 
