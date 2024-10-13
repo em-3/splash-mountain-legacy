@@ -985,6 +985,7 @@ function ItemCard(item, options) {
 			thumbnailElement.classList.add("iconContainer");
 			
 			var iconElement = document.createElement("iconify-icon");
+			iconElement.width = 48;
 			switch (item.type) {
 				case "audio":
 					iconElement.icon = "mdi:headphones";
