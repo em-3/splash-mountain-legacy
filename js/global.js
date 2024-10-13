@@ -548,7 +548,7 @@ function DatabaseBrowser(options) {
 								);
 						}
 					}
-					if (!preservePreviousResults && data.search_results.length === 0) {
+					if (mode !== "preservePreviousResults" && data.search_results.length === 0) {
 						var noResults = document.createElement("div");
 						noResults.className = "noResults";
 						noResults.innerHTML = `
@@ -559,7 +559,7 @@ function DatabaseBrowser(options) {
 							<p>We couldn't find any results.</p>
 						`;
 						this.element.querySelector(".resultsContainer").appendChild(noResults);
-					} else if (preservePreviousResults && data.search_results.length === 0) {
+					} else if (mode === "preservePreviousResults" && data.search_results.length === 0) {
 						var loadMoreButton = this.element.querySelector(
 							".loadMoreButton"
 						);
