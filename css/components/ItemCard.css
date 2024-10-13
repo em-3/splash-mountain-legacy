@@ -33,7 +33,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    --ggs: 1.5;
 }
 
 .itemCardNEW .loadingContainer>div {
@@ -44,12 +43,12 @@
     position: relative;
 }
 
-.itemCardNEW .imageContainer i {
+.itemCardNEW .imageContainer iconify-icon {
     position: absolute;
     color: white;
     top: 50%;
     left: 50%;
-    transform: scale(1.5) translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .itemCardNEW .imageContainer i::before {
@@ -84,14 +83,6 @@
 
 .itemCardNEW .locationContainer div span {
     margin: 0;
-}
-
-.itemCardNEW .locationContainer div:first-child i {
-    --ggs: 0.8;
-}
-
-.itemCardNEW .locationContainer div:last-child i {
-    transform: scale(0.9) translateX(-5pt);
 }
 
 .itemCardNEW .right .name {

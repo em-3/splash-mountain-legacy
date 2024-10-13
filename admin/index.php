@@ -76,11 +76,11 @@ if(!check_authentication() || !check_clearance(0)) {
                 </div>
                 <div class="actions">
                     <button class="create" onclick="">
-                        <div class="icon"><i class="gg-math-plus"></i></div>
+                        <div class="icon"><iconify-icon icon="mdi:plus" width="24"></iconify-icon></div>
                         <span>Create</span>
                     </button>
                     <button class="logout" onclick="logout()">
-                        <div class="icon"><i class="gg-log-out"></i></div>
+                        <div class="icon"><iconify-icon icon="mdi:logout" width="24"></iconify-icon></div>
                         <span>Logout</span>
                     </button>
                 </div>
@@ -90,37 +90,37 @@ if(!check_authentication() || !check_clearance(0)) {
             <a href="/admin/database">
                 <div class="pageLink databaseBrowser">
                     <div class="icon">
-                        <i class="gg-database"></i>
+                        <iconify-icon icon="mdi:database" width="48"></iconify-icon>
                     </div>
                     <div class="text">
                         <h2>Database Browser</h2>
                         <p>Upload, edit, and delete items.</p>
                     </div>
-                    <i class="gg-chevron-right"></i>
+                    <iconify-icon icon="mdi:chevron-right" width="48"></iconify-icon>
                 </div>
             </a>
             <a href="/admin/newsList">
                 <div class="pageLink newsList">
                     <div class="icon">
-                        <i class="gg-file-document"></i>
+                        <iconify-icon icon="mdi:file-document" width="48"></iconify-icon>
                     </div>
                     <div class="text">
                         <h2>News List</h2>
                         <p>Create, edit, and delete news articles.</p>
                     </div>
-                    <i class="gg-chevron-right"></i>
+                    <iconify-icon icon="mdi:chevron-right" width="48"></iconify-icon>
                 </div>
             </a>
             <a href="/admin/audit-log">
                 <div class="pageLink auditLog">
                     <div class="icon">
-                        <i class="gg-play-list-search"></i>
+                        <iconify-icon icon="material-symbols:manage-search" width="48"></iconify-icon>
                     </div>
                     <div class="text">
                         <h2>Audit Log</h2>
                         <p>View a history of database changes.</p>
                     </div>
-                    <i class="gg-chevron-right"></i>
+                    <iconify-icon icon="mdi:chevron-right" width="48"></iconify-icon>
                 </div>
             </a>
         </section>

@@ -76,7 +76,7 @@ require_once __DIR__ . "/../scripts/global.php";
                     <div class="filterBar">
                         <div class="filters"></div>
                         <div class="addFilter" onclick="showFilterSelect()">
-                            <i class="gg-math-plus"></i>
+                            <iconify-icon icon="mdi:plus"></iconify-icon>
                         </div>
                     </div>
                     <div class="sortByContainer">
@@ -92,7 +92,7 @@ require_once __DIR__ . "/../scripts/global.php";
 
                 <div class="filterSelect hidden">
                     <div class="closeButton" onclick="hideFilterSelect()">
-                        <i class="gg-close"></i>
+                        <iconify-icon icon="mdi:close"></iconify-icon>
                     </div>
                     <div class="availableFilters"></div>
                 </div>

@@ -177,7 +177,7 @@
     align-items: center;
 }
 
-.databaseBrowser .resultsContainer .noResults .iconContainer i {
+.databaseBrowser .resultsContainer .noResults .iconContainer iconify-icon {
     margin: auto;
     transform: rotate(45deg);
 }

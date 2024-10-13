@@ -350,7 +350,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin: 0;
 }
 
-.locationContainer .sceneContainer i {
+.locationContainer .sceneContainer iconify-icon {
   transform: translateX(-4pt);
 }
 
@@ -512,6 +512,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   cursor: pointer;
   margin-bottom: 5pt;
   display: flex;
+  align-items: center;
   justify-content: center;
   transition: 0.1s ease background;
 }

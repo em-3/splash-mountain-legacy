@@ -22,8 +22,7 @@ header {
   z-index: 2;
 }
 
-header i {
-  --ggs: 1.5;
+header iconify-icon {
   cursor: pointer;
 }
 
@@ -100,7 +99,7 @@ section {
   width: auto;
 }
 
-.propertyContainer select~i {
+.propertyContainer select~iconify-icon {
   position: absolute;
   bottom: 14pt;
   right: 10pt;

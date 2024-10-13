@@ -79,11 +79,11 @@ if(!check_authentication() || !check_clearance(0)) {
                 <h2 class="subtitle">Admin Console</h2>
             </div>
             <a href="/admin" class="backLink">
-                <i class="gg-chevron-left"></i>
+                <iconify-icon icon="mdi:chevron-left"></iconify-icon>
                 <span>Back to Admin Home</span>
             </a>
             <a onclick="showDatabaseItemEditor()" class="addItem">
-                <i class="gg-math-plus"></i>
+                <iconify-icon icon="mdi:plus"></iconify-icon>
                 <span>Create Item</span>
             </a>
         </section>

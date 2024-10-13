@@ -79,7 +79,7 @@ if(!check_authentication() || !check_clearance(0)) {
                 <h2 class="subtitle">Admin Console</h2>
             </div>
             <a href="/admin" class="backLink">
-                <i class="gg-chevron-left"></i>
+                <iconify-icon icon="mdi:chevron-left"></iconify-icon>
                 <span>Back to Admin Home</span>
             </a>
         </section>

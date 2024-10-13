@@ -70,7 +70,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <main>
         <section class="articleViewer">
             <div class="loadingContainer">
-                <i class="gg-loadbar-doc"></i>
+                <iconify-icon icon="mdi:file-document" width="48"></iconify-icon>
             </div>
             <div class="articleDisplay hidden">
                 <section class="articleHeader">

@@ -52,8 +52,8 @@ function displayItemDetails() {
 		var iconContainer = document.createElement("div");
 		iconContainer.classList.add("iconContainer");
 
-		var iconElement = document.createElement("i");
-		iconElement.classList.add("gg-" + icon);
+		var iconElement = document.createElement("iconify-icon");
+		iconElement.icon = icon;
 
 		var valueElement = document.createElement("p");
 		valueElement.textContent = value;
@@ -118,7 +118,7 @@ function displayItemDetails() {
 						y: e.clientY,
 						items: [
 							{
-								icon: "profile",
+								icon: "mdi:account",
 								label: "See All Items",
 								callback: function () {
 									if (embedded) {
@@ -132,7 +132,7 @@ function displayItemDetails() {
 								}
 							},
 							{
-								icon: "external",
+								icon: "mdi:external-link",
 								label: "Open Link",
 								callback: function () {
 									window.open(link);
@@ -152,7 +152,7 @@ function displayItemDetails() {
 						y: e.clientY,
 						items: [
 							{
-								icon: "profile",
+								icon: "mdi:account",
 								label: "See All Items",
 								callback: function () {
 									if (embedded) {
@@ -229,7 +229,7 @@ function displayItemDetails() {
 				y: e.clientY,
 				items: [
 					{
-						icon: "copy",
+						icon: "mdi:copy",
 						label: "Copy Item ID",
 						callback: function () {
 							navigator.clipboard.writeText(itemDetails.id);
@@ -248,7 +248,7 @@ function displayItemDetails() {
 					y: e.clientY,
 					items: [
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy Resource ID",
 							callback: function () {
 								navigator.clipboard.writeText(itemDetails.image);
@@ -256,7 +256,7 @@ function displayItemDetails() {
 							}
 						},
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy Thumbnail URL",
 							callback: function () {
 								navigator.clipboard.writeText(
@@ -266,7 +266,7 @@ function displayItemDetails() {
 							}
 						},
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy Full Image URL",
 							callback: function () {
 								navigator.clipboard.writeText(
@@ -286,7 +286,7 @@ function displayItemDetails() {
 					y: e.clientY,
 					items: [
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy YouTube ID",
 							callback: function () {
 								navigator.clipboard.writeText(itemDetails.video_id);
@@ -294,7 +294,7 @@ function displayItemDetails() {
 							}
 						},
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy YouTube URL",
 							callback: function () {
 								navigator.clipboard.writeText(
@@ -304,7 +304,7 @@ function displayItemDetails() {
 							}
 						},
 						{
-							icon: "copy",
+							icon: "mdi:copy",
 							label: "Copy Thumbnail URL",
 							callback: function () {
 								navigator.clipboard.writeText(
@@ -333,7 +333,7 @@ function displayItemDetails() {
 						y: e.clientY,
 						items: [
 							{
-								icon: "tag",
+								icon: "mdi:tag",
 								label: "See All Items",
 								callback: function () {
 									if (embedded) {
@@ -392,11 +392,11 @@ function displayItemDetails() {
 
 		function createContentPropertyElement(icon, name, value) {
 			var containerElement = document.createElement("div");
-			var iconElement = document.createElement("i");
+			var iconElement = document.createElement("iconify-icon");
 			var valueElement = document.createElement("p");
 
 			containerElement.title = name;
-			iconElement.classList.add("gg-" + icon);
+			iconElement.icon = icon;
 			valueElement.textContent = value;
 
 			containerElement.appendChild(iconElement);
@@ -520,9 +520,9 @@ function showItemContent(itemDetails) {
                     <div class="info">
 						<div class="left">
 							<button class="playStateButton" onclick="audioPlayer.changePlayState()">
-								<i class="play gg-play-button hidden"></i>
-								<i class="pause gg-play-pause hidden"></i>
-								<i class="replay gg-undo hidden"></i>
+								<iconify-icon icon="mdi:play" class="play hidden" width="24"></iconify-icon>
+								<iconify-icon icon="mdi:pause" class="pause hidden" width="24"></iconify-icon>
+								<iconify-icon icon="mdi:restart" class="replay hidden" width="24"></iconify-icon>
 								<div class="buffering loadingContainer">
 									<div class="loadingAnimationEllipsis">
 										<div></div>
@@ -533,7 +533,7 @@ function showItemContent(itemDetails) {
 								</div>
 							</button>
 							<button class="repeatButton" onclick="audioPlayer.changeRepeatMode()">
-								<i class="gg-repeat"></i>
+								<iconify-icon icon="mdi:repeat"></iconify-icon>
 							</button>
 						</div>
 						<div class="right">
@@ -664,7 +664,7 @@ function share(e) {
 			y: e.clientY,
 			items: [
 				{
-					icon: "link",
+					icon: "mdi:link",
 					label: "Copy Link",
 					callback: function () {
 						navigator.clipboard.writeText(
@@ -674,7 +674,7 @@ function share(e) {
 					}
 				},
 				{
-					icon: "share",
+					icon: "mdi:share",
 					label: "Share Link",
 					callback: function () {
 						navigator.share({

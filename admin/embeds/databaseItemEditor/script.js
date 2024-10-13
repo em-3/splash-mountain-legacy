@@ -88,8 +88,8 @@ function showItemDetails(itemDetails) {
 					}
 				};
 
-				var icon = document.createElement("i");
-				icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 
 				container.appendChild(select);
 				container.appendChild(icon);
@@ -339,8 +339,8 @@ function showItemDetails(itemDetails) {
 				select.value = itemDetails.park.toLowerCase();
 			}
 
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 
 			container.appendChild(select);
 			container.appendChild(icon);
@@ -411,8 +411,8 @@ function showItemDetails(itemDetails) {
 				select.value = itemDetails.scene;
 			}
 
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 
 			container.appendChild(select);
 			container.appendChild(icon);
@@ -575,8 +575,8 @@ function showItemDetails(itemDetails) {
 				}
 			}
 
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 
 			container.appendChild(select);
 			container.appendChild(icon);
@@ -1090,8 +1090,9 @@ function showItemDetails(itemDetails) {
 			if (mode === "editor" && metadata.precision) {
 				precisionSelect.value = metadata.precision;
 			}
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
+
 			timestampContainer.appendChild(precisionSelect);
 			timestampContainer.appendChild(icon);
 
@@ -1302,7 +1303,7 @@ function showItemDetails(itemDetails) {
 				items: [
 					{
 						label: "Copy ID",
-						icon: "copy",
+						icon: "mdi:copy",
 						callback: function() {
 							navigator.clipboard.writeText(id);
 							notification.addToQueue(
@@ -1315,7 +1316,7 @@ function showItemDetails(itemDetails) {
 					},
 					{
 						label: "Open Item",
-						icon: "external",
+						icon: "mdi:external-link",
 						callback: function() {
 							window.open("/item/" + id);
 						}

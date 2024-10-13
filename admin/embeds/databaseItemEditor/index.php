@@ -41,7 +41,7 @@ if(!check_authentication() || !check_clearance(0)) {
 <body ontouchstart class>
 
     <header>
-        <i class="gg-close" onclick="closeEditor()"></i>
+        <iconify-icon icon="mdi:close" onclick="closeEditor()" width="24"></iconify-icon>
         <p class="itemID hidden">Item ID: <span></span></p>
     </header>
 
@@ -64,17 +64,17 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions existingItem hidden">
                     <div class="passive">
                         <button class="cancel" onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Cancel Changes</span>
                         </button>
                         <button class="save" onclick="updateItem()">
-                            <div class="icon"><i class="gg-drive"></i></div>
+                            <div class="icon"><iconify-icon icon="material-symbols:save" width="24"></iconify-icon></div>
                             <span>Update Item</span>
                         </button>
                     </div>
                     <div class="danger">
                         <button class="delete" onclick="deleteItem()">
-                            <div class="icon"><i class="gg-trash"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:trash" width="24"></iconify-icon></div>
                             <span>Delete Item</span>
                         </button>
                     </div>
@@ -82,13 +82,13 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions newItem hidden">
                     <div class="danger">
                         <button class="cancel" onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Cancel</span>
                         </button>
                     </div>
                     <div class="passive">
                         <button class="save" onclick="uploadItem()">
-                            <div class="icon"><i class="gg-software-upload"></i></div>
+                            <div class="icon"><iconify-icon icon="material-symbols:upload" width="24"></iconify-icon></div>
                             <span>Upload Item</span>
                         </button>
                     </div>
@@ -162,7 +162,7 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions success hidden">
                     <div class="passive">
                         <button onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Close</span>
                         </button>
                     </div>
@@ -170,13 +170,13 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions uploadFailure hidden">
                     <div class="danger">
                         <button onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Close</span>
                         </button>
                     </div>
                     <div class="passive">
                         <button onclick="uploadItem()">
-                            <div class="icon"><i class="gg-redo"></i></div>
+                            <div class="icon"><iconify-icon icon="material-symbols:redo" width="24"></iconify-icon></div>
                             <span>Try Again</span>
                         </button>
                     </div>
@@ -184,13 +184,13 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions updateFailure hidden">
                     <div class="danger">
                         <button onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Close</span>
                         </button>
                     </div>
                     <div class="passive">
                         <button onclick="updateItem()">
-                            <div class="icon"><i class="gg-redo"></i></div>
+                            <div class="icon"><iconify-icon icon="material-symbols:redo" width="24"></iconify-icon></div>
                             <span>Try Again</span>
                         </button>
                     </div>
@@ -198,13 +198,13 @@ if(!check_authentication() || !check_clearance(0)) {
                 <div class="actions deleteFailure hidden">
                     <div class="danger">
                         <button onclick="closeEditor()">
-                            <div class="icon"><i class="gg-close"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:close" width="24"></iconify-icon></div>
                             <span>Close</span>
                         </button>
                     </div>
                     <div class="passive">
                         <button onclick="deleteItem()">
-                            <div class="icon"><i class="gg-trash"></i></div>
+                            <div class="icon"><iconify-icon icon="mdi:trash" width="24"></iconify-icon></div>
                             <span>Try Again</span>
                         </button>
                     </div>

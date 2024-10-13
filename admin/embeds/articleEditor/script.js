@@ -29,7 +29,7 @@ if (mode === "editor" && id) {
 var contentFieldConstructors = {
 	paragraph: {
 		name: "Paragraph",
-		icon: "format-left",
+		icon: "mdi:format-align-left",
 		constructor(content) {
 			var element = document.createElement("textarea");
 			element.placeholder = "Paragraph";
@@ -49,7 +49,7 @@ var contentFieldConstructors = {
 	},
 	header: {
 		name: "Header",
-		icon: "format-heading",
+		icon: "mdi:format-heading-hash",
 		constructor(content) {
 			var element = document.createElement("input");
 			element.type = "text";
@@ -71,7 +71,7 @@ var contentFieldConstructors = {
 	},
 	subheader: {
 		name: "Subheader",
-		icon: "details-less",
+		icon: "mdi:notes",
 		constructor(content) {
 			var element = document.createElement("input");
 			element.type = "text";
@@ -93,7 +93,7 @@ var contentFieldConstructors = {
 	},
 	image: {
 		name: "Image",
-		icon: "image",
+		icon: "mdi:image",
 		constructor(content) {
 			var container = document.createElement("div");
 			container.classList.add("imageContainer");
@@ -149,7 +149,7 @@ var contentFieldConstructors = {
 	},
 	quote: {
 		name: "Quote",
-		icon: "quote",
+		icon: "mdi:comment-quote",
 		constructor(content) {
 			var container = document.createElement("div");
 			container.classList.add("container");
@@ -183,7 +183,7 @@ var contentFieldConstructors = {
 	},
 	divider: {
 		name: "Divider",
-		icon: "format-separator",
+		icon: "material-symbols:align-space-even",
 		constructor(content) {
 			var container = document.createElement("div");
 			var divider = document.createElement("hr");
@@ -220,7 +220,7 @@ function addContentField(type, content, position) {
 				y: event.clientY,
 				items: [
 					{
-						icon: "arrow-up",
+						icon: "mdi:arrow-up",
 						label: "Move up",
 						disabled: contentFields.indexOf(contentField) === 0,
 						callback: function () {
@@ -233,7 +233,7 @@ function addContentField(type, content, position) {
 						}
 					},
 					{
-						icon: "border-top",
+						icon: "mdi:border-top",
 						label: "Insert above",
 						callback: function () {
 							contextMenu.presentFieldTypeSelector(event)
@@ -244,7 +244,7 @@ function addContentField(type, content, position) {
 						}
 					},
 					{
-						icon: "border-bottom",
+						icon: "mdi:border-bottom",
 						label: "Insert below",
 						callback: function () {
 							contextMenu.presentFieldTypeSelector(event)
@@ -255,7 +255,7 @@ function addContentField(type, content, position) {
 						}
 					},
 					{
-						icon: "arrow-down",
+						icon: "mdi:arrow-down",
 						label: "Move down",
 						disabled: contentFields.indexOf(contentField) === contentFields.length - 1,
 						callback: function () {
@@ -268,7 +268,7 @@ function addContentField(type, content, position) {
 						}
 					},
 					{
-						icon: "trash",
+						icon: "mdi:trash",
 						label: "Remove",
 						type: "destructive",
 						callback: function () {
@@ -487,8 +487,8 @@ function showArticleDetails(articleDetails) {
 				select.value = "Splash Mountain Legacy Staff";
 			}
 
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 			
 			container.appendChild(select);
 			container.appendChild(icon);
@@ -548,8 +548,8 @@ function showArticleDetails(articleDetails) {
 				}
 			};
 			
-			var icon = document.createElement("i");
-			icon.classList.add("gg-chevron-down");
+			var icon = document.createElement("iconify-icon");
+			icon.icon = "mdi:chevron-down";
 			
 			container.appendChild(select);
 			container.appendChild(icon);
@@ -663,7 +663,7 @@ function showArticleDetails(articleDetails) {
 				items: [
 					{
 						label: "Copy ID",
-						icon: "copy",
+						icon: "mdi:content-copy",
 						callback: function() {
 							navigator.clipboard.writeText(id);
 							notification.addToQueue(
@@ -676,7 +676,7 @@ function showArticleDetails(articleDetails) {
 					},
 					{
 						label: "Open Article",
-						icon: "external",
+						icon: "mdi:externa-link",
 						callback: function() {
 							window.open("/article/" + id);
 						}

@@ -14,17 +14,17 @@ function DatabaseBrowser(options) {
 			</div>
 
 			<button class="match">
-				<i class="gg-search-found"></i>
+				<iconify-icon icon="mdi:magnify-plus"></iconify-icon>
 				<span>Match</span>
 			</button>
 
 			<button class="sortBy">
-				<i class="gg-sort-az"></i>
+				<iconify-icon icon="mdi:sort"></iconify-icon>
 				<span>Sort By</span>
 			</button>
 
 			<button class="addFilter">
-				<i class="gg-math-plus"></i>
+				<iconify-icon icon="mdi:plus"></iconify-icon>
 				<span>Add Filter</span>
 			</button>
 			<div class="filters"></div>
@@ -47,7 +47,7 @@ function DatabaseBrowser(options) {
 	this.filters = [
 		{
 			id: "type",
-			icon: "attachment",
+			icon: "mdi:attachment",
 			label: "Type",
 			type: "list",
 			values: ["image", "video", "audio", "text", "date"],
@@ -55,7 +55,7 @@ function DatabaseBrowser(options) {
 		},
 		{
 			id: "park",
-			icon: "pin",
+			icon: "material-symbols:push-pin",
 			label: "Park",
 			type: "list",
 			values: ["WDW", "DL", "TDL"],
@@ -63,7 +63,7 @@ function DatabaseBrowser(options) {
 		},
 		{
 			id: "scene",
-			icon: "pin-alt",
+			icon: "material-symbols:pin-drop",
 			label: "Scene",
 			type: "list",
 			values: [
@@ -97,7 +97,7 @@ function DatabaseBrowser(options) {
 		undefined,
 		{
 			id: "dateRange",
-			icon: "calendar",
+			icon: "mdi:calendar",
 			label: "Date Range",
 			type: "dateRange",
 			values: [
@@ -144,7 +144,7 @@ function DatabaseBrowser(options) {
 		{
 			adminAccess: true,
 			id: "visibility",
-			icon: "eye",
+			icon: "mdi:eye",
 			label: "Visibility",
 			type: "list",
 			values: ["All", "Public", "Unlisted"],
@@ -300,7 +300,7 @@ function DatabaseBrowser(options) {
 		var filterIcon = document.createElement("div");
 		filterIcon.classList.add("iconContainer");
 		filterIcon.innerHTML = `
-			<i class="gg-${filterObject.icon}"></i>
+			<iconify-icon icon="${filterObject.icon}"></iconify-icon>
 		`;
 		filterIcon.title = filterObject.label;
 		filterIcon.onclick = function (e) {
@@ -321,7 +321,7 @@ function DatabaseBrowser(options) {
 
 		var removeButton = document.createElement("div");
 		removeButton.classList.add("removeButton");
-		removeButton.innerHTML = "<i class='gg-close'></i>";
+		removeButton.innerHTML = "<iconify-icon icon='mdi:close'></iconify-icon>";
 		removeButton.addEventListener("click", function () {
 			filterObject.disabled = false;
 			filterElement.parentElement.removeChild(filterElement);
@@ -553,7 +553,7 @@ function DatabaseBrowser(options) {
 						noResults.className = "noResults";
 						noResults.innerHTML = `
 							<div class="iconContainer">
-								<i class="gg-bee"></i>
+								<iconify-icon icon="mdi:bee" width="48"></iconify-icon>
 							</div>
 							<h2>There's Nothing In Here But Bees!</h2>
 							<p>We couldn't find any results.</p>
@@ -685,7 +685,7 @@ function DatabaseBrowser(options) {
 			this.filters[3] = {
 				id: "tags",
 				parameterName: "tags[]",
-				icon: "tag",
+				icon: "mdi:tag",
 				label: "Tag",
 				type: "list",
 				values: ["UNTAGGED"].concat(data),
@@ -700,7 +700,7 @@ function DatabaseBrowser(options) {
 			this.filters[4] = {
 				id: "author",
 				parameterName: "author",
-				icon: "user",
+				icon: "mdi:user",
 				label: "Author",
 				type: "list",
 				values: data.map((author) => {
@@ -887,8 +887,8 @@ function ItemCard(item, options) {
 	var parkContainer = document.createElement("div");
 	locationContaianer.appendChild(parkContainer);
 
-	var parkIcon = document.createElement("i");
-	parkIcon.classList.add("gg-pin");
+	var parkIcon = document.createElement("iconify-icon");
+	parkIcon.icon = "material-symbols:push-pin";
 	parkContainer.appendChild(parkIcon);
 
 	var parkValue = document.createElement("span");
@@ -898,8 +898,8 @@ function ItemCard(item, options) {
 	var sceneContainer = document.createElement("div");
 	locationContaianer.appendChild(sceneContainer);
 
-	var sceneIcon = document.createElement("i");
-	sceneIcon.classList.add("gg-pin-alt");
+	var sceneIcon = document.createElement("iconify-icon");
+	sceneIcon.icon = "material-symbols:pin-drop";
 	sceneContainer.appendChild(sceneIcon);
 
 	var sceneValue = document.createElement("span");
@@ -916,8 +916,8 @@ function ItemCard(item, options) {
 	authorContainer.classList.add("hidden");
 	rightSideContainer.appendChild(authorContainer);
 
-	var authorIcon = document.createElement("i");
-	authorIcon.classList.add("gg-user");
+	var authorIcon = document.createElement("iconify-icon");
+	authorIcon.icon = "mdi:user";
 	authorContainer.appendChild(authorIcon);
 
 	var authorValue = document.createElement("p");
@@ -977,23 +977,23 @@ function ItemCard(item, options) {
 				"/mqdefault.jpg";
 			thumbnailElement.appendChild(imgElement);
 
-			var playIcon = document.createElement("i");
-			playIcon.classList.add("gg-play-button");
+			var playIcon = document.createElement("iconify-icon");
+			playIcon.icon = "mdi:play";
 			thumbnailElement.appendChild(playIcon);
 		} else {
 			thumbnailElement = document.createElement("div");
 			thumbnailElement.classList.add("iconContainer");
 			
-			var iconElement = document.createElement("i");
+			var iconElement = document.createElement("iconify-icon");
 			switch (item.type) {
 				case "audio":
-					iconElement.classList.add("gg-headset");
+					iconElement.icon = "mdi:headphones";
 					break;
 				case "date":
-					iconElement.classList.add("gg-calendar");
+					iconElement.icon = "mdi:calendar";
 					break;
 				case "text":
-					iconElement.classList.add("gg-file-document");
+					iconElement.icon = "mdi:file-document";
 					break;
 			}
 			thumbnailElement.appendChild(iconElement);
@@ -1441,7 +1441,7 @@ var notification = {
 		}
 		notificationElement.innerHTML = `
 			<div class="icon">
-				<i class="gg-${icon}"></i>
+				<iconify-icon icon="${icon}"></iconify-icon>
 			</div>
 			<div class="content">
 				<p class="title">${title}</p>
@@ -1500,8 +1500,8 @@ var contextMenu = {
 			if (items[i].icon) {
 				var iconContainer = document.createElement("div");
 				iconContainer.classList.add("icon");
-				var icon = document.createElement("i");
-				icon.classList.add("gg-" + items[i].icon);
+				var icon = document.createElement("iconify-icon");
+				icon.icon = items[i].icon;
 				iconContainer.appendChild(icon);
 				button.appendChild(iconContainer);
 			}
