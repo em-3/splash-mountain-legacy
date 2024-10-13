@@ -97,7 +97,7 @@ Promise.all([
 
 
 //Populate the database additions container with the newest items
-fetch("/api/search/?sort_by=newest_first&min=1&max=15")
+fetch("/api/search/?sort_by=newest_first&min=1&max=6")
 	.then((response) => response.json())
 	.then(
 		(data) => {
@@ -203,7 +203,7 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 	);
 
 //Populate the news articles container with the newest items
-fetch("/api/news/list/?min=1&max=15")
+fetch("/api/news/list/?min=1&max=4")
 	.then((response) => response.json())
 	.then(
 		(data) => {

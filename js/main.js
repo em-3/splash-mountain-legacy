@@ -54,7 +54,7 @@ function hideItemDetails() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
 	document.body.classList.remove("noScroll");
 	for (browser in refreshableDatabaseBrowsers) {
-			refreshableDatabaseBrowsers[browser].refreshResults("refreshExisting");
+		refreshableDatabaseBrowsers[browser].refreshResults("refreshExisting");
 	}
 }
 

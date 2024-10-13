@@ -61,6 +61,10 @@ body {
   font-weight: normal;
 }
 
+h1, h2, h3, p {
+  margin: 0;
+}
+
 .loadingAnimationEllipsis {
   display: inline-block;
   position: relative;
@@ -564,10 +568,6 @@ main {
   justify-content: center;
 }
 
-.notification p {
-  margin: 0;
-}
-
 .notification p.title {
   font-weight: bold;
 }
@@ -659,10 +659,6 @@ main {
 .dialog .list .item.selected {
   background: var(--color-2);
   color: white;
-}
-
-.dialog .list .item p {
-  margin: 0;
 }
 
 .dialog .list .item p.label {
@@ -774,10 +770,6 @@ main {
   margin-right: 10pt;
   width: 20pt;
   height: 20pt;
-}
-
-.contextMenu>div p {
-  margin: 0;
 }
 
 .contextMenu>div.active {
