@@ -64,35 +64,13 @@ require_once __DIR__ . "/scripts/global.php";
             <p class="subtitle"></p>
         </div>
     </div>
-
+    <header>
+        <div class="background"></div>
+        <div class="foreground">
+            <img src="images/logo-white.png" alt="Splash Mountain Legacy">
+        </div>
+    </header>
     <main>
-        <section class="header">
-            <div class="background"></div>
-            <div class="foreground">
-                <img src="images/logo-white.png" alt="Splash Mountain Legacy">
-                <div class="countdown">
-                    <p class="label">DL Retheme Closure</p>
-                    <div class="timer">
-                        <div class="days">
-                            <h1></h1>
-                            <p>Days</p>
-                        </div>
-                        <div class="hours">
-                            <h1></h1>
-                            <p>Hours</p>
-                        </div>
-                        <div class="minutes">
-                            <h1></h1>
-                            <p>Minutes</p>
-                        </div>
-                        <div class="seconds">
-                            <h1></h1>
-                            <p>Seconds</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
         <section class="waitTimes featured">
             <div class="header">
                 <h1 class="title">Wait Times</h1>

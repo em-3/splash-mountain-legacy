@@ -53,10 +53,7 @@ header.globalHeader .links>* {
   color: black;
 }
 
-header.globalHeader .links>*.current {
-  background: rgba(300, 300, 300, 0.8);
-}
-
+header.globalHeader .links>*.current,
 header.globalHeader .links>*:hover {
   background: rgba(300, 300, 300, 0.8);
 }
@@ -78,17 +75,20 @@ header.globalHeader .searchBox .clearButton {
 }
 
 main {
-  margin-top: 0;
+  margin: 20pt 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20pt;
 }
 
-main section.header {
+header {
   position: relative;
   height: calc(45vh + 55pt);
   min-height: 200pt;
   overflow: hidden;
 }
 
-main section.header>* {
+header>* {
   position: absolute;
   top: 0;
   left: 0;
@@ -97,7 +97,7 @@ main section.header>* {
   overflow: hidden;
 }
 
-main section.header .background {
+header .background {
   filter: blur(5px);
   background-image: url("/images/header.jpg");
   background-repeat: no-repeat;
@@ -108,54 +108,23 @@ main section.header .background {
 }
 
 @media (prefers-color-scheme: dark) {
-  main section.header .background {
+  header .background {
     background-image: url("/images/header-night.jpg");
   }
 }
 
-main section.header .foreground {
+header .foreground {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   color: white;
   z-index: 2;
-  transform: translate(0, 20pt);
 }
 
-main section.header .foreground img {
+header .foreground img {
   width: 75vw;
   max-width: 500px;
-}
-
-.countdown {
-  text-align: center;
-  margin-top: 30pt;
-}
-
-.countdown .label {
-  font-weight: bold;
-  margin: 0 0 5pt 0;
-}
-
-.countdown .timer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  gap: 10pt;
-}
-
-.countdown .timer div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.countdown .timer div h1,
-.countdown .timer div p {
-  margin: 0;
 }
 
 section.featured.waitTimes .loading,
@@ -198,14 +167,6 @@ section.waitTimes .content div p.updatedTime {
   font-size: 9pt;
   font-style: italic;
   color: var(--secondary-text-color);
-}
-
-section.featured {
-  padding: 20pt 0 0 0;
-}
-
-section.featured:last-child {
-  padding-bottom: 20pt;
 }
 
 section.featured .header {
