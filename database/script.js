@@ -181,7 +181,7 @@ function addFilter(filterObject, selectedOption) {
 
 	var removeButton = document.createElement("div");
 	removeButton.classList.add("removeButton");
-	removeButton.innerHTML = "<i class='gg-close'></i>";
+	removeButton.innerHTML = "<iconify-icon icon='mdi:close'></iconify-icon>";
 	removeButton.addEventListener("click", function () {
 		if (!filterObject.hidden) {
 			document.querySelector(".availableFilters .filter." + filterObject.id)
@@ -349,7 +349,7 @@ var databaseBrowser = {
 						noResults.className = "noResults";
 						noResults.innerHTML = `
 							<div class="iconContainer">
-								<i class="gg-bee"></i>
+								<iconify-icon icon="mdi:bee" width="48"></iconify-icon>
 							</div>
 							<h2>There's Nothing In Here But Bees!</h2>
 							<p>We couldn't find any results.</p>

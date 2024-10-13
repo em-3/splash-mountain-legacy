@@ -63,17 +63,17 @@ var auditLog = {
 							resultElement.className = "logRow";
 
 							var typeIconContainer = document.createElement("div");
-							var typeIconElement = document.createElement("i");
+							var typeIconElement = document.createElement("iconify-icon");
 							typeIconElement.classList.add("icon");
 							if (currentLogData.type === "article") {
 								typeIconContainer.title = "Article";
-								typeIconElement.classList.add("gg-file-document");
+								typeIconElement.icon = "mdi:file-document";
 								typeIconContainer.onclick = function () {
 									auditLog.applyFilter("type", "article");
 								};
 							} else if (currentLogData.type === "item") {
 								typeIconContainer.title = "Item";
-								typeIconElement.classList.add("gg-file");
+								typeIconElement.icon ="mdi:file";
 								typeIconContainer.onclick = function () {
 									auditLog.applyFilter("type", "item");
 								};
@@ -82,23 +82,23 @@ var auditLog = {
 							resultElement.appendChild(typeIconContainer);
 
 							var actionIconContainer = document.createElement("div");
-							var actionIconElement = document.createElement("i");
+							var actionIconElement = document.createElement("iconify-icon");
 							actionIconElement.classList.add("icon");
 							if (currentLogData.action === "create") {
 								actionIconContainer.title = "Created";
-								actionIconElement.classList.add("gg-add");
+								actionIconElement.icon = "mdi:plus";
 								actionIconContainer.onclick = function () {
 									auditLog.applyFilter("action", "create");
 								}
 							} else if (currentLogData.action === "modify") {
 								actionIconContainer.title = "Edited";
-								actionIconElement.classList.add("gg-edit-exposure");
+								actionIconElement.icon = "mdi:edit";
 								actionIconContainer.onclick = function () {
 									auditLog.applyFilter("action", "modify");
 								}
 							} else if (currentLogData.action === "delete") {
 								actionIconContainer.title = "Deleted";
-								actionIconElement.classList.add("gg-remove");
+								actionIconElement.icon = "mdi:minus";
 								actionIconContainer.onclick = function () {
 									auditLog.applyFilter("action", "delete");
 								};
@@ -117,7 +117,7 @@ var auditLog = {
 										items: [
 											{
 												label: "Filter to Item",
-												icon: "filters",
+												icon: "mdi:filter",
 												type: "active",
 												callback: () => {
 													auditLog.applyFilter("item_id", itemID);
@@ -125,7 +125,7 @@ var auditLog = {
 											},
 											{
 												label: "Copy Item ID",
-												icon: "asterisk",
+												icon: "mdi:asterisk",
 												callback: () => {
 													navigator.clipboard.writeText(itemID);
 													notification.show("passive", "copy", "Copied", "Item ID copied to clipboard.");
@@ -166,7 +166,7 @@ var auditLog = {
 										items: [
 											{
 												label: "Filter to User",
-												icon: "filters",
+												icon: "mdi:filter",
 												type: "active",
 												callback: () => {
 													auditLog.applyFilter("user_id", currentUserInfo.id);
@@ -174,7 +174,7 @@ var auditLog = {
 											},
 											{
 												label: "Copy User ID",
-												icon: "asterisk",
+												icon: "mdi:asterisk",
 												callback: () => {
 													navigator.clipboard.writeText(currentUserInfo.id);
 													notification.show("passive", "copy", "Copied", "User ID copied to clipboard.");
@@ -182,7 +182,7 @@ var auditLog = {
 											},
 											{
 												label: "Copy Username",
-												icon: "details-less",
+												icon: "mdi:notes",
 												callback: () => {
 													navigator.clipboard.writeText(currentUserInfo.username);
 													notification.show("passive", "copy", "Copied", "Username copied to clipboard.");

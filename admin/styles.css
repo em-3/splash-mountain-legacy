@@ -121,13 +121,8 @@ div.actions button .icon {
   justify-content: center;
 }
 
-.pageLink div.icon i {
-  --ggs: 1.2;
+.pageLink div.icon iconify-icon {
   color: black;
-}
-
-.pageLink.auditLog div.icon i {
-  --ggs: 1.5;
 }
 
 .pageLink .text {
@@ -147,8 +142,7 @@ div.actions button .icon {
   margin: 0;
 }
 
-.pageLink i.gg-chevron-right {
-  --ggs: 1.2;
+.pageLink iconify-icon[icon="mdi:chevron-right"] {
   margin-left: auto;
 }
 

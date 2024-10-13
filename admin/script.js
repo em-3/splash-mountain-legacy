@@ -42,14 +42,14 @@ document.querySelector(".actions .create").addEventListener("click", function (e
 		y: e.clientY,
 		items: [
 			{
-				icon: "file-add",
+				icon: "mdi:file-image-add",
 				label: "Item",
 				callback: function () {
 					showDatabaseItemEditor();
 				}
 			},
 			{
-				icon: "file-document",
+				icon: "mdi:file-document-add",
 				label: "Article",
 				callback: function () {
 					showArticleEditor();

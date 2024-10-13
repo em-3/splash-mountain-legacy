@@ -53,10 +53,7 @@ header.globalHeader .links>* {
   color: black;
 }
 
-header.globalHeader .links>*.current {
-  background: rgba(300, 300, 300, 0.8);
-}
-
+header.globalHeader .links>*.current,
 header.globalHeader .links>*:hover {
   background: rgba(300, 300, 300, 0.8);
 }
@@ -78,17 +75,19 @@ header.globalHeader .searchBox .clearButton {
 }
 
 main {
-  margin-top: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-main section.header {
+section.header {
   position: relative;
   height: calc(45vh + 55pt);
   min-height: 200pt;
   overflow: hidden;
 }
 
-main section.header>* {
+section.header>* {
   position: absolute;
   top: 0;
   left: 0;
@@ -97,7 +96,7 @@ main section.header>* {
   overflow: hidden;
 }
 
-main section.header .background {
+section.header .background {
   filter: blur(5px);
   background-image: url("/images/header.jpg");
   background-repeat: no-repeat;
@@ -108,54 +107,23 @@ main section.header .background {
 }
 
 @media (prefers-color-scheme: dark) {
-  main section.header .background {
+  section.header .background {
     background-image: url("/images/header-night.jpg");
   }
 }
 
-main section.header .foreground {
+section.header .foreground {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   color: white;
   z-index: 2;
-  transform: translate(0, 20pt);
 }
 
-main section.header .foreground img {
+section.header .foreground img {
   width: 75vw;
   max-width: 500px;
-}
-
-.countdown {
-  text-align: center;
-  margin-top: 30pt;
-}
-
-.countdown .label {
-  font-weight: bold;
-  margin: 0 0 5pt 0;
-}
-
-.countdown .timer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  gap: 10pt;
-}
-
-.countdown .timer div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.countdown .timer div h1,
-.countdown .timer div p {
-  margin: 0;
 }
 
 section.featured.waitTimes .loading,
@@ -163,13 +131,7 @@ section.featured.waitTimes .error {
   height: 85pt;
 }
 
-section.waitTimes .content>div:first-child {
-  margin-left: 20pt;
-}
-
 section.waitTimes .content>div {
-  height: 85pt;
-  min-width: 150pt;
   background: var(--content-background-color);
   border-radius: 10pt;
   padding: 5pt 10pt;
@@ -179,7 +141,6 @@ section.waitTimes .content>div {
   justify-content: center;
   flex-direction: column;
   gap: 2.5pt;
-  margin-right: 20pt;
 }
 
 section.waitTimes .content div .top {
@@ -201,23 +162,16 @@ section.waitTimes .content div p.updatedTime {
 }
 
 section.featured {
-  padding: 20pt 0 0 0;
-}
-
-section.featured:last-child {
-  padding-bottom: 20pt;
+  display: flex;
+  flex-direction: column;
+  gap: 5pt;
+  padding: 10pt;
 }
 
 section.featured .header {
-  width: calc(100% - 40pt);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 20pt 20pt;
-}
-
-section.featured .header h1 {
-  margin: 0 0 0 10pt;
 }
 
 section.featured .header button {
@@ -256,28 +210,31 @@ section.featured .error p {
 }
 
 section.featured .content {
-  white-space: nowrap;
-  overflow-x: scroll;
-  align-items: stretch;
+  display: grid;
+  gap: 20pt;
 }
 
-section.featured .content .item:first-child {
-  margin-left: 20pt;
+section.featured.waitTimes .content {
+  display: flex;
+}
+
+section.featured.news .content {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+section.featured.databaseAdditions .content {
+  grid-template-columns: repeat(6, 1fr);
 }
 
 section.featured .content .item {
-  width: 200pt;
-  height: 170pt;
   background: var(--content-background-color);
   border-radius: 10pt;
   overflow: hidden;
-  margin-right: 20pt;
   display: inline-block;
   cursor: pointer;
 }
 
 section.featured.news .content .item {
-  width: 500pt;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -383,7 +340,23 @@ section.featured .content .item .info .infoContainer *:last-child {
   text-overflow: ellipsis;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1200px) {
+  section.featured.databaseAdditions .content {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  section.featured.news .content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  section.featured.databaseAdditions .content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 768px) {
   header.globalHeader {
     height: 55pt;
     transition: background 0.2s ease;
@@ -405,11 +378,22 @@ section.featured .content .item .info .infoContainer *:last-child {
     border-radius: 0;
   }
 
-  main {
-    margin-top: 0;
+  section.featured.waitTimes .content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  section.featured.news .content {
+    grid-template-columns: repeat(1, 1fr);
   }
 
-  section.featured .header h1 {
-    margin: 0;
+  section.featured.databaseAdditions .content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  section.featured.databaseAdditions .content {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

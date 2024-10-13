@@ -22,15 +22,6 @@ require_once __DIR__ . "/../scripts/global.php";
     <meta name="keywords"
         content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9N1M0HPYP7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-9N1M0HPYP7');
-    </script>
-
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -40,6 +31,8 @@ require_once __DIR__ . "/../scripts/global.php";
 
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)">
+    
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 
 </head>
 
@@ -81,13 +74,11 @@ require_once __DIR__ . "/../scripts/global.php";
             <p>Splash Mountain Legacy is a project created, contributed to, and maintained by members of the Splash Mountain
                 fanbase. The site was developed by three friends who share a love for the attraction, and other members of the
                 community are invited to help contribute media and improve the site.</p>
-            <a href="https://discord.gg/GwThxWbQMG" target="_BLANK">Join Us On Discord</a>
-            <a href="https://forms.gle/ZwHb5Uw85fTZR6dq5" target="_BLANK">Contribute Media</a>
         </section>
         <section class="creators">
             <h2>Meet the Creators.</h2>
             <div class="creatorList">
-                <div class="creator link" onclick="window.location.href = 'https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA'">
+                <a href="https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA">
                     <div class="nameContainer">
                         <img src="/images/91j.jpg" alt="">
                         <h2>91J Sound</h2>
@@ -99,33 +90,33 @@ require_once __DIR__ . "/../scripts/global.php";
                             <li>Data Auditor</li>
                         </ul>
                     </div>
-                </div>
-                <div class="creator">
+                </a>
+                <a href="https://github.com/em-3">
                     <div class="nameContainer">
                         <img src="/images/em3.jpg" alt="">
                         <h2>EM_3</h2>
                     </div>
                     <div class="info">
                         <ul>
-                            <li>Backend</li>
+                            <li>Backend Developer</li>
                             <li>System Administrator</li>
                             <li>Database Engineer</li>
                         </ul>
                     </div>
-                </div>
-                <div class="creator link" onclick="window.location.href = 'https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A'">
+                </a>
+                <a href="https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A">
                     <div class="nameContainer">
                         <img src="/images/mwc.jpg" alt="">
-                        <h2>MickeyWaffleCo.</h2>
+                        <h2>Mickey WaffleCo.</h2>
                     </div>
                     <div class="info">
                         <ul>
-                            <li>Frontend</li>
+                            <li>Frontend Developer</li>
                             <li>Database Curator</li>
                             <li>Publicity Manager</li>
                         </ul>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
     </main>

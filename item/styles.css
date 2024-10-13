@@ -243,11 +243,6 @@ main {
   color: black;
 }
 
-.audioControls button.active .gg-repeat {
-  box-shadow: -2px -2px 0 0,
-    2px 2px 0 0 black;
-}
-
 .audioControls .playStateButton .loadingContainer {
   transform: scale(0.3);
 }
@@ -350,7 +345,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   margin: 0;
 }
 
-.locationContainer .sceneContainer i {
+.locationContainer .sceneContainer iconify-icon {
   transform: translateX(-4pt);
 }
 
@@ -512,6 +507,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   cursor: pointer;
   margin-bottom: 5pt;
   display: flex;
+  align-items: center;
   justify-content: center;
   transition: 0.1s ease background;
 }

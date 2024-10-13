@@ -54,7 +54,7 @@ function hideItemDetails() {
 	document.querySelector(".itemDetailsContainer").classList.add("hidden");
 	document.body.classList.remove("noScroll");
 	for (browser in refreshableDatabaseBrowsers) {
-			refreshableDatabaseBrowsers[browser].refreshResults("refreshExisting");
+		refreshableDatabaseBrowsers[browser].refreshResults("refreshExisting");
 	}
 }
 
@@ -106,35 +106,35 @@ if (document.querySelector("header .links")) {
 				y: e.clientY,
 				items: [
 					{
-						icon: "home",
+						icon: "mdi:home",
 						label: "Admin Home",
 						callback: function () {
 							window.location.href = "/admin";
 						}
 					},
 					{
-						icon: "database",
+						icon: "mdi:database",
 						label: "Database",
 						callback: function () {
 							window.location.href = "/admin/database";
 						}
 					},
 					{
-						icon: "file-document",
+						icon: "mdi:file-document",
 						label: "News List",
 						callback: function () {
 							window.location.href = "/admin/newsList";
 						}
 					},
 					{
-						icon: "play-list-search",
+						icon: "mdi:text-search",
 						label: "Audit Log",
 						callback: function () {
 							window.location.href = "/admin/audit-log";
 						}
 					},
 					{
-						icon: "file-add",
+						icon: "mdi:file-image-add",
 						label: "New Item",
 						type: "active",
 						callback: function () {
@@ -142,7 +142,7 @@ if (document.querySelector("header .links")) {
 						}
 					},
 					{
-						icon: "file-document",
+						icon: "mdi:file-document-add",
 						label: "New Article",
 						type: "active",
 						callback: function () {

@@ -6,10 +6,6 @@ main {
     overflow: auto;
 }
 
-section.header a.addArticle i {
-    --ggs: 0.8;
-}
-
 section.header a.addArticle span {
     margin-left: 2.5pt;
 }

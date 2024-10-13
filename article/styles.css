@@ -19,10 +19,6 @@ main {
     justify-content: center;
 }
 
-.articleViewer .loadingContainer i {
-    --ggs: 2.5;
-}
-
 .articleViewer .errorMessageContainer {
     flex-direction: column;
 }

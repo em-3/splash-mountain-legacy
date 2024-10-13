@@ -97,7 +97,7 @@ Promise.all([
 
 
 //Populate the database additions container with the newest items
-fetch("/api/search/?sort_by=newest_first&min=1&max=15")
+fetch("/api/search/?sort_by=newest_first&min=1&max=6")
 	.then((response) => response.json())
 	.then(
 		(data) => {
@@ -203,7 +203,7 @@ fetch("/api/search/?sort_by=newest_first&min=1&max=15")
 	);
 
 //Populate the news articles container with the newest items
-fetch("/api/news/list/?min=1&max=15")
+fetch("/api/news/list/?min=1&max=4")
 	.then((response) => response.json())
 	.then(
 		(data) => {
@@ -266,64 +266,6 @@ fetch("/api/news/list/?min=1&max=15")
 			document.querySelector(".news .error").classList.remove("hidden");
 		}
 	);
-
-//Update the closing countdown timer
-var currentTimestamp;
-var launchTimestamp = new Date("2023-05-30T06:00:00Z");
-
-const countdownDOM = {
-	container: document.querySelector(".countdown"),
-	days: {
-		container: document.querySelector(".countdown .days"),
-		value: document.querySelector(".countdown .days h1"),
-	},
-	hours: {
-		container: document.querySelector(".countdown .hours"),
-		value: document.querySelector(".countdown .hours h1"),
-	},
-	minutes: {
-		container: document.querySelector(".countdown .minutes"),
-		value: document.querySelector(".countdown .minutes h1"),
-	},
-	seconds: {
-		container: document.querySelector(".countdown .seconds"),
-		value: document.querySelector(".countdown .seconds h1"),
-	}
-}
-
-function updateCountdown() {
-	currentTimestamp = new Date();
-	var difference = launchTimestamp.getTime() - currentTimestamp.getTime();
-
-	//If the launch timestamp is in the past, redirect to index.
-	if (difference <= 0) {
-		countdownDOM.container.classList.add("hidden");
-	} else {
-		var countdownString = "";
-
-		var days = Math.floor(difference / (1000 * 60 * 60 * 24));
-		var hours = Math.floor(
-			(difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-		);
-		var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-		if (days <= 0) {
-			countdownDOM.days.container.classList.add("hidden");
-		} else {
-			countdownDOM.days.value.textContent = days;
-		}
-		if (days <= 0 && hours <= 0) {
-			countdownDOM.hours.container.classList.add("hidden");
-		} else {
-			countdownDOM.hours.value.textContent = hours;
-		}
-		countdownDOM.minutes.value.textContent = minutes;
-		countdownDOM.seconds.value.textContent = seconds;
-	}
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
 
 //Listen for the Konami code
 var konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "KeyB", "KeyA"];

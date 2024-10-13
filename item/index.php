@@ -22,21 +22,14 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="../styles.css">
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9N1M0HPYP7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-9N1M0HPYP7');
-    </script>
-
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2f8ea9">
     <meta name="msapplication-TileColor" content="#2d89ef">
+    
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 
 </head>
 
@@ -51,7 +44,7 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
     <main>
         <div class="closeButton" onclick="closeItemViewer()">
-            <i class="gg-close"></i>
+            <iconify-icon icon="mdi:close"></iconify-icon>
             <p>Close</p>
         </div>
         <div class="contentContainer">
@@ -79,11 +72,11 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
         <div class="itemInfoContainer hidden">
             <div class="locationContainer">
                 <div class="parkContainer">
-                    <i class="gg-pin"></i>
+                    <iconify-icon icon="material-symbols:push-pin"></iconify-icon>
                     <h2 class="park"></h2>
                 </div>
                 <div class="sceneContainer">
-                    <i class="gg-pin-alt"></i>
+                    <iconify-icon icon="material-symbols:pin-drop"></iconify-icon>
                     <h2 class="scene"></h2>
                 </div>
             </div>
@@ -91,14 +84,14 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
             <div class="propertiesContainer"></div>
             <div class="tags hidden">
                 <div class="labelContainer">
-                    <div class="iconContainer"><i class="gg-tag"></i></div>
+                    <div class="iconContainer"><iconify-icon icon="mdi:tag"></iconify-icon></div>
                     <p class="label">Tags</p>
                 </div>
                 <div class="tagsContainer"></div>
             </div>
             <div class="linkedItems hidden">
                 <div class="labelContainer">
-                    <div class="iconContainer"><i class="gg-link"></i></div>
+                    <div class="iconContainer"><iconify-icon icon="mdi:link"></iconify-icon></div>
                     <p class="label">Linked Items</p>
                 </div>
                 <div class="itemsContainer"></div>
@@ -116,11 +109,11 @@ require_once __DIR__ . "/../scripts/viewer_meta.php";
 
             <div class="buttonContainer">
                 <button class="share" onclick="share(event)">
-                    <i class="gg-export" style="transform: translate(1px, 3px) scale(0.8)"></i>
+                    <iconify-icon icon="mdi:share" width="24"></iconify-icon>
                     <span>Share</span>
                 </button>
                 <button class="editItem hidden" onclick="editItem()">
-                    <i class="gg-edit-exposure"></i>
+                    <iconify-icon icon="mdi:edit" width="24"></iconify-icon>
                     <span>Edit Item</span>
                 </button>
             </div>

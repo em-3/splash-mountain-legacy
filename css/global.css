@@ -1,6 +1,3 @@
-/* Icons */
-@import url("https://css.gg/css");
-
 /* Component Styles */
 @import url("/css/components/DatabaseBrowser.css");
 @import url("/css/components/Item.css");
@@ -41,32 +38,6 @@
   }
 }
 
-/* CSS.gg corrections */
-.gg-home {
-  margin-bottom: -6.5px;
-}
-
-.gg-share {
-  margin-left: -8px;
-}
-
-.gg-bulb {
-  margin-top: -5pt;
-}
-
-.gg-pin::before {
-  background: currentColor;
-  transform: scale(0.8);
-}
-
-.gg-pin-alt {
-  margin: 0 0 -6pt 0;
-}
-
-.gg-tag {
-  margin-left: -2.75pt;
-}
-
 .hidden {
   display: none !important;
 }
@@ -79,8 +50,6 @@ html,
 body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
 }
 
 body {
@@ -88,6 +57,10 @@ body {
   color: var(--primary-text-color);
   font-family: "Montserrat", sans-serif;
   font-weight: normal;
+}
+
+h1, h2, h3, p {
+  margin: 0;
 }
 
 .loadingAnimationEllipsis {
@@ -593,10 +566,6 @@ main {
   justify-content: center;
 }
 
-.notification p {
-  margin: 0;
-}
-
 .notification p.title {
   font-weight: bold;
 }
@@ -688,10 +657,6 @@ main {
 .dialog .list .item.selected {
   background: var(--color-2);
   color: white;
-}
-
-.dialog .list .item p {
-  margin: 0;
 }
 
 .dialog .list .item p.label {
@@ -803,10 +768,6 @@ main {
   margin-right: 10pt;
   width: 20pt;
   height: 20pt;
-}
-
-.contextMenu>div p {
-  margin: 0;
 }
 
 .contextMenu>div.active {

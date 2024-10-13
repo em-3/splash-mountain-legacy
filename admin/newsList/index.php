@@ -29,15 +29,6 @@ if(!check_authentication() || !check_clearance(0)) {
     <meta name="keywords"
         content="Splash Mountain, Splash Mountain Legacy, SaveSplashMountain, Critter Country, Frontierland, Disneyland, Tokyo Disneyland, Magic Kingdom, Walt Disney World">
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9N1M0HPYP7"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-9N1M0HPYP7');
-    </script>
-
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -47,6 +38,8 @@ if(!check_authentication() || !check_clearance(0)) {
 
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#222222" media="(prefers-color-scheme: dark)">
+    
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 
 </head>
 
@@ -77,11 +70,11 @@ if(!check_authentication() || !check_clearance(0)) {
                 <h2 class="subtitle">Admin Console</h2>
             </div>
             <a href="/admin" class="backLink">
-                <i class="gg-chevron-left"></i>
+                <iconify-icon icon="mdi:chevron-left"></iconify-icon>
                 <span>Back to Admin Home</span>
             </a>
             <a onclick="showArticleEditor()" class="addArticle">
-                <i class="gg-math-plus"></i>
+                <iconify-icon icon="mdi:plus"></iconify-icon>
                 <span>Create Article</span>
             </a>
         </section>
