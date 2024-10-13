@@ -75,19 +75,19 @@ header.globalHeader .searchBox .clearButton {
 }
 
 main {
-  margin: 20pt 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
 }
 
-header {
+section.header {
   position: relative;
   height: calc(45vh + 55pt);
   min-height: 200pt;
   overflow: hidden;
 }
 
-header>* {
+section.header>* {
   position: absolute;
   top: 0;
   left: 0;
@@ -96,7 +96,7 @@ header>* {
   overflow: hidden;
 }
 
-header .background {
+section.header .background {
   filter: blur(5px);
   background-image: url("/images/header.jpg");
   background-repeat: no-repeat;
@@ -107,12 +107,12 @@ header .background {
 }
 
 @media (prefers-color-scheme: dark) {
-  header .background {
+  section.header .background {
     background-image: url("/images/header-night.jpg");
   }
 }
 
-header .foreground {
+section.header .foreground {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,7 +121,7 @@ header .foreground {
   z-index: 2;
 }
 
-header .foreground img {
+section.header .foreground img {
   width: 75vw;
   max-width: 500px;
 }

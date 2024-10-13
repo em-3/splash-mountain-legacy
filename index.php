@@ -64,13 +64,13 @@ require_once __DIR__ . "/scripts/global.php";
             <p class="subtitle"></p>
         </div>
     </div>
-    <header>
-        <div class="background"></div>
-        <div class="foreground">
-            <img src="images/logo-white.png" alt="Splash Mountain Legacy">
-        </div>
-    </header>
     <main>
+        <section class="header">
+            <div class="background"></div>
+            <div class="foreground">
+                <img src="images/logo-white.png" alt="Splash Mountain Legacy">
+            </div>
+        </section>
         <section class="waitTimes featured">
             <div class="header">
                 <h1 class="title">Wait Times</h1>
