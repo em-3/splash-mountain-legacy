@@ -78,7 +78,7 @@ require_once __DIR__ . "/../scripts/global.php";
         <section class="creators">
             <h2>Meet the Creators.</h2>
             <div class="creatorList">
-                <div class="creator link" onclick="window.location.href = 'https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA'">
+                <a href="https://www.youtube.com/channel/UCJau8EhvBih5QfGb3s2nVvA">
                     <div class="nameContainer">
                         <img src="/images/91j.jpg" alt="">
                         <h2>91J Sound</h2>
@@ -90,33 +90,33 @@ require_once __DIR__ . "/../scripts/global.php";
                             <li>Data Auditor</li>
                         </ul>
                     </div>
-                </div>
-                <div class="creator">
+                </a>
+                <a href="https://github.com/em-3">
                     <div class="nameContainer">
                         <img src="/images/em3.jpg" alt="">
                         <h2>EM_3</h2>
                     </div>
                     <div class="info">
                         <ul>
-                            <li>Backend</li>
+                            <li>Backend Developer</li>
                             <li>System Administrator</li>
                             <li>Database Engineer</li>
                         </ul>
                     </div>
-                </div>
-                <div class="creator link" onclick="window.location.href = 'https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A'">
+                </a>
+                <a href="https://www.youtube.com/channel/UCnL5QGcUhQo1SLOuL23yG1A">
                     <div class="nameContainer">
                         <img src="/images/mwc.jpg" alt="">
-                        <h2>MickeyWaffleCo.</h2>
+                        <h2>Mickey WaffleCo.</h2>
                     </div>
                     <div class="info">
                         <ul>
-                            <li>Frontend</li>
+                            <li>Frontend Developer</li>
                             <li>Database Curator</li>
                             <li>Publicity Manager</li>
                         </ul>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
     </main>
