@@ -83,8 +83,6 @@ require_once __DIR__ . "/../scripts/global.php";
             <p>Splash Mountain Legacy is a project created, contributed to, and maintained by members of the Splash Mountain
                 fanbase. The site was developed by three friends who share a love for the attraction, and other members of the
                 community are invited to help contribute media and improve the site.</p>
-            <a href="https://discord.gg/GwThxWbQMG" target="_BLANK">Join Us On Discord</a>
-            <a href="https://forms.gle/ZwHb5Uw85fTZR6dq5" target="_BLANK">Contribute Media</a>
         </section>
         <section class="creators">
             <h2>Meet the Creators.</h2>
