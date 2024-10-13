@@ -38,32 +38,6 @@
   }
 }
 
-/* CSS.gg corrections */
-.gg-home {
-  margin-bottom: -6.5px;
-}
-
-.gg-share {
-  margin-left: -8px;
-}
-
-.gg-bulb {
-  margin-top: -5pt;
-}
-
-.gg-pin::before {
-  background: currentColor;
-  transform: scale(0.8);
-}
-
-.gg-pin-alt {
-  margin: 0 0 -6pt 0;
-}
-
-.gg-tag {
-  margin-left: -2.75pt;
-}
-
 .hidden {
   display: none !important;
 }

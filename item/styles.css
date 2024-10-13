@@ -243,11 +243,6 @@ main {
   color: black;
 }
 
-.audioControls button.active .gg-repeat {
-  box-shadow: -2px -2px 0 0,
-    2px 2px 0 0 black;
-}
-
 .audioControls .playStateButton .loadingContainer {
   transform: scale(0.3);
 }
