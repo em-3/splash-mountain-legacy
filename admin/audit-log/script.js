@@ -156,7 +156,7 @@ var auditLog = {
 								userInformation[currentLogData.user_id] = currentUserInfo;
 							}
 
-							profilePicture.src = "https://cdn.discordapp.com/avatars/" + currentUserInfo.id + "/" + currentUserInfo.avatar_hash;
+							profilePicture.src = "/images/authors/splashmountainlegacystaff.jpg";
 							usernameElement.textContent = currentUserInfo.username;
 							(function (currentUserInfo) {
 								userInfoContainer.onclick = (e) => {

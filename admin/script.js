@@ -4,7 +4,7 @@ fetch("/api/profile/index.php")
 	.then((data) => {
 		if (data.status === "success") {
 			var profileInfo = data.user_data;
-			document.querySelector(".profileInformation .profilePicture").src = "https://cdn.discordapp.com/avatars/" + profileInfo.id + "/" + profileInfo.avatar_hash;
+			document.querySelector(".profileInformation .profilePicture").src = "/images/authors/splashmountainlegacystaff.jpg";
 			document.querySelector(".profileInformation .name").textContent = profileInfo.username;
 			var authorizationLevel;
 			switch (profileInfo.clearance) {
