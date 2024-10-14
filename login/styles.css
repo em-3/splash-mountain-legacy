@@ -37,35 +37,35 @@ section.loginPromptContainer .titleContainer * {
 
 section.loginPromptContainer .titleContainer .errorMessage {
   color: #ff7e79;
-  font-weight: bold;
 }
 
-section.loginPromptContainer .loginButton {
-  background: #5865f2;
-  color: white;
-  border: none;
-  border-radius: 5pt;
+input {
+  background: var(--page-background-color);
+  color: var(--primary-text--color);
   font-family: inherit;
-  font-weight: bold;
-  font-size: 10pt;
-  padding: 5pt 20pt;
+  width: 100%;
+  height: 30pt;
+  border-radius: 5pt;
+  padding: 5pt;
+  margin-bottom: 10pt;
+  border: none;
+}
+
+input[type="text"],
+input[type="password"] {
+  border: 1px solid transparent;
+  transition: border 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border: 1px solid var(--primary-text-color);
+  outline: none;
+}
+
+input[type="submit"] {
   cursor: pointer;
-}
-
-section.welcomeContainer .profilePicture {
-  border-radius: 50%;
-  animation: ProfilePictureAnimation 1.2s ease 1s 1 normal both;
-}
-
-section.welcomeContainer .name {
-  margin: 5pt 0 0 0;
-    animation: ProfileTextAnimation 1.1s ease 1.3s 1 normal both;
-}
-
-section.welcomeContainer .authLevel {
-  color: var(--secondary-text-color);
-  margin: 5pt 0 10pt 0;
-  animation: ProfileTextAnimation 1s ease 1.5s 1 normal both;
+  font-weight: bold;
 }
 
 @keyframes ProfilePictureAnimation {

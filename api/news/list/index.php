@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . "/../../../scripts/init.php";
-require_once __DIR__ . "/../../../admin/scripts/init_admin.php";
 
 $params = array();
 

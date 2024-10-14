@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "vlucas/phpdotenv": "^5.5",
-        "wohali/oauth2-discord-new": "^1.2"
+        "vlucas/phpdotenv": "^5.5"
     },
     "config": {
         "platform-check": false
