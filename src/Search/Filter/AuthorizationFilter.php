@@ -2,7 +2,7 @@
 
 namespace SplmlFoundation\SplashMountainLegacyBackend\Search\Filter;
 
-require_once __DIR__ . "/../../../admin/scripts/init_admin.php";
+require_once __DIR__ . "/../../../scripts/init.php";
 
 use SplmlFoundation\SplashMountainLegacyBackend\Search\SQLSnippet;
 
